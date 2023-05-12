@@ -1,4 +1,4 @@
-#include "csvReader.h"
+#include "fileIO.h"
 #include "rasterizer.h"
 #include <iostream>
 #include <fstream>
@@ -13,17 +13,16 @@
 
 int main(int argc, char** argv) {
     if (argc <= 3) {
-        std::cout << "Usage: eftdem <path to point cloud> <resolutionX> <resolutionZ>" << std::endl;
+        std::cout << "Usage: EFTDEM <path to point cloud> <resolutionX> <resolutionZ>" << std::endl;
         exit(1);
     }
 
     std::string filename = argv[1];
     unsigned long resolutionX = strtoul(argv[2], nullptr, 10), resolutionZ = strtoul(argv[3], nullptr, 10);
-    auto reader = new csvReader();
-    auto rawCloud = reader->readCSV(filename);
+    auto IO = new fileIO();
+    auto rawCloud = IO->readCSV(filename);
 
-    auto rasterizer = new class rasterizer();
-    auto grid = rasterizer->rasterizeToPointGrid(rawCloud, resolutionX, resolutionZ);
+    auto grid = rasterizer::rasterizeToPointGrid(&rawCloud, resolutionX, resolutionZ);
 
     std::fstream f ("../test.txt", std::ios::out);
     std::string intro = "X,Y,Z,SemClassID,Intensity\n";
@@ -35,6 +34,9 @@ int main(int argc, char** argv) {
         }
     }
     f.close();
+
+    auto map = rasterizer::rasterizeToHeightMap(&grid);
+    IO->writeTIFF(&map, (int) resolutionX, (int) resolutionZ, true);
 
     return 0;
 }

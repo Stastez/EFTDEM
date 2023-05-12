@@ -1,5 +1,4 @@
 #include "dataStructures.h"
-
 #include <utility>
 #include <iostream>
 
