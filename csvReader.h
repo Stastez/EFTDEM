@@ -11,7 +11,7 @@ private:
     std::vector<point> groundPoints, environmentPoints;
 
 public:
-    std::pair<std::vector<point>*, std::vector<point>*> readCSV(const std::string& fileName);
+    rawPointCloud readCSV(const std::string& fileName);
 };
 
 
