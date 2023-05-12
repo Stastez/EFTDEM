@@ -1,18 +1,19 @@
 
-#ifndef EFTDEM_CSVREADER_H
-#define EFTDEM_CSVREADER_H
+#ifndef EFTDEM_FILEIO_H
+#define EFTDEM_FILEIO_H
 
 #include <vector>
 #include <string>
 #include "dataStructures.h"
 
-class csvReader {
+class fileIO {
 private:
     std::vector<point> groundPoints, environmentPoints;
 
 public:
     rawPointCloud readCSV(const std::string& fileName);
+    void writeTIFF(const heightMap *map, int resolutionX, int resolutionZ, bool writeLowDepth = false);
 };
 
 
-#endif //EFTDEM_CSVREADER_H
+#endif //EFTDEM_FILEIO_H

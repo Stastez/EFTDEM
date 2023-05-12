@@ -1,17 +1,16 @@
-//
-// Created by Sandr on 11.05.2023.
-//
 
 #ifndef EFTDEM_RASTERIZER_H
 #define EFTDEM_RASTERIZER_H
 
-
 #include "dataStructures.h"
 
 class rasterizer {
+private:
+    static std::pair<unsigned long, unsigned long> calculateGridCoordinates(pointGrid *grid, rawPointCloud *pointCloud, double xCoord, double zCoord);
+
 public:
-    pointGrid rasterizeToPointGrid(rawPointCloud pointCloud, unsigned long resolutionX, unsigned long resolutionZ);
-    heightMap rasterizeToHeightMap(pointGrid pointGrid);
+    static pointGrid rasterizeToPointGrid(rawPointCloud *pointCloud, unsigned long resolutionX, unsigned long resolutionZ);
+    static heightMap rasterizeToHeightMap(pointGrid *pointGrid);
 };
 
 
