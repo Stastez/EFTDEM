@@ -3,4 +3,4 @@ project(EFTDEM)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(EFTDEM csvReader.cpp csvReader.h main.cpp)
+add_executable(EFTDEM csvReader.cpp csvReader.h main.cpp dataStructures.cpp)
