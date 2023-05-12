@@ -10,7 +10,8 @@ rawPointCloud csvReader::readCSV(const std::string& fileName) {
     std::fstream pointFile (fileName, std::ios::in);
     if (!pointFile.is_open()) {
         std::cout << "Specified file could not be opened." << std::endl;
-        return {&groundPoints, &environmentPoints, 0, 0, 0, 0};
+        exit(3);
+        //return {&groundPoints, &environmentPoints, 0, 0, 0, 0};
     }
 
     double minX = std::numeric_limits<double>::max(), minZ = std::numeric_limits<double>::max(), maxX = std::numeric_limits<double>::min(), maxZ = std::numeric_limits<double>::min();
