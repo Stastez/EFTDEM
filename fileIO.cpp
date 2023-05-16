@@ -20,6 +20,8 @@ rawPointCloud fileIO::readCSV(const std::string& fileName) {
         exit(3);
     }
 
+    std::cout << "Reading point cloud..." << std::endl;
+
     double minX = std::numeric_limits<double>::max(), minZ = std::numeric_limits<double>::max(), maxX = std::numeric_limits<double>::min(), maxZ = std::numeric_limits<double>::min();
 
     std::string line;
@@ -32,7 +34,7 @@ rawPointCloud fileIO::readCSV(const std::string& fileName) {
 
         point p = {.x=stod(words[0]), .y=stod(words[1]), .z=stod(words[2]), .intensity=stoi(words[4])};
 
-        //if (p.z <= 152 || p.z >= 160) continue;
+        if (p.z <= 152 || p.z >= 160) continue;
 
         minX = std::min(minX, p.x); minZ = std::min(minZ, p.z); maxX = std::max(maxX, p.x); maxZ = std::max(maxZ, p.z);
 
@@ -63,12 +65,16 @@ void fileIO::writeTIFF(const heightMap *map, const int resolutionX, const int re
     if (driver == nullptr) { std::cout << "Could not get driver!" << std::endl; exit(3); }
     if (!CSLFetchBoolean(GDALGetMetadata(driver, nullptr), GDAL_DCAP_CREATE, FALSE)) { std::cout << "Driver does not support creation!" << std::endl; exit(3); }
 
+    std::cout << "Writing GeoTIFF..." << std::endl;
+
     auto dataset = driver->Create("../test.tiff", resolutionX, resolutionZ, 1, GDT_Float64, nullptr);
     auto rasterBand = dataset->GetRasterBand(1);
     rasterBand->RasterIO(GF_Write, 0, 0, resolutionX, resolutionZ, map->heights, resolutionX, resolutionZ, GDT_Float64, 0, 0,nullptr);
     GDALClose(dataset);
 
     if (writeLowDepth) {
+        std::cout << "Writing second GeoTIFF with reduced depth..." << std::endl;
+
         double max = 0, min = std::numeric_limits<double>::max();
         for (auto i = 0; i < resolutionX * resolutionZ; i++) {
             max = std::max(max, map->heights[i]);

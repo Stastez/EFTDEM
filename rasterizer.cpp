@@ -1,4 +1,5 @@
 
+#include <iostream>
 #include "rasterizer.h"
 
 std::pair<unsigned long, unsigned long> rasterizer::calculateGridCoordinates(pointGrid *grid, rawPointCloud *pointCloud, double xCoord, double zCoord){
@@ -9,6 +10,8 @@ std::pair<unsigned long, unsigned long> rasterizer::calculateGridCoordinates(poi
 }
 
 pointGrid rasterizer::rasterizeToPointGrid(rawPointCloud *pointCloud, unsigned long resolutionX, unsigned long resolutionZ) {
+    std::cout << "Rasterizing points to grid..." << std::endl;
+
     pointGrid grid = {.points = new std::vector<point>[resolutionX * resolutionZ], .resolutionX = resolutionX, .resolutionZ = resolutionZ};
 
     for (auto it = pointCloud->groundPoints->begin(); it != pointCloud->groundPoints->end(); it++){
@@ -20,6 +23,8 @@ pointGrid rasterizer::rasterizeToPointGrid(rawPointCloud *pointCloud, unsigned l
 }
 
 heightMap rasterizer::rasterizeToHeightMap(pointGrid *pointGrid) {
+    std::cout << "Rasterizing points to height map..." << std::endl;
+
     heightMap map = {.heights = new double[pointGrid->resolutionX * pointGrid->resolutionZ], .resolutionX = pointGrid->resolutionX, .resolutionZ = pointGrid->resolutionZ};
     long double sum = 0;
 

@@ -24,7 +24,7 @@ int main(int argc, char** argv) {
 
     auto grid = rasterizer::rasterizeToPointGrid(&rawCloud, resolutionX, resolutionZ);
 
-    std::fstream f ("../test.txt", std::ios::out);
+    /*std::fstream f ("../test.txt", std::ios::out);
     std::string intro = "X,Y,Z,SemClassID,Intensity\n";
     f.write(intro.c_str(), intro.size());
     for (auto i = 0; i < resolutionZ * resolutionX; i++) {
@@ -33,7 +33,7 @@ int main(int argc, char** argv) {
             f.write(s.c_str(), s.size());
         }
     }
-    f.close();
+    f.close();*/
 
     auto map = rasterizer::rasterizeToHeightMap(&grid);
     IO->writeTIFF(&map, (int) resolutionX, (int) resolutionZ, true);
