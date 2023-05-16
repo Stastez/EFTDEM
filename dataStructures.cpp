@@ -9,7 +9,7 @@
  * @param z
  * @return
  */
-unsigned long long calculate2DCoordinates(pointGrid *g, unsigned long x, unsigned long z) {
+unsigned long long calculate1DCoordinate(pointGrid *g, unsigned long x, unsigned long z) {
     return z * g->resolutionX + x;
 }
 
@@ -35,7 +35,7 @@ void validateCoordinates(pointGrid *g, unsigned long x, unsigned long z) {
  */
 std::vector<point> get(pointGrid *g, unsigned long x, unsigned long z){
     validateCoordinates(g, x, z);
-    return g->points[calculate2DCoordinates(g, x, z)];
+    return g->points[calculate1DCoordinate(g, x, z)];
 }
 
 /**
@@ -47,7 +47,7 @@ std::vector<point> get(pointGrid *g, unsigned long x, unsigned long z){
  */
 void set(pointGrid *g, unsigned long x, unsigned long z, std::vector<point> value){
     validateCoordinates(g, x, z);
-    g->points[calculate2DCoordinates(g, x, z)] = std::move(value);
+    g->points[calculate1DCoordinate(g, x, z)] = std::move(value);
 }
 
 /**
@@ -59,5 +59,5 @@ void set(pointGrid *g, unsigned long x, unsigned long z, std::vector<point> valu
  */
 void add(pointGrid *g, unsigned long x, unsigned long z, point value){
     validateCoordinates(g, x, z);
-    g->points[calculate2DCoordinates(g, x, z)].push_back(value);
+    g->points[calculate1DCoordinate(g, x, z)].push_back(value);
 }

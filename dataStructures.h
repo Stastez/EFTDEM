@@ -22,7 +22,7 @@ struct pointGrid {
 std::vector<point> get(pointGrid *g, unsigned long x, unsigned long z);
 void set(pointGrid *g, unsigned long x, unsigned long z, std::vector<point> value);
 void add(pointGrid *g, unsigned long x, unsigned long z, point value);
-unsigned long long calculate2DCoordinates(pointGrid *g, unsigned long x, unsigned long z);
+unsigned long long calculate1DCoordinate(pointGrid *g, unsigned long x, unsigned long z);
 
 struct heightMap {
     double *heights;
