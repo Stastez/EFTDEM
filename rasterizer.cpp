@@ -10,7 +10,7 @@ std::pair<unsigned long, unsigned long> rasterizer::calculateGridCoordinates(poi
 }
 
 pointGrid rasterizer::rasterizeToPointGrid(rawPointCloud *pointCloud, unsigned long pixelPerUnit) {
-    std::cout << "Rasterizing points to grid..." << std::endl;
+    std::cout << "Sorting points into grid..." << std::endl;
 
     unsigned long resolutionX = std::max((unsigned long) std::ceil((pointCloud->maxX - pointCloud->minX) * pixelPerUnit), 1ul);
     unsigned long resolutionY = std::max((unsigned long) std::ceil((pointCloud->maxY - pointCloud->minY) * pixelPerUnit), 1ul);
