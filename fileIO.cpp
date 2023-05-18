@@ -56,7 +56,14 @@ rawPointCloud fileIO::readCSV(const std::string& fileName) {
  * @param resolutionX
  * @param resolutionY
  */
-void fileIO::writeTIFF(const heightMap *map, const int resolutionX, const int resolutionY, const bool writeLowDepth) {
+void fileIO::writeTIFF(const heightMap *map, const bool writeLowDepth) {
+    if (map->resolutionX > std::numeric_limits<int>::max() || map->resolutionY > std::numeric_limits<int>::max()) {
+        std::cout << "Resolution too great for GeoTIFF!" << std::endl;
+        exit(2);
+    }
+
+    int resolutionX = (int) map->resolutionX, resolutionY = (int) map->resolutionY;
+
     GDALRegister_GTiff();
 
     auto driver = GetGDALDriverManager()->GetDriverByName("GTiff");

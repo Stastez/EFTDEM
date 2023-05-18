@@ -9,7 +9,7 @@ private:
     static std::pair<unsigned long, unsigned long> calculateGridCoordinates(pointGrid *grid, rawPointCloud *pointCloud, double xCoord, double yCoord);
 
 public:
-    static pointGrid rasterizeToPointGrid(rawPointCloud *pointCloud, unsigned long resolutionX, unsigned long resolutionY);
+    static pointGrid rasterizeToPointGrid(rawPointCloud *pointCloud, unsigned long pixelPerUnit);
     static heightMap rasterizeToHeightMap(pointGrid *pointGrid);
 };
 
