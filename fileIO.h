@@ -12,7 +12,7 @@ private:
 
 public:
     rawPointCloud readCSV(const std::string& fileName);
-    void writeTIFF(const heightMap *map, int resolutionX, int resolutionZ, bool writeLowDepth = false);
+    void writeTIFF(const heightMap *map, int resolutionX, int resolutionY, bool writeLowDepth = false);
 };
 
 

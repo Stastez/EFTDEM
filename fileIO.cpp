@@ -22,7 +22,7 @@ rawPointCloud fileIO::readCSV(const std::string& fileName) {
 
     std::cout << "Reading point cloud..." << std::endl;
 
-    double minX = std::numeric_limits<double>::max(), minZ = std::numeric_limits<double>::max(), maxX = std::numeric_limits<double>::min(), maxZ = std::numeric_limits<double>::min();
+    double minX = std::numeric_limits<double>::max(), minY = std::numeric_limits<double>::max(), maxX = std::numeric_limits<double>::min(), maxY = std::numeric_limits<double>::min();
 
     std::string line;
     std::getline(pointFile, line);
@@ -34,9 +34,7 @@ rawPointCloud fileIO::readCSV(const std::string& fileName) {
 
         point p = {.x=stod(words[0]), .y=stod(words[1]), .z=stod(words[2]), .intensity=stoi(words[4])};
 
-        if (p.z <= 152 || p.z >= 160) continue;
-
-        minX = std::min(minX, p.x); minZ = std::min(minZ, p.z); maxX = std::max(maxX, p.x); maxZ = std::max(maxZ, p.z);
+        minX = std::min(minX, p.x); minY = std::min(minY, p.y); maxX = std::max(maxX, p.x); maxY = std::max(maxY, p.y);
 
         if (words[3] == "1") groundPoints.push_back(p);
         else environmentPoints.push_back(p);
@@ -45,10 +43,10 @@ rawPointCloud fileIO::readCSV(const std::string& fileName) {
     pointFile.close();
 
     if (groundPoints.empty()) {
-        minX = 0; maxX = 0; minZ = 0; maxZ = 0;
+        minX = 0; maxX = 0; minY = 0; maxY = 0;
     }
 
-    return {&groundPoints, &environmentPoints, minX, maxX, minZ, maxZ};
+    return {&groundPoints, &environmentPoints, minX, maxX, minY, maxY};
 }
 
 /**
@@ -56,9 +54,9 @@ rawPointCloud fileIO::readCSV(const std::string& fileName) {
  *
  * @param map
  * @param resolutionX
- * @param resolutionZ
+ * @param resolutionY
  */
-void fileIO::writeTIFF(const heightMap *map, const int resolutionX, const int resolutionZ, const bool writeLowDepth) {
+void fileIO::writeTIFF(const heightMap *map, const int resolutionX, const int resolutionY, const bool writeLowDepth) {
     GDALRegister_GTiff();
 
     auto driver = GetGDALDriverManager()->GetDriverByName("GTiff");
@@ -67,27 +65,27 @@ void fileIO::writeTIFF(const heightMap *map, const int resolutionX, const int re
 
     std::cout << "Writing GeoTIFF..." << std::endl;
 
-    auto dataset = driver->Create("../test.tiff", resolutionX, resolutionZ, 1, GDT_Float64, nullptr);
+    auto dataset = driver->Create("../test.tiff", resolutionX, resolutionY, 1, GDT_Float64, nullptr);
     auto rasterBand = dataset->GetRasterBand(1);
-    rasterBand->RasterIO(GF_Write, 0, 0, resolutionX, resolutionZ, map->heights, resolutionX, resolutionZ, GDT_Float64, 0, 0,nullptr);
+    rasterBand->RasterIO(GF_Write, 0, 0, resolutionX, resolutionY, map->heights, resolutionX, resolutionY, GDT_Float64, 0, 0, nullptr);
     GDALClose(dataset);
 
     if (writeLowDepth) {
         std::cout << "Writing second GeoTIFF with reduced depth..." << std::endl;
 
         double max = 0, min = std::numeric_limits<double>::max();
-        for (auto i = 0; i < resolutionX * resolutionZ; i++) {
+        for (auto i = 0; i < resolutionX * resolutionY; i++) {
             max = std::max(max, map->heights[i]);
             min = std::min(min, map->heights[i]);
         }
-        auto heightsLowDepth = new int[resolutionX * resolutionZ];
-        for (auto i = 0; i < resolutionX * resolutionZ; i++) {
+        auto heightsLowDepth = new int[resolutionX * resolutionY];
+        for (auto i = 0; i < resolutionX * resolutionY; i++) {
             heightsLowDepth[i] = (int) (((map->heights[i] - min) / (max - min)) * (double) 255);
         }
 
-        dataset = driver->Create("../test_lowDepth.tiff", resolutionX, resolutionZ, 1, GDT_Byte, nullptr);
+        dataset = driver->Create("../test_lowDepth.tiff", resolutionX, resolutionY, 1, GDT_Byte, nullptr);
         rasterBand = dataset->GetRasterBand(1);
-        rasterBand->RasterIO(GF_Write, 0, 0, resolutionX, resolutionZ, heightsLowDepth, resolutionX, resolutionZ,
+        rasterBand->RasterIO(GF_Write, 0, 0, resolutionX, resolutionY, heightsLowDepth, resolutionX, resolutionY,
                              GDT_Byte, 4, 4 * resolutionX, nullptr);
         GDALClose(dataset);
     }

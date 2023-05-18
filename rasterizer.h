@@ -6,10 +6,10 @@
 
 class rasterizer {
 private:
-    static std::pair<unsigned long, unsigned long> calculateGridCoordinates(pointGrid *grid, rawPointCloud *pointCloud, double xCoord, double zCoord);
+    static std::pair<unsigned long, unsigned long> calculateGridCoordinates(pointGrid *grid, rawPointCloud *pointCloud, double xCoord, double yCoord);
 
 public:
-    static pointGrid rasterizeToPointGrid(rawPointCloud *pointCloud, unsigned long resolutionX, unsigned long resolutionZ);
+    static pointGrid rasterizeToPointGrid(rawPointCloud *pointCloud, unsigned long resolutionX, unsigned long resolutionY);
     static heightMap rasterizeToHeightMap(pointGrid *pointGrid);
 };
 

@@ -11,22 +11,22 @@ struct point {
 
 struct rawPointCloud {
     std::vector<point> *groundPoints, *environmentPoints;
-    double minX, maxX, minZ, maxZ;
+    double minX, maxX, minY, maxY;
 };
 
 struct pointGrid {
     std::vector<point> *points;
-    unsigned long resolutionX, resolutionZ;
+    unsigned long resolutionX, resolutionY;
 };
 
-std::vector<point> get(pointGrid *g, unsigned long x, unsigned long z);
-void set(pointGrid *g, unsigned long x, unsigned long z, std::vector<point> value);
-void add(pointGrid *g, unsigned long x, unsigned long z, point value);
-unsigned long long calculate1DCoordinate(pointGrid *g, unsigned long x, unsigned long z);
+std::vector<point> get(pointGrid *g, unsigned long x, unsigned long y);
+void set(pointGrid *g, unsigned long x, unsigned long y, std::vector<point> value);
+void add(pointGrid *g, unsigned long x, unsigned long y, point value);
+unsigned long long calculate1DCoordinate(pointGrid *g, unsigned long x, unsigned long y);
 
 struct heightMap {
     double *heights;
-    unsigned long resolutionX, resolutionZ;
+    unsigned long resolutionX, resolutionY;
 };
 
 #endif //EFTDEM_DATASTRUCTURES_H
