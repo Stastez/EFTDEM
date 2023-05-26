@@ -7,12 +7,9 @@
 #include "dataStructures.h"
 
 class fileIO {
-private:
-    std::vector<point> groundPoints, environmentPoints;
-
 public:
-    rawPointCloud readCSV(const std::string& fileName);
-    void writeTIFF(const heightMap *map, bool writeLowDepth = false);
+    static rawPointCloud readCSV(const std::string& fileName);
+    static void writeTIFF(const heightMap *map, const std::string& destinationDEM, bool writeLowDepth = true);
 };
 
 

@@ -12,32 +12,20 @@
  */
 
 int main(int argc, char** argv) {
-    if (argc <= 2) {
-        std::cout << "Usage: EFTDEM <path to point cloud> <pixel per unit>" << std::endl;
+    if (argc <= 3) {
+        std::cout << "Usage: EFTDEM <path to point cloud> <desired path to resulting DEM> <pixel per unit>" << std::endl;
         exit(1);
     }
 
     std::string filename = argv[1];
-    //unsigned long resolutionX = strtoul(argv[2], nullptr, 10), resolutionY = strtoul(argv[3], nullptr, 10);
-    unsigned long pixelPerUnit = strtoul(argv[2], nullptr, 10);
-    auto IO = new fileIO();
-    auto rawCloud = IO->readCSV(filename);
+    std::string destinationDEM = argv[2];
+    unsigned long pixelPerUnit = strtoul(argv[3], nullptr, 10);
+    auto rawCloud = fileIO::readCSV(filename);
 
     auto grid = rasterizer::rasterizeToPointGrid(&rawCloud, pixelPerUnit);
 
-    /*std::fstream f ("../test.txt", std::ios::out);
-    std::string intro = "X,Y,Z,SemClassID,Intensity\n";
-    f.write(intro.c_str(), intro.size());
-    for (auto i = 0; i < resolutionY * resolutionX; i++) {
-        for (auto it = grid.points[i].begin(); it != grid.points[i].end(); it++) {
-            std::string s = std::to_string(it->x) + "," + std::to_string(it->y) + "," + std::to_string(it->z) + ",1," + std::to_string(it->intensity) + "\n";
-            f.write(s.c_str(), s.size());
-        }
-    }
-    f.close();*/
-
     auto map = rasterizer::rasterizeToHeightMap(&grid);
-    IO->writeTIFF(&map, true);
+    fileIO::writeTIFF(&map, destinationDEM, true);
 
     return 0;
 }

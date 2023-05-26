@@ -10,7 +10,8 @@ struct point {
 };
 
 struct rawPointCloud {
-    std::vector<point> *groundPoints, *environmentPoints;
+    std::vector<point> groundPoints;
+    std::vector<point> environmentPoints;
     double minX, maxX, minY, maxY;
 };
 

@@ -1,6 +1,6 @@
 
 #include "fileIO.h"
-#include "gdal_priv.h"
+#include <gdal_priv.h>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -20,6 +20,7 @@ rawPointCloud fileIO::readCSV(const std::string& fileName) {
         exit(3);
     }
 
+    std::vector<point> groundPoints, environmentPoints;
     std::cout << "Reading point cloud..." << std::endl;
 
     double minX = std::numeric_limits<double>::max(), minY = std::numeric_limits<double>::max(), maxX = std::numeric_limits<double>::min(), maxY = std::numeric_limits<double>::min();
@@ -46,7 +47,7 @@ rawPointCloud fileIO::readCSV(const std::string& fileName) {
         minX = 0; maxX = 0; minY = 0; maxY = 0;
     }
 
-    return {&groundPoints, &environmentPoints, minX, maxX, minY, maxY};
+    return {groundPoints, environmentPoints, minX, maxX, minY, maxY};
 }
 
 /**
@@ -56,7 +57,7 @@ rawPointCloud fileIO::readCSV(const std::string& fileName) {
  * @param resolutionX
  * @param resolutionY
  */
-void fileIO::writeTIFF(const heightMap *map, const bool writeLowDepth) {
+void fileIO::writeTIFF(const heightMap *map, const std::string& destinationDEM, const bool writeLowDepth) {
     if (map->resolutionX > std::numeric_limits<int>::max() || map->resolutionY > std::numeric_limits<int>::max()) {
         std::cout << "Resolution too great for GeoTIFF!" << std::endl;
         exit(2);
@@ -72,7 +73,7 @@ void fileIO::writeTIFF(const heightMap *map, const bool writeLowDepth) {
 
     std::cout << "Writing GeoTIFF..." << std::endl;
 
-    auto dataset = driver->Create("../test.tiff", resolutionX, resolutionY, 1, GDT_Float64, nullptr);
+    auto dataset = driver->Create((destinationDEM + ".tiff").c_str(), resolutionX, resolutionY, 1, GDT_Float64, nullptr);
     auto rasterBand = dataset->GetRasterBand(1);
     rasterBand->RasterIO(GF_Write, 0, 0, resolutionX, resolutionY, map->heights, resolutionX, resolutionY, GDT_Float64, 0, 0, nullptr);
     GDALClose(dataset);
@@ -90,10 +91,9 @@ void fileIO::writeTIFF(const heightMap *map, const bool writeLowDepth) {
             heightsLowDepth[i] = (int) (((map->heights[i] - min) / (max - min)) * (double) 255);
         }
 
-        dataset = driver->Create("../test_lowDepth.tiff", resolutionX, resolutionY, 1, GDT_Byte, nullptr);
+        dataset = driver->Create((destinationDEM + "_lowDepth.tiff").c_str(), resolutionX, resolutionY, 1, GDT_Byte, nullptr);
         rasterBand = dataset->GetRasterBand(1);
-        rasterBand->RasterIO(GF_Write, 0, 0, resolutionX, resolutionY, heightsLowDepth, resolutionX, resolutionY,
-                             GDT_Byte, 4, 4 * resolutionX, nullptr);
+        rasterBand->RasterIO(GF_Write, 0, 0, resolutionX, resolutionY, heightsLowDepth, resolutionX, resolutionY, GDT_Byte, 4, 4 * resolutionX, nullptr);
         GDALClose(dataset);
     }
 }

@@ -17,7 +17,7 @@ pointGrid rasterizer::rasterizeToPointGrid(rawPointCloud *pointCloud, unsigned l
 
     pointGrid grid = {.points = new std::vector<point>[resolutionX * resolutionY], .resolutionX = resolutionX, .resolutionY = resolutionY};
 
-    for (auto it = pointCloud->groundPoints->begin(); it != pointCloud->groundPoints->end(); it++){
+    for (auto it = pointCloud->groundPoints.begin(); it != pointCloud->groundPoints.end(); it++){
         std::pair<unsigned long, unsigned long> coords = calculateGridCoordinates(&grid, pointCloud, it->x, it->y);
         add(&grid, coords.first, coords.second, *it);
     }
