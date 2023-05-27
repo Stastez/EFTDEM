@@ -1,7 +1,7 @@
 #include "fileIO.h"
 #include "rasterizer.h"
+#include "glHandler.h"
 #include <iostream>
-#include <fstream>
 
 /*
  * Exit codes:
@@ -9,9 +9,10 @@
  * 1 : wrong command line parameters
  * 2 : invalid parameters given to function
  * 3 : IO error
+ * 4 : OpenGL error
  */
 
-int main(int argc, char** argv) {
+void readCloudAndMakeHeightMap(int argc, char** argv){
     if (argc <= 3) {
         std::cout << "Usage: EFTDEM <path to point cloud> <desired path to resulting DEM> <pixel per unit>" << std::endl;
         exit(1);
@@ -26,6 +27,12 @@ int main(int argc, char** argv) {
 
     auto map = rasterizer::rasterizeToHeightMap(&grid);
     fileIO::writeTIFF(&map, destinationDEM, true);
+}
+
+int main(int argc, char** argv) {
+    auto gl = new glHandler();
+    gl->initializeGL();
+    gl->getShader("../../shaders/test.glsl");
 
     return 0;
 }
