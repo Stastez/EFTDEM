@@ -1,0 +1,1 @@
+powershell -ExecutionPolicy Bypass -File .\.build_config.ps1
