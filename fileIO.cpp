@@ -23,7 +23,8 @@ rawPointCloud fileIO::readCSV(const std::string& fileName) {
     std::vector<point> groundPoints, environmentPoints;
     std::cout << "Reading point cloud..." << std::endl;
 
-    double minX = std::numeric_limits<double>::max(), minY = std::numeric_limits<double>::max(), maxX = std::numeric_limits<double>::min(), maxY = std::numeric_limits<double>::min();
+    point min = {std::numeric_limits<double>::max(), std::numeric_limits<double>::max(),std::numeric_limits<double>::max()};
+    point max = {std::numeric_limits<double>::min(), std::numeric_limits<double>::min(),std::numeric_limits<double>::min()};
 
     std::string line;
     std::getline(pointFile, line);
@@ -35,19 +36,25 @@ rawPointCloud fileIO::readCSV(const std::string& fileName) {
 
         point p = {.x=stod(words[0]), .y=stod(words[1]), .z=stod(words[2]), .intensity=stoi(words[4])};
 
-        minX = std::min(minX, p.x); minY = std::min(minY, p.y); maxX = std::max(maxX, p.x); maxY = std::max(maxY, p.y);
+        if (words[3] == "1") {
+            min.x = std::min(min.x, p.x);
+            min.y = std::min(min.y, p.y);
+            min.z = std::min(min.z, p.z);
+            max.x = std::max(max.x, p.x);
+            max.y = std::max(max.y, p.y);
+            max.z = std::max(max.z, p.z);
 
-        if (words[3] == "1") groundPoints.push_back(p);
-        else environmentPoints.push_back(p);
+            groundPoints.push_back(p);
+        } else environmentPoints.push_back(p);
     }
 
     pointFile.close();
 
     if (groundPoints.empty()) {
-        minX = 0; maxX = 0; minY = 0; maxY = 0;
+        min = {0,0,0}; max = {0,0,0};
     }
 
-    return {groundPoints, environmentPoints, minX, maxX, minY, maxY};
+    return {groundPoints, environmentPoints, min, max};
 }
 
 /**
@@ -73,22 +80,21 @@ void fileIO::writeTIFF(const heightMap *map, const std::string& destinationDEM, 
 
     std::cout << "Writing GeoTIFF..." << std::endl;
 
+    auto denormalizedHeights = new double[map->resolutionX * map->resolutionY];
+    for (int i = 0; i < map->resolutionX * map->resolutionY; i++)
+        denormalizedHeights[i] = denormalizeValue(map->heights[i], map->min.z, map->max.z);
+
     auto dataset = driver->Create((destinationDEM + ".tiff").c_str(), resolutionX, resolutionY, 1, GDT_Float64, nullptr);
     auto rasterBand = dataset->GetRasterBand(1);
-    rasterBand->RasterIO(GF_Write, 0, 0, resolutionX, resolutionY, map->heights, resolutionX, resolutionY, GDT_Float64, 0, 0, nullptr);
+    rasterBand->RasterIO(GF_Write, 0, 0, resolutionX, resolutionY, denormalizedHeights, resolutionX, resolutionY, GDT_Float64, 0, 0, nullptr);
     GDALClose(dataset);
 
     if (writeLowDepth) {
         std::cout << "Writing second GeoTIFF with reduced depth..." << std::endl;
 
-        double max = 0, min = std::numeric_limits<double>::max();
-        for (auto i = 0; i < resolutionX * resolutionY; i++) {
-            max = std::max(max, map->heights[i]);
-            min = std::min(min, map->heights[i]);
-        }
         auto heightsLowDepth = new int[resolutionX * resolutionY];
         for (auto i = 0; i < resolutionX * resolutionY; i++) {
-            heightsLowDepth[i] = (int) (((map->heights[i] - min) / (max - min)) * (double) 255);
+            heightsLowDepth[i] = (int) (map->heights[i] * (double) 255);
         }
 
         dataset = driver->Create((destinationDEM + "_lowDepth.tiff").c_str(), resolutionX, resolutionY, 1, GDT_Byte, nullptr);

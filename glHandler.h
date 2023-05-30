@@ -14,8 +14,9 @@ private:
     GLFWwindow* context;
 
 public:
-    void initializeGL();
+    GLFWwindow * initializeGL();
     shaderProgram getShader(const std::string& shaderFile);
+    void runShader(shaderProgram* shaderProgram);
 };
 
 

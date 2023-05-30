@@ -61,3 +61,25 @@ void add(pointGrid *g, unsigned long x, unsigned long y, point value){
     validateCoordinates(g, x, y);
     g->points[calculate1DCoordinate(g, x, y)].push_back(value);
 }
+
+/**
+ * Normalizes the given value from the range [min,max] to [0,1]
+ * @param value The value to be normalized
+ * @param min The current minimal value of the input
+ * @param max The current maximal value of the input
+ * @return The normalized value
+ */
+double normalizeValue(double value, double min, double max){
+    return (value-min) / (max-min);
+}
+
+/**
+ * Reverses the normalization by translating the value from the range of [0,1] to [min,max]
+ * @param value The value to be denormalized
+ * @param min The target minimal value of the input
+ * @param max The target maximal value of the input
+ * @return The denormalized value
+ */
+double denormalizeValue(double value, double min, double max){
+    return value * (max-min) + min;
+}

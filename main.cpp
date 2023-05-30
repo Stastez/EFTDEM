@@ -31,8 +31,10 @@ void readCloudAndMakeHeightMap(int argc, char** argv){
 
 int main(int argc, char** argv) {
     auto gl = new glHandler();
-    gl->initializeGL();
-    gl->getShader("../../shaders/test.glsl");
+    auto context = gl->initializeGL();
+    auto shader = gl->getShader("../../shaders/test.glsl");
+
+    readCloudAndMakeHeightMap(argc, argv);
 
     return 0;
 }

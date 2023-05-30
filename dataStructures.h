@@ -12,12 +12,13 @@ struct point {
 struct rawPointCloud {
     std::vector<point> groundPoints;
     std::vector<point> environmentPoints;
-    double minX, maxX, minY, maxY;
+    point min, max;
 };
 
 struct pointGrid {
     std::vector<point> *points;
     unsigned long resolutionX, resolutionY;
+    point min, max;
 };
 
 std::vector<point> get(pointGrid *g, unsigned long x, unsigned long y);
@@ -28,6 +29,10 @@ unsigned long long calculate1DCoordinate(pointGrid *g, unsigned long x, unsigned
 struct heightMap {
     double *heights;
     unsigned long resolutionX, resolutionY;
+    point min, max;
 };
+
+double denormalizeValue(double value, double min, double max);
+double normalizeValue(double value, double min, double max);
 
 #endif //EFTDEM_DATASTRUCTURES_H
