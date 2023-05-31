@@ -82,10 +82,10 @@ heightMap rasterizer::rasterizeToHeightMapOpenGL(pointGrid *pointGrid, glHandler
     auto chunkBorders = new unsigned int[pointGrid->resolutionX * pointGrid->resolutionY];
     unsigned int dataPosition = 0;
     for (auto i = 0; i < pointGrid->resolutionX * pointGrid->resolutionY; i++) {
+        chunkBorders[i] = dataPosition;
         for (auto point : pointGrid->points[i]) {
             data[dataPosition++] = point.z;
         }
-        chunkBorders[i] = dataPosition;
     }
 
     auto ssbos = new gl::GLuint[3];
@@ -143,10 +143,10 @@ heightMap rasterizer::rasterizeToHeightMapOpenCL(pointGrid *pointGrid) {
 
     unsigned int dataPosition = 0;
     for (auto i = 0; i < pointGrid->resolutionX * pointGrid->resolutionY; i++) {
+        offsets[i] = dataPosition;
         for (auto point : pointGrid->points[i]) {
             heights[dataPosition++] = point.z;
         }
-        offsets[i] = dataPosition;
     }
 
     Program program(context, shaderString, true);
