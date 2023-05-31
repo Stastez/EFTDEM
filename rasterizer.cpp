@@ -23,7 +23,7 @@ pointGrid rasterizer::rasterizeToPointGrid(rawPointCloud *pointCloud, unsigned l
     unsigned long resolutionX = std::max((unsigned long) std::ceil((pointCloud->max.x - pointCloud->min.x) * pixelPerUnit), 1ul);
     unsigned long resolutionY = std::max((unsigned long) std::ceil((pointCloud->max.y - pointCloud->min.y) * pixelPerUnit), 1ul);
 
-    pointGrid grid = {.points = new std::vector<point>[resolutionX * resolutionY], .resolutionX = resolutionX, .resolutionY = resolutionY, .min = pointCloud->min, .max = pointCloud->max};
+    pointGrid grid = {.points = std::vector<std::vector<point>>(resolutionX * resolutionY), .resolutionX = resolutionX, .resolutionY = resolutionY, .min = pointCloud->min, .max = pointCloud->max};
 
     for (auto it = pointCloud->groundPoints.begin(); it != pointCloud->groundPoints.end(); it++){
         std::pair<unsigned long, unsigned long> coords = calculateGridCoordinates(&grid, pointCloud, it->x, it->y);
@@ -53,7 +53,7 @@ heightMap rasterizer::rasterizeToHeightMap(pointGrid *pointGrid, int useGPU = 0,
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    heightMap map = {.heights = new double[pointGrid->resolutionX * pointGrid->resolutionY], .resolutionX = pointGrid->resolutionX, .resolutionY = pointGrid->resolutionY,  .min = pointGrid->min, .max = pointGrid->max};
+    heightMap map = {.heights = std::vector<double>(pointGrid->resolutionX * pointGrid->resolutionY), .resolutionX = pointGrid->resolutionX, .resolutionY = pointGrid->resolutionY,  .min = pointGrid->min, .max = pointGrid->max};
     long double sum;
 
     for (unsigned long long i = 0; i < map.resolutionX * map.resolutionY; i++){
@@ -103,11 +103,11 @@ heightMap rasterizer::rasterizeToHeightMapOpenGL(pointGrid *pointGrid, glHandler
     gl::glUniform2ui(gl::glGetUniformLocation(shader, "resolution"), pointGrid->resolutionX, pointGrid->resolutionY);
 
     gl::glDispatchCompute(pointGrid->resolutionX / 8, pointGrid->resolutionY / 8, 1);
-    heightMap map = {.heights = new double[pointGrid->resolutionX * pointGrid->resolutionY], .resolutionX = pointGrid->resolutionX, .resolutionY = pointGrid->resolutionY,  .min = pointGrid->min, .max = pointGrid->max};
+    heightMap map = {.heights = std::vector<double>(pointGrid->resolutionX * pointGrid->resolutionY), .resolutionX = pointGrid->resolutionX, .resolutionY = pointGrid->resolutionY,  .min = pointGrid->min, .max = pointGrid->max};
     gl::glMemoryBarrier(gl::GL_ALL_BARRIER_BITS);
 
     gl::glBindBuffer(gl::GL_SHADER_STORAGE_BUFFER, ssbos[2]);
-    gl::glGetBufferSubData(gl::GL_SHADER_STORAGE_BUFFER, 0, (long long) sizeof(double) * pointGrid->resolutionX * pointGrid->resolutionY, map.heights);
+    gl::glGetBufferSubData(gl::GL_SHADER_STORAGE_BUFFER, 0, (long long) sizeof(double) * pointGrid->resolutionX * pointGrid->resolutionY, map.heights.data());
     gl::glDeleteBuffers(3, ssbos);
 
     auto end = std::chrono::high_resolution_clock::now();
@@ -153,15 +153,15 @@ heightMap rasterizer::rasterizeToHeightMapOpenCL(pointGrid *pointGrid) {
 
     Buffer heightBuffer(context, heights.begin(), heights.end(), true),
         offsetBuffer(context, offsets.begin(), offsets.end(), true),
-        //resultBuffer(context, CL_MEM_WRITE_ONLY, sizeof(double) * pointGrid->resolutionX * pointGrid->resolutionY);
         resultBuffer(context, results.begin(), results.end(), false);
 
+    NDRange local(64);
     NDRange global(pointGrid->resolutionX * pointGrid->resolutionY);
 
     cl_ulong resX = pointGrid->resolutionX;
     cl_ulong resY = pointGrid->resolutionY;
 
-    EnqueueArgs args(queue, global);
+    EnqueueArgs args(queue, global, local);
 
     cl::Kernel averageHeight(program, "averageHeight");
     averageHeight.setArg(0, resX);
@@ -174,11 +174,7 @@ heightMap rasterizer::rasterizeToHeightMapOpenCL(pointGrid *pointGrid) {
 
     copy(queue, resultBuffer, results.begin(), results.end());
 
-    heightMap map = {.heights = new double[pointGrid->resolutionX * pointGrid->resolutionY], .resolutionX = pointGrid->resolutionX, .resolutionY = pointGrid->resolutionY,  .min = pointGrid->min, .max = pointGrid->max};
-    for (auto i = 0; i < pointGrid->resolutionX * pointGrid->resolutionY; i++) {
-        //if (results [i] > 0) std::cout << results[i] << std::endl;
-        map.heights[i] = results[i];
-    }
+    heightMap map = {.heights = results, .resolutionX = pointGrid->resolutionX, .resolutionY = pointGrid->resolutionY,  .min = pointGrid->min, .max = pointGrid->max};
 
     auto end = std::chrono::high_resolution_clock::now();
     std::cout << "OpenCL: " << duration_cast<std::chrono::nanoseconds>(end - start) << std::endl;

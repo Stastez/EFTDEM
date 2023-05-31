@@ -17,7 +17,7 @@ struct rawPointCloud {
 };
 
 struct pointGrid {
-    std::vector<point> *points;
+    std::vector<std::vector<point>> points;
     unsigned long resolutionX, resolutionY;
     point min, max;
     unsigned int numberOfPoints;
@@ -29,7 +29,7 @@ void add(pointGrid *g, unsigned long x, unsigned long y, point value);
 unsigned long long calculate1DCoordinate(pointGrid *g, unsigned long x, unsigned long y);
 
 struct heightMap {
-    double *heights;
+    std::vector<double> heights;
     unsigned long resolutionX, resolutionY;
     point min, max;
 };
