@@ -49,12 +49,3 @@ Set-Location "vcpkg"
 
 Set-Location "..\.."
 & "$PSScriptRoot/.build_config.ps1"
-
-New-Item -Path "build\Debug" -ItemType Directory
-New-Item -Path "build\Release" -ItemType Directory
-Copy-Item -Path ".deps\glfw\bin\glfw3.dll" -Destination "build\Debug\glfw3.dll"
-Copy-Item -Path ".deps\glfw\bin\glfw3.dll" -Destination "build\Release\glfw3.dll"
-Copy-Item -Path ".deps\glbinding\glbindingd.dll" -Destination "build\Debug\glbindingd.dll"
-Copy-Item -Path ".deps\glbinding\glbinding-auxd.dll" -Destination "build\Debug\glbinding-auxd.dll"
-Copy-Item -Path ".deps\glbinding\glbinding.dll" -Destination "build\Release\glbinding.dll"
-Copy-Item -Path ".deps\glbinding\glbinding-aux.dll" -Destination "build\Release\glbinding-aux.dll"
