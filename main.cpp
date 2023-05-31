@@ -25,13 +25,13 @@ void readCloudAndMakeHeightMap(int argc, char** argv, glHandler* glHandler){
 
     auto grid = rasterizer::rasterizeToPointGrid(&rawCloud, pixelPerUnit);
 
-    /*auto map = rasterizer::rasterizeToHeightMap(&grid, strtol(argv[4], nullptr, 10), glHandler);
-    fileIO::writeTIFF(&map, destinationDEM, true);*/
+    auto map = rasterizer::rasterizeToHeightMap(&grid, strtol(argv[4], nullptr, 10), glHandler);
+    fileIO::writeTIFF(&map, destinationDEM, true);
 
-    for (int i = 0; i < 3; i++) {
+    /*for (int i = 0; i < 3; i++) {
         auto map = rasterizer::rasterizeToHeightMap(&grid, i, glHandler);
         fileIO::writeTIFF(&map, destinationDEM + std::to_string(i), true);
-    }
+    }*/
 }
 
 int main(int argc, char** argv) {

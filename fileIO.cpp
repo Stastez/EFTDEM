@@ -84,7 +84,11 @@ void fileIO::writeTIFF(const heightMap *map, const std::string& destinationDEM, 
     for (int i = 0; i < map->resolutionX * map->resolutionY; i++)
         denormalizedHeights[i] = denormalizeValue(map->heights[i], map->min.z, map->max.z);
 
-    auto dataset = driver->Create((destinationDEM + ".tiff").c_str(), resolutionX, resolutionY, 1, GDT_Float64, nullptr);
+    char** gdalDriverOptions = nullptr;
+    gdalDriverOptions = CSLAddNameValue(gdalDriverOptions, "COMPRESS", "LZW");
+    gdalDriverOptions = CSLAddNameValue(gdalDriverOptions, "NUM_THREADS", "16");
+
+    auto dataset = driver->Create((destinationDEM + ".tiff").c_str(), resolutionX, resolutionY, 1, GDT_Float64,gdalDriverOptions);
     auto rasterBand = dataset->GetRasterBand(1);
     rasterBand->RasterIO(GF_Write, 0, 0, resolutionX, resolutionY, denormalizedHeights, resolutionX, resolutionY, GDT_Float64, 0, 0, nullptr);
     GDALClose(dataset);
@@ -97,7 +101,7 @@ void fileIO::writeTIFF(const heightMap *map, const std::string& destinationDEM, 
             heightsLowDepth[i] = (int) (map->heights[i] * (double) 255);
         }
 
-        dataset = driver->Create((destinationDEM + "_lowDepth.tiff").c_str(), resolutionX, resolutionY, 1, GDT_Byte, nullptr);
+        dataset = driver->Create((destinationDEM + "_lowDepth.tiff").c_str(), resolutionX, resolutionY, 1, GDT_Byte, gdalDriverOptions);
         rasterBand = dataset->GetRasterBand(1);
         rasterBand->RasterIO(GF_Write, 0, 0, resolutionX, resolutionY, heightsLowDepth, resolutionX, resolutionY, GDT_Byte, 4, 4 * resolutionX, nullptr);
         GDALClose(dataset);
