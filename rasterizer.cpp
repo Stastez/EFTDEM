@@ -64,7 +64,7 @@ heightMap rasterizer::rasterizeToHeightMap(pointGrid *pointGrid, int useGPU = 0,
     }
 
     auto end = std::chrono::high_resolution_clock::now();
-    std::cout << "OpenCL: " << duration_cast<std::chrono::nanoseconds>(end - start) << std::endl;
+    std::cout << "CPU: " << duration_cast<std::chrono::milliseconds>(end - start) << std::endl;
 
     return map;
 }
@@ -111,7 +111,7 @@ heightMap rasterizer::rasterizeToHeightMapOpenGL(pointGrid *pointGrid, glHandler
     gl::glDeleteBuffers(3, ssbos);
 
     auto end = std::chrono::high_resolution_clock::now();
-    std::cout << "OpenGL: " << duration_cast<std::chrono::nanoseconds>(end - start) << std::endl;
+    std::cout << "OpenGL: " << duration_cast<std::chrono::milliseconds>(end - start) << std::endl;
 
     return map;
 }
@@ -177,7 +177,7 @@ heightMap rasterizer::rasterizeToHeightMapOpenCL(pointGrid *pointGrid) {
     heightMap map = {.heights = results, .resolutionX = pointGrid->resolutionX, .resolutionY = pointGrid->resolutionY,  .min = pointGrid->min, .max = pointGrid->max};
 
     auto end = std::chrono::high_resolution_clock::now();
-    std::cout << "OpenCL: " << duration_cast<std::chrono::nanoseconds>(end - start) << std::endl;
+    std::cout << "OpenCL: " << duration_cast<std::chrono::milliseconds>(end - start) << std::endl;
 
     return map;
 }
