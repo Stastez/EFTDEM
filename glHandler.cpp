@@ -39,7 +39,11 @@ GLFWwindow * glHandler::initializeGL(bool debug) {
     return context;
 }
 
-shaderProgram glHandler::getShader(const std::string& shaderFile) {
+void glHandler::uninitializeGL() {
+    glfwTerminate();
+}
+
+unsigned int glHandler::getShader(const std::string& shaderFile) {
     std::ifstream shaderFileStream;
     std::stringstream shaderStream;
     shaderFileStream.open(shaderFile);
@@ -62,19 +66,19 @@ shaderProgram glHandler::getShader(const std::string& shaderFile) {
         glGetShaderInfoLog(shaderNumber, 512, nullptr, infoLog);
         std::cout << infoLog << std::endl;
         exit(4);
-    };
+    }
 
-    shaderProgram shaderProgram{.ID = glCreateProgram()};
-    glAttachShader(shaderProgram.ID, shaderNumber);
-    glLinkProgram(shaderProgram.ID);
-    glGetProgramiv(shaderProgram.ID, GL_LINK_STATUS, &success);
+    auto program = glCreateProgram();
+    glAttachShader(program, shaderNumber);
+    glLinkProgram(program);
+    glGetProgramiv(program, GL_LINK_STATUS, &success);
     if(!success)
     {
-        glGetProgramInfoLog(shaderProgram.ID, 512, nullptr, infoLog);
+        glGetProgramInfoLog(program, 512, nullptr, infoLog);
         std::cout << infoLog << std::endl;
         exit(4);
     }
 
     glDeleteShader(shaderNumber);
-    return shaderProgram;
+    return program;
 }

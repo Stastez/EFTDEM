@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include <chrono>
 #include "rasterizer.h"
 #include "glHandler.h"
 
@@ -30,8 +31,10 @@ pointGrid rasterizer::rasterizeToPointGrid(rawPointCloud *pointCloud, unsigned l
 }
 
 /**
- * Creates a heightmap from the given point grid, by averaging the Points of every grid cell.
+ * Creates a heightmap from the given point grid by averaging the points of every grid cell.
  * @param pointGrid The point grid containing the point data, sorted into a grid
+ * @param useGPU Whether to use OpenGL GPU-acceleration
+ * @param glHandler If GPU-acceleration is used, the glHandler for creating contexts and reading shaders
  * @return A new heightMap struct
  */
 heightMap rasterizer::rasterizeToHeightMap(pointGrid *pointGrid, bool useGPU = false, glHandler *glHandler = nullptr) {
@@ -59,7 +62,7 @@ heightMap rasterizer::rasterizeToHeightMapGPU(pointGrid *pointGrid, glHandler *g
 
     glHandler->initializeGL(false);
     auto shader = glHandler->getShader("../../shaders/test.glsl");
-    gl::glUseProgram(shader.ID);
+    gl::glUseProgram(shader);
 
     auto data = new double[pointGrid->numberOfPoints];
     auto chunkBorders = new unsigned int[pointGrid->resolutionX * pointGrid->resolutionY];
@@ -74,21 +77,24 @@ heightMap rasterizer::rasterizeToHeightMapGPU(pointGrid *pointGrid, glHandler *g
     auto ssbos = new gl::GLuint[3];
     gl::glGenBuffers(3, ssbos);
     gl::glBindBufferBase(gl::GL_SHADER_STORAGE_BUFFER, 0, ssbos[0]);
-    gl::glBufferData(gl::GL_SHADER_STORAGE_BUFFER, sizeof(double) * pointGrid->numberOfPoints, data, gl::GL_STATIC_DRAW);
+    gl::glBufferData(gl::GL_SHADER_STORAGE_BUFFER, (long long) sizeof(double) * pointGrid->numberOfPoints, data, gl::GL_STATIC_DRAW);
+    delete[] data;
     gl::glBindBufferBase(gl::GL_SHADER_STORAGE_BUFFER, 1, ssbos[1]);
-    gl::glBufferData(gl::GL_SHADER_STORAGE_BUFFER, sizeof(unsigned int) * pointGrid->resolutionX * pointGrid->resolutionY, chunkBorders, gl::GL_STATIC_DRAW);
+    gl::glBufferData(gl::GL_SHADER_STORAGE_BUFFER, (long long) sizeof(unsigned int) * pointGrid->resolutionX * pointGrid->resolutionY, chunkBorders, gl::GL_STATIC_DRAW);
+    delete[] chunkBorders;
     gl::glBindBufferBase(gl::GL_SHADER_STORAGE_BUFFER, 2, ssbos[2]);
-    gl::glBufferData(gl::GL_SHADER_STORAGE_BUFFER, sizeof(double) * pointGrid->resolutionX * pointGrid->resolutionY, nullptr, gl::GL_STREAM_READ);
+    gl::glBufferData(gl::GL_SHADER_STORAGE_BUFFER, (long long) sizeof(double) * pointGrid->resolutionX * pointGrid->resolutionY, nullptr, gl::GL_STREAM_READ);
     gl::glBindBuffer(gl::GL_SHADER_STORAGE_BUFFER, 0);
 
-    gl::glUniform2ui(gl::glGetUniformLocation(shader.ID, "resolution"), pointGrid->resolutionX, pointGrid->resolutionY);
+    gl::glUniform2ui(gl::glGetUniformLocation(shader, "resolution"), pointGrid->resolutionX, pointGrid->resolutionY);
 
-    gl::glDispatchCompute(pointGrid->resolutionX, pointGrid->resolutionY, 1);
+    gl::glDispatchCompute(pointGrid->resolutionX / 8, pointGrid->resolutionY / 8, 1);
     heightMap map = {.heights = new double[pointGrid->resolutionX * pointGrid->resolutionY], .resolutionX = pointGrid->resolutionX, .resolutionY = pointGrid->resolutionY,  .min = pointGrid->min, .max = pointGrid->max};
     gl::glMemoryBarrier(gl::GL_ALL_BARRIER_BITS);
 
     gl::glBindBuffer(gl::GL_SHADER_STORAGE_BUFFER, ssbos[2]);
-    gl::glGetBufferSubData(gl::GL_SHADER_STORAGE_BUFFER, 0, sizeof(double) * pointGrid->resolutionX * pointGrid->resolutionY, map.heights);
+    gl::glGetBufferSubData(gl::GL_SHADER_STORAGE_BUFFER, 0, (long long) sizeof(double) * pointGrid->resolutionX * pointGrid->resolutionY, map.heights);
+    gl::glDeleteBuffers(3, ssbos);
 
     return map;
 }

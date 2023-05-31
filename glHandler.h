@@ -7,18 +7,14 @@
 #include <glbinding/glbinding.h>
 #include <string>
 
-struct shaderProgram {
-    unsigned int ID;
-
-};
-
 class glHandler {
 private:
     GLFWwindow* context;
 
 public:
     GLFWwindow * initializeGL(bool debug);
-    shaderProgram getShader(const std::string& shaderFile);
+    unsigned int getShader(const std::string& shaderFile);
+    void uninitializeGL();
 };
 
 
