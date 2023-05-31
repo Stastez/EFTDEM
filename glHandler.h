@@ -2,6 +2,9 @@
 #define EFTDEM_GLHANDLER_H
 
 #include <GLFW/glfw3.h>
+#include <glbinding/gl/gl.h>
+#include <glbinding-aux/ContextInfo.h>
+#include <glbinding/glbinding.h>
 #include <string>
 
 struct shaderProgram {
@@ -14,9 +17,8 @@ private:
     GLFWwindow* context;
 
 public:
-    GLFWwindow * initializeGL();
+    GLFWwindow * initializeGL(bool debug);
     shaderProgram getShader(const std::string& shaderFile);
-    void runShader(shaderProgram* shaderProgram);
 };
 
 

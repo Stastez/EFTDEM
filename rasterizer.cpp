@@ -24,6 +24,8 @@ pointGrid rasterizer::rasterizeToPointGrid(rawPointCloud *pointCloud, unsigned l
         add(&grid, coords.first, coords.second, point(it->x, it->y, normalizeValue(it->z, pointCloud->min.z, pointCloud->max.z), it->intensity));
     }
 
+    grid.numberOfPoints = pointCloud->groundPoints.size();
+
     return grid;
 }
 
@@ -32,8 +34,12 @@ pointGrid rasterizer::rasterizeToPointGrid(rawPointCloud *pointCloud, unsigned l
  * @param pointGrid The point grid containing the point data, sorted into a grid
  * @return A new heightMap struct
  */
-heightMap rasterizer::rasterizeToHeightMap(pointGrid *pointGrid) {
-    std::cout << "Rasterizing points to height map..." << std::endl;
+heightMap rasterizer::rasterizeToHeightMap(pointGrid *pointGrid, bool useGPU = false, glHandler *glHandler = nullptr) {
+    if (useGPU) {
+        return rasterizeToHeightMapGPU(pointGrid, glHandler);
+    }
+
+    std::cout << "Rasterizing points to height map using CPU..." << std::endl;
 
     heightMap map = {.heights = new double[pointGrid->resolutionX * pointGrid->resolutionY], .resolutionX = pointGrid->resolutionX, .resolutionY = pointGrid->resolutionY,  .min = pointGrid->min, .max = pointGrid->max};
     long double sum;
@@ -48,3 +54,41 @@ heightMap rasterizer::rasterizeToHeightMap(pointGrid *pointGrid) {
     return map;
 }
 
+heightMap rasterizer::rasterizeToHeightMapGPU(pointGrid *pointGrid, glHandler *glHandler) {
+    std::cout << "Rasterizing points to height map using GPU..." << std::endl;
+
+    glHandler->initializeGL(false);
+    auto shader = glHandler->getShader("../../shaders/test.glsl");
+    gl::glUseProgram(shader.ID);
+
+    auto data = new double[pointGrid->numberOfPoints];
+    auto chunkBorders = new unsigned int[pointGrid->resolutionX * pointGrid->resolutionY];
+    unsigned int dataPosition = 0;
+    for (auto i = 0; i < pointGrid->resolutionX * pointGrid->resolutionY; i++) {
+        for (auto point : pointGrid->points[i]) {
+            data[dataPosition++] = point.z;
+        }
+        chunkBorders[i] = dataPosition;
+    }
+
+    auto ssbos = new gl::GLuint[3];
+    gl::glGenBuffers(3, ssbos);
+    gl::glBindBufferBase(gl::GL_SHADER_STORAGE_BUFFER, 0, ssbos[0]);
+    gl::glBufferData(gl::GL_SHADER_STORAGE_BUFFER, sizeof(double) * pointGrid->numberOfPoints, data, gl::GL_STATIC_DRAW);
+    gl::glBindBufferBase(gl::GL_SHADER_STORAGE_BUFFER, 1, ssbos[1]);
+    gl::glBufferData(gl::GL_SHADER_STORAGE_BUFFER, sizeof(unsigned int) * pointGrid->resolutionX * pointGrid->resolutionY, chunkBorders, gl::GL_STATIC_DRAW);
+    gl::glBindBufferBase(gl::GL_SHADER_STORAGE_BUFFER, 2, ssbos[2]);
+    gl::glBufferData(gl::GL_SHADER_STORAGE_BUFFER, sizeof(double) * pointGrid->resolutionX * pointGrid->resolutionY, nullptr, gl::GL_STREAM_READ);
+    gl::glBindBuffer(gl::GL_SHADER_STORAGE_BUFFER, 0);
+
+    gl::glUniform2ui(gl::glGetUniformLocation(shader.ID, "resolution"), pointGrid->resolutionX, pointGrid->resolutionY);
+
+    gl::glDispatchCompute(pointGrid->resolutionX, pointGrid->resolutionY, 1);
+    heightMap map = {.heights = new double[pointGrid->resolutionX * pointGrid->resolutionY], .resolutionX = pointGrid->resolutionX, .resolutionY = pointGrid->resolutionY,  .min = pointGrid->min, .max = pointGrid->max};
+    gl::glMemoryBarrier(gl::GL_ALL_BARRIER_BITS);
+
+    gl::glBindBuffer(gl::GL_SHADER_STORAGE_BUFFER, ssbos[2]);
+    gl::glGetBufferSubData(gl::GL_SHADER_STORAGE_BUFFER, 0, sizeof(double) * pointGrid->resolutionX * pointGrid->resolutionY, map.heights);
+
+    return map;
+}

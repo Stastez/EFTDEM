@@ -13,12 +13,14 @@ struct rawPointCloud {
     std::vector<point> groundPoints;
     std::vector<point> environmentPoints;
     point min, max;
+    unsigned int numberOfPoints;
 };
 
 struct pointGrid {
     std::vector<point> *points;
     unsigned long resolutionX, resolutionY;
     point min, max;
+    unsigned int numberOfPoints;
 };
 
 std::vector<point> get(pointGrid *g, unsigned long x, unsigned long y);

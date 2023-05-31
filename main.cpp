@@ -12,9 +12,9 @@
  * 4 : OpenGL error
  */
 
-void readCloudAndMakeHeightMap(int argc, char** argv){
-    if (argc <= 3) {
-        std::cout << "Usage: EFTDEM <path to point cloud> <desired path to resulting DEM> <pixel per unit>" << std::endl;
+void readCloudAndMakeHeightMap(int argc, char** argv, glHandler* glHandler){
+    if (argc < 5) {
+        std::cout << "Usage: EFTDEM <path to point cloud> <desired path to resulting DEM> <pixel per unit> <use GPU acceleration ? 1 : 0>" << std::endl;
         exit(1);
     }
 
@@ -25,16 +25,14 @@ void readCloudAndMakeHeightMap(int argc, char** argv){
 
     auto grid = rasterizer::rasterizeToPointGrid(&rawCloud, pixelPerUnit);
 
-    auto map = rasterizer::rasterizeToHeightMap(&grid);
+    auto map = rasterizer::rasterizeToHeightMap(&grid, (bool) strtol(argv[4], nullptr, 10), glHandler);
     fileIO::writeTIFF(&map, destinationDEM, true);
 }
 
 int main(int argc, char** argv) {
     auto gl = new glHandler();
-    auto context = gl->initializeGL();
-    auto shader = gl->getShader("../../shaders/test.glsl");
 
-    readCloudAndMakeHeightMap(argc, argv);
+    readCloudAndMakeHeightMap(argc, argv, gl);
 
     return 0;
 }

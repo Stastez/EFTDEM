@@ -1,7 +1,4 @@
 #include "glHandler.h"
-#include <glbinding/gl/gl.h>
-#include <glbinding-aux/ContextInfo.h>
-#include <glbinding/glbinding.h>
 
 #include <iostream>
 #include <fstream>
@@ -14,7 +11,7 @@ void GLAPIENTRY MessageCallback( GLenum source, GLenum type, GLuint id, GLenum s
              type, severity, message );
 }
 
-GLFWwindow * glHandler::initializeGL() {
+GLFWwindow * glHandler::initializeGL(bool debug) {
     if(!glfwInit()) {
         std::cout << "Could not initialize GLFW." << std::endl;
         exit(4);
@@ -23,7 +20,7 @@ GLFWwindow * glHandler::initializeGL() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, debug);
     context = glfwCreateWindow(800, 600, "EFTDEM", nullptr, nullptr);
     if (context == nullptr) {
         const char* error;
