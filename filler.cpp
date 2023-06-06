@@ -3,7 +3,7 @@
 #include "dataStructures.h"
 #include "glHandler.h"
 
-heightMap filler::applyClosingFilter(heightMap *map, glHandler *glHandler) {
+heightMap filler::applyClosingFilter(heightMap *map, glHandler *glHandler, unsigned int kernelPercentageDivisor) {
     using namespace gl;
 
     std::cout << "Applying closing filter using OpenGL..." << std::endl;
@@ -20,13 +20,15 @@ heightMap filler::applyClosingFilter(heightMap *map, glHandler *glHandler) {
 
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, ssbos[0]);
     glBufferData(GL_SHADER_STORAGE_BUFFER, map->dataSize, map->heights.data(), GL_STATIC_DRAW);
+
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, ssbos[1]);
     glBufferData(GL_SHADER_STORAGE_BUFFER, map->dataSize, nullptr, GL_STREAM_READ);
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 
     glUniform2ui(glGetUniformLocation(shader, "resolution"), map->resolutionX, map->resolutionY);
+    glUniform1ui(glGetUniformLocation(shader, "kernelPercentageDivisor"), kernelPercentageDivisor);
 
-    glDispatchCompute(map->resolutionX / 8, map->resolutionY / 8, 1);
+    glDispatchCompute(map->resolutionX, map->resolutionY, 1);
 
     heightMap filledMap = emptyHeightMapfromHeightMap(map);
     glMemoryBarrier(GL_ALL_BARRIER_BITS);
@@ -37,4 +39,6 @@ heightMap filler::applyClosingFilter(heightMap *map, glHandler *glHandler) {
 
     auto end = std::chrono::high_resolution_clock::now();
     std::cout << "Elapsed time for closing: " << duration_cast<std::chrono::milliseconds>(end - start) << std::endl;
+
+    return filledMap;
 }

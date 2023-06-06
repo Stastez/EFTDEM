@@ -53,7 +53,7 @@ heightMap rasterizer::rasterizeToHeightMap(pointGrid *pointGrid, bool useGPU = f
         sum = 0;
 
         for (auto it = pointGrid->points[i].begin(); it != pointGrid->points[i].end(); it++) sum += it->z;
-        map.heights[i] = static_cast<double>(sum / static_cast<long double>(pointGrid->points[i].size()));
+        map.heights[i] = static_cast<double>(sum / std::max(static_cast<long double>(pointGrid->points[i].size()), (long double) 1));
     }
 
     auto end = std::chrono::high_resolution_clock::now();

@@ -1,6 +1,7 @@
 #include "fileIO.h"
 #include "rasterizer.h"
 #include "glHandler.h"
+#include "filler.h"
 #include <iostream>
 
 /*
@@ -26,6 +27,8 @@ void readCloudAndMakeHeightMap(int argc, char** argv, glHandler* glHandler){
     auto grid = rasterizer::rasterizeToPointGrid(&rawCloud, pixelPerUnit);
 
     auto map = rasterizer::rasterizeToHeightMap(&grid, (bool) strtol(argv[4], nullptr, 10), glHandler);
+    map = filler::applyClosingFilter(&map, glHandler, 250);
+
     fileIO::writeTIFF(&map, destinationDEM, true);
 }
 

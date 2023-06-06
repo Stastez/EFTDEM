@@ -25,5 +25,5 @@ void main() {
         sum += heights[i];
     }
 
-    results[position] = sum / double(offsets[position + 1] - offsets[position]);
+    results[position] = sum / max(double(1.), double(offsets[position + 1] - offsets[position]));
 }
