@@ -11,6 +11,7 @@ class glHandler {
 private:
     GLFWwindow* context;
     bool initialized = false;
+    bool isDebug;
 
 public:
     GLFWwindow * initializeGL(bool debug);
@@ -18,6 +19,7 @@ public:
     void uninitializeGL();
 
     bool isInitialized();
+    bool isInitialized(bool debug);
 };
 
 

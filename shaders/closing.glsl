@@ -9,25 +9,27 @@ layout (binding = 1) restrict buffer resultBuffer{
 };
 
 uniform uvec2 resolution;
-uniform uint kernelPercentageDivisor;
+uniform uint kernelRadius;
+uniform uvec2 currentInvocation;
 
 uint calculate1DCoordinate(uvec2 pos) {
     return pos.y * resolution.x + pos.x;
 }
 
 void main() {
+    uvec2 correctedGlobalInvocation = gl_GlobalInvocationID.xy + currentInvocation;
+    if (any(greaterThanEqual(correctedGlobalInvocation, resolution))) return;
+
     double sum = 0.;
     double divisionSum = 0.;
 
-    uvec2 kernelRadius = max(resolution / kernelPercentageDivisor, uvec2(1u));
-
-    for (uint x = max(0u, gl_GlobalInvocationID.x - kernelRadius.x); x < min(resolution.x - 1u, gl_GlobalInvocationID.x + kernelRadius.x); x++) {
-        for (uint y = max(0u, gl_GlobalInvocationID.y - kernelRadius.y); y < min(resolution.y - 1, gl_GlobalInvocationID.y + kernelRadius.y); y++) {
+    for (uint x = max(0u, correctedGlobalInvocation.x - kernelRadius); x < min(resolution.x - 1u, correctedGlobalInvocation.x + kernelRadius); x++) {
+        for (uint y = max(0u, correctedGlobalInvocation.y - kernelRadius); y < min(resolution.y - 1, correctedGlobalInvocation.y + kernelRadius); y++) {
             double currentHeight = heights[calculate1DCoordinate(uvec2(x,y))];
             sum += currentHeight;
             divisionSum += step(double(.00001), currentHeight);
         }
     }
 
-    results[calculate1DCoordinate(gl_GlobalInvocationID.xy)] = (divisionSum == 0.) ? 0. : sum / divisionSum;//heights[calculate1DCoordinate(gl_GlobalInvocationID.xy)];
+    results[calculate1DCoordinate(correctedGlobalInvocation)] = (divisionSum == 0.) ? 0. : sum / divisionSum;//heights[calculate1DCoordinate(gl_GlobalInvocationID.xy)];
 }

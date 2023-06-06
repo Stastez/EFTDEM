@@ -7,7 +7,7 @@
 
 class filler {
 public:
-    static heightMap applyClosingFilter(heightMap *map, glHandler *glHandler, unsigned int kernelPercentageDivisor);
+    static heightMap applyClosingFilter(heightMap *map, glHandler *glHandler, unsigned int kernelRadius);
 };
 
 

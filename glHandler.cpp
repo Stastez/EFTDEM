@@ -12,6 +12,8 @@ void GLAPIENTRY MessageCallback( GLenum source, GLenum type, GLuint id, GLenum s
 }
 
 GLFWwindow * glHandler::initializeGL(bool debug) {
+    if (isInitialized(debug)) uninitializeGL();
+
     if(!glfwInit()) {
         std::cout << "Could not initialize GLFW." << std::endl;
         exit(4);
@@ -37,6 +39,7 @@ GLFWwindow * glHandler::initializeGL(bool debug) {
     glDebugMessageCallback(MessageCallback, nullptr);
 
     initialized = true;
+    this->isDebug = debug;
 
     return context;
 }
@@ -86,4 +89,5 @@ unsigned int glHandler::getShader(const std::string& shaderFile) {
     return program;
 }
 
-bool glHandler::isInitialized() {return initialized;}
+bool glHandler::isInitialized() {return isInitialized(false) || isInitialized(true);}
+bool glHandler::isInitialized(bool debug) {return initialized && (this->isDebug == debug);}
