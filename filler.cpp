@@ -29,51 +29,59 @@ heightMap filler::applyClosingFilter(heightMap *map, glHandler *glHandler, unsig
     glUniform2ui(glGetUniformLocation(shader, "resolution"), map->resolutionX, map->resolutionY);
     glUniform1ui(glGetUniformLocation(shader, "kernelRadius"), kernelRadius);
 
-    unsigned int batchSize = 64;
+    unsigned int batchSize = 1;
     std::chrono::time_point<std::chrono::steady_clock> startInvocation = std::chrono::high_resolution_clock::now(), endInvocation;
     bool first = true;
-    for (unsigned long batchX = 0; batchX < std::ceil(map->resolutionX / (double) batchSize); batchX++) {
-        for (unsigned long batchY = 0; batchY < std::ceil(map->resolutionY / (double) batchSize); batchY++) {
+    unsigned int totalInvocations = map->resolutionX * map->resolutionY, currentInvocation;
 
-            glUniform2ui(glGetUniformLocation(shader, "currentInvocation"), batchX * batchSize, batchY * batchSize);
+    // find optimal batch size
+    while (duration_cast<std::chrono::milliseconds>(endInvocation - startInvocation) < std::chrono::milliseconds {500}) {
+        glUniform2ui(glGetUniformLocation(shader, "currentInvocation"), batchSize, batchSize);
+        glDispatchCompute(batchSize, batchSize, 1);
+        auto sync = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+        glFlush();
+        endInvocation = std::chrono::high_resolution_clock::now();
+        glClientWaitSync(sync, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED);
+        glDeleteSync(sync);
+
+        batchSize *= 2;
+    }
+
+    for (unsigned long batchX = 0; batchX < map->resolutionX; batchX += batchSize) {
+        for (unsigned long batchY = 0; batchY < map->resolutionY; batchY += batchSize) {
+            glUniform2ui(glGetUniformLocation(shader, "currentInvocation"), batchX, batchY);
             glDispatchCompute(batchSize, batchSize, 1);
             auto sync = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
             glFlush();
 
-            if ((unsigned int) (batchX * std::ceil(map->resolutionY / (double) batchSize) + batchY) % 100 == 0 && batchX + batchY != 0) {
-                if (!first) {
-                    std::cout << "\x1b[2K"; // Delete current line
-                    for (int i = 0; i < 5; i++) {
-                        std::cout
-                                << "\x1b[1A" // Move cursor up one
-                                << "\x1b[2K"; // Delete the entire line
-                    }
-                    std::cout << "\r";
+            currentInvocation = batchX * map->resolutionY + batchY;
+            if (!first) {
+                std::cout << "\x1b[2K"; // Delete current line
+                for (int i = 0; i < 6; i++) {
+                    std::cout
+                            << "\x1b[1A" // Move cursor up one
+                            << "\x1b[2K"; // Delete the entire line
                 }
-
-                first = false;
-
-                endInvocation = std::chrono::high_resolution_clock::now();
-
-                unsigned int currentInvocation = batchX * std::ceil(map->resolutionY / (double) batchSize) + batchY,
-                        totalInvocations = std::ceil(map->resolutionX / (double) batchSize) *
-                                           std::ceil(map->resolutionY / (double) batchSize);
-
-                std::cout << "Batch number: " << currentInvocation
-                          << " / " << totalInvocations - 1 << std::endl;
-
-                auto elapsedTime = duration_cast<std::chrono::milliseconds>(endInvocation - startInvocation);
-
-                std::cout << "Elapsed time for 100 invocations: "
-                          << elapsedTime << std::endl
-                          << "Average elapsed time per invocation: "
-                          << elapsedTime / 100
-                          << std::endl;
-                std::cout << "Estimated time to completion: "
-                          << duration_cast<std::chrono::seconds>((elapsedTime / 100) * (totalInvocations - currentInvocation))
-                          << std::endl << std::endl;
-                startInvocation = std::chrono::high_resolution_clock::now();
+                std::cout << "\r";
             }
+            first = false;
+
+            endInvocation = std::chrono::high_resolution_clock::now();
+            auto elapsedTime = endInvocation - startInvocation;
+
+            std::cout << "Batch number: " << currentInvocation
+                      << " / " << totalInvocations - 1 << std::endl;
+            std::cout << "Elapsed time for " << batchSize << " invocations: "
+                      << duration_cast<std::chrono::milliseconds>(elapsedTime) << std::endl
+                      << "Average elapsed time per invocation: "
+                      << duration_cast<std::chrono::milliseconds>(elapsedTime) / batchSize
+                      << std::endl;
+            std::cout << "Estimated time to completion: "
+                      << duration_cast<std::chrono::seconds>((elapsedTime / batchSize) * (totalInvocations - currentInvocation))
+                      << std::endl;
+            std::cout << "Batch size: " << batchSize << std::endl << std::endl;
+
+            startInvocation = std::chrono::high_resolution_clock::now();
 
             glClientWaitSync(sync, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED);
             glDeleteSync(sync);
