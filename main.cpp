@@ -14,7 +14,7 @@
 
 void readCloudAndMakeHeightMap(int argc, char** argv, glHandler* glHandler){
     if (argc < 5) {
-        std::cout << "Usage: EFTDEM <path to point cloud> <desired path to resulting DEM> <pixel per unit> <use GPU acceleration ? 0 - no | 1 - OpenGL | 2 - OpenCL>" << std::endl;
+        std::cout << "Usage: EFTDEM <path to point cloud> <desired path to resulting DEM> <pixel per unit> <use GPU acceleration ? 0 - no | 1 - OpenGL>" << std::endl;
         exit(1);
     }
 
@@ -25,13 +25,8 @@ void readCloudAndMakeHeightMap(int argc, char** argv, glHandler* glHandler){
 
     auto grid = rasterizer::rasterizeToPointGrid(&rawCloud, pixelPerUnit);
 
-    auto map = rasterizer::rasterizeToHeightMap(&grid, strtol(argv[4], nullptr, 10), glHandler);
+    auto map = rasterizer::rasterizeToHeightMap(&grid, (bool) strtol(argv[4], nullptr, 10), glHandler);
     fileIO::writeTIFF(&map, destinationDEM, true);
-
-    /*for (int i = 0; i < 3; i++) {
-        auto map = rasterizer::rasterizeToHeightMap(&grid, i, glHandler);
-        fileIO::writeTIFF(&map, destinationDEM + std::to_string(i), true);
-    }*/
 }
 
 int main(int argc, char** argv) {

@@ -3,11 +3,6 @@
 #include <chrono>
 #include "rasterizer.h"
 #include "glHandler.h"
-#define CL_HPP_ENABLE_EXCEPTIONS
-#define CL_HPP_TARGET_OPENCL_VERSION 300
-
-#include <CL/opencl.hpp>
-#include <fstream>
 
 std::pair<unsigned long, unsigned long> rasterizer::calculateGridCoordinates(pointGrid *grid, rawPointCloud *pointCloud, double xCoord, double yCoord){
     unsigned long x, y;
@@ -42,11 +37,9 @@ pointGrid rasterizer::rasterizeToPointGrid(rawPointCloud *pointCloud, unsigned l
  * @param glHandler If GPU-acceleration is used, the glHandler for creating contexts and reading shaders
  * @return A new heightMap struct
  */
-heightMap rasterizer::rasterizeToHeightMap(pointGrid *pointGrid, int useGPU = 0, glHandler *glHandler = nullptr) {
-    if (useGPU == 1) {
+heightMap rasterizer::rasterizeToHeightMap(pointGrid *pointGrid, bool useGPU = false, glHandler *glHandler = nullptr) {
+    if (useGPU) {
         return rasterizeToHeightMapOpenGL(pointGrid, glHandler);
-    } else if (useGPU == 2) {
-        return rasterizeToHeightMapOpenCL(pointGrid);
     }
 
     std::cout << "Rasterizing points to height map using CPU..." << std::endl;
@@ -77,7 +70,7 @@ heightMap rasterizer::rasterizeToHeightMapOpenGL(pointGrid *pointGrid, glHandler
     auto start = std::chrono::high_resolution_clock::now();
 
     glHandler->initializeGL(false);
-    auto shader = glHandler->getShader("../../shaders/test.glsl");
+    auto shader = glHandler->getShader("../../shaders/averageHeight.glsl");
     glUseProgram(shader);
 
     auto data = new double[pointGrid->numberOfPoints];
@@ -114,72 +107,6 @@ heightMap rasterizer::rasterizeToHeightMapOpenGL(pointGrid *pointGrid, glHandler
 
     auto end = std::chrono::high_resolution_clock::now();
     std::cout << "OpenGL: " << duration_cast<std::chrono::milliseconds>(end - start) << std::endl;
-
-    return map;
-}
-
-heightMap rasterizer::rasterizeToHeightMapOpenCL(pointGrid *pointGrid) {
-    using namespace cl;
-
-    std::cout << "Rasterizing points to height map using OpenCL..." << std::endl;
-
-    auto start = std::chrono::high_resolution_clock::now();
-
-    Context context(CL_DEVICE_TYPE_GPU);
-    CommandQueue queue(context);
-
-    std::string shaderFile = "../../shaders/test.cl";
-    std::ifstream shaderFileStream;
-    std::stringstream shaderStream;
-    shaderFileStream.open(shaderFile);
-    if (!shaderFileStream.is_open()) {
-        std::cout << "Specified shader could not be opened: " << shaderFile << std::endl;
-        exit(3);
-    }
-    shaderStream << shaderFileStream.rdbuf();
-    auto shaderString = shaderStream.str();
-
-    std::vector<double> heights(pointGrid->numberOfPoints);
-    std::vector<unsigned int> offsets(pointGrid->resolutionX * pointGrid->resolutionY);
-    std::vector<double> results(pointGrid->resolutionX * pointGrid->resolutionY);
-
-    unsigned int dataPosition = 0;
-    for (auto i = 0; i < pointGrid->resolutionX * pointGrid->resolutionY; i++) {
-        offsets[i] = dataPosition;
-        for (auto point : pointGrid->points[i]) {
-            heights[dataPosition++] = point.z;
-        }
-    }
-
-    Program program(context, shaderString, true);
-
-    Buffer heightBuffer(context, heights.begin(), heights.end(), true),
-        offsetBuffer(context, offsets.begin(), offsets.end(), true),
-        resultBuffer(context, results.begin(), results.end(), false);
-
-    NDRange local(64);
-    NDRange global(pointGrid->resolutionX * pointGrid->resolutionY / 64);
-
-    cl_ulong resX = pointGrid->resolutionX;
-    cl_ulong resY = pointGrid->resolutionY;
-
-    EnqueueArgs args(queue, global, local);
-
-    Kernel averageHeight(program, "averageHeight");
-    averageHeight.setArg(0, resX);
-    averageHeight.setArg(1, resY);
-    averageHeight.setArg(2, heightBuffer);
-    averageHeight.setArg(3, offsetBuffer);
-    averageHeight.setArg(4, resultBuffer);
-    queue.enqueueNDRangeKernel(averageHeight,NullRange, global, local);
-    queue.finish();
-
-    copy(queue, resultBuffer, results.begin(), results.end());
-
-    heightMap map = {.heights = results, .resolutionX = pointGrid->resolutionX, .resolutionY = pointGrid->resolutionY,  .min = pointGrid->min, .max = pointGrid->max};
-
-    auto end = std::chrono::high_resolution_clock::now();
-    std::cout << "OpenCL: " << duration_cast<std::chrono::milliseconds>(end - start) << std::endl;
 
     return map;
 }

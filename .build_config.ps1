@@ -4,7 +4,7 @@ if (Test-Path "build"){
     Remove-Item "build" -Recurse
 }
 
-cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE="${depFolder}\vcpkg\scripts\buildsystems\vcpkg.cmake" -Dglfw3_DIR="${depFolder}\glfw\lib\cmake\glfw3" -Dglbinding_DIR="${depFolder}\glbinding" -Dglm_DIR="${depFolder}\glm\lib\cmake\glm" -D OpenCL_DIR="${depFolder}\OpenCL-SDK\install\share\cmake\OpenCL" -G "Visual Studio 17 2022" -A x64
+cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE="${depFolder}\vcpkg\scripts\buildsystems\vcpkg.cmake" -Dglfw3_DIR="${depFolder}\glfw\lib\cmake\glfw3" -Dglbinding_DIR="${depFolder}\glbinding" -Dglm_DIR="${depFolder}\glm\lib\cmake\glm" -G "Visual Studio 17 2022" -A x64
 
 New-Item -Path "build\Debug" -ItemType Directory
 New-Item -Path "build\Release" -ItemType Directory

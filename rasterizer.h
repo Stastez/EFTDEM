@@ -13,9 +13,7 @@ private:
 
 public:
     static pointGrid rasterizeToPointGrid(rawPointCloud *pointCloud, unsigned long pixelPerUnit);
-    static heightMap rasterizeToHeightMap(pointGrid *pointGrid, int useGPU, glHandler *glHandler);
-
-    static heightMap rasterizeToHeightMapOpenCL(pointGrid *pointGrid);
+    static heightMap rasterizeToHeightMap(pointGrid *pointGrid, bool useGPU, glHandler *glHandler);
 };
 
 
