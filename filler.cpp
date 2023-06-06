@@ -29,7 +29,7 @@ heightMap filler::applyClosingFilter(heightMap *map, glHandler *glHandler, unsig
     glUniform2ui(glGetUniformLocation(shader, "resolution"), map->resolutionX, map->resolutionY);
     glUniform1ui(glGetUniformLocation(shader, "kernelRadius"), kernelRadius);
 
-    unsigned int batchSize = 1;
+    unsigned int batchSize = 32;
     std::chrono::time_point<std::chrono::steady_clock> startInvocation = std::chrono::high_resolution_clock::now(), endInvocation;
     bool first = true;
     unsigned int totalInvocations = map->resolutionX * map->resolutionY, currentInvocation;
@@ -77,9 +77,15 @@ heightMap filler::applyClosingFilter(heightMap *map, glHandler *glHandler, unsig
                       << duration_cast<std::chrono::milliseconds>(elapsedTime) / batchSize
                       << std::endl;
             std::cout << "Estimated time to completion: "
-                      << duration_cast<std::chrono::seconds>((elapsedTime / batchSize) * (totalInvocations - currentInvocation))
+                      << duration_cast<std::chrono::seconds>(elapsedTime * (totalInvocations - currentInvocation) / batchSize)
                       << std::endl;
             std::cout << "Batch size: " << batchSize << std::endl << std::endl;
+
+            if (duration_cast<std::chrono::milliseconds>(endInvocation - startInvocation) > std::chrono::milliseconds {1000}) {
+                batchSize /= 2;
+                batchX = 0;
+                batchY = 0;
+            }
 
             startInvocation = std::chrono::high_resolution_clock::now();
 
