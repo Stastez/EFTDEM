@@ -36,11 +36,14 @@ GLFWwindow * glHandler::initializeGL(bool debug) {
 
     glDebugMessageCallback(MessageCallback, nullptr);
 
+    initialized = true;
+
     return context;
 }
 
 void glHandler::uninitializeGL() {
     glfwTerminate();
+    initialized = false;
 }
 
 unsigned int glHandler::getShader(const std::string& shaderFile) {
@@ -82,3 +85,5 @@ unsigned int glHandler::getShader(const std::string& shaderFile) {
     glDeleteShader(shaderNumber);
     return program;
 }
+
+bool glHandler::isInitialized() {return initialized;}

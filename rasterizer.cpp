@@ -46,7 +46,7 @@ heightMap rasterizer::rasterizeToHeightMap(pointGrid *pointGrid, bool useGPU = f
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    heightMap map = {.heights = std::vector<double>(pointGrid->resolutionX * pointGrid->resolutionY), .resolutionX = pointGrid->resolutionX, .resolutionY = pointGrid->resolutionY,  .min = pointGrid->min, .max = pointGrid->max};
+    heightMap map = emptyHeightMapfromPointGrid(pointGrid);
     long double sum;
 
     for (unsigned long long i = 0; i < map.resolutionX * map.resolutionY; i++){
@@ -57,7 +57,7 @@ heightMap rasterizer::rasterizeToHeightMap(pointGrid *pointGrid, bool useGPU = f
     }
 
     auto end = std::chrono::high_resolution_clock::now();
-    std::cout << "CPU: " << duration_cast<std::chrono::milliseconds>(end - start) << std::endl;
+    std::cout << "Elapsed time for averaging: " << duration_cast<std::chrono::milliseconds>(end - start) << std::endl;
 
     return map;
 }
@@ -69,7 +69,7 @@ heightMap rasterizer::rasterizeToHeightMapOpenGL(pointGrid *pointGrid, glHandler
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    glHandler->initializeGL(false);
+    if (!glHandler->isInitialized()) glHandler->initializeGL(false);
     auto shader = glHandler->getShader("../../shaders/averageHeight.glsl");
     glUseProgram(shader);
 
@@ -98,7 +98,7 @@ heightMap rasterizer::rasterizeToHeightMapOpenGL(pointGrid *pointGrid, glHandler
     glUniform2ui(glGetUniformLocation(shader, "resolution"), pointGrid->resolutionX, pointGrid->resolutionY);
 
     glDispatchCompute(pointGrid->resolutionX / 8, pointGrid->resolutionY / 8, 1);
-    heightMap map = {.heights = std::vector<double>(pointGrid->resolutionX * pointGrid->resolutionY), .resolutionX = pointGrid->resolutionX, .resolutionY = pointGrid->resolutionY,  .min = pointGrid->min, .max = pointGrid->max};
+    heightMap map = emptyHeightMapfromPointGrid(pointGrid);
     glMemoryBarrier(GL_ALL_BARRIER_BITS);
 
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbos[2]);
@@ -106,7 +106,7 @@ heightMap rasterizer::rasterizeToHeightMapOpenGL(pointGrid *pointGrid, glHandler
     glDeleteBuffers(3, ssbos);
 
     auto end = std::chrono::high_resolution_clock::now();
-    std::cout << "OpenGL: " << duration_cast<std::chrono::milliseconds>(end - start) << std::endl;
+    std::cout << "Elapsed time for averaging: " << duration_cast<std::chrono::milliseconds>(end - start) << std::endl;
 
     return map;
 }

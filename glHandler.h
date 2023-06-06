@@ -10,11 +10,14 @@
 class glHandler {
 private:
     GLFWwindow* context;
+    bool initialized = false;
 
 public:
     GLFWwindow * initializeGL(bool debug);
     unsigned int getShader(const std::string& shaderFile);
     void uninitializeGL();
+
+    bool isInitialized();
 };
 
 

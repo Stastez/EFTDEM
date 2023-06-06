@@ -83,3 +83,21 @@ double normalizeValue(double value, double min, double max){
 double denormalizeValue(double value, double min, double max){
     return value * (max-min) + min;
 }
+
+heightMap emptyHeightMapfromPointGrid(pointGrid *grid) {
+    return {.heights = std::vector<double>(grid->resolutionX * grid->resolutionY),
+            .resolutionX = grid->resolutionX,
+            .resolutionY = grid->resolutionY,
+            .dataSize = (long long) sizeof(double) * grid->resolutionX * grid->resolutionY,
+            .min = grid->min,
+            .max = grid->max};
+}
+
+heightMap emptyHeightMapfromHeightmap(heightMap *map){
+    return {.heights = std::vector<double>(map->resolutionX * map->resolutionY),
+            .resolutionX = map->resolutionX,
+            .resolutionY = map->resolutionY,
+            .dataSize = map->dataSize,
+            .min = map->min,
+            .max = map->max };
+}

@@ -31,8 +31,12 @@ unsigned long long calculate1DCoordinate(pointGrid *g, unsigned long x, unsigned
 struct heightMap {
     std::vector<double> heights;
     unsigned long resolutionX, resolutionY;
+    long long dataSize;
     point min, max;
 };
+
+heightMap emptyHeightMapfromHeightMap(heightMap *originalMap);
+heightMap emptyHeightMapfromPointGrid(pointGrid *grid);
 
 double denormalizeValue(double value, double min, double max);
 double normalizeValue(double value, double min, double max);

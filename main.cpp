@@ -34,5 +34,7 @@ int main(int argc, char** argv) {
 
     readCloudAndMakeHeightMap(argc, argv, gl);
 
+    gl->uninitializeGL();
+
     return 0;
 }
