@@ -70,13 +70,15 @@ heightMap rasterizer::rasterizeToHeightMap(pointGrid *pointGrid, int useGPU = 0,
 }
 
 heightMap rasterizer::rasterizeToHeightMapOpenGL(pointGrid *pointGrid, glHandler *glHandler) {
+    using namespace gl;
+
     std::cout << "Rasterizing points to height map using OpenGL..." << std::endl;
 
     auto start = std::chrono::high_resolution_clock::now();
 
     glHandler->initializeGL(false);
     auto shader = glHandler->getShader("../../shaders/test.glsl");
-    gl::glUseProgram(shader);
+    glUseProgram(shader);
 
     auto data = new double[pointGrid->numberOfPoints];
     auto chunkBorders = new unsigned int[pointGrid->resolutionX * pointGrid->resolutionY];
@@ -88,27 +90,27 @@ heightMap rasterizer::rasterizeToHeightMapOpenGL(pointGrid *pointGrid, glHandler
         }
     }
 
-    auto ssbos = new gl::GLuint[3];
-    gl::glGenBuffers(3, ssbos);
-    gl::glBindBufferBase(gl::GL_SHADER_STORAGE_BUFFER, 0, ssbos[0]);
-    gl::glBufferData(gl::GL_SHADER_STORAGE_BUFFER, (long long) sizeof(double) * pointGrid->numberOfPoints, data, gl::GL_STATIC_DRAW);
+    auto ssbos = new GLuint[3];
+    glGenBuffers(3, ssbos);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, ssbos[0]);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, (long long) sizeof(double) * pointGrid->numberOfPoints, data, GL_STATIC_DRAW);
     delete[] data;
-    gl::glBindBufferBase(gl::GL_SHADER_STORAGE_BUFFER, 1, ssbos[1]);
-    gl::glBufferData(gl::GL_SHADER_STORAGE_BUFFER, (long long) sizeof(unsigned int) * pointGrid->resolutionX * pointGrid->resolutionY, chunkBorders, gl::GL_STATIC_DRAW);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 1, ssbos[1]);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, (long long) sizeof(unsigned int) * pointGrid->resolutionX * pointGrid->resolutionY, chunkBorders, GL_STATIC_DRAW);
     delete[] chunkBorders;
-    gl::glBindBufferBase(gl::GL_SHADER_STORAGE_BUFFER, 2, ssbos[2]);
-    gl::glBufferData(gl::GL_SHADER_STORAGE_BUFFER, (long long) sizeof(double) * pointGrid->resolutionX * pointGrid->resolutionY, nullptr, gl::GL_STREAM_READ);
-    gl::glBindBuffer(gl::GL_SHADER_STORAGE_BUFFER, 0);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 2, ssbos[2]);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, (long long) sizeof(double) * pointGrid->resolutionX * pointGrid->resolutionY, nullptr, GL_STREAM_READ);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 
-    gl::glUniform2ui(gl::glGetUniformLocation(shader, "resolution"), pointGrid->resolutionX, pointGrid->resolutionY);
+    glUniform2ui(glGetUniformLocation(shader, "resolution"), pointGrid->resolutionX, pointGrid->resolutionY);
 
-    gl::glDispatchCompute(pointGrid->resolutionX / 8, pointGrid->resolutionY / 8, 1);
+    glDispatchCompute(pointGrid->resolutionX / 8, pointGrid->resolutionY / 8, 1);
     heightMap map = {.heights = std::vector<double>(pointGrid->resolutionX * pointGrid->resolutionY), .resolutionX = pointGrid->resolutionX, .resolutionY = pointGrid->resolutionY,  .min = pointGrid->min, .max = pointGrid->max};
-    gl::glMemoryBarrier(gl::GL_ALL_BARRIER_BITS);
+    glMemoryBarrier(GL_ALL_BARRIER_BITS);
 
-    gl::glBindBuffer(gl::GL_SHADER_STORAGE_BUFFER, ssbos[2]);
-    gl::glGetBufferSubData(gl::GL_SHADER_STORAGE_BUFFER, 0, (long long) sizeof(double) * pointGrid->resolutionX * pointGrid->resolutionY, map.heights.data());
-    gl::glDeleteBuffers(3, ssbos);
+    glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbos[2]);
+    glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, (long long) sizeof(double) * pointGrid->resolutionX * pointGrid->resolutionY, map.heights.data());
+    glDeleteBuffers(3, ssbos);
 
     auto end = std::chrono::high_resolution_clock::now();
     std::cout << "OpenGL: " << duration_cast<std::chrono::milliseconds>(end - start) << std::endl;
@@ -156,20 +158,20 @@ heightMap rasterizer::rasterizeToHeightMapOpenCL(pointGrid *pointGrid) {
         resultBuffer(context, results.begin(), results.end(), false);
 
     NDRange local(64);
-    NDRange global(pointGrid->resolutionX * pointGrid->resolutionY);
+    NDRange global(pointGrid->resolutionX * pointGrid->resolutionY / 64);
 
     cl_ulong resX = pointGrid->resolutionX;
     cl_ulong resY = pointGrid->resolutionY;
 
     EnqueueArgs args(queue, global, local);
 
-    cl::Kernel averageHeight(program, "averageHeight");
+    Kernel averageHeight(program, "averageHeight");
     averageHeight.setArg(0, resX);
     averageHeight.setArg(1, resY);
     averageHeight.setArg(2, heightBuffer);
     averageHeight.setArg(3, offsetBuffer);
     averageHeight.setArg(4, resultBuffer);
-    queue.enqueueNDRangeKernel(averageHeight,cl::NullRange, global, cl::NullRange);
+    queue.enqueueNDRangeKernel(averageHeight,NullRange, global, local);
     queue.finish();
 
     copy(queue, resultBuffer, results.begin(), results.end());
