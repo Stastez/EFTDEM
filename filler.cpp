@@ -32,7 +32,7 @@ heightMap filler::applyClosingFilter(heightMap *map, glHandler *glHandler, unsig
     unsigned int batchSize = 32;
     std::chrono::time_point<std::chrono::steady_clock> startInvocation = std::chrono::high_resolution_clock::now(), endInvocation;
     bool first = true;
-    unsigned int totalInvocations = map->resolutionX * map->resolutionY, currentInvocation;
+    unsigned int totalInvocations = std::ceil(map->resolutionX * map->resolutionY), currentInvocation;
 
     // find optimal batch size
     while (duration_cast<std::chrono::milliseconds>(endInvocation - startInvocation) < std::chrono::milliseconds {500}) {
@@ -47,8 +47,8 @@ heightMap filler::applyClosingFilter(heightMap *map, glHandler *glHandler, unsig
         batchSize *= 2;
     }
 
-    for (unsigned long batchX = 0; batchX < map->resolutionX; batchX += batchSize) {
-        for (unsigned long batchY = 0; batchY < map->resolutionY; batchY += batchSize) {
+    for (unsigned long batchX = 0; batchX < map->resolutionX; batchX += batchSize * 8) {
+        for (unsigned long batchY = 0; batchY < map->resolutionY; batchY += batchSize * 4) {
             glUniform2ui(glGetUniformLocation(shader, "currentInvocation"), batchX, batchY);
             glDispatchCompute(batchSize, batchSize, 1);
             auto sync = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
@@ -57,7 +57,7 @@ heightMap filler::applyClosingFilter(heightMap *map, glHandler *glHandler, unsig
             currentInvocation = batchX * map->resolutionY + batchY;
             if (!first) {
                 std::cout << "\x1b[2K"; // Delete current line
-                for (int i = 0; i < 6; i++) {
+                for (int i = 0; i < 5; i++) {
                     std::cout
                             << "\x1b[1A" // Move cursor up one
                             << "\x1b[2K"; // Delete the entire line
@@ -75,9 +75,6 @@ heightMap filler::applyClosingFilter(heightMap *map, glHandler *glHandler, unsig
                       << duration_cast<std::chrono::milliseconds>(elapsedTime) << std::endl
                       << "Average elapsed time per invocation: "
                       << duration_cast<std::chrono::milliseconds>(elapsedTime) / batchSize
-                      << std::endl;
-            std::cout << "Estimated time to completion: "
-                      << duration_cast<std::chrono::seconds>(elapsedTime * (totalInvocations - currentInvocation) / batchSize)
                       << std::endl;
             std::cout << "Batch size: " << batchSize << std::endl << std::endl;
 
