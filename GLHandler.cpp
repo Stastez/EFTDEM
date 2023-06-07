@@ -1,4 +1,4 @@
-#include "glHandler.h"
+#include "GLHandler.h"
 
 #include <iostream>
 #include <fstream>
@@ -11,7 +11,7 @@ void GLAPIENTRY MessageCallback( GLenum source, GLenum type, GLuint id, GLenum s
              type, severity, message );
 }
 
-GLFWwindow * glHandler::initializeGL(bool debug) {
+GLFWwindow * GLHandler::initializeGL(bool debug) {
     if (isInitialized(debug)) uninitializeGL();
 
     if(!glfwInit()) {
@@ -44,12 +44,12 @@ GLFWwindow * glHandler::initializeGL(bool debug) {
     return context;
 }
 
-void glHandler::uninitializeGL() {
+void GLHandler::uninitializeGL() {
     glfwTerminate();
     initialized = false;
 }
 
-unsigned int glHandler::getShader(const std::string& shaderFile) {
+unsigned int GLHandler::getShader(const std::string& shaderFile) {
     std::ifstream shaderFileStream;
     std::stringstream shaderStream;
     shaderFileStream.open(shaderFile);
@@ -89,5 +89,5 @@ unsigned int glHandler::getShader(const std::string& shaderFile) {
     return program;
 }
 
-bool glHandler::isInitialized() {return isInitialized(false) || isInitialized(true);}
-bool glHandler::isInitialized(bool debug) {return initialized && (this->isDebug == debug);}
+bool GLHandler::isInitialized() {return isInitialized(false) || isInitialized(true);}
+bool GLHandler::isInitialized(bool debug) {return initialized && (this->isDebug == debug);}

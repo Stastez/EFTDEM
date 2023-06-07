@@ -4,9 +4,9 @@
 
 #include <vector>
 #include <string>
-#include "dataStructures.h"
+#include "DataStructures.h"
 
-class fileIO {
+class FileIO {
 public:
     static rawPointCloud readCSV(const std::string& fileName);
     static void writeTIFF(const heightMap *map, const std::string& destinationDEM, bool writeLowDepth = true);

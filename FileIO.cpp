@@ -1,5 +1,5 @@
 
-#include "fileIO.h"
+#include "FileIO.h"
 #include <gdal_priv.h>
 #include <fstream>
 #include <iostream>
@@ -13,7 +13,7 @@ using std::vector, std::pair;
  * @param fileName The path to the csv containing the point cloud
  * @return A new rawPointCloud struct
  */
-rawPointCloud fileIO::readCSV(const std::string& fileName) {
+rawPointCloud FileIO::readCSV(const std::string& fileName) {
     std::fstream pointFile (fileName, std::ios::in);
     if (!pointFile.is_open()) {
         std::cout << "Specified file could not be opened." << std::endl;
@@ -64,7 +64,7 @@ rawPointCloud fileIO::readCSV(const std::string& fileName) {
  * @param resolutionX
  * @param resolutionY
  */
-void fileIO::writeTIFF(const heightMap *map, const std::string& destinationDEM, const bool writeLowDepth) {
+void FileIO::writeTIFF(const heightMap *map, const std::string& destinationDEM, const bool writeLowDepth) {
     if (map->resolutionX > std::numeric_limits<int>::max() || map->resolutionY > std::numeric_limits<int>::max()) {
         std::cout << "Resolution too great for GeoTIFF!" << std::endl;
         exit(2);

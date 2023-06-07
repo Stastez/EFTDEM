@@ -1,10 +1,10 @@
 
 #include <iostream>
 #include <chrono>
-#include "rasterizer.h"
-#include "glHandler.h"
+#include "Rasterizer.h"
+#include "GLHandler.h"
 
-std::pair<unsigned long, unsigned long> rasterizer::calculateGridCoordinates(pointGrid *grid, rawPointCloud *pointCloud, double xCoord, double yCoord){
+std::pair<unsigned long, unsigned long> Rasterizer::calculateGridCoordinates(pointGrid *grid, rawPointCloud *pointCloud, double xCoord, double yCoord){
     unsigned long x, y;
     x = std::min(grid->resolutionX - 1, (unsigned long) floor(normalizeValue(xCoord, pointCloud->min.x, pointCloud->max.x) * grid->resolutionX));
     y = std::min(grid->resolutionY - 1, (unsigned long) floor(normalizeValue(yCoord, pointCloud->min.y, pointCloud->max.y) * grid->resolutionY));
@@ -12,7 +12,7 @@ std::pair<unsigned long, unsigned long> rasterizer::calculateGridCoordinates(poi
 }
 
 
-pointGrid rasterizer::rasterizeToPointGrid(rawPointCloud *pointCloud, unsigned long pixelPerUnit) {
+pointGrid Rasterizer::rasterizeToPointGrid(rawPointCloud *pointCloud, unsigned long pixelPerUnit) {
     std::cout << "Sorting points into grid..." << std::endl;
 
     unsigned long resolutionX = std::max((unsigned long) std::ceil((pointCloud->max.x - pointCloud->min.x) * pixelPerUnit), 1ul);
@@ -34,10 +34,10 @@ pointGrid rasterizer::rasterizeToPointGrid(rawPointCloud *pointCloud, unsigned l
  * Creates a heightmap from the given point grid by averaging the points of every grid cell.
  * @param pointGrid The point grid containing the point data, sorted into a grid
  * @param useGPU Whether to use OpenGL GPU-acceleration
- * @param glHandler If GPU-acceleration is used, the glHandler for creating contexts and reading shaders
+ * @param glHandler If GPU-acceleration is used, the GLHandler for creating contexts and reading shaders
  * @return A new heightMap struct
  */
-heightMap rasterizer::rasterizeToHeightMap(pointGrid *pointGrid, bool useGPU = false, glHandler *glHandler = nullptr) {
+heightMap Rasterizer::rasterizeToHeightMap(pointGrid *pointGrid, bool useGPU = false, GLHandler *glHandler = nullptr) {
     if (useGPU) {
         return rasterizeToHeightMapOpenGL(pointGrid, glHandler);
     }
@@ -62,7 +62,7 @@ heightMap rasterizer::rasterizeToHeightMap(pointGrid *pointGrid, bool useGPU = f
     return map;
 }
 
-heightMap rasterizer::rasterizeToHeightMapOpenGL(pointGrid *pointGrid, glHandler *glHandler) {
+heightMap Rasterizer::rasterizeToHeightMapOpenGL(pointGrid *pointGrid, GLHandler *glHandler) {
     using namespace gl;
 
     std::cout << "Rasterizing points to height map using OpenGL..." << std::endl;

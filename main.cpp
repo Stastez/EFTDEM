@@ -1,7 +1,7 @@
-#include "fileIO.h"
-#include "rasterizer.h"
-#include "glHandler.h"
-#include "filler.h"
+#include "FileIO.h"
+#include "Rasterizer.h"
+#include "GLHandler.h"
+#include "Filler.h"
 #include <iostream>
 
 /*
@@ -13,7 +13,7 @@
  * 4 : OpenGL error
  */
 
-void readCloudAndMakeHeightMap(int argc, char** argv, glHandler* glHandler){
+void readCloudAndMakeHeightMap(int argc, char** argv, GLHandler* glHandler){
     if (argc < 6) {
         std::cout << "Usage: EFTDEM <path to point cloud> <desired path to resulting DEM> <pixel per unit> <filling kernel radius in pixels> <use GPU acceleration ? 0 - no | 1 - OpenGL>" << std::endl;
         exit(1);
@@ -22,18 +22,18 @@ void readCloudAndMakeHeightMap(int argc, char** argv, glHandler* glHandler){
     std::string filename = argv[1];
     std::string destinationDEM = argv[2];
     unsigned long pixelPerUnit = strtoul(argv[3], nullptr, 10);
-    auto rawCloud = fileIO::readCSV(filename);
+    auto rawCloud = FileIO::readCSV(filename);
 
-    auto grid = rasterizer::rasterizeToPointGrid(&rawCloud, pixelPerUnit);
+    auto grid = Rasterizer::rasterizeToPointGrid(&rawCloud, pixelPerUnit);
 
-    auto map = rasterizer::rasterizeToHeightMap(&grid, (bool) strtol(argv[5], nullptr, 10), glHandler);
-    map = filler::applyClosingFilter(&map, glHandler, strtoul(argv[4], nullptr, 10));
+    auto map = Rasterizer::rasterizeToHeightMap(&grid, (bool) strtol(argv[5], nullptr, 10), glHandler);
+    map = Filler::applyClosingFilter(&map, glHandler, strtoul(argv[4], nullptr, 10));
 
-    fileIO::writeTIFF(&map, destinationDEM, true);
+    FileIO::writeTIFF(&map, destinationDEM, true);
 }
 
 int main(int argc, char** argv) {
-    auto gl = new glHandler();
+    auto gl = new GLHandler();
 
     readCloudAndMakeHeightMap(argc, argv, gl);
 

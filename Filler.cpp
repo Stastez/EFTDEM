@@ -1,9 +1,9 @@
 #include <iostream>
-#include "filler.h"
-#include "dataStructures.h"
-#include "glHandler.h"
+#include "Filler.h"
+#include "DataStructures.h"
+#include "GLHandler.h"
 
-heightMap filler::applyClosingFilter(heightMap *map, glHandler *glHandler, unsigned int kernelRadius) {
+heightMap Filler::applyClosingFilter(heightMap *map, GLHandler *glHandler, unsigned int kernelRadius) {
     using namespace gl;
 
     std::cout << "Applying closing filter using OpenGL..." << std::endl << std::endl;

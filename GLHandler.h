@@ -7,7 +7,7 @@
 #include <glbinding/glbinding.h>
 #include <string>
 
-class glHandler {
+class GLHandler {
 private:
     GLFWwindow* context;
     bool initialized = false;
