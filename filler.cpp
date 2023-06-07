@@ -36,13 +36,14 @@ heightMap filler::applyClosingFilter(heightMap *map, glHandler *glHandler, unsig
 
     // find optimal batch size
     while (duration_cast<std::chrono::milliseconds>(endInvocation - startInvocation) < std::chrono::milliseconds {500}) {
+        startInvocation = std::chrono::high_resolution_clock::now();
         glUniform2ui(glGetUniformLocation(shader, "currentInvocation"), batchSize, batchSize);
         glDispatchCompute(batchSize, batchSize, 1);
         auto sync = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
-        glFlush();
-        endInvocation = std::chrono::high_resolution_clock::now();
         glClientWaitSync(sync, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED);
         glDeleteSync(sync);
+
+        endInvocation = std::chrono::high_resolution_clock::now();
 
         batchSize *= 2;
     }
@@ -52,7 +53,6 @@ heightMap filler::applyClosingFilter(heightMap *map, glHandler *glHandler, unsig
             glUniform2ui(glGetUniformLocation(shader, "currentInvocation"), batchX, batchY);
             glDispatchCompute(batchSize, batchSize, 1);
             auto sync = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
-            glFlush();
 
             currentInvocation = batchX * map->resolutionY + batchY;
             if (!first) {
