@@ -10,7 +10,6 @@ private:
 public:
     bool isDefaultComponent() const;
     IPipelineComponent();
-    virtual IPipelineComponentReturn apply() const = 0;
 };
 
 inline bool IPipelineComponent::isDefaultComponent() const {

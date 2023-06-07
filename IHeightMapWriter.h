@@ -5,7 +5,7 @@
 
 class IHeightMapWriter : public IPipelineComponent {
 public:
-    virtual void apply() = 0;
+    virtual void apply(const heightMap *map, const std::string& destinationDEM) = 0;
 };
 
 

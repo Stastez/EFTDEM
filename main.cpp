@@ -1,8 +1,11 @@
-#include "FileIO.h"
-#include "Rasterizer.h"
 #include "GLHandler.h"
-#include "Filler.h"
+#include "ClosingFilter.h"
 #include "Pipeline.h"
+#include "CloudReader.h"
+#include "GTiffWriter.h"
+#include "SorterCPU.h"
+#include "RasterizerCpu.h"
+#include "RasterizerGpu.h"
 #include <iostream>
 
 /*
@@ -14,7 +17,7 @@
  * 4 : OpenGL error
  */
 
-void readCloudAndMakeHeightMap(int argc, char** argv, GLHandler* glHandler){
+/*void readCloudAndMakeHeightMap(int argc, char** argv, GLHandler* glHandler){
     if (argc < 6) {
         std::cout << "Usage: EFTDEM <path to point cloud> <desired path to resulting DEM> <pixel per unit> <filling kernel radius in pixels> <use GPU acceleration ? 0 - no | 1 - OpenGL>" << std::endl;
         exit(1);
@@ -28,18 +31,28 @@ void readCloudAndMakeHeightMap(int argc, char** argv, GLHandler* glHandler){
     auto grid = Rasterizer::rasterizeToPointGrid(&rawCloud, pixelPerUnit);
 
     auto map = Rasterizer::rasterizeToHeightMap(&grid, (bool) strtol(argv[5], nullptr, 10), glHandler);
-    map = Filler::applyClosingFilter(&map, glHandler, strtoul(argv[4], nullptr, 10));
+    map = ClosingFilter::apply(&map, glHandler, strtoul(argv[4], nullptr, 10));
 
     FileIO::writeTIFF(&map, destinationDEM, true);
-}
+}*/
 
 int main(int argc, char** argv) {
-    /*auto gl = new GLHandler();
+    if (argc < 6) {
+        std::cout << "Usage: EFTDEM <path to point cloud> <desired path to resulting DEM> <pixel per unit> <filling kernel radius in pixels> <use GPU acceleration ? 0 - no | 1 - OpenGL>" << std::endl;
+        exit(1);
+    }
 
-    readCloudAndMakeHeightMap(argc, argv, gl);
+    auto pipeline = new Pipeline(argv[1], argv[2],strtoul(argv[3], nullptr, 10));
 
-    gl->uninitializeGL();*/
+    pipeline->attachElements(
+            new CloudReader(),
+            new SorterCPU(),
+            ((bool) strtol(argv[5], nullptr, 10)) ? (ICloudRasterizer *) new RasterizerGPU(pipeline->getGLHandler()) : (ICloudRasterizer *) new RasterizerCPU(),
+            new ClosingFilter(pipeline->getGLHandler(), strtoul(argv[4], nullptr, 10), 2048),
+            new GTiffWriter(true)
+            );
 
+    pipeline->execute();
 
     return 0;
 }

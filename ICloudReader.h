@@ -2,10 +2,11 @@
 #define EFTDEM_ICLOUDREADER_H
 
 #include "IPipelineComponent.h"
+#include <string>
 
 class ICloudReader : public IPipelineComponent {
 public:
-    virtual rawPointCloud apply() = 0;
+    virtual rawPointCloud apply(const std::string& fileName) = 0;
 };
 
 

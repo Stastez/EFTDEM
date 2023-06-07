@@ -11,17 +11,26 @@
 
 class Pipeline {
 private:
-    ICloudReader *reader;
-    ICloudSorter *sorter;
-    ICloudRasterizer *rasterizer;
-    IHeightMapFiller *filler;
-    IHeightMapWriter *writer;
-    GLHandler *glHandler;
+    std::string sourceFilePath;
+    std::string destinationPath;
+    unsigned long pixelPerUnit;
+
+    ICloudReader *reader{};
+    ICloudSorter *sorter{};
+    ICloudRasterizer *rasterizer{};
+    IHeightMapFiller *filler{};
+    IHeightMapWriter *writer{};
+    GLHandler *glHandler{};
 
 public:
-    Pipeline(ICloudReader *, ICloudSorter *, ICloudRasterizer *, IHeightMapFiller *, IHeightMapWriter *);
-    Pipeline(ICloudReader *, ICloudSorter *, ICloudRasterizer *, IHeightMapFiller *, IHeightMapWriter *, GLHandler *);
+    Pipeline(std::string sourceFilePath, std::string destinationPath, unsigned long pixelPerUnit);
+    Pipeline(std::string sourceFilePath, std::string destinationPath, unsigned long pixelPerUnit, ICloudReader *, ICloudSorter *, ICloudRasterizer *, IHeightMapFiller *, IHeightMapWriter *);
+    Pipeline(std::string sourceFilePath, std::string destinationPath, unsigned long pixelPerUnit, ICloudReader *, ICloudSorter *, ICloudRasterizer *, IHeightMapFiller *, IHeightMapWriter *, GLHandler *);
     bool isOperable();
+
+    void attachElements(ICloudReader *, ICloudSorter *, ICloudRasterizer *, IHeightMapFiller *, IHeightMapWriter *);
+
+    void execute();
 
     ICloudReader *getReader();
     void setReader(ICloudReader *reader);

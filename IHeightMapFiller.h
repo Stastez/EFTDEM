@@ -5,7 +5,7 @@
 
 class IHeightMapFiller : public IPipelineComponent {
 public:
-    virtual heightMap apply() = 0;
+    virtual heightMap apply(heightMap *map) = 0;
 };
 
 
