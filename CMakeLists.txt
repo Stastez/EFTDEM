@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.25)
 project(EFTDEM)
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(EFTDEM FileIO.cpp FileIO.h main.cpp DataStructures.cpp Rasterizer.cpp Rasterizer.h GLHandler.cpp GLHandler.h Filler.cpp Filler.h IPipeline.h)
+add_executable(EFTDEM FileIO.cpp FileIO.h main.cpp DataStructures.cpp Rasterizer.cpp Rasterizer.h GLHandler.cpp GLHandler.h Filler.cpp Filler.h Pipeline.h ICloudSorter.h ICloudReader.h ICloudRasterizer.h IHeightMapFiller.h IHeightMapWriter.h Pipeline.cpp IPipelineComponent.h)
 
 find_package(GDAL CONFIG REQUIRED)
 

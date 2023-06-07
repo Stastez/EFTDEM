@@ -4,19 +4,21 @@
 
 #include <vector>
 
+struct IPipelineComponentReturn {};
+
 struct point {
     double x, y, z;
     int intensity;
 };
 
-struct rawPointCloud {
+struct rawPointCloud : IPipelineComponentReturn {
     std::vector<point> groundPoints;
     std::vector<point> environmentPoints;
     point min, max;
     unsigned int numberOfPoints;
 };
 
-struct pointGrid {
+struct pointGrid : IPipelineComponentReturn {
     std::vector<std::vector<point>> points;
     unsigned long resolutionX, resolutionY;
     point min, max;
@@ -28,7 +30,7 @@ void set(pointGrid *g, unsigned long x, unsigned long y, std::vector<point> valu
 void add(pointGrid *g, unsigned long x, unsigned long y, point value);
 unsigned long long calculate1DCoordinate(pointGrid *g, unsigned long x, unsigned long y);
 
-struct heightMap {
+struct heightMap : IPipelineComponentReturn {
     std::vector<double> heights;
     unsigned long resolutionX, resolutionY;
     long long dataSize;

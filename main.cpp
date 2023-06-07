@@ -2,6 +2,7 @@
 #include "Rasterizer.h"
 #include "GLHandler.h"
 #include "Filler.h"
+#include "Pipeline.h"
 #include <iostream>
 
 /*
@@ -33,11 +34,12 @@ void readCloudAndMakeHeightMap(int argc, char** argv, GLHandler* glHandler){
 }
 
 int main(int argc, char** argv) {
-    auto gl = new GLHandler();
+    /*auto gl = new GLHandler();
 
     readCloudAndMakeHeightMap(argc, argv, gl);
 
-    gl->uninitializeGL();
+    gl->uninitializeGL();*/
+
 
     return 0;
 }

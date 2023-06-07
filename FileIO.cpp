@@ -54,7 +54,7 @@ rawPointCloud FileIO::readCSV(const std::string& fileName) {
         min = {0,0,0}; max = {0,0,0};
     }
 
-    return {groundPoints, environmentPoints, min, max};
+    return {.groundPoints = groundPoints, .environmentPoints = environmentPoints, .min = min, .max = max};
 }
 
 /**
