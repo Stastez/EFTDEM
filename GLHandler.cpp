@@ -131,5 +131,8 @@ void GLHandler::waitForShaderStorageIntegrity() {
     glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 }
 
+std::vector<bool> GLHandler::getCoherentBufferMask() {
+    return coherentBufferMask;
+}
 bool GLHandler::isInitialized() {return isInitialized(false) || isInitialized(true);}
 bool GLHandler::isInitialized(bool debug) {return initialized && (this->isDebug == debug);}

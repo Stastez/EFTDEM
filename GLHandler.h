@@ -12,15 +12,9 @@ public:
     enum bufferIndices {
         EFTDEM_UNBIND,
         EFTDEM_RAW_POINT_BUFFER, // 3 double for each point
-        EFTDEM_RAW_POINT_SUM_BUFFER, // double for each point
-        EFTDEM_RAW_POINT_COUNT_BUFFER, // unsigned int for each point
-        EFTDEM_SORTED_POINTS_BUFFER,
-        EFTDEM_SORTED_POINTS_OFFSET_BUFFER,
-        EFTDEM_HEIGHTMAP_BUFFER,
-        EFTDEM_SECOND_HEIGHTMAP_BUFFER,
-        EFTDEM_FIRST_CLOSING_FILTER_BUFFER,
-        EFTDEM_SECOND_CLOSING_FILTER_BUFFER,
-        EFTDEM_THIRD_CLOSING_FILTER_BUFFER,
+        EFTDEM_RAW_POINT_INDEX_BUFFER, // unsigned int for each point
+        EFTDEM_SORTED_POINT_SUM_BUFFER, // double for each grid cell
+        EFTDEM_SORTED_POINT_COUNT_BUFFER, // unsigned int for each grid cell
         lengthElementDoNotUse
     };
 
@@ -38,6 +32,7 @@ public:
 
     bool isInitialized();
     bool isInitialized(bool debug);
+    std::vector<bool> getCoherentBufferMask();
 
 private:
     GLFWwindow* context;

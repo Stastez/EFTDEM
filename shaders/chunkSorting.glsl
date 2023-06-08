@@ -4,7 +4,7 @@ layout (local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
 layout (binding = 1) restrict buffer pointBuffer{
     double points[];
 };
-layout (binding = 3) restrict buffer gridCoordinateBuffer{
+layout (binding = 2) restrict buffer gridCoordinateBuffer{
     uint coordinate[];
 };
 

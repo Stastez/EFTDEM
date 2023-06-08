@@ -38,7 +38,7 @@ pointGrid SorterGPU::apply(rawPointCloud *pointCloud, unsigned long pixelPerUnit
     glUniform2ui(glGetUniformLocation(shaderPrograms[0], "resolution"), resolutionX, resolutionY);
     glUniform1ui(glGetUniformLocation(shaderPrograms[0], "numberOfPoints"), pointCloud->numberOfPoints);
 
-    glHandler->dataToBuffer(GLHandler::EFTDEM_RAW_POINT_COUNT_BUFFER, (long long) (pointCloud->numberOfPoints * sizeof(GLuint)), nullptr, GL_STREAM_READ);
+    glHandler->dataToBuffer(GLHandler::EFTDEM_RAW_POINT_INDEX_BUFFER, (long long) (pointCloud->numberOfPoints * sizeof(GLuint)), nullptr, GL_STREAM_READ);
     glHandler->bindBuffer(GLHandler::EFTDEM_UNBIND);
 
     auto workgroupSize = (unsigned int) std::ceil(std::sqrt(pointCloud->numberOfPoints));
@@ -50,7 +50,7 @@ pointGrid SorterGPU::apply(rawPointCloud *pointCloud, unsigned long pixelPerUnit
     }
 
     std::vector<unsigned int> gridIndices(pointCloud->numberOfPoints);
-    glHandler->dataFromBuffer(GLHandler::EFTDEM_RAW_POINT_COUNT_BUFFER, 0, (long long) (pointCloud->numberOfPoints * sizeof(GLuint)), gridIndices.data());
+    glHandler->dataFromBuffer(GLHandler::EFTDEM_RAW_POINT_INDEX_BUFFER, 0, (long long) (pointCloud->numberOfPoints * sizeof(GLuint)), gridIndices.data());
 
     pointGrid grid = {.points = std::vector<std::vector<point>>(resolutionX * resolutionY),
                       .resolutionX = resolutionX,
