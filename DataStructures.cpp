@@ -84,6 +84,20 @@ double denormalizeValue(double value, double min, double max){
     return value * (max-min) + min;
 }
 
+point normalizeValue(point value, point min, point max) {
+    return point{.x = normalizeValue(value.x, min.x, max.x),
+                 .y = normalizeValue(value.y, min.y, max.y),
+                 .z = normalizeValue(value.z, min.z, max.z),
+                 .intensity = value.intensity};
+}
+
+point denormalizeValue(point value, point min, point max) {
+    return point{.x = denormalizeValue(value.x, min.x, max.x),
+            .y = denormalizeValue(value.y, min.y, max.y),
+            .z = denormalizeValue(value.z, min.z, max.z),
+            .intensity = value.intensity};
+}
+
 heightMap emptyHeightMapfromPointGrid(pointGrid *grid) {
     return {.heights = std::vector<double>(grid->resolutionX * grid->resolutionY),
             .resolutionX = grid->resolutionX,

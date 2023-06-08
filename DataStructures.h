@@ -40,5 +40,7 @@ heightMap emptyHeightMapfromPointGrid(pointGrid *grid);
 
 double denormalizeValue(double value, double min, double max);
 double normalizeValue(double value, double min, double max);
+point normalizeValue(point value, point min, point max);
+point denormalizeValue(point value, point min, point max);
 
 #endif //EFTDEM_DATASTRUCTURES_H

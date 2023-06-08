@@ -11,9 +11,9 @@ class GLHandler {
 public:
     enum bufferIndices {
         EFTDEM_UNBIND,
-        EFTDEM_RAW_POINT_BUFFER,
-        EFTDEM_RAW_POINT_SUM_BUFFER,
-        EFTDEM_RAW_POINT_COUNT_BUFFER,
+        EFTDEM_RAW_POINT_BUFFER, // 3 double for each point
+        EFTDEM_RAW_POINT_SUM_BUFFER, // double for each point
+        EFTDEM_RAW_POINT_COUNT_BUFFER, // unsigned int for each point
         EFTDEM_SORTED_POINTS_BUFFER,
         EFTDEM_SORTED_POINTS_OFFSET_BUFFER,
         EFTDEM_HEIGHTMAP_BUFFER,

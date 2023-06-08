@@ -60,5 +60,5 @@ rawPointCloud CloudReader::apply(const std::string &fileName, bool generateOutpu
         min = {0,0,0}; max = {0,0,0};
     }
 
-    return {.groundPoints = groundPoints, .environmentPoints = environmentPoints, .min = min, .max = max};
+    return {.groundPoints = groundPoints, .environmentPoints = environmentPoints, .min = min, .max = max, .numberOfPoints = static_cast<unsigned int>(groundPoints.size())};
 }

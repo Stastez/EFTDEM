@@ -6,6 +6,7 @@
 #include "SorterCPU.h"
 #include "RasterizerCpu.h"
 #include "RasterizerGpu.h"
+#include "SorterGpu.h"
 #include <iostream>
 
 /*
@@ -46,7 +47,8 @@ int main(int argc, char** argv) {
 
     pipeline->attachElements(
             new CloudReader(),
-            new SorterCPU(),
+            new SorterGPU(pipeline->getGLHandler()),
+            //new SorterCPU(),
             ((bool) strtol(argv[5], nullptr, 10)) ? (ICloudRasterizer *) new RasterizerGPU(pipeline->getGLHandler()) : (ICloudRasterizer *) new RasterizerCPU(),
             new ClosingFilter(pipeline->getGLHandler(), strtoul(argv[4], nullptr, 10), 512),
             new GTiffWriter(true)

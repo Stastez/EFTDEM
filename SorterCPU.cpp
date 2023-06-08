@@ -17,7 +17,7 @@ void SorterCPU::cleanUp() {
 }
 
 pointGrid SorterCPU::apply(rawPointCloud *pointCloud, unsigned long pixelPerUnit, bool generateOutput) {
-    std::cout << "Sorting points into grid..." << std::endl;
+    std::cout << "Sorting points into grid using CPU..." << std::endl;
 
     if (!generateOutput) return {};
 

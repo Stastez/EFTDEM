@@ -29,17 +29,17 @@ bool adjacentStagesUseGPU(IPipelineComponent *first, IPipelineComponent *second)
 void Pipeline::execute() {
     if (!isOperable()) exit(2);
 
-    bool generateOutput;
-    generateOutput = adjacentStagesUseGPU(reader, sorter);
+    bool generateOutput = true;
+    //generateOutput = adjacentStagesUseGPU(reader, sorter);
     auto readerReturn = reader->apply(sourceFilePath, generateOutput);
     reader->cleanUp();
-    generateOutput = adjacentStagesUseGPU(sorter, rasterizer);
+    //generateOutput = adjacentStagesUseGPU(sorter, rasterizer);
     auto sorterReturn = sorter->apply(&readerReturn, pixelPerUnit, generateOutput);
     sorter->cleanUp();
-    generateOutput = adjacentStagesUseGPU(rasterizer, filler);
+    //generateOutput = adjacentStagesUseGPU(rasterizer, filler);
     auto rasterizerReturn = rasterizer->apply(&sorterReturn, generateOutput);
     rasterizer->cleanUp();
-    generateOutput = adjacentStagesUseGPU(filler, writer);
+    //generateOutput = adjacentStagesUseGPU(filler, writer);
     auto fillerReturn = filler->apply(&rasterizerReturn, generateOutput);
     filler->cleanUp();
     writer->apply(&fillerReturn, destinationPath + "_filled", generateOutput);
