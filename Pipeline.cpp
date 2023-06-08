@@ -2,6 +2,10 @@
 
 #include <utility>
 
+Pipeline::~Pipeline() {
+    glHandler->uninitializeGL();
+}
+
 Pipeline::Pipeline(std::string sourceFilePath, std::string destinationPath, unsigned long pixelPerUnit) {
     this->sourceFilePath = std::move(sourceFilePath);
     this->destinationPath = std::move(destinationPath);
@@ -19,12 +23,19 @@ Pipeline::Pipeline(std::string sourceFilePath, std::string destinationPath, unsi
 }
 
 void Pipeline::execute() {
+    if (!isOperable()) exit(2);
+
     auto readerReturn = reader->apply(sourceFilePath);
+    reader->cleanUp();
     auto sorterReturn = sorter->apply(&readerReturn, pixelPerUnit);
+    sorter->cleanUp();
     auto rasterizerReturn = rasterizer->apply(&sorterReturn);
+    rasterizer->cleanUp();
     auto fillerReturn = filler->apply(&rasterizerReturn);
+    filler->cleanUp();
     writer->apply(&fillerReturn, destinationPath + "_filled");
     writer->apply(&rasterizerReturn, destinationPath);
+    writer->cleanUp();
 }
 
 void Pipeline::attachElements(ICloudReader *reader, ICloudSorter *sorter, ICloudRasterizer *rasterizer, IHeightMapFiller *filler, IHeightMapWriter *writer) {
@@ -36,11 +47,11 @@ void Pipeline::attachElements(ICloudReader *reader, ICloudSorter *sorter, ICloud
 }
 
 bool Pipeline::isOperable() {
-    return !(reader->isDefaultComponent()
-            || sorter->isDefaultComponent()
-            || rasterizer->isDefaultComponent()
-            || filler->isDefaultComponent()
-            || writer->isDefaultComponent());
+    return !(reader == nullptr
+            || sorter == nullptr
+            || rasterizer == nullptr
+            || filler == nullptr
+            || writer == nullptr);
 }
 
 ICloudReader *Pipeline::getReader() {

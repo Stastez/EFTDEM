@@ -9,6 +9,10 @@ ClosingFilter::ClosingFilter(GLHandler *glHandler, unsigned int kernelRadius, un
     ClosingFilter::batchSize = batchSize;
 }
 
+void ClosingFilter::cleanUp() {
+
+}
+
 heightMap ClosingFilter::apply(heightMap *map) {
     using namespace gl;
 
@@ -19,8 +23,10 @@ heightMap ClosingFilter::apply(heightMap *map) {
     bool debug = false;
 
     if (!glHandler->isInitialized(debug)) glHandler->initializeGL(debug);
-    auto shader = glHandler->getShader("../../shaders/closing.glsl");
-    glUseProgram(shader);
+    std::vector<std::string> shaderPaths;
+    shaderPaths.emplace_back("../../shaders/closing.glsl");
+    auto shader = glHandler->getShaderPrograms(shaderPaths);
+    glUseProgram(shader[0]);
 
     GLuint ssbos[2];
     glGenBuffers(2, ssbos);
@@ -32,8 +38,8 @@ heightMap ClosingFilter::apply(heightMap *map) {
     glBufferData(GL_SHADER_STORAGE_BUFFER, map->dataSize, nullptr, GL_STREAM_READ);
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
 
-    glUniform2ui(glGetUniformLocation(shader, "resolution"), map->resolutionX, map->resolutionY);
-    glUniform1ui(glGetUniformLocation(shader, "kernelRadius"), kernelRadius);
+    glUniform2ui(glGetUniformLocation(shader[0], "resolution"), map->resolutionX, map->resolutionY);
+    glUniform1ui(glGetUniformLocation(shader[0], "kernelRadius"), kernelRadius);
 
     std::chrono::time_point<std::chrono::steady_clock> startInvocation, endInvocation;
     unsigned int localBatchSize = batchSize;
@@ -44,7 +50,7 @@ heightMap ClosingFilter::apply(heightMap *map) {
         while (duration_cast<std::chrono::milliseconds>(endInvocation - startInvocation) <
                std::chrono::milliseconds{500}) {
             startInvocation = std::chrono::high_resolution_clock::now();
-            glUniform2ui(glGetUniformLocation(shader, "currentInvocation"), batchSize, batchSize);
+            glUniform2ui(glGetUniformLocation(shader[0], "currentInvocation"), batchSize, batchSize);
             glDispatchCompute(batchSize, batchSize, 1);
             auto sync = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
             glClientWaitSync(sync, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED);
@@ -62,7 +68,7 @@ heightMap ClosingFilter::apply(heightMap *map) {
     unsigned int totalInvocations = std::ceil(map->resolutionX * map->resolutionY), currentInvocation;
     for (unsigned long batchX = 0; batchX < map->resolutionX; batchX += localBatchSize * 8) {
         for (unsigned long batchY = 0; batchY < map->resolutionY; batchY += localBatchSize * 4) {
-            glUniform2ui(glGetUniformLocation(shader, "currentInvocation"), batchX, batchY);
+            glUniform2ui(glGetUniformLocation(shader[0], "currentInvocation"), batchX, batchY);
             glDispatchCompute(localBatchSize, localBatchSize, 1);
             auto sync = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
 

@@ -1,6 +1,10 @@
 #include <iostream>
 #include "RasterizerCpu.h"
 
+void RasterizerCPU::cleanUp() {
+
+}
+
 /**
  * Creates a heightmap from the given point grid by averaging the points of every grid cell.
  * @param pointGrid The point grid containing the point data, sorted into a grid

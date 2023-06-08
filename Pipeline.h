@@ -23,6 +23,8 @@ private:
     GLHandler *glHandler{};
 
 public:
+    ~Pipeline();
+
     Pipeline(std::string sourceFilePath, std::string destinationPath, unsigned long pixelPerUnit);
     Pipeline(std::string sourceFilePath, std::string destinationPath, unsigned long pixelPerUnit, ICloudReader *, ICloudSorter *, ICloudRasterizer *, IHeightMapFiller *, IHeightMapWriter *);
     Pipeline(std::string sourceFilePath, std::string destinationPath, unsigned long pixelPerUnit, ICloudReader *, ICloudSorter *, ICloudRasterizer *, IHeightMapFiller *, IHeightMapWriter *, GLHandler *);

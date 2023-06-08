@@ -3,6 +3,10 @@
 #include <sstream>
 #include "CloudReader.h"
 
+void CloudReader::cleanUp() {
+
+}
+
 /**
  * Reads the content of the fileName-provided file into a raw, non-grid point cloud struct. The file must be comma-
  * separated and conform to the format [x],[y],[z],[ground point? -> 1; environment point? -> 0],[reflection intensity]

@@ -1,13 +1,13 @@
 #version 430 core
 
 layout (local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
-layout (binding = 0) restrict buffer pointBuffer{
+layout (binding = 1) restrict buffer pointBuffer{
     double heights[];
 };
-layout (binding = 1) restrict buffer offsetBuffer{
+layout (binding = 3) restrict buffer offsetBuffer{
     uint offsets[];
 };
-layout (binding = 2) restrict buffer resultBuffer{
+layout (binding = 6) restrict buffer resultBuffer{
     double results[];
 };
 

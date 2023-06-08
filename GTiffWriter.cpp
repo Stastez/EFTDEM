@@ -6,6 +6,10 @@ GTiffWriter::GTiffWriter(bool writeLowDepth) {
     GTiffWriter::writeLowDepth = writeLowDepth;
 }
 
+void GTiffWriter::cleanUp() {
+
+}
+
 /**
  * Exports the provided height map into GeoTiff format. The resolution of the height map must be within int limits.
  *

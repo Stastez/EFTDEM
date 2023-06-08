@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
             new CloudReader(),
             new SorterCPU(),
             ((bool) strtol(argv[5], nullptr, 10)) ? (ICloudRasterizer *) new RasterizerGPU(pipeline->getGLHandler()) : (ICloudRasterizer *) new RasterizerCPU(),
-            new ClosingFilter(pipeline->getGLHandler(), strtoul(argv[4], nullptr, 10), 2048),
+            new ClosingFilter(pipeline->getGLHandler(), strtoul(argv[4], nullptr, 10), 512),
             new GTiffWriter(true)
             );
 

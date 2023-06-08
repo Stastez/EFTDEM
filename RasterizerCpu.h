@@ -7,6 +7,7 @@
 
 class RasterizerCPU : ICloudRasterizer {
 public:
+    void cleanUp() override;
     heightMap apply(pointGrid *pointGrid) override;
 };
 

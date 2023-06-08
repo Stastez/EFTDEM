@@ -38,6 +38,8 @@ GLFWwindow * GLHandler::initializeGL(bool debug) {
 
     glDebugMessageCallback(MessageCallback, nullptr);
 
+    glGenBuffers(bufferCount, ssbos);
+
     initialized = true;
     this->isDebug = debug;
 
@@ -45,48 +47,77 @@ GLFWwindow * GLHandler::initializeGL(bool debug) {
 }
 
 void GLHandler::uninitializeGL() {
+    glDeleteBuffers(bufferCount, ssbos);
     glfwTerminate();
     initialized = false;
 }
 
-unsigned int GLHandler::getShader(const std::string& shaderFile) {
-    std::ifstream shaderFileStream;
-    std::stringstream shaderStream;
-    shaderFileStream.open(shaderFile);
-    if (!shaderFileStream.is_open()) {
-        std::cout << "Specified shader could not be opened: " << shaderFile << std::endl;
-        exit(3);
-    }
-    shaderStream << shaderFileStream.rdbuf();
-    auto shaderString = shaderStream.str();
-    auto shader = shaderString.c_str();
+std::vector<GLuint> GLHandler::getShaderPrograms(std::vector<std::string> shaderFiles) {
+    std::vector<GLuint> programs;
 
-    int success;
-    char infoLog[512];
-    auto shaderNumber = glCreateShader(GL_COMPUTE_SHADER);
-    glShaderSource(shaderNumber, 1, &shader, nullptr);
-    glCompileShader(shaderNumber);
-    glGetShaderiv(shaderNumber, GL_COMPILE_STATUS, &success);
-    if(!success)
-    {
-        glGetShaderInfoLog(shaderNumber, 512, nullptr, infoLog);
-        std::cout << infoLog << std::endl;
-        exit(4);
+    for (auto shaderFile : shaderFiles) {
+        std::ifstream shaderFileStream;
+        std::stringstream shaderStream;
+        shaderFileStream.open(shaderFile);
+        if (!shaderFileStream.is_open()) {
+            std::cout << "Specified shader could not be opened: " << shaderFile << std::endl;
+            exit(3);
+        }
+        shaderStream << shaderFileStream.rdbuf();
+        auto shaderString = shaderStream.str();
+        auto shader = shaderString.c_str();
+
+        int success;
+        char infoLog[512];
+        auto shaderNumber = glCreateShader(GL_COMPUTE_SHADER);
+        glShaderSource(shaderNumber, 1, &shader, nullptr);
+        glCompileShader(shaderNumber);
+        glGetShaderiv(shaderNumber, GL_COMPILE_STATUS, &success);
+        if (!success) {
+            glGetShaderInfoLog(shaderNumber, 512, nullptr, infoLog);
+            std::cout << infoLog << std::endl;
+            exit(4);
+        }
+
+        auto program = glCreateProgram();
+        glAttachShader(program, shaderNumber);
+
+        glLinkProgram(program);
+
+        glGetProgramiv(program, GL_LINK_STATUS, &success);
+        if (!success) {
+            glGetProgramInfoLog(program, 512, nullptr, infoLog);
+            std::cout << infoLog << std::endl;
+            exit(4);
+        }
+
+        glDeleteShader(shaderNumber);
+
+        programs.emplace_back(program);
     }
 
-    auto program = glCreateProgram();
-    glAttachShader(program, shaderNumber);
-    glLinkProgram(program);
-    glGetProgramiv(program, GL_LINK_STATUS, &success);
-    if(!success)
-    {
-        glGetProgramInfoLog(program, 512, nullptr, infoLog);
-        std::cout << infoLog << std::endl;
-        exit(4);
-    }
+    return programs;
+}
 
-    glDeleteShader(shaderNumber);
-    return program;
+void GLHandler::bindBuffer(GLHandler::bufferIndices buffer) {
+    if (buffer == EFTDEM_UNBIND) glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+    else glBindBufferBase(GL_SHADER_STORAGE_BUFFER, buffer, ssbos[buffer]);
+}
+
+void GLHandler::dataToBuffer(GLHandler::bufferIndices buffer, gl::GLsizeiptr size, const void *data, gl::GLenum usage) {
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, buffer, ssbos[buffer]);
+    glBufferData(GL_SHADER_STORAGE_BUFFER, size, data, usage);
+}
+
+void GLHandler::dataFromBuffer(GLHandler::bufferIndices buffer, gl::GLsizeiptr offset, gl::GLsizeiptr size, void *data) {
+    bindBuffer(buffer);
+    glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+    glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, offset, size, data);
+}
+
+void GLHandler::setProgram(gl::GLuint program) {
+    glUseProgram(program);
+    currentProgram = program;
 }
 
 bool GLHandler::isInitialized() {return isInitialized(false) || isInitialized(true);}
