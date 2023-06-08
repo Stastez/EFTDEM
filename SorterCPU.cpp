@@ -8,12 +8,18 @@ std::pair<unsigned long, unsigned long> SorterCPU::calculateGridCoordinates(poin
     return {x, y};
 }
 
+SorterCPU::SorterCPU() {
+    SorterCPU::stageUsesGPU = false;
+}
+
 void SorterCPU::cleanUp() {
 
 }
 
-pointGrid SorterCPU::apply(rawPointCloud *pointCloud, unsigned long pixelPerUnit) {
+pointGrid SorterCPU::apply(rawPointCloud *pointCloud, unsigned long pixelPerUnit, bool generateOutput) {
     std::cout << "Sorting points into grid..." << std::endl;
+
+    if (!generateOutput) return {};
 
     unsigned long resolutionX = std::max((unsigned long) std::ceil((pointCloud->max.x - pointCloud->min.x) * pixelPerUnit), 1ul);
     unsigned long resolutionY = std::max((unsigned long) std::ceil((pointCloud->max.y - pointCloud->min.y) * pixelPerUnit), 1ul);

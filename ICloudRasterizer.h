@@ -5,7 +5,7 @@
 
 class ICloudRasterizer : public IPipelineComponent {
 public:
-    virtual heightMap apply(pointGrid *pointGrid) = 0;
+    virtual heightMap apply(pointGrid *pointGrid, bool generateOutput) = 0;
 };
 
 

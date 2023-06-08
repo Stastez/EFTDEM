@@ -5,7 +5,7 @@
 
 class ICloudSorter : public IPipelineComponent {
 public:
-    virtual pointGrid apply(rawPointCloud *pointCloud, unsigned long pixelPerUnit) = 0;
+    virtual pointGrid apply(rawPointCloud *pointCloud, unsigned long pixelPerUnit, bool generateOutput) = 0;
 };
 
 

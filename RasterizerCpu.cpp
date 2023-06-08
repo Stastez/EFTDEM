@@ -1,6 +1,10 @@
 #include <iostream>
 #include "RasterizerCpu.h"
 
+RasterizerCPU::RasterizerCPU() {
+    RasterizerCPU::stageUsesGPU = false;
+}
+
 void RasterizerCPU::cleanUp() {
 
 }
@@ -12,8 +16,10 @@ void RasterizerCPU::cleanUp() {
  * @param glHandler If GPU-acceleration is used, the GLHandler for creating contexts and reading shaders
  * @return A new heightMap struct
  */
-heightMap RasterizerCPU::apply(pointGrid *pointGrid) {
+heightMap RasterizerCPU::apply(pointGrid *pointGrid, bool generateOutput) {
     std::cout << "Rasterizing points to height map using CPU..." << std::endl;
+
+    if (!generateOutput) return {};
 
     auto start = std::chrono::high_resolution_clock::now();
 

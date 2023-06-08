@@ -7,7 +7,9 @@
 #include "ICloudReader.h"
 
 class CloudReader : public ICloudReader {
-    rawPointCloud apply(const std::string &fileName) override;
+public:
+    CloudReader();
+    rawPointCloud apply(const std::string &fileName, bool generateOutput) override;
     void cleanUp() override;
 };
 

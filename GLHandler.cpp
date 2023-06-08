@@ -38,7 +38,10 @@ GLFWwindow * GLHandler::initializeGL(bool debug) {
 
     glDebugMessageCallback(MessageCallback, nullptr);
 
-    glGenBuffers(bufferCount, ssbos);
+    ssbos = std::vector<GLuint>(lengthElementDoNotUse);
+    glGenBuffers(lengthElementDoNotUse, ssbos.data());
+
+    coherentBufferMask = std::vector<bool>(lengthElementDoNotUse, false);
 
     initialized = true;
     this->isDebug = debug;
@@ -47,7 +50,7 @@ GLFWwindow * GLHandler::initializeGL(bool debug) {
 }
 
 void GLHandler::uninitializeGL() {
-    glDeleteBuffers(bufferCount, ssbos);
+    glDeleteBuffers(lengthElementDoNotUse, ssbos.data());
     glfwTerminate();
     initialized = false;
 }
@@ -100,24 +103,32 @@ std::vector<GLuint> GLHandler::getShaderPrograms(std::vector<std::string> shader
 }
 
 void GLHandler::bindBuffer(GLHandler::bufferIndices buffer) {
-    if (buffer == EFTDEM_UNBIND) glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+    if (buffer == lengthElementDoNotUse) exit(2);
+    else if (buffer == EFTDEM_UNBIND) glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
     else glBindBufferBase(GL_SHADER_STORAGE_BUFFER, buffer, ssbos[buffer]);
 }
 
 void GLHandler::dataToBuffer(GLHandler::bufferIndices buffer, gl::GLsizeiptr size, const void *data, gl::GLenum usage) {
+    if (buffer == lengthElementDoNotUse || buffer == EFTDEM_UNBIND) exit(2);
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, buffer, ssbos[buffer]);
     glBufferData(GL_SHADER_STORAGE_BUFFER, size, data, usage);
+    coherentBufferMask[buffer - 1] = true;
 }
 
 void GLHandler::dataFromBuffer(GLHandler::bufferIndices buffer, gl::GLsizeiptr offset, gl::GLsizeiptr size, void *data) {
+    if (buffer == lengthElementDoNotUse || buffer == EFTDEM_UNBIND) exit(2);
     bindBuffer(buffer);
-    glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+    waitForShaderStorageIntegrity();
     glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, offset, size, data);
 }
 
 void GLHandler::setProgram(gl::GLuint program) {
     glUseProgram(program);
     currentProgram = program;
+}
+
+void GLHandler::waitForShaderStorageIntegrity() {
+    glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 }
 
 bool GLHandler::isInitialized() {return isInitialized(false) || isInitialized(true);}

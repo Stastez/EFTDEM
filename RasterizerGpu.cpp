@@ -3,13 +3,14 @@
 
 RasterizerGPU::RasterizerGPU(GLHandler *glHandler) {
     RasterizerGPU::glHandler = glHandler;
+    RasterizerGPU::stageUsesGPU = true;
 }
 
 void RasterizerGPU::cleanUp() {
 
 }
 
-heightMap RasterizerGPU::apply(pointGrid *pointGrid) {
+heightMap RasterizerGPU::apply(pointGrid *pointGrid, bool generateOutput) {
     using namespace gl;
 
     std::cout << "Rasterizing points to height map using OpenGL..." << std::endl;
@@ -48,6 +49,12 @@ heightMap RasterizerGPU::apply(pointGrid *pointGrid) {
     glUniform2ui(glGetUniformLocation(shader[0], "resolution"), pointGrid->resolutionX, pointGrid->resolutionY);
 
     glDispatchCompute(pointGrid->resolutionX / 8, pointGrid->resolutionY / 8, 1);
+
+    if (!generateOutput) {
+        glHandler->waitForShaderStorageIntegrity();
+        return {};
+    }
+
     heightMap map = emptyHeightMapfromPointGrid(pointGrid);
 
     glHandler->dataFromBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER, 0,

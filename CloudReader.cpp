@@ -3,6 +3,10 @@
 #include <sstream>
 #include "CloudReader.h"
 
+CloudReader::CloudReader() {
+    stageUsesGPU = false;
+}
+
 void CloudReader::cleanUp() {
 
 }
@@ -13,7 +17,9 @@ void CloudReader::cleanUp() {
  * @param fileName The path to the csv containing the point cloud
  * @return A new rawPointCloud struct
  */
-rawPointCloud CloudReader::apply(const std::string& fileName) {
+rawPointCloud CloudReader::apply(const std::string &fileName, bool generateOutput) {
+    if (!generateOutput) return {};
+
     std::fstream pointFile (fileName, std::ios::in);
     if (!pointFile.is_open()) {
         std::cout << "Specified file could not be opened." << std::endl;

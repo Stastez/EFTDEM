@@ -22,19 +22,28 @@ Pipeline::Pipeline(std::string sourceFilePath, std::string destinationPath, unsi
     attachElements(reader, sorter, rasterizer, filler, writer);
 }
 
+bool adjacentStagesUseGPU(IPipelineComponent *first, IPipelineComponent *second) {
+    return !(first->usesGPU() && second->usesGPU());
+}
+
 void Pipeline::execute() {
     if (!isOperable()) exit(2);
 
-    auto readerReturn = reader->apply(sourceFilePath);
+    bool generateOutput;
+    generateOutput = adjacentStagesUseGPU(reader, sorter);
+    auto readerReturn = reader->apply(sourceFilePath, generateOutput);
     reader->cleanUp();
-    auto sorterReturn = sorter->apply(&readerReturn, pixelPerUnit);
+    generateOutput = adjacentStagesUseGPU(sorter, rasterizer);
+    auto sorterReturn = sorter->apply(&readerReturn, pixelPerUnit, generateOutput);
     sorter->cleanUp();
-    auto rasterizerReturn = rasterizer->apply(&sorterReturn);
+    generateOutput = adjacentStagesUseGPU(rasterizer, filler);
+    auto rasterizerReturn = rasterizer->apply(&sorterReturn, generateOutput);
     rasterizer->cleanUp();
-    auto fillerReturn = filler->apply(&rasterizerReturn);
+    generateOutput = adjacentStagesUseGPU(filler, writer);
+    auto fillerReturn = filler->apply(&rasterizerReturn, generateOutput);
     filler->cleanUp();
-    writer->apply(&fillerReturn, destinationPath + "_filled");
-    writer->apply(&rasterizerReturn, destinationPath);
+    writer->apply(&fillerReturn, destinationPath + "_filled", generateOutput);
+    writer->apply(&rasterizerReturn, destinationPath, generateOutput);
     writer->cleanUp();
 }
 

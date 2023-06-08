@@ -7,13 +7,14 @@ ClosingFilter::ClosingFilter(GLHandler *glHandler, unsigned int kernelRadius, un
     ClosingFilter::glHandler = glHandler;
     ClosingFilter::kernelRadius = kernelRadius;
     ClosingFilter::batchSize = batchSize;
+    ClosingFilter::stageUsesGPU = true;
 }
 
 void ClosingFilter::cleanUp() {
 
 }
 
-heightMap ClosingFilter::apply(heightMap *map) {
+heightMap ClosingFilter::apply(heightMap *map, bool generateOutput) {
     using namespace gl;
 
     std::cout << "Applying closing filter using OpenGL..." << std::endl << std::endl;
@@ -109,15 +110,18 @@ heightMap ClosingFilter::apply(heightMap *map) {
         }
     }
 
+    glHandler->waitForShaderStorageIntegrity();
+    auto end = std::chrono::high_resolution_clock::now();
+    std::cout << "Elapsed time for closing: " << duration_cast<std::chrono::milliseconds>(end - start) << std::endl;
+
+    if (!generateOutput) return {};
+
     heightMap filledMap = emptyHeightMapfromHeightMap(map);
     glMemoryBarrier(GL_ALL_BARRIER_BITS);
 
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbos[1]);
     glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, filledMap.dataSize, filledMap.heights.data());
     glDeleteBuffers(2, ssbos);
-
-    auto end = std::chrono::high_resolution_clock::now();
-    std::cout << "Elapsed time for closing: " << duration_cast<std::chrono::milliseconds>(end - start) << std::endl;
 
     return filledMap;
 }

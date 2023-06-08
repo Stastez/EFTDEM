@@ -6,7 +6,7 @@
 
 class ICloudReader : public IPipelineComponent {
 public:
-    virtual rawPointCloud apply(const std::string& fileName) = 0;
+    virtual rawPointCloud apply(const std::string &fileName, bool generateOutput) = 0;
 };
 
 

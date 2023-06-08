@@ -20,7 +20,8 @@ public:
         EFTDEM_SECOND_HEIGHTMAP_BUFFER,
         EFTDEM_FIRST_CLOSING_FILTER_BUFFER,
         EFTDEM_SECOND_CLOSING_FILTER_BUFFER,
-        EFTDEM_THIRD_CLOSING_FILTER_BUFFER
+        EFTDEM_THIRD_CLOSING_FILTER_BUFFER,
+        lengthElementDoNotUse
     };
 
     GLFWwindow * initializeGL(bool debug);
@@ -31,20 +32,20 @@ public:
     void bindBuffer(bufferIndices buffer);
     void dataToBuffer(bufferIndices buffer, gl::GLsizeiptr size, const void *data, gl::GLenum usage);
     void dataFromBuffer(bufferIndices buffer, gl::GLsizeiptr offset, gl::GLsizeiptr size, void *data);
+    void waitForShaderStorageIntegrity();
 
     void setProgram(gl::GLuint program);
 
     bool isInitialized();
     bool isInitialized(bool debug);
 
-    static const unsigned int bufferCount = 11;
-    gl::GLuint ssbos[bufferCount];
-
 private:
     GLFWwindow* context;
     bool initialized = false;
     bool isDebug;
 
+    std::vector<bool> coherentBufferMask;
+    std::vector<gl::GLuint> ssbos;
     gl::GLuint currentProgram;
 };
 
