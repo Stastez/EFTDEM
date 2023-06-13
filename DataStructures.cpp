@@ -70,6 +70,7 @@ void add(pointGrid *g, unsigned long x, unsigned long y, point value){
  * @return The normalized value
  */
 double normalizeValue(double value, double min, double max){
+    if (max == min) return 0;
     return (value-min) / (max-min);
 }
 
