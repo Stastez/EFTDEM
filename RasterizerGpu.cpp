@@ -98,7 +98,7 @@ heightMap RasterizerGPU::apply(pointGrid *pointGrid, bool generateOutput) {
 
     if (!generateOutput) {
         glHandler->waitForShaderStorageIntegrity();
-        return {};
+        return emptyHeightMapfromPointGrid(pointGrid);
     }
 
     heightMap map = emptyHeightMapfromPointGrid(pointGrid);

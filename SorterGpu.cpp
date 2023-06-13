@@ -46,7 +46,12 @@ pointGrid SorterGPU::apply(rawPointCloud *pointCloud, unsigned long pixelPerUnit
 
     if (!generateOutput) {
         glHandler->waitForShaderStorageIntegrity();
-        return {};
+        return {.points = {},
+                .resolutionX = resolutionX,
+                .resolutionY = resolutionY,
+                .min = min,
+                .max = max,
+                .numberOfPoints = pointCloud->numberOfPoints};
     }
 
     std::vector<unsigned int> gridIndices(pointCloud->numberOfPoints);

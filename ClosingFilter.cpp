@@ -114,7 +114,7 @@ heightMap ClosingFilter::apply(heightMap *map, bool generateOutput) {
     auto end = std::chrono::high_resolution_clock::now();
     std::cout << "Elapsed time for closing: " << duration_cast<std::chrono::milliseconds>(end - start) << std::endl;
 
-    if (!generateOutput) return {};
+    if (!generateOutput) return emptyHeightMapfromHeightMap(map);
 
     heightMap filledMap = emptyHeightMapfromHeightMap(map);
     glMemoryBarrier(GL_ALL_BARRIER_BITS);

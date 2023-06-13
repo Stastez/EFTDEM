@@ -30,16 +30,17 @@ void Pipeline::execute() {
     if (!isOperable()) exit(2);
 
     bool generateOutput = true;
-    //generateOutput = adjacentStagesUseGPU(reader, sorter);
+    generateOutput = adjacentStagesUseGPU(reader, sorter);
     auto readerReturn = reader->apply(sourceFilePath, generateOutput);
     reader->cleanUp();
-    //generateOutput = adjacentStagesUseGPU(sorter, rasterizer);
+    generateOutput = adjacentStagesUseGPU(sorter, rasterizer);
     auto sorterReturn = sorter->apply(&readerReturn, pixelPerUnit, generateOutput);
     sorter->cleanUp();
-    //generateOutput = adjacentStagesUseGPU(rasterizer, filler);
+    generateOutput = adjacentStagesUseGPU(rasterizer, filler);
+    generateOutput = true; //Closing filter not yet using previous buffers
     auto rasterizerReturn = rasterizer->apply(&sorterReturn, generateOutput);
     rasterizer->cleanUp();
-    //generateOutput = adjacentStagesUseGPU(filler, writer);
+    generateOutput = adjacentStagesUseGPU(filler, writer);
     auto fillerReturn = filler->apply(&rasterizerReturn, generateOutput);
     filler->cleanUp();
     writer->apply(&fillerReturn, destinationPath + "_filled", generateOutput);
