@@ -20,27 +20,39 @@ heightMap RasterizerGPU::apply(pointGrid *pointGrid, bool generateOutput) {
     auto shader = glHandler->getShaderPrograms({"../../shaders/countChunks.glsl", "../../shaders/sumChunks.glsl", "../../shaders/makeHeightmap.glsl"});
     glHandler->setProgram(shader[0]);
 
-    //TODO
     if (!(glHandler->getCoherentBufferMask()[GLHandler::EFTDEM_RAW_POINT_BUFFER] && glHandler->getCoherentBufferMask()[GLHandler::EFTDEM_RAW_POINT_INDEX_BUFFER])) {
+        if (!(glHandler->getCoherentBufferMask()[GLHandler::EFTDEM_RAW_POINT_BUFFER])) {
+            auto rawPoints = new std::vector<GLdouble>();
 
-        auto data = new double[pointGrid->numberOfPoints];
-        auto chunkBorders = new unsigned int[pointGrid->resolutionX * pointGrid->resolutionY];
-        unsigned int dataPosition = 0;
-        for (auto i = 0; i < pointGrid->resolutionX * pointGrid->resolutionY; i++) {
-            chunkBorders[i] = dataPosition;
-            for (auto point: pointGrid->points[i]) {
-                data[dataPosition++] = point.z;
+            for (const auto& cell : pointGrid->points) {
+                for (auto point : cell) {
+                    rawPoints->emplace_back(point.x);
+                    rawPoints->emplace_back(point.y);
+                    rawPoints->emplace_back(point.z);
+                }
             }
+
+            glHandler->dataToBuffer(GLHandler::EFTDEM_RAW_POINT_BUFFER,
+                                    (long long) sizeof(GLdouble) * pointGrid->numberOfPoints * 3,
+                                    rawPoints->data(), GL_STATIC_DRAW);
         }
 
-        glHandler->dataToBuffer(GLHandler::EFTDEM_RAW_POINT_BUFFER,
-                                (long long) sizeof(double) * pointGrid->numberOfPoints,
-                                data, GL_STATIC_DRAW);
-        delete[] data;
-        glHandler->dataToBuffer(GLHandler::EFTDEM_RAW_POINT_INDEX_BUFFER,
-                                (long long) sizeof(unsigned int) * pointGrid->resolutionX * pointGrid->resolutionY,
-                                chunkBorders, GL_STATIC_DRAW);
-        delete[] chunkBorders;
+        if (!(glHandler->getCoherentBufferMask()[GLHandler::EFTDEM_RAW_POINT_INDEX_BUFFER])) {
+            auto indices = new std::vector<GLuint>(pointGrid->numberOfPoints);
+
+            unsigned long long maxIndex = 0;
+            for (auto i = 0; i < pointGrid->points.size(); i++) {
+                for (auto j = maxIndex; j < pointGrid->points[i].size() + maxIndex; j++) {
+                    indices->at(j) = i;
+                }
+
+                maxIndex += pointGrid->points[i].size();
+            }
+
+            glHandler->dataToBuffer(GLHandler::EFTDEM_RAW_POINT_INDEX_BUFFER,
+                                    (long long) sizeof(GLuint) * pointGrid->numberOfPoints,
+                                    indices->data(), GL_STATIC_DRAW);
+        }
     }
 
     //countChunks.glsl
