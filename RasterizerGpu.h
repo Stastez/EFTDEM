@@ -5,7 +5,7 @@
 #include "ICloudRasterizer.h"
 #include "GLHandler.h"
 
-class RasterizerGPU : ICloudRasterizer {
+class RasterizerGPU : public ICloudRasterizer {
 private:
     GLHandler *glHandler;
 

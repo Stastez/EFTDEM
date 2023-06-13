@@ -5,7 +5,7 @@
 #include "ICloudRasterizer.h"
 #include "GLHandler.h"
 
-class RasterizerCPU : ICloudRasterizer {
+class RasterizerCPU : public ICloudRasterizer {
 public:
     RasterizerCPU();
     void cleanUp() override;

@@ -112,7 +112,7 @@ void GLHandler::dataToBuffer(GLHandler::bufferIndices buffer, gl::GLsizeiptr siz
     if (buffer == lengthElementDoNotUse || buffer == EFTDEM_UNBIND) exit(2);
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, buffer, ssbos[buffer]);
     glBufferData(GL_SHADER_STORAGE_BUFFER, size, data, usage);
-    coherentBufferMask[buffer - 1] = true;
+    coherentBufferMask[buffer] = true;
 }
 
 void GLHandler::dataFromBuffer(GLHandler::bufferIndices buffer, gl::GLsizeiptr offset, gl::GLsizeiptr size, void *data) {

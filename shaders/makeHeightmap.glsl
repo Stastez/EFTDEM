@@ -11,7 +11,6 @@ layout (binding = 4) restrict buffer countBuffer{
 layout (binding = 5) restrict buffer heightMapBuffer{
     double heights[];
 };
-//layout (binding = 6) uniform atomic_uint maxPointsPerGridCell;
 uniform uvec2 resolution;
 
 uint calculate1DCoordinate(uvec2 pos, uvec2 referenceResolution) {
@@ -23,8 +22,8 @@ void main() {
 
     uint coordinate = calculate1DCoordinate(gl_GlobalInvocationID.xy, resolution);
 
-    double heightRepresentation = double(sums[coordinate]) / double(counts[coordinate]);
-    double height = heightRepresentation / double(~0u / counts[coordinate]);
+    double heightRepresentation = max(double(sums[coordinate]) / double(counts[coordinate]), double(0));
+    double height = heightRepresentation / (double(~0u) / double(counts[coordinate]));
 
     heights[coordinate] = height;
 }
