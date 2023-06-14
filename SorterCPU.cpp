@@ -28,7 +28,7 @@ pointGrid SorterCPU::apply(rawPointCloud *pointCloud, unsigned long pixelPerUnit
 
     for (auto it = pointCloud->groundPoints.begin(); it != pointCloud->groundPoints.end(); it++){
         std::pair<unsigned long, unsigned long> coords = calculateGridCoordinates(&grid, pointCloud, it->x, it->y);
-        add(&grid, coords.first, coords.second, point(it->x, it->y, normalizeValue(it->z, pointCloud->min.z, pointCloud->max.z), it->intensity));
+        add(&grid, coords.first, coords.second, normalizeValue(*it, pointCloud->min, pointCloud->max));
     }
 
     grid.numberOfPoints = pointCloud->groundPoints.size();
