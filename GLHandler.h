@@ -16,6 +16,8 @@ public:
         EFTDEM_SORTED_POINT_SUM_BUFFER, // unsigned int for each grid cell
         EFTDEM_SORTED_POINT_COUNT_BUFFER, // unsigned int for each grid cell
         EFTDEM_HEIGHTMAP_BUFFER, // double for each grid cell
+        EFTDEM_DILATION_RESULT_BUFFER,
+        EFTDEM_FILLED_MAP_BUFFER,
         lengthElementDoNotUse
     };
 
@@ -27,6 +29,7 @@ public:
     void bindBuffer(bufferIndices buffer);
     void dataToBuffer(bufferIndices buffer, gl::GLsizeiptr size, const void *data, gl::GLenum usage);
     void dataFromBuffer(bufferIndices buffer, gl::GLsizeiptr offset, gl::GLsizeiptr size, void *data);
+    void dispatchShader(unsigned int shader, unsigned int localBatchSize, unsigned long resolutionX, unsigned long resolutionY);
     void waitForShaderStorageIntegrity();
     std::vector<gl::GLuint> getBuffers();
 
