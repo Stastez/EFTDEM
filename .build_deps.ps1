@@ -1,5 +1,5 @@
 $depFolder=".deps"
-$removeOld=$false
+$removeOld=$true
 
 if (-Not (Test-Path ".deps")){
     New-Item -Path ".deps" -ItemType Directory
