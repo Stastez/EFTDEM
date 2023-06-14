@@ -25,6 +25,7 @@ heightMap ClosingFilter::apply(heightMap *map, bool generateOutput) {
 
     if (!glHandler->isInitialized(debug)) glHandler->initializeGL(debug);
     std::vector<std::string> shaderPaths;
+    shaderPaths.emplace_back("../../shaders/horizontalSum.glsl");
     shaderPaths.emplace_back("../../shaders/dilation.glsl");
     shaderPaths.emplace_back("../../shaders/erosion.glsl");
     auto shader = glHandler->getShaderPrograms(shaderPaths);
@@ -36,8 +37,18 @@ heightMap ClosingFilter::apply(heightMap *map, bool generateOutput) {
                                 (long long) sizeof(double) * map->resolutionX * map->resolutionY,
                                 map->heights.data(), GL_STATIC_DRAW);
     }
+    glHandler->dataToBuffer(GLHandler::EFTDEM_DILATION_HORIZONTAL_SUM_BUFFER,
+                            (long long) sizeof(double) * map->resolutionX * map->resolutionY,
+                            nullptr, GL_STREAM_READ);
+    glHandler->dataToBuffer(GLHandler::EFTDEM_DILATION_HORIZONTAL_AMOUNT_BUFFER,
+                            (long long) sizeof(unsigned int) * map->resolutionX * map->resolutionY,
+                            nullptr, GL_STREAM_READ);
     glHandler->dataToBuffer(GLHandler::EFTDEM_DILATION_RESULT_BUFFER,
                             (long long) sizeof(double) * map->resolutionX * map->resolutionY,
+                            nullptr, GL_STREAM_READ);
+
+    glHandler->dataToBuffer(GLHandler::EFTDEM_EROSION_HORIZONTAL_AMOUNT_BUFFER,
+                            (long long) sizeof(unsigned int) * map->resolutionX * map->resolutionY,
                             nullptr, GL_STREAM_READ);
     glHandler->dataToBuffer(GLHandler::EFTDEM_FILLED_MAP_BUFFER,
                             (long long) sizeof(double) * map->resolutionX * map->resolutionY,
@@ -46,6 +57,11 @@ heightMap ClosingFilter::apply(heightMap *map, bool generateOutput) {
     glUniform2ui(glGetUniformLocation(shader[0], "resolution"), map->resolutionX, map->resolutionY);
     glUniform1ui(glGetUniformLocation(shader[0], "kernelRadius"), kernelRadius);
     glHandler->dispatchShader(shader[0], batchSize, map->resolutionX, map->resolutionY);
+    glHandler->waitForShaderStorageIntegrity();
+
+    glUniform2ui(glGetUniformLocation(shader[1], "resolution"), map->resolutionX, map->resolutionY);
+    glUniform1ui(glGetUniformLocation(shader[1], "kernelRadius"), kernelRadius);
+    glHandler->dispatchShader(shader[1], batchSize, map->resolutionX, map->resolutionY);
     glHandler->waitForShaderStorageIntegrity();
 
     glUseProgram(shader[1]);
@@ -59,7 +75,7 @@ heightMap ClosingFilter::apply(heightMap *map, bool generateOutput) {
     if (!generateOutput) return emptyHeightMapfromHeightMap(map);
 
     heightMap filledMap = emptyHeightMapfromHeightMap(map);
-    glHandler->dataFromBuffer(GLHandler::EFTDEM_FILLED_MAP_BUFFER,
+    glHandler->dataFromBuffer(GLHandler::EFTDEM_DILATION_RESULT_BUFFER,
                               0,
                               (long long) sizeof(GLdouble) * filledMap.resolutionX * filledMap.resolutionY,
                               filledMap.heights.data());
