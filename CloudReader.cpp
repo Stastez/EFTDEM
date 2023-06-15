@@ -2,6 +2,7 @@
 #include <iostream>
 #include <sstream>
 #include "CloudReader.h"
+#include "Pipeline.h"
 
 CloudReader::CloudReader() {
     stageUsesGPU = false;
@@ -23,7 +24,7 @@ rawPointCloud CloudReader::apply(const std::string &fileName, bool generateOutpu
     std::fstream pointFile (fileName, std::ios::in);
     if (!pointFile.is_open()) {
         std::cout << "Specified file could not be opened." << std::endl;
-        exit(3);
+        exit(Pipeline::EXIT_IO_ERROR);
     }
 
     std::vector<point> groundPoints, environmentPoints;

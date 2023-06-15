@@ -1,5 +1,6 @@
 #include "GLHandler.h"
 #include "DataStructures.h"
+#include "Pipeline.h"
 
 #include <iostream>
 #include <fstream>
@@ -18,12 +19,12 @@ GLFWwindow * GLHandler::initializeGL(bool debug) {
 
     if (!magic_enum::is_magic_enum_supported) {
         std::cout << "Current compiler does not support magic_enum!" << std::endl;
-        exit(5);
+        exit(Pipeline::EXIT_DEPENDENCY_ERROR);
     }
 
     if(!glfwInit()) {
         std::cout << "Could not initialize GLFW." << std::endl;
-        exit(4);
+        exit(Pipeline::EXIT_OPENGL_ERROR);
     }
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -36,7 +37,7 @@ GLFWwindow * GLHandler::initializeGL(bool debug) {
         glfwGetError(&error);
         std::cout << "Failed to create GLFW window: " << error << std::endl;
         glfwTerminate();
-        exit(4);
+        exit(Pipeline::EXIT_OPENGL_ERROR);
     }
     glfwMakeContextCurrent(context);
 
@@ -71,7 +72,7 @@ std::vector<GLuint> GLHandler::getShaderPrograms(const std::vector<std::string>&
         shaderFileStream.open(shaderFile);
         if (!shaderFileStream.is_open()) {
             std::cout << "Specified shader could not be opened: " << shaderFile << std::endl;
-            exit(3);
+            exit(Pipeline::EXIT_IO_ERROR);
         }
         shaderStream << shaderFileStream.rdbuf();
         auto shaderString = shaderStream.str();
@@ -87,7 +88,7 @@ std::vector<GLuint> GLHandler::getShaderPrograms(const std::vector<std::string>&
         if (!success) {
             glGetShaderInfoLog(shaderNumber, 512, nullptr, infoLog);
             std::cout << infoLog << std::endl;
-            exit(4);
+            exit(Pipeline::EXIT_OPENGL_ERROR);
         }
 
         auto program = glCreateProgram();
@@ -99,7 +100,7 @@ std::vector<GLuint> GLHandler::getShaderPrograms(const std::vector<std::string>&
         if (!success) {
             glGetProgramInfoLog(program, 512, nullptr, infoLog);
             std::cout << infoLog << std::endl;
-            exit(4);
+            exit(Pipeline::EXIT_OPENGL_ERROR);
         }
 
         glDeleteShader(shaderNumber);
@@ -116,14 +117,14 @@ void GLHandler::bindBuffer(GLHandler::bufferIndices buffer) {
 }
 
 void GLHandler::dataToBuffer(GLHandler::bufferIndices buffer, gl::GLsizeiptr size, const void *data, gl::GLenum usage) {
-    if (buffer == EFTDEM_UNBIND) exit(2);
+    if (buffer == EFTDEM_UNBIND) exit(Pipeline::EXIT_INVALID_FUNCTION_PARAMETERS);
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, buffer, ssbos[buffer - 1]); //no buffer needed for EFTDEM_UNBIND
     glBufferData(GL_SHADER_STORAGE_BUFFER, size, data, usage);
     coherentBufferMask[buffer] = true;
 }
 
 void GLHandler::dataFromBuffer(GLHandler::bufferIndices buffer, gl::GLsizeiptr offset, gl::GLsizeiptr size, void *data) {
-    if (buffer == EFTDEM_UNBIND) exit(2);
+    if (buffer == EFTDEM_UNBIND) exit(Pipeline::EXIT_INVALID_FUNCTION_PARAMETERS);
     bindBuffer(buffer);
     waitForShaderStorageIntegrity();
     glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, offset, size, data);

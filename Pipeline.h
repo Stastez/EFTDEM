@@ -46,6 +46,15 @@ public:
     void setWriter(IHeightMapWriter *writer);
     GLHandler *getGLHandler();
     void setGLHandler(GLHandler *glHandler);
+
+    enum exitCodes {
+        EXIT_REGULAR_EXECUTION,
+        EXIT_INVALID_COMMAND_LINE_ARGUMENTS = 101,
+        EXIT_INVALID_FUNCTION_PARAMETERS,
+        EXIT_IO_ERROR,
+        EXIT_OPENGL_ERROR,
+        EXIT_DEPENDENCY_ERROR
+    };
 };
 
 
