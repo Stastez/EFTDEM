@@ -64,7 +64,7 @@ Pipeline *ConfigProvider::providePipeline() {
         auto batchSizeTest = checkValidityAndReturn(config["HeightMapFillerOptions"]["closingFilterOptions"]["batchSize"], false);
         auto batchSize = (batchSizeTest.second) ? batchSizeTest.first.as<unsigned int>() : 0;
         //filler = new ClosingFilter(pipeline->glHandler, kernelRadii, batchSize); !!!Correct version
-        filler = new ClosingFilter(pipeline->glHandler, 0, batchSize);
+        filler = new ClosingFilter(pipeline->glHandler, {10, 30}, batchSize);
     } else if (fillingAlgorithm == "averageDistanceWeightedFilter") {
         //TODO add averageDistanceWeightedFilter call
         exit(Pipeline::EXIT_NOT_YET_IMPLEMENTED);

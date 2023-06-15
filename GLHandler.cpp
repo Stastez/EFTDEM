@@ -171,7 +171,8 @@ void GLHandler::dispatchShader(unsigned int shader, unsigned int localBatchSize,
 
             endInvocation = std::chrono::high_resolution_clock::now();
 
-            batchSize *= 2;
+            batchSize = std::min((unsigned long) batchSize * 2, std::max((unsigned long) std::ceil(resolutionX / 8.), (unsigned long) std::ceil(resolutionY / 4.)));
+            if (batchSize == std::max((unsigned long) std::ceil(resolutionX / 8.), (unsigned long) std::ceil(resolutionY / 4.))) break;
         }
 
         localBatchSize = batchSize;
