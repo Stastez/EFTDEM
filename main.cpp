@@ -33,7 +33,7 @@ int main(int argc, char** argv) {
             //new SorterCPU(),
             //((bool) strtol(argv[5], nullptr, 10)) ? (ICloudRasterizer *) new RasterizerGPU(pipeline->getGLHandler()) : (ICloudRasterizer *) new RasterizerCPU(),
             new RasterizerGPU(pipeline->getGLHandler()),
-            new ClosingFilter(pipeline->getGLHandler(), strtoul(argv[4], nullptr, 10), 512),
+            new ClosingFilter(pipeline->getGLHandler(), std::vector<unsigned int>({2,5,10,30}), 512),
             new GTiffWriter(true)
             );
 

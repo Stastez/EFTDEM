@@ -9,11 +9,12 @@
 class ClosingFilter : public IHeightMapFiller {
 private:
     GLHandler *glHandler;
-    unsigned int kernelRadius, batchSize;
-    heightMap applySingleClosingFilter(heightMap *map, bool generateOutput);
+    std::vector<unsigned int> kernelRadii;
+    unsigned int batchSize;
+    heightMap applySingleClosingFilter(heightMap *map, bool generateOutput, unsigned int kernelRadius);
 
 public:
-    ClosingFilter(GLHandler *glHandler, unsigned int kernelRadius, unsigned int batchSize);
+    ClosingFilter(GLHandler *glHandler, std::vector<unsigned int> kernelRadii, unsigned int batchSize);
     void cleanUp() override;
     heightMap apply(heightMap *map, bool generateOutput) override;
 };
