@@ -1,9 +1,11 @@
 #include <iostream>
+#include <utility>
 #include "GTiffWriter.h"
 #include "Pipeline.h"
 #include <gdal_priv.h>
 
-GTiffWriter::GTiffWriter(bool writeLowDepth) {
+GTiffWriter::GTiffWriter(bool writeLowDepth, const std::string& destinationDEM) {
+    GTiffWriter::destinationDEM = destinationDEM;
     GTiffWriter::writeLowDepth = writeLowDepth;
     GTiffWriter::stageUsesGPU = false;
 }
@@ -19,7 +21,7 @@ void GTiffWriter::cleanUp() {
  * @param resolutionX
  * @param resolutionY
  */
-void GTiffWriter::apply(const heightMap *map, const std::string &destinationDEM, bool generateOutput) {
+void GTiffWriter::apply(const heightMap *map, bool generateOutput) {
     std::cout << "Writing GeoTIFF..." << std::endl;
 
     if (!generateOutput) return;

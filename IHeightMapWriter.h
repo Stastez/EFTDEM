@@ -4,8 +4,10 @@
 #include "IPipelineComponent.h"
 
 class IHeightMapWriter : public IPipelineComponent {
+protected:
+    std::string destinationDEM;
 public:
-    virtual void apply(const heightMap *map, const std::string &destinationDEM, bool generateOutput) = 0;
+    virtual void apply(const heightMap *map, bool generateOutput) = 0;
 };
 
 

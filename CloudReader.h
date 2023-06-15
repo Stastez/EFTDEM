@@ -8,8 +8,8 @@
 
 class CloudReader : public ICloudReader {
 public:
-    CloudReader();
-    rawPointCloud apply(const std::string &fileName, bool generateOutput) override;
+    explicit CloudReader(const std::string& fileName);
+    rawPointCloud apply(bool generateOutput) override;
     void cleanUp() override;
 };
 

@@ -4,8 +4,9 @@
 #include "CloudReader.h"
 #include "Pipeline.h"
 
-CloudReader::CloudReader() {
+CloudReader::CloudReader(const std::string& fileName) {
     stageUsesGPU = false;
+    CloudReader::fileName = fileName;
 }
 
 void CloudReader::cleanUp() {
@@ -18,7 +19,7 @@ void CloudReader::cleanUp() {
  * @param fileName The path to the csv containing the point cloud
  * @return A new rawPointCloud struct
  */
-rawPointCloud CloudReader::apply(const std::string &fileName, bool generateOutput) {
+rawPointCloud CloudReader::apply(bool generateOutput) {
     if (!generateOutput) return {};
 
     std::fstream pointFile (fileName, std::ios::in);
