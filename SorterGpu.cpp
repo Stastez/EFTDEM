@@ -1,16 +1,17 @@
 #include "SorterGpu.h"
 #include <iostream>
 
-SorterGPU::SorterGPU(GLHandler *glHandler) {
+SorterGPU::SorterGPU(GLHandler *glHandler, unsigned long pixelPerUnit) {
     SorterGPU::stageUsesGPU = true;
     SorterGPU::glHandler = glHandler;
+    SorterGPU::pixelPerUnit = pixelPerUnit;
 }
 
 void SorterGPU::cleanUp() {
 
 }
 
-pointGrid SorterGPU::apply(rawPointCloud *pointCloud, unsigned long pixelPerUnit, bool generateOutput) {
+pointGrid SorterGPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
     using namespace gl;
 
     std::cout << "Sorting points into grid using OpenGL..." << std::endl;

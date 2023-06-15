@@ -2,10 +2,10 @@ CloudReaderOptions:
   pointCloudPath: "../../resources/20220912_SZE(2)-001_LAS1_2_20.txt"
 
 CloudSorterOptions:
+  pixelPerUnit: 20
   useGPU: true
 
 CloudRasterizerOptions:
-  pixelPerUnit: 20
   useGPU: true
 
 HeightMapFillerOptions:
@@ -20,3 +20,4 @@ HeightMapFillerOptions:
 
 CloudWriterOptions:
   destinationPath: "../../resources/map"
+  writeLowDepth: true

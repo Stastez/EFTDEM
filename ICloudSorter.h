@@ -4,8 +4,10 @@
 #include "IPipelineComponent.h"
 
 class ICloudSorter : public IPipelineComponent {
+protected:
+    unsigned long pixelPerUnit;
 public:
-    virtual pointGrid apply(rawPointCloud *pointCloud, unsigned long pixelPerUnit, bool generateOutput) = 0;
+    virtual pointGrid apply(rawPointCloud *pointCloud, bool generateOutput) = 0;
 };
 
 

@@ -5,8 +5,10 @@
 #include <string>
 
 class ICloudReader : public IPipelineComponent {
+protected:
+    std::string fileName;
 public:
-    virtual rawPointCloud apply(const std::string &fileName, bool generateOutput) = 0;
+    virtual rawPointCloud apply(bool generateOutput) = 0;
 };
 
 
