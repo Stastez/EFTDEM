@@ -57,14 +57,13 @@ Pipeline *ConfigProvider::providePipeline() {
     auto rasterizer = (checkValidityAndReturn(config["CloudRasterizerOptions"]["useGPU"], true).first) ?
             (ICloudRasterizer *) new RasterizerGPU(pipeline->glHandler) : (ICloudRasterizer *) new RasterizerCPU();
     
-    IHeightMapFiller *filler{};
+    IHeightMapFiller *filler;
     auto fillingAlgorithm = checkValidityAndReturn(config["HeightMapFillerOptions"]["filler"], true).first.as<std::string>();
     if (fillingAlgorithm == "closingFilter") {
         auto kernelRadii = checkValidityAndReturn(config["HeightMapFillerOptions"]["closingFilterOptions"]["kernelSizes"], true).first.as<std::vector<unsigned int>>();
         auto batchSizeTest = checkValidityAndReturn(config["HeightMapFillerOptions"]["closingFilterOptions"]["batchSize"], false);
         auto batchSize = (batchSizeTest.second) ? batchSizeTest.first.as<unsigned int>() : 0;
-        //filler = new ClosingFilter(pipeline->glHandler, kernelRadii, batchSize); !!!Correct version
-        filler = new ClosingFilter(pipeline->glHandler, {10, 30}, batchSize);
+        filler = new ClosingFilter(pipeline->glHandler, kernelRadii, batchSize);
     } else if (fillingAlgorithm == "averageDistanceWeightedFilter") {
         //TODO add averageDistanceWeightedFilter call
         exit(Pipeline::EXIT_NOT_YET_IMPLEMENTED);

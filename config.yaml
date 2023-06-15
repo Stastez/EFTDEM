@@ -17,6 +17,7 @@ HeightMapFillerOptions:
   closingFilterOptions:
     kernelSizes:
       - 10
+      - 30
 
 CloudWriterOptions:
   destinationPath: "../../resources/map"
