@@ -7,7 +7,7 @@ layout (binding = 8) restrict buffer mapBuffer{
 layout (binding = 9) restrict buffer amountBuffer{
     uint horizontalAmounts[];
 };
-layout (binding = 10) restrict buffer resultBuffer{
+layout (binding = 5) restrict buffer resultBuffer{
     double results[];
 };
 
