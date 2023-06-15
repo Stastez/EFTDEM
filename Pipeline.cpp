@@ -27,7 +27,7 @@ bool adjacentStagesUseGPU(IPipelineComponent *first, IPipelineComponent *second)
 }
 
 void Pipeline::execute() {
-    if (!isOperable()) exit(2);
+    if (!isOperable()) exit(EXIT_INVALID_FUNCTION_PARAMETERS);
 
     bool generateOutput = true;
     generateOutput = adjacentStagesUseGPU(reader, sorter);

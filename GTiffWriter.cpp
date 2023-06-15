@@ -1,5 +1,6 @@
 #include <iostream>
 #include "GTiffWriter.h"
+#include "Pipeline.h"
 #include <gdal_priv.h>
 
 GTiffWriter::GTiffWriter(bool writeLowDepth) {
@@ -25,7 +26,7 @@ void GTiffWriter::apply(const heightMap *map, const std::string &destinationDEM,
 
     if (map->resolutionX > std::numeric_limits<int>::max() || map->resolutionY > std::numeric_limits<int>::max()) {
         std::cout << "Resolution too great for GeoTIFF!" << std::endl;
-        exit(2);
+        exit(Pipeline::EXIT_INVALID_FUNCTION_PARAMETERS);
     }
 
     int resolutionX = (int) map->resolutionX, resolutionY = (int) map->resolutionY;
@@ -33,8 +34,8 @@ void GTiffWriter::apply(const heightMap *map, const std::string &destinationDEM,
     GDALRegister_GTiff();
 
     auto driver = GetGDALDriverManager()->GetDriverByName("GTiff");
-    if (driver == nullptr) { std::cout << "Could not get driver!" << std::endl; exit(3); }
-    if (!CSLFetchBoolean(GDALGetMetadata(driver, nullptr), GDAL_DCAP_CREATE, FALSE)) { std::cout << "Driver does not support creation!" << std::endl; exit(3); }
+    if (driver == nullptr) { std::cout << "Could not get driver!" << std::endl; exit(Pipeline::EXIT_IO_ERROR); }
+    if (!CSLFetchBoolean(GDALGetMetadata(driver, nullptr), GDAL_DCAP_CREATE, FALSE)) { std::cout << "Driver does not support creation!" << std::endl; exit(Pipeline::EXIT_IO_ERROR); }
 
     auto denormalizedHeights = new double[map->resolutionX * map->resolutionY];
     for (int i = 0; i < map->resolutionX * map->resolutionY; i++)

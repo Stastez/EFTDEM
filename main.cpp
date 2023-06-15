@@ -22,7 +22,7 @@
 int main(int argc, char** argv) {
     if (argc < 6) {
         std::cout << "Usage: EFTDEM <path to point cloud> <desired path to resulting DEM> <pixel per unit> <filling kernel radius in pixels> <use GPU acceleration ? 0 - no | 1 - OpenGL>" << std::endl;
-        exit(1);
+        exit(Pipeline::EXIT_INVALID_COMMAND_LINE_ARGUMENTS);
     }
 
     auto pipeline = new Pipeline(argv[1], argv[2],strtoul(argv[3], nullptr, 10));

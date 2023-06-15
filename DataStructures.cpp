@@ -1,4 +1,5 @@
 #include "DataStructures.h"
+#include "Pipeline.h"
 #include <utility>
 #include <iostream>
 
@@ -22,7 +23,7 @@ unsigned long long calculate1DCoordinate(pointGrid *g, unsigned long x, unsigned
 void validateCoordinates(pointGrid *g, unsigned long x, unsigned long y) {
     if (x > g->resolutionX - 1 || y > g->resolutionY - 1) {
         std::cout << "Given coordinates outside of grid! Grid dimensions: (" << g->resolutionX << ", " << g->resolutionY << "), given coordinates: (" << x << ", " << y << ")";
-        exit(2);
+        exit(Pipeline::EXIT_INVALID_FUNCTION_PARAMETERS);
     }
 }
 
