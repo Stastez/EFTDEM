@@ -2,10 +2,10 @@
 precision highp int;
 
 layout (local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
-layout (binding = 2) restrict buffer indexBuffer{
+layout (binding = EFTDEM_RAW_POINT_INDEX_BUFFER) restrict buffer indexBuffer{
     uint indices[];
 };
-layout (binding = 4) restrict buffer countBuffer{
+layout (binding = EFTDEM_SORTED_POINT_COUNT_BUFFER) restrict buffer countBuffer{
     uint counts[];
 };
 uniform uint numberOfPoints;

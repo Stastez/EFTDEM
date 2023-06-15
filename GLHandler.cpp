@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <magic_enum.hpp>
 
 using namespace gl;
 
@@ -15,12 +16,17 @@ void GLAPIENTRY MessageCallback( GLenum source, GLenum type, GLuint id, GLenum s
 GLFWwindow * GLHandler::initializeGL(bool debug) {
     if (isInitialized(debug)) uninitializeGL();
 
+    if (!magic_enum::is_magic_enum_supported) {
+        std::cout << "Current compiler does not support magic_enum!" << std::endl;
+        exit(5);
+    }
+
     if(!glfwInit()) {
         std::cout << "Could not initialize GLFW." << std::endl;
         exit(4);
     }
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
     glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, debug);
@@ -39,10 +45,10 @@ GLFWwindow * GLHandler::initializeGL(bool debug) {
 
     glDebugMessageCallback(MessageCallback, nullptr);
 
-    ssbos = std::vector<GLuint>(lengthElementDoNotUse);
-    glGenBuffers(lengthElementDoNotUse, ssbos.data());
+    ssbos = std::vector<GLuint>(numBuffers);
+    glGenBuffers(numBuffers, ssbos.data());
 
-    coherentBufferMask = std::vector<bool>(lengthElementDoNotUse, false);
+    coherentBufferMask = std::vector<bool>(numBuffers + 1, false);
 
     initialized = true;
     this->isDebug = debug;
@@ -51,15 +57,15 @@ GLFWwindow * GLHandler::initializeGL(bool debug) {
 }
 
 void GLHandler::uninitializeGL() {
-    glDeleteBuffers(lengthElementDoNotUse, ssbos.data());
+    glDeleteBuffers(numBuffers, ssbos.data());
     glfwTerminate();
     initialized = false;
 }
 
-std::vector<GLuint> GLHandler::getShaderPrograms(std::vector<std::string> shaderFiles) {
+std::vector<GLuint> GLHandler::getShaderPrograms(const std::vector<std::string>& shaderFiles) {
     std::vector<GLuint> programs;
 
-    for (auto shaderFile : shaderFiles) {
+    for (const auto& shaderFile : shaderFiles) {
         std::ifstream shaderFileStream;
         std::stringstream shaderStream;
         shaderFileStream.open(shaderFile);
@@ -69,6 +75,7 @@ std::vector<GLuint> GLHandler::getShaderPrograms(std::vector<std::string> shader
         }
         shaderStream << shaderFileStream.rdbuf();
         auto shaderString = shaderStream.str();
+        replaceBufferPlaceholders(shaderString);
         auto shader = shaderString.c_str();
 
         int success;
@@ -104,20 +111,19 @@ std::vector<GLuint> GLHandler::getShaderPrograms(std::vector<std::string> shader
 }
 
 void GLHandler::bindBuffer(GLHandler::bufferIndices buffer) {
-    if (buffer == lengthElementDoNotUse) exit(2);
-    else if (buffer == EFTDEM_UNBIND) glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
-    else glBindBufferBase(GL_SHADER_STORAGE_BUFFER, buffer, ssbos[buffer]);
+    if (buffer == EFTDEM_UNBIND) glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+    else glBindBufferBase(GL_SHADER_STORAGE_BUFFER, buffer, ssbos[buffer - 1]); //no buffer needed for EFTDEM_UNBIND
 }
 
 void GLHandler::dataToBuffer(GLHandler::bufferIndices buffer, gl::GLsizeiptr size, const void *data, gl::GLenum usage) {
-    if (buffer == lengthElementDoNotUse || buffer == EFTDEM_UNBIND) exit(2);
-    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, buffer, ssbos[buffer]);
+    if (buffer == EFTDEM_UNBIND) exit(2);
+    glBindBufferBase(GL_SHADER_STORAGE_BUFFER, buffer, ssbos[buffer - 1]); //no buffer needed for EFTDEM_UNBIND
     glBufferData(GL_SHADER_STORAGE_BUFFER, size, data, usage);
     coherentBufferMask[buffer] = true;
 }
 
 void GLHandler::dataFromBuffer(GLHandler::bufferIndices buffer, gl::GLsizeiptr offset, gl::GLsizeiptr size, void *data) {
-    if (buffer == lengthElementDoNotUse || buffer == EFTDEM_UNBIND) exit(2);
+    if (buffer == EFTDEM_UNBIND) exit(2);
     bindBuffer(buffer);
     waitForShaderStorageIntegrity();
     glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, offset, size, data);
@@ -132,7 +138,7 @@ void GLHandler::setProgram(gl::GLuint program) {
     currentProgram = program;
 }
 
-gl::GLuint GLHandler::getProgram() {
+gl::GLuint GLHandler::getProgram() const {
     return currentProgram;
 }
 
@@ -143,8 +149,8 @@ void GLHandler::waitForShaderStorageIntegrity() {
 std::vector<bool> GLHandler::getCoherentBufferMask() {
     return coherentBufferMask;
 }
-bool GLHandler::isInitialized() {return isInitialized(false) || isInitialized(true);}
-bool GLHandler::isInitialized(bool debug) {return initialized && (this->isDebug == debug);}
+bool GLHandler::isInitialized() const {return isInitialized(false) || isInitialized(true);}
+bool GLHandler::isInitialized(bool debug) const {return initialized && (this->isDebug == debug);}
 
 void GLHandler::dispatchShader(unsigned int shader, unsigned int localBatchSize, unsigned long resolutionX, unsigned long resolutionY){
     std::chrono::time_point<std::chrono::steady_clock> startInvocation, endInvocation;
@@ -212,6 +218,24 @@ void GLHandler::dispatchShader(unsigned int shader, unsigned int localBatchSize,
 
             glClientWaitSync(sync, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED);
             glDeleteSync(sync);
+        }
+    }
+}
+
+void GLHandler::replaceBufferPlaceholders(std::string &shaderSource) {
+    for (auto i = 1; i < magic_enum::enum_count<bufferIndices>(); i++) {
+        size_t index = 0;
+        auto bufferName = magic_enum::enum_name<bufferIndices>(magic_enum::enum_value<bufferIndices>(i));
+
+        while (true) {
+            index = shaderSource.find(bufferName, index);
+            if (index == std::string::npos) break;
+
+            std::string replacement = std::to_string(i);
+            shaderSource.erase(index, bufferName.length() - 1);
+            shaderSource.replace(index, replacement.length(), replacement);
+
+            index += replacement.length();
         }
     }
 }

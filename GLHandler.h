@@ -6,6 +6,7 @@
 #include <glbinding-aux/ContextInfo.h>
 #include <glbinding/glbinding.h>
 #include <string>
+#include <magic_enum.hpp>
 
 class GLHandler {
 public:
@@ -20,13 +21,13 @@ public:
         EFTDEM_DILATION_HORIZONTAL_AMOUNT_BUFFER, // unsigned int for each grid cell
         EFTDEM_DILATION_RESULT_BUFFER, // double for each grid cell
         EFTDEM_EROSION_HORIZONTAL_AMOUNT_BUFFER, // unsigned int for each grid cell
-        lengthElementDoNotUse
+        EFTDEM_FILLED_MAP_BUFFER // double for each grid cell
     };
 
     GLFWwindow * initializeGL(bool debug);
     void uninitializeGL();
 
-    std::vector<gl::GLuint> getShaderPrograms(std::vector<std::string> shaderFiles);
+    std::vector<gl::GLuint> getShaderPrograms(const std::vector<std::string>& shaderFiles);
 
     void bindBuffer(bufferIndices buffer);
     void dataToBuffer(bufferIndices buffer, gl::GLsizeiptr size, const void *data, gl::GLenum usage);
@@ -36,10 +37,10 @@ public:
     std::vector<gl::GLuint> getBuffers();
 
     void setProgram(gl::GLuint program);
-    gl::GLuint getProgram();
+    gl::GLuint getProgram() const;
 
-    bool isInitialized();
-    bool isInitialized(bool debug);
+    bool isInitialized() const;
+    bool isInitialized(bool debug) const;
     std::vector<bool> getCoherentBufferMask();
 
 private:
@@ -50,6 +51,10 @@ private:
     std::vector<bool> coherentBufferMask;
     std::vector<gl::GLuint> ssbos;
     gl::GLuint currentProgram;
+
+    int numBuffers = magic_enum::enum_count<bufferIndices>() - 1;
+
+    void replaceBufferPlaceholders(std::string &shaderSource);
 };
 
 

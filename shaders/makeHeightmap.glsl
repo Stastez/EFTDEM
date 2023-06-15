@@ -2,13 +2,13 @@
 precision highp int;
 
 layout (local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
-layout (binding = 3) restrict buffer sumBuffer{
+layout (binding = EFTDEM_SORTED_POINT_SUM_BUFFER) restrict buffer sumBuffer{
     uint sums[];
 };
-layout (binding = 4) restrict buffer countBuffer{
+layout (binding = EFTDEM_SORTED_POINT_COUNT_BUFFER) restrict buffer countBuffer{
     uint counts[];
 };
-layout (binding = 5) restrict buffer heightMapBuffer{
+layout (binding = EFTDEM_HEIGHTMAP_BUFFER) restrict buffer heightMapBuffer{
     double heights[];
 };
 uniform uvec2 resolution;

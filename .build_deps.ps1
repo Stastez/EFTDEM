@@ -5,11 +5,12 @@ if (-Not (Test-Path ".deps")){
     New-Item -Path ".deps" -ItemType Directory
 }
 
-#get glfw, glbinding and glm
+#get glfw, glbinding, glm, magic_enum
 Set-Location "${depFolder}"
 git clone https://github.com/glfw/glfw.git
 git clone https://github.com/cginternals/glbinding.git
 git clone https://github.com/g-truc/glm.git
+git clone https://github.com/Neargye/magic_enum.git
 
 #build glfw
 if ((Test-Path "glfw\build") -and $removeOld){
@@ -40,6 +41,16 @@ cmake --build "glbinding\build" --target ALL_BUILD --config Debug
 cmake --build "glbinding\build" --target ALL_BUILD --config Release
 cmake --build "glbinding\build" --target INSTALL --config Debug
 cmake --build "glbinding\build" --target INSTALL --config Release
+
+#build magic_enum
+if ((Test-Path "magic_enum\build") -and $removeOld){
+    Remove-Item "magic_enum\build" -Recurse
+}
+cmake -B "magic_enum\build" -S "magic_enum" -D CMAKE_CONFIGURATION_TYPES="Debug;Release" -D CMAKE_INSTALL_PREFIX="magic_enum" -D MAGIC_ENUM_OPT_BUILD_EXAMPLES=OFF -D MAGIC_ENUM_OPT_BUILD_TESTS=OFF -D MAGIC_ENUM_OPT_INSTALL=ON
+cmake --build "magic_enum\build" --target ALL_BUILD --config Debug
+cmake --build "magic_enum\build" --target ALL_BUILD --config Release
+cmake --build "magic_enum\build" --target INSTALL --config Debug
+cmake --build "magic_enum\build" --target INSTALL --config Release
 
 git clone https://github.com/Microsoft/vcpkg.git
 Set-Location "vcpkg"

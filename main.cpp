@@ -16,6 +16,7 @@
  * 2 : invalid parameters given to function
  * 3 : IO error
  * 4 : OpenGL error
+ * 5 : dependency error
  */
 
 int main(int argc, char** argv) {
