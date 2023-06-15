@@ -1,0 +1,22 @@
+CloudReaderOptions:
+  pointCloudPath: "../../resources/20220912_SZE(2)-001_LAS1_2_20.txt"
+
+CloudSorterOptions:
+  useGPU: true
+
+CloudRasterizerOptions:
+  pixelPerUnit: 20
+  useGPU: true
+
+HeightMapFillerOptions:
+  useGPU: true
+
+  # Currently implemented: closingFilter, averageDistanceWeightedFilter
+  filler: closingFilter
+
+  closingFilterOptions:
+    kernelSizes:
+      - 10
+
+CloudWriterOptions:
+  destinationPath: "../../resources/map"
