@@ -27,6 +27,7 @@ heightMap ClosingFilter::apply(heightMap *map, bool generateOutput) {
     std::vector<std::string> shaderPaths;
     shaderPaths.emplace_back("../../shaders/horizontalSum.glsl");
     shaderPaths.emplace_back("../../shaders/dilation.glsl");
+    shaderPaths.emplace_back("../../shaders/horizontalAmount.glsl");
     shaderPaths.emplace_back("../../shaders/erosion.glsl");
     auto shader = glHandler->getShaderPrograms(shaderPaths);
     glUseProgram(shader[0]);
@@ -59,15 +60,22 @@ heightMap ClosingFilter::apply(heightMap *map, bool generateOutput) {
     glHandler->dispatchShader(shader[0], batchSize, map->resolutionX, map->resolutionY);
     glHandler->waitForShaderStorageIntegrity();
 
+    glUseProgram(shader[1]);
     glUniform2ui(glGetUniformLocation(shader[1], "resolution"), map->resolutionX, map->resolutionY);
     glUniform1ui(glGetUniformLocation(shader[1], "kernelRadius"), kernelRadius);
     glHandler->dispatchShader(shader[1], batchSize, map->resolutionX, map->resolutionY);
     glHandler->waitForShaderStorageIntegrity();
 
-    glUseProgram(shader[1]);
-    glUniform2ui(glGetUniformLocation(shader[1], "resolution"), map->resolutionX, map->resolutionY);
-    glUniform1ui(glGetUniformLocation(shader[1], "kernelRadius"), kernelRadius);
-    glHandler->dispatchShader(shader[1], batchSize, map->resolutionX, map->resolutionY);
+    glUseProgram(shader[2]);
+    glUniform2ui(glGetUniformLocation(shader[2], "resolution"), map->resolutionX, map->resolutionY);
+    glUniform1ui(glGetUniformLocation(shader[2], "kernelRadius"), kernelRadius);
+    glHandler->dispatchShader(shader[2], batchSize, map->resolutionX, map->resolutionY);
+    glHandler->waitForShaderStorageIntegrity();
+
+    glUseProgram(shader[3]);
+    glUniform2ui(glGetUniformLocation(shader[3], "resolution"), map->resolutionX, map->resolutionY);
+    glUniform1ui(glGetUniformLocation(shader[3], "kernelRadius"), kernelRadius);
+    glHandler->dispatchShader(shader[3], batchSize, map->resolutionX, map->resolutionY);
 
     auto end = std::chrono::high_resolution_clock::now();
     std::cout << "Elapsed time for closing: " << duration_cast<std::chrono::milliseconds>(end - start) << std::endl;
@@ -75,7 +83,7 @@ heightMap ClosingFilter::apply(heightMap *map, bool generateOutput) {
     if (!generateOutput) return emptyHeightMapfromHeightMap(map);
 
     heightMap filledMap = emptyHeightMapfromHeightMap(map);
-    glHandler->dataFromBuffer(GLHandler::EFTDEM_DILATION_RESULT_BUFFER,
+    glHandler->dataFromBuffer(GLHandler::EFTDEM_FILLED_MAP_BUFFER,
                               0,
                               (long long) sizeof(GLdouble) * filledMap.resolutionX * filledMap.resolutionY,
                               filledMap.heights.data());
