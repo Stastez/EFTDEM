@@ -10,6 +10,7 @@ class ClosingFilter : public IHeightMapFiller {
 private:
     GLHandler *glHandler;
     unsigned int kernelRadius, batchSize;
+    heightMap applySingleClosingFilter(heightMap *map, bool generateOutput);
 
 public:
     ClosingFilter(GLHandler *glHandler, unsigned int kernelRadius, unsigned int batchSize);

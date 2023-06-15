@@ -14,7 +14,7 @@ void ClosingFilter::cleanUp() {
 
 }
 
-heightMap ClosingFilter::apply(heightMap *map, bool generateOutput) {
+heightMap ClosingFilter::applySingleClosingFilter(heightMap *map, bool generateOutput) {
     using namespace gl;
 
     std::cout << "Applying closing filter using OpenGL..." << std::endl << std::endl;
@@ -83,10 +83,24 @@ heightMap ClosingFilter::apply(heightMap *map, bool generateOutput) {
     if (!generateOutput) return emptyHeightMapfromHeightMap(map);
 
     heightMap filledMap = emptyHeightMapfromHeightMap(map);
-    glHandler->dataFromBuffer(GLHandler::EFTDEM_FILLED_MAP_BUFFER,
+    glHandler->dataFromBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,
                               0,
                               (long long) sizeof(GLdouble) * filledMap.resolutionX * filledMap.resolutionY,
                               filledMap.heights.data());
 
     return filledMap;
+}
+
+heightMap ClosingFilter::apply(heightMap *map, bool generateOutput) {
+    using namespace gl;
+
+    std::vector<long> kernelRadiusesToBeApplied = {2,5,10,30};
+
+    for (int i=0; i<kernelRadiusesToBeApplied.size()-1; i++){
+        kernelRadius = kernelRadiusesToBeApplied[i];
+        applySingleClosingFilter(map, false);
+    }
+
+    kernelRadius = *kernelRadiusesToBeApplied.end();
+    return applySingleClosingFilter(map, generateOutput);
 }

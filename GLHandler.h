@@ -20,7 +20,6 @@ public:
         EFTDEM_DILATION_HORIZONTAL_AMOUNT_BUFFER, // unsigned int for each grid cell
         EFTDEM_DILATION_RESULT_BUFFER, // double for each grid cell
         EFTDEM_EROSION_HORIZONTAL_AMOUNT_BUFFER, // unsigned int for each grid cell
-        EFTDEM_FILLED_MAP_BUFFER, // double for each grid cell
         lengthElementDoNotUse
     };
 
