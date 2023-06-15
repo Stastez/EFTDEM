@@ -4,18 +4,14 @@
 
 #include "DataStructures.h"
 #include "GLHandler.h"
-#include "IHeightMapFiller.h"
+#include "IKernelBasedFilter.h"
 
-class ClosingFilter : public IHeightMapFiller {
+class ClosingFilter : public IKernelBasedFilter {
 private:
-    GLHandler *glHandler;
     std::vector<unsigned int> kernelRadii;
-    unsigned int batchSize;
-    heightMap applySingleClosingFilter(heightMap *map, bool generateOutput, unsigned int kernelRadius);
-
+    //heightMap applySingleClosingFilter(heightMap *map, bool generateOutput, unsigned int kernelRadius) override;
 public:
     ClosingFilter(GLHandler *glHandler, std::vector<unsigned int> kernelRadii, unsigned int batchSize);
-    void cleanUp() override;
     heightMap apply(heightMap *map, bool generateOutput) override;
 };
 
