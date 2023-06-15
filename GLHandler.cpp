@@ -16,6 +16,11 @@ void GLAPIENTRY MessageCallback( GLenum source, GLenum type, GLuint id, GLenum s
 GLFWwindow * GLHandler::initializeGL(bool debug) {
     if (isInitialized(debug)) uninitializeGL();
 
+    if (!magic_enum::is_magic_enum_supported) {
+        std::cout << "Current compiler does not support magic_enum!" << std::endl;
+        exit(5);
+    }
+
     if(!glfwInit()) {
         std::cout << "Could not initialize GLFW." << std::endl;
         exit(4);
