@@ -68,7 +68,7 @@ heightMap RasterizerGPU::apply(pointGrid *pointGrid, bool generateOutput) {
     auto workgroupSize = (unsigned int) (std::ceil(std::sqrt((double) pointGrid->numberOfPoints)));
     workgroupSize = std::ceil(workgroupSize / 8.);
     glDispatchCompute(workgroupSize, workgroupSize, 1);
-    glMemoryBarrier(GL_ALL_BARRIER_BITS);
+    glHandler->waitForShaderStorageIntegrity();
 
     //sumChunks.glsl
     glHandler->setProgram(shader[1]);
@@ -83,7 +83,7 @@ heightMap RasterizerGPU::apply(pointGrid *pointGrid, bool generateOutput) {
     glUniform1ui(glGetUniformLocation(glHandler->getProgram(), "numberOfPoints"), pointGrid->numberOfPoints);
 
     glDispatchCompute(workgroupSize, workgroupSize, 1);
-    glMemoryBarrier(GL_ALL_BARRIER_BITS);
+    glHandler->waitForShaderStorageIntegrity();
 
     //makeHeightmap.glsl
     glHandler->setProgram(shader[2]);
