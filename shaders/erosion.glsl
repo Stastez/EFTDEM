@@ -4,7 +4,7 @@ layout (local_size_x = 8, local_size_y = 4, local_size_z = 1) in;
 layout (binding = 8) restrict buffer mapBuffer{
     double heights[];
 };
-layout (binding = 9) restrict buffer amountBuffer{
+layout (binding = 7) restrict buffer amountBuffer{
     uint horizontalAmounts[];
 };
 layout (binding = 5) restrict buffer resultBuffer{

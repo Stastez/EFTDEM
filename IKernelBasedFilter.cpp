@@ -12,7 +12,7 @@ void IKernelBasedFilter::cleanUp() {
 heightMap IKernelBasedFilter::applySingleFilter(heightMap *map, bool generateOutput, unsigned int kernelRadius) {
     using namespace gl;
 
-    std::cout << "Applying closing filter using OpenGL..." << std::endl << std::endl;
+    std::cout << "Applying filter using OpenGL..." << std::endl << std::endl;
 
     auto start = std::chrono::high_resolution_clock::now();
 

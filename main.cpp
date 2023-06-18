@@ -1,5 +1,6 @@
 #include "GLHandler.h"
 #include "ClosingFilter.h"
+#include "InverseDistanceWeightedFilter.h"
 #include "Pipeline.h"
 #include "CloudReader.h"
 #include "GTiffWriter.h"
@@ -33,7 +34,8 @@ int main(int argc, char** argv) {
             //new SorterCPU(),
             //((bool) strtol(argv[5], nullptr, 10)) ? (ICloudRasterizer *) new RasterizerGPU(pipeline->getGLHandler()) : (ICloudRasterizer *) new RasterizerCPU(),
             new RasterizerGPU(pipeline->getGLHandler()),
-            new ClosingFilter(pipeline->getGLHandler(), std::vector<unsigned int>({2,5,10,30}), 512),
+            new ClosingFilter(pipeline->getGLHandler(), {2,5,10,30}, 512),
+            //new InverseDistanceWeightedFilter(pipeline->getGLHandler(), 30, 512),
             new GTiffWriter(true)
             );
 

@@ -17,13 +17,11 @@ ClosingFilter::ClosingFilter(GLHandler *glHandler, std::vector<unsigned int> ker
 
     bufferSpecifications b;
     interimBufferSpecifications = std::vector<bufferSpecifications>();
-    b = {.buffer = GLHandler::EFTDEM_DILATION_HORIZONTAL_SUM_BUFFER, .elementSize = (long long) sizeof(double)};
+    b = {.buffer = GLHandler::EFTDEM_SUM_BUFFER, .elementSize = (long long) sizeof(double)};
     interimBufferSpecifications.emplace_back(b);
-    b = {.buffer = GLHandler::EFTDEM_DILATION_HORIZONTAL_AMOUNT_BUFFER, .elementSize = (long long) sizeof(unsigned int)};
+    b = {.buffer = GLHandler::EFTDEM_AMOUNT_BUFFER, .elementSize = (long long) sizeof(unsigned int)};
     interimBufferSpecifications.emplace_back(b);
-    b = {.buffer = GLHandler::EFTDEM_DILATION_RESULT_BUFFER, .elementSize = (long long) sizeof(double)};
-    interimBufferSpecifications.emplace_back(b);
-    b = {.buffer = GLHandler::EFTDEM_EROSION_HORIZONTAL_AMOUNT_BUFFER, .elementSize = (long long) sizeof(unsigned int)};
+    b = {.buffer = GLHandler::EFTDEM_INTERIM_RESULT_BUFFER, .elementSize = (long long) sizeof(double)};
     interimBufferSpecifications.emplace_back(b);
 }
 

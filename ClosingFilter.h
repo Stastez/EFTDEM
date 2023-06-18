@@ -9,7 +9,6 @@
 class ClosingFilter : public IKernelBasedFilter {
 private:
     std::vector<unsigned int> kernelRadii;
-    //heightMap applySingleClosingFilter(heightMap *map, bool generateOutput, unsigned int kernelRadius) override;
 public:
     ClosingFilter(GLHandler *glHandler, std::vector<unsigned int> kernelRadii, unsigned int batchSize);
     heightMap apply(heightMap *map, bool generateOutput) override;
