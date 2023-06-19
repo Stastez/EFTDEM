@@ -201,14 +201,9 @@ void GLHandler::dispatchShader(unsigned int shader, unsigned int localBatchSize,
             endInvocation = std::chrono::high_resolution_clock::now();
             auto elapsedTime = endInvocation - startInvocation;
 
-            std::cout << "Batch number: " << currentInvocation
-                      << " / " << totalInvocations - 1 << std::endl;
             std::cout << "Elapsed time for " << localBatchSize << " invocations: "
-                      << duration_cast<std::chrono::milliseconds>(elapsedTime) << std::endl
-                      << "Average elapsed time per invocation: "
-                      << duration_cast<std::chrono::milliseconds>(elapsedTime) / localBatchSize
-                      << std::endl;
-            std::cout << "Batch size: " << localBatchSize << std::endl << std::endl;
+                      << duration_cast<std::chrono::milliseconds>(elapsedTime) << std::endl;
+            std::cout << "Batch size: " << localBatchSize << std::endl;
 
             if (duration_cast<std::chrono::milliseconds>(endInvocation - startInvocation) > std::chrono::milliseconds {1000}) {
                 localBatchSize /= 2;
