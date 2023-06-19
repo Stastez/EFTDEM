@@ -10,9 +10,9 @@ private:
     static std::pair<unsigned long, unsigned long> calculateGridCoordinates(pointGrid *grid, rawPointCloud *pointCloud, double xCoord, double yCoord);
 
 public:
-    SorterCPU();
+    SorterCPU(unsigned long pixelPerUnit);
     void cleanUp() override;
-    pointGrid apply(rawPointCloud *pointCloud, unsigned long pixelPerUnit, bool generateOutput) override;
+    pointGrid apply(rawPointCloud *pointCloud, bool generateOutput) override;
 };
 
 

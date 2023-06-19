@@ -10,10 +10,9 @@
 #include "GLHandler.h"
 
 class Pipeline {
+friend class ConfigProvider;
+
 private:
-    std::string sourceFilePath;
-    std::string destinationPath;
-    unsigned long pixelPerUnit;
 
     ICloudReader *reader{};
     ICloudSorter *sorter{};
@@ -25,9 +24,9 @@ private:
 public:
     ~Pipeline();
 
-    Pipeline(std::string sourceFilePath, std::string destinationPath, unsigned long pixelPerUnit);
-    Pipeline(std::string sourceFilePath, std::string destinationPath, unsigned long pixelPerUnit, ICloudReader *, ICloudSorter *, ICloudRasterizer *, IHeightMapFiller *, IHeightMapWriter *);
-    Pipeline(std::string sourceFilePath, std::string destinationPath, unsigned long pixelPerUnit, ICloudReader *, ICloudSorter *, ICloudRasterizer *, IHeightMapFiller *, IHeightMapWriter *, GLHandler *);
+    Pipeline();
+    Pipeline(ICloudReader *, ICloudSorter *, ICloudRasterizer *, IHeightMapFiller *, IHeightMapWriter *);
+    Pipeline(ICloudReader *, ICloudSorter *, ICloudRasterizer *, IHeightMapFiller *, IHeightMapWriter *, GLHandler *);
     bool isOperable();
 
     void attachElements(ICloudReader *, ICloudSorter *, ICloudRasterizer *, IHeightMapFiller *, IHeightMapWriter *);
@@ -53,7 +52,9 @@ public:
         EXIT_INVALID_FUNCTION_PARAMETERS,
         EXIT_IO_ERROR,
         EXIT_OPENGL_ERROR,
-        EXIT_DEPENDENCY_ERROR
+        EXIT_DEPENDENCY_ERROR,
+        EXIT_INVALID_CONFIGURATION,
+        EXIT_NOT_YET_IMPLEMENTED
     };
 };
 

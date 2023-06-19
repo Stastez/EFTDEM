@@ -6,19 +6,16 @@ Pipeline::~Pipeline() {
     glHandler->uninitializeGL();
 }
 
-Pipeline::Pipeline(std::string sourceFilePath, std::string destinationPath, unsigned long pixelPerUnit) {
-    this->sourceFilePath = std::move(sourceFilePath);
-    this->destinationPath = std::move(destinationPath);
-    this->pixelPerUnit = pixelPerUnit;
+Pipeline::Pipeline() {
     this->glHandler = new GLHandler();
     this->glHandler->initializeGL(false);
 }
 
-Pipeline::Pipeline(std::string sourceFilePath, std::string destinationPath, unsigned long pixelPerUnit, ICloudReader *reader, ICloudSorter *sorter, ICloudRasterizer *rasterizer, IHeightMapFiller *filler, IHeightMapWriter *writer)
-                    : Pipeline(std::move(sourceFilePath), std::move(destinationPath), pixelPerUnit, reader, sorter, rasterizer, filler, writer, new GLHandler()) {}
+Pipeline::Pipeline(ICloudReader *reader, ICloudSorter *sorter, ICloudRasterizer *rasterizer, IHeightMapFiller *filler, IHeightMapWriter *writer)
+                    : Pipeline(reader, sorter, rasterizer, filler, writer, new GLHandler()) {}
 
-Pipeline::Pipeline(std::string sourceFilePath, std::string destinationPath, unsigned long pixelPerUnit, ICloudReader *reader, ICloudSorter *sorter, ICloudRasterizer *rasterizer, IHeightMapFiller *filler, IHeightMapWriter *writer, GLHandler *glHandler)
-                    : Pipeline(std::move(sourceFilePath), std::move(destinationPath), pixelPerUnit) {
+Pipeline::Pipeline(ICloudReader *reader, ICloudSorter *sorter, ICloudRasterizer *rasterizer, IHeightMapFiller *filler, IHeightMapWriter *writer, GLHandler *glHandler)
+                    : Pipeline() {
     attachElements(reader, sorter, rasterizer, filler, writer);
 }
 
@@ -31,10 +28,10 @@ void Pipeline::execute() {
 
     bool generateOutput = true;
     generateOutput = adjacentStagesUseGPU(reader, sorter);
-    auto readerReturn = reader->apply(sourceFilePath, generateOutput);
+    auto readerReturn = reader->apply(generateOutput);
     reader->cleanUp();
     generateOutput = adjacentStagesUseGPU(sorter, rasterizer);
-    auto sorterReturn = sorter->apply(&readerReturn, pixelPerUnit, generateOutput);
+    auto sorterReturn = sorter->apply(&readerReturn, generateOutput);
     sorter->cleanUp();
     generateOutput = adjacentStagesUseGPU(rasterizer, filler);
     generateOutput = true; //Closing filter not yet using previous buffers
@@ -43,8 +40,7 @@ void Pipeline::execute() {
     generateOutput = adjacentStagesUseGPU(filler, writer);
     auto fillerReturn = filler->apply(&rasterizerReturn, generateOutput);
     filler->cleanUp();
-    writer->apply(&fillerReturn, destinationPath + "_filled", generateOutput);
-    writer->apply(&rasterizerReturn, destinationPath, generateOutput);
+    writer->apply(&fillerReturn, generateOutput);
     writer->cleanUp();
 }
 

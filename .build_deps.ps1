@@ -1,16 +1,17 @@
 $depFolder=".deps"
-$removeOld=$true
+$removeOld=$false #$removeOld=$true
 
 if (-Not (Test-Path ".deps")){
     New-Item -Path ".deps" -ItemType Directory
 }
 
-#get glfw, glbinding, glm, magic_enum
+#get glfw, glbinding, glm, magic_enum, yaml-cpp
 Set-Location "${depFolder}"
 git clone https://github.com/glfw/glfw.git
 git clone https://github.com/cginternals/glbinding.git
 git clone https://github.com/g-truc/glm.git
 git clone https://github.com/Neargye/magic_enum.git
+git clone https://github.com/jbeder/yaml-cpp.git
 
 #build glfw
 if ((Test-Path "glfw\build") -and $removeOld){
@@ -51,6 +52,16 @@ cmake --build "magic_enum\build" --target ALL_BUILD --config Debug
 cmake --build "magic_enum\build" --target ALL_BUILD --config Release
 cmake --build "magic_enum\build" --target INSTALL --config Debug
 cmake --build "magic_enum\build" --target INSTALL --config Release
+
+#build yaml-cpp
+if ((Test-Path "yaml-cpp\build") -and $removeOld){
+    Remove-Item "yaml-cpp\build" -Recurse
+}
+cmake -B "yaml-cpp\build" -S "yaml-cpp" -D CMAKE_CONFIGURATION_TYPES="Debug;Release" -D CMAKE_INSTALL_PREFIX="yaml-cpp" -D YAML_BUILD_SHARED_LIBS=ON
+cmake --build "yaml-cpp\build" --target ALL_BUILD --config Debug
+cmake --build "yaml-cpp\build" --target ALL_BUILD --config Release
+cmake --build "yaml-cpp\build" --target INSTALL --config Debug
+cmake --build "yaml-cpp\build" --target INSTALL --config Release
 
 git clone https://github.com/Microsoft/vcpkg.git
 Set-Location "vcpkg"
