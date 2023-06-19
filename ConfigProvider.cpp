@@ -7,6 +7,7 @@
 #include "RasterizerCpu.h"
 #include "ClosingFilter.h"
 #include "GTiffWriter.h"
+#include "InverseDistanceWeightedFilter.h"
 
 #include <iostream>
 
@@ -60,13 +61,17 @@ Pipeline *ConfigProvider::providePipeline() {
     IHeightMapFiller *filler;
     auto fillingAlgorithm = checkValidityAndReturn(config["HeightMapFillerOptions"]["filler"], true).first.as<std::string>();
     if (fillingAlgorithm == "closingFilter") {
-        auto kernelRadii = checkValidityAndReturn(config["HeightMapFillerOptions"]["closingFilterOptions"]["kernelSizes"], true).first.as<std::vector<unsigned int>>();
-        auto batchSizeTest = checkValidityAndReturn(config["HeightMapFillerOptions"]["closingFilterOptions"]["batchSize"], false);
+        auto kernelRadii = checkValidityAndReturn(config["HeightMapFillerOptions"]["kernelBasedFilterOptions"]["kernelSizes"], true).first.as<std::vector<unsigned int>>();
+        auto batchSizeTest = checkValidityAndReturn(config["HeightMapFillerOptions"]["kernelBasedFilterOptions"]["batchSize"], false);
         auto batchSize = (batchSizeTest.second) ? batchSizeTest.first.as<unsigned int>() : 0;
         filler = new ClosingFilter(pipeline->glHandler, kernelRadii, batchSize);
     } else if (fillingAlgorithm == "averageDistanceWeightedFilter") {
         //TODO add averageDistanceWeightedFilter call
-        exit(Pipeline::EXIT_NOT_YET_IMPLEMENTED);
+        auto kernelRadii = checkValidityAndReturn(config["HeightMapFillerOptions"]["kernelBasedFilterOptions"]["kernelSizes"], true).first.as<std::vector<unsigned int>>();
+        auto batchSizeTest = checkValidityAndReturn(config["HeightMapFillerOptions"]["kernelBasedFilterOptions"]["batchSize"], false);
+        auto batchSize = (batchSizeTest.second) ? batchSizeTest.first.as<unsigned int>() : 0;
+        //TODO
+        filler = new InverseDistanceWeightedFilter(pipeline->glHandler, kernelRadii[0], batchSize);
     } else {
         std::cout << "Unrecognized filling algorithm!" << std::endl;
         exit(Pipeline::EXIT_INVALID_CONFIGURATION);

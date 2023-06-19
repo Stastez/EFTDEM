@@ -14,7 +14,7 @@ HeightMapFillerOptions:
   # Currently implemented: closingFilter, averageDistanceWeightedFilter
   filler: closingFilter
 
-  closingFilterOptions:
+  kernelBasedFilterOptions:
     kernelSizes:
       - 10
       - 30
