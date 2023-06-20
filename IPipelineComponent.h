@@ -5,9 +5,21 @@
 
 class IPipelineComponent {
 protected:
+    /**
+     * Whether or not the described stage uses OpenGL. If adjacent stages both use OpenGL, the former may choose to forgo
+     * returning fully formed return types and only include necessary metadata, as the buffers already set on the GPU may be reused.
+     */
     bool stageUsesGPU = false;
 public:
+    /**
+     * Clean up all resources that are no longer necessary for later stages in the pipeline.
+     */
     virtual void cleanUp() = 0;
+    /**
+     * Check if the described stage uses OpenGL. If adjacent stages both use OpenGL, the former may choose to forgo
+     * returning fully formed return types and only include necessary metadata, as the buffers already set on the GPU may be reused.
+     * @return Whether the the described stage uses OpenGL
+     */
     virtual bool usesGPU();
 };
 

@@ -4,6 +4,11 @@
 #include "CloudReader.h"
 #include "Pipeline.h"
 
+/**
+ * Constructs a new CloudReader that will read from the fileName-provided point cloud. The file must be comma-
+ * separated and conform to the format [x],[y],[z],[ground point? -> 1; environment point? -> 0],[reflection intensity]
+ * @param fileName The path to the point cloud to be read from
+ */
 CloudReader::CloudReader(const std::string& fileName) {
     stageUsesGPU = false;
     CloudReader::fileName = fileName;
@@ -13,12 +18,6 @@ void CloudReader::cleanUp() {
 
 }
 
-/**
- * Reads the content of the fileName-provided file into a raw, non-grid point cloud struct. The file must be comma-
- * separated and conform to the format [x],[y],[z],[ground point? -> 1; environment point? -> 0],[reflection intensity]
- * @param fileName The path to the csv containing the point cloud
- * @return A new rawPointCloud struct
- */
 rawPointCloud CloudReader::apply(bool generateOutput) {
     if (!generateOutput) return {};
 
