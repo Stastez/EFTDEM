@@ -25,5 +25,7 @@ void main() {
     double heightRepresentation = max(double(sums[coordinate]) / double(counts[coordinate]), double(0));
     double height = heightRepresentation / (double(~0u) / double(counts[coordinate]));
 
-    heights[coordinate] = max(height, double(0.));
+    height = (isnan(height)) ? 0. : height;
+
+    heights[coordinate] = height;
 }
