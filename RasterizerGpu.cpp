@@ -20,8 +20,14 @@ heightMap RasterizerGPU::apply(pointGrid *pointGrid, bool generateOutput) {
     auto shader = glHandler->getShaderPrograms({"../../shaders/countChunks.glsl", "../../shaders/sumChunks.glsl", "../../shaders/makeHeightmap.glsl"});
     glHandler->setProgram(shader[0]);
 
-    if (!(glHandler->getCoherentBufferMask()[GLHandler::EFTDEM_RAW_POINT_BUFFER] && glHandler->getCoherentBufferMask()[GLHandler::EFTDEM_RAW_POINT_INDEX_BUFFER])) {
-        if (!(glHandler->getCoherentBufferMask()[GLHandler::EFTDEM_RAW_POINT_BUFFER])) {
+    auto workgroupSize = (unsigned int) (std::ceil(std::sqrt((double) pointGrid->numberOfPoints)));
+    workgroupSize = std::ceil(workgroupSize / 8.);
+
+    auto bufferMask = glHandler->getCoherentBufferMask();
+    if (!(bufferMask[GLHandler::EFTDEM_RAW_POINT_BUFFER]
+            && bufferMask[GLHandler::EFTDEM_RAW_POINT_INDEX_BUFFER]
+            && bufferMask[GLHandler::EFTDEM_SORTED_POINT_COUNT_BUFFER])) {
+        if (!(bufferMask[GLHandler::EFTDEM_RAW_POINT_BUFFER])) {
             auto rawPoints = new std::vector<GLdouble>();
 
             for (const auto& cell : pointGrid->points) {
@@ -37,7 +43,7 @@ heightMap RasterizerGPU::apply(pointGrid *pointGrid, bool generateOutput) {
                                     rawPoints->data(), GL_STATIC_DRAW);
         }
 
-        if (!(glHandler->getCoherentBufferMask()[GLHandler::EFTDEM_RAW_POINT_INDEX_BUFFER])) {
+        if (!(bufferMask[GLHandler::EFTDEM_RAW_POINT_INDEX_BUFFER])) {
             auto indices = new std::vector<GLuint>(pointGrid->numberOfPoints);
 
             unsigned long long maxIndex = 0;
@@ -53,22 +59,22 @@ heightMap RasterizerGPU::apply(pointGrid *pointGrid, bool generateOutput) {
                                     (long long) sizeof(GLuint) * pointGrid->numberOfPoints,
                                     indices->data(), GL_STATIC_DRAW);
         }
+
+        if (!(bufferMask[GLHandler::EFTDEM_SORTED_POINT_COUNT_BUFFER])) {
+            //countChunks.glsl
+            auto counts = new GLuint[pointGrid->resolutionX * pointGrid->resolutionY];
+            for (auto i = 0; i < pointGrid->resolutionX * pointGrid->resolutionY; i++) counts[i] = 0u;
+            glHandler->dataToBuffer(GLHandler::EFTDEM_SORTED_POINT_COUNT_BUFFER,
+                                    (long long) sizeof(GLuint) * pointGrid->resolutionX * pointGrid->resolutionY,
+                                    counts, GL_STREAM_READ);
+            glHandler->bindBuffer(GLHandler::EFTDEM_UNBIND);
+
+            glUniform1ui(glGetUniformLocation(glHandler->getProgram(), "numberOfPoints"), pointGrid->numberOfPoints);
+
+            glDispatchCompute(workgroupSize, workgroupSize, 1);
+            glHandler->waitForShaderStorageIntegrity();
+        }
     }
-
-    //countChunks.glsl
-    auto counts = new GLuint[pointGrid->resolutionX * pointGrid->resolutionY];
-    for (auto i = 0; i < pointGrid->resolutionX * pointGrid->resolutionY; i++) counts[i] = 0u;
-    glHandler->dataToBuffer(GLHandler::EFTDEM_SORTED_POINT_COUNT_BUFFER,
-                            (long long) sizeof(GLuint) * pointGrid->resolutionX * pointGrid->resolutionY,
-                            counts, GL_STREAM_READ);
-    glHandler->bindBuffer(GLHandler::EFTDEM_UNBIND);
-
-    glUniform1ui(glGetUniformLocation(glHandler->getProgram(), "numberOfPoints"), pointGrid->numberOfPoints);
-
-    auto workgroupSize = (unsigned int) (std::ceil(std::sqrt((double) pointGrid->numberOfPoints)));
-    workgroupSize = std::ceil(workgroupSize / 8.);
-    glDispatchCompute(workgroupSize, workgroupSize, 1);
-    glHandler->waitForShaderStorageIntegrity();
 
     //sumChunks.glsl
     glHandler->setProgram(shader[1]);

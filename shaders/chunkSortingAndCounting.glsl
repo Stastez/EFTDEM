@@ -5,7 +5,10 @@ layout (binding = EFTDEM_RAW_POINT_BUFFER) restrict buffer pointBuffer{
     double points[];
 };
 layout (binding = EFTDEM_RAW_POINT_INDEX_BUFFER) restrict buffer gridCoordinateBuffer{
-    uint coordinate[];
+    uint coordinates[];
+};
+layout (binding = EFTDEM_SORTED_POINT_COUNT_BUFFER) restrict buffer countBuffer{
+    uint counts[];
 };
 
 uniform uvec2 resolution;
@@ -30,5 +33,8 @@ void main() {
     returnXY.x = clamp(returnXY.x, 0u, resolution.x - 1);
     returnXY.y = clamp(returnXY.y, 0u, resolution.y - 1);
 
-    coordinate[calculate1DCoordinate(gl_GlobalInvocationID.xy, uvec2(ceil(sqrt(double(numberOfPoints)))))] = calculate1DCoordinate(returnXY, resolution);
+    uint coordinate = calculate1DCoordinate(returnXY, resolution);
+
+    coordinates[calculate1DCoordinate(gl_GlobalInvocationID.xy, uvec2(ceil(sqrt(double(numberOfPoints)))))] = coordinate;
+    atomicAdd(counts[coordinate], 1u);
 }
