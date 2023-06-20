@@ -1,11 +1,11 @@
 #version 430 core
 
 layout (local_size_x = 8, local_size_y = 4, local_size_z = 1) in;
-layout (binding = 8) restrict buffer mapBuffer{
-    double heights[];
+layout (binding = EFTDEM_CLOSING_MASK_BUFFER) restrict buffer mapBuffer{ //EFTDEM_CLOSING_MASK_BUFFER
+    double discreteValues[];
 };
-layout (binding = 7) restrict buffer amountBuffer{
-    uint amounts[];
+layout (binding = EFTDEM_HORIZONTAL_AMOUNT_BUFFER) restrict buffer horizontalAmountsBuffer{
+    uint horizontalAmounts[];
 };
 
 uniform uvec2 resolution;
@@ -27,9 +27,9 @@ void main() {
         uint x = min(resolution.x-1u, max(0u, kx - kernelRadius + correctedGlobalInvocation.x));
         uint y = correctedGlobalInvocation.y;
 
-        double currentHeight = heights[calculate1DCoordinate(uvec2(x,y))];
-        amount += (currentHeight <= 0.0) ? 1 : 0;
+        double currentHeight = discreteValues[calculate1DCoordinate(uvec2(x,y))];
+        amount += uint(currentHeight);
     }
 
-    amounts[coord1D] = amount;
+    horizontalAmounts[coord1D] = amount;
 }

@@ -10,7 +10,7 @@ InverseDistanceWeightedFilter::InverseDistanceWeightedFilter(GLHandler *glHandle
     InverseDistanceWeightedFilter::kernelRadius = kernelRadius;
 
     shaderPaths = std::vector<std::string>();
-    shaderPaths.emplace_back("../../shaders/horizontalInverseDistanceSum.glsl");
+    shaderPaths.emplace_back("../../shaders/horizontalSumIDW.glsl");
     shaderPaths.emplace_back("../../shaders/inverseDistanceAverage.glsl");
     shaderPaths.emplace_back("../../shaders/horizontalAmount.glsl");
     shaderPaths.emplace_back("../../shaders/erosion.glsl");

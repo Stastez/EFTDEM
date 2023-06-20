@@ -10,19 +10,29 @@ ClosingFilter::ClosingFilter(GLHandler *glHandler, std::vector<unsigned int> ker
     ClosingFilter::kernelRadii = kernelRadii;
 
     shaderPaths = std::vector<std::string>();
-    shaderPaths.emplace_back("../../shaders/horizontalSum.glsl");
+    shaderPaths.emplace_back("../../shaders/discretization.glsl");
+    shaderPaths.emplace_back("../../shaders/horizontalAmount.glsl");
+    shaderPaths.emplace_back("../../shaders/amount.glsl");
     shaderPaths.emplace_back("../../shaders/dilation.glsl");
     shaderPaths.emplace_back("../../shaders/horizontalAmount.glsl");
+    shaderPaths.emplace_back("../../shaders/amount.glsl");
     shaderPaths.emplace_back("../../shaders/erosion.glsl");
+
+    shaderPaths.emplace_back("../../shaders/discretization.glsl");
+    shaderPaths.emplace_back("../../shaders/horizontalAmount.glsl");
+    shaderPaths.emplace_back("../../shaders/amount.glsl");
+    shaderPaths.emplace_back("../../shaders/horizontalSum.glsl");
+    shaderPaths.emplace_back("../../shaders/sum.glsl");
+    shaderPaths.emplace_back("../../shaders/closing.glsl");
+
 
     bufferSpecifications b;
     interimBufferSpecifications = std::vector<bufferSpecifications>();
-    b = {.buffer = GLHandler::EFTDEM_SUM_BUFFER, .elementSize = (long long) sizeof(double)};
-    interimBufferSpecifications.emplace_back(b);
-    b = {.buffer = GLHandler::EFTDEM_AMOUNT_BUFFER, .elementSize = (long long) sizeof(unsigned int)};
-    interimBufferSpecifications.emplace_back(b);
-    b = {.buffer = GLHandler::EFTDEM_INTERIM_RESULT_BUFFER, .elementSize = (long long) sizeof(double)};
-    interimBufferSpecifications.emplace_back(b);
+    interimBufferSpecifications.emplace_back(bufferSpecifications{.buffer = GLHandler::EFTDEM_CLOSING_MASK_BUFFER, .elementSize = (long long) sizeof(double)});
+    interimBufferSpecifications.emplace_back(bufferSpecifications{.buffer = GLHandler::EFTDEM_HORIZONTAL_AMOUNT_BUFFER, .elementSize = (long long) sizeof(unsigned int)});
+    interimBufferSpecifications.emplace_back(bufferSpecifications{.buffer = GLHandler::EFTDEM_AMOUNT_BUFFER, .elementSize = (long long) sizeof(unsigned int)});
+    interimBufferSpecifications.emplace_back(bufferSpecifications{.buffer = GLHandler::EFTDEM_HORIZONTAL_SUM_BUFFER, .elementSize = (long long) sizeof(double)});
+    interimBufferSpecifications.emplace_back(bufferSpecifications{.buffer = GLHandler::EFTDEM_SUM_BUFFER, .elementSize = (long long) sizeof(double)});
 }
 
 heightMap ClosingFilter::apply(heightMap *map, bool generateOutput) {

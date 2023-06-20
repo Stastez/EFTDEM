@@ -1,5 +1,5 @@
 CloudReaderOptions:
-  pointCloudPath: "../../resources/20220912_SZE(2)-001_LAS1_2_20.txt"
+  pointCloudPath: "../../res/20220912_SZE(2)-001_LAS1_2_05.txt"
 
 CloudSorterOptions:
   pixelPerUnit: 20
@@ -16,9 +16,8 @@ HeightMapFillerOptions:
 
   kernelBasedFilterOptions:
     kernelSizes:
-      - 10
       - 30
 
 CloudWriterOptions:
-  destinationPath: "../../resources/map"
+  destinationPath: "../../res/map"
   writeLowDepth: true

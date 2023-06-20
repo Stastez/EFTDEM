@@ -17,8 +17,11 @@ public:
         EFTDEM_SORTED_POINT_SUM_BUFFER, // unsigned int for each grid cell
         EFTDEM_SORTED_POINT_COUNT_BUFFER, // unsigned int for each grid cell
         EFTDEM_HEIGHTMAP_BUFFER, // double for each grid cell
+        EFTDEM_HORIZONTAL_SUM_BUFFER, // unsigned int for each grid cell
         EFTDEM_SUM_BUFFER, // double for each grid cell
+        EFTDEM_HORIZONTAL_AMOUNT_BUFFER, // unsigned int for each grid cell
         EFTDEM_AMOUNT_BUFFER, // unsigned int for each grid cell
+        EFTDEM_CLOSING_MASK_BUFFER, // double for each grid cell
         EFTDEM_INTERIM_RESULT_BUFFER, // double for each grid cell
         EFTDEM_TOTAL_WEIGHT_BUFFER, // double for each grid cell
     };
