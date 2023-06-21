@@ -65,12 +65,10 @@ Pipeline *ConfigProvider::providePipeline() {
         auto batchSizeTest = checkValidityAndReturn(config["HeightMapFillerOptions"]["kernelBasedFilterOptions"]["batchSize"], false);
         auto batchSize = (batchSizeTest.second) ? batchSizeTest.first.as<unsigned int>() : 0;
         filler = new ClosingFilter(pipeline->glHandler, kernelRadii, batchSize);
-    } else if (fillingAlgorithm == "averageDistanceWeightedFilter") {
-        //TODO add averageDistanceWeightedFilter call
+    } else if (fillingAlgorithm == "inverseDistanceWeightedFilter") {
         auto kernelRadii = checkValidityAndReturn(config["HeightMapFillerOptions"]["kernelBasedFilterOptions"]["kernelSizes"], true).first.as<std::vector<unsigned int>>();
         auto batchSizeTest = checkValidityAndReturn(config["HeightMapFillerOptions"]["kernelBasedFilterOptions"]["batchSize"], false);
         auto batchSize = (batchSizeTest.second) ? batchSizeTest.first.as<unsigned int>() : 0;
-        //TODO
         filler = new InverseDistanceWeightedFilter(pipeline->glHandler, kernelRadii[0], batchSize);
     } else {
         std::cout << "Unrecognized filling algorithm!" << std::endl;
