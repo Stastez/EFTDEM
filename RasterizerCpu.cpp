@@ -34,7 +34,7 @@ heightMap RasterizerCPU::apply(pointGrid *pointGrid, bool generateOutput) {
     }
 
     auto end = std::chrono::high_resolution_clock::now();
-    std::cout << "Elapsed time for averaging: " << duration_cast<std::chrono::milliseconds>(end - start) << std::endl;
+    std::cout << "Elapsed time for averaging: " << duration_cast<std::chrono::milliseconds>(end - start).count() << "ms" << std::endl;
 
     return map;
 }
