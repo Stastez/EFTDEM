@@ -1,13 +1,13 @@
 #version 430 core
 
 layout (local_size_x = 8, local_size_y = 4, local_size_z = 1) in;
-layout (binding = EFTDEM_CLOSING_MASK_BUFFER ) restrict buffer closingMaskBuffer{
+layout (binding = EFTDEM_CLOSING_MASK_BUFFER) restrict buffer closingMaskBuffer{
     double closingMask[];
 };
-layout (binding = EFTDEM_AVERAGE_BUFFER ) restrict buffer averagesBuffer{
+layout (binding = EFTDEM_AVERAGE_BUFFER) restrict buffer averagesBuffer{
     double average[];
 };
-layout (binding = EFTDEM_HEIGHTMAP_BUFFER ) restrict buffer heightsBuffer{
+layout (binding = EFTDEM_HEIGHTMAP_BUFFER) restrict buffer heightsBuffer{
     double heights[];
 };
 

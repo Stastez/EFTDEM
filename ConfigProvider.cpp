@@ -10,9 +10,10 @@
 #include "InverseDistanceWeightedFilter.h"
 
 #include <iostream>
+#include <utility>
 
 ConfigProvider::ConfigProvider(std::string configPath) {
-    ConfigProvider::configPath = configPath;
+    ConfigProvider::configPath = std::move(configPath);
 }
 
 YAML::Node ConfigProvider::readConfig() {
@@ -28,7 +29,7 @@ YAML::Node ConfigProvider::readConfig() {
     return config;
 }
 
-std::pair<YAML::Node, bool> ConfigProvider::checkValidityAndReturn(YAML::Node node, bool required) {
+std::pair<YAML::Node, bool> ConfigProvider::checkValidityAndReturn(const YAML::Node& node, bool required) {
     auto returnPair = std::pair{node, true};
 
     if (!node) {

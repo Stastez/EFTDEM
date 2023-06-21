@@ -214,11 +214,11 @@ void GLHandler::dispatchShader(unsigned int shader, unsigned int localBatchSize,
                       << duration_cast<std::chrono::milliseconds>(elapsedTime).count() << "ms" << std::endl;
             std::cout << "Batch size: " << localBatchSize << std::endl;
 
-            if (duration_cast<std::chrono::milliseconds>(endInvocation - startInvocation) > std::chrono::milliseconds {1000}) {
+            /*if (duration_cast<std::chrono::milliseconds>(endInvocation - startInvocation) > std::chrono::milliseconds {1000}) {
                 localBatchSize /= 2;
                 batchX = 0;
                 batchY = 0;
-            }
+            }*/
 
             startInvocation = std::chrono::high_resolution_clock::now();
 
@@ -238,7 +238,9 @@ void GLHandler::replaceBufferPlaceholders(std::string &shaderSource) {
             if (index == std::string::npos) break;
 
             std::string replacement = std::to_string(i);
-            shaderSource.erase(index, bufferName.length() - 1);
+
+            if (replacement.length() > bufferName.length()) shaderSource.insert(index, replacement.length() - bufferName.length(), '*');
+            shaderSource.erase(index, bufferName.length() - replacement.length());
             shaderSource.replace(index, replacement.length(), replacement);
 
             index += replacement.length();

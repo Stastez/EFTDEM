@@ -1,13 +1,13 @@
 #version 430 core
 
 layout (local_size_x = 8, local_size_y = 4, local_size_z = 1) in;
-layout (binding = EFTDEM_HEIGHTMAP_BUFFER ) restrict buffer mapBuffer{
+layout (binding = EFTDEM_HEIGHTMAP_BUFFER) restrict buffer mapBuffer{
     double heights[];
 };
-layout (binding = EFTDEM_SUM_BUFFER ) restrict buffer sumBuffer{
+layout (binding = EFTDEM_SUM_BUFFER) restrict buffer sumBuffer{
     double sums[];
 };
-layout (binding = EFTDEM_TOTAL_WEIGHT_BUFFER ) restrict buffer weightsBuffer{
+layout (binding = EFTDEM_TOTAL_WEIGHT_BUFFER) restrict buffer weightsBuffer{
     double totalWeights[];
 };
 
