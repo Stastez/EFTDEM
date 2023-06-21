@@ -22,7 +22,7 @@ heightMap RasterizerGPU::apply(pointGrid *pointGrid, bool generateOutput) {
     glHandler->setProgram(shader[0]);
 
     auto workgroupSize = (unsigned int) (std::ceil(std::sqrt((double) pointGrid->numberOfPoints)));
-    workgroupSize = std::ceil(workgroupSize / 8.);
+    workgroupSize = (unsigned int) std::ceil(workgroupSize / 8.);
 
     auto bufferMask = glHandler->getCoherentBufferMask();
     if (!(bufferMask[GLHandler::EFTDEM_RAW_POINT_BUFFER]
@@ -50,7 +50,7 @@ heightMap RasterizerGPU::apply(pointGrid *pointGrid, bool generateOutput) {
             unsigned long long maxIndex = 0;
             for (size_t i = 0; i < pointGrid->points.size(); i++) {
                 for (auto j = maxIndex; j < pointGrid->points[i].size() + maxIndex; j++) {
-                    indices->at(j) = i;
+                    indices->at(j) = (GLuint) i;
                 }
 
                 maxIndex += pointGrid->points[i].size();
@@ -101,7 +101,7 @@ heightMap RasterizerGPU::apply(pointGrid *pointGrid, bool generateOutput) {
 
     glUniform2ui(glGetUniformLocation(glHandler->getProgram(), "resolution"), pointGrid->resolutionX, pointGrid->resolutionY);
 
-    glDispatchCompute(std::ceil((double) pointGrid->resolutionX / 8.), std::ceil((double) pointGrid->resolutionY / 8.), 1);
+    glDispatchCompute((GLuint) std::ceil((double) pointGrid->resolutionX / 8.), (GLuint) std::ceil((double) pointGrid->resolutionY / 8.), 1);
 
     if (!generateOutput) {
         GLHandler::waitForShaderStorageIntegrity();

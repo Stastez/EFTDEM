@@ -58,7 +58,7 @@ private:
     std::vector<gl::GLuint> ssbos;
     gl::GLuint currentProgram{};
 
-    int numBuffers = magic_enum::enum_count<bufferIndices>() - 1;
+    unsigned long long numBuffers = magic_enum::enum_count<bufferIndices>() - 1;
 
     static void replaceBufferPlaceholders(std::string &shaderSource);
 };

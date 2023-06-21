@@ -50,7 +50,7 @@ pointGrid SorterGPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
     glHandler->bindBuffer(GLHandler::EFTDEM_UNBIND);
 
     auto workgroupSize = (unsigned int) std::ceil(std::sqrt(pointCloud->numberOfPoints));
-    glDispatchCompute(std::ceil(workgroupSize / 8.), std::ceil(workgroupSize / 8.), 1);
+    glDispatchCompute((GLuint) std::ceil(workgroupSize / 8.), (GLuint) std::ceil(workgroupSize / 8.), 1);
 
     if (!generateOutput) {
         GLHandler::waitForShaderStorageIntegrity();

@@ -25,7 +25,7 @@ void GTiffWriter::apply(const heightMap *map, bool generateOutput) {
 
     if (!generateOutput) return;
 
-    if (map->resolutionX > std::numeric_limits<int>::max() || map->resolutionY > std::numeric_limits<int>::max()) {
+    if (map->resolutionX > (unsigned int) std::numeric_limits<int>::max() || map->resolutionY > (unsigned int) std::numeric_limits<int>::max()) {
         std::cout << "Resolution too great for GeoTIFF!" << std::endl;
         exit(Pipeline::EXIT_INVALID_FUNCTION_PARAMETERS);
     }

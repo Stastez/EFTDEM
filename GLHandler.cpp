@@ -57,7 +57,7 @@ GLFWwindow * GLHandler::initializeGL(bool debug) {
     glDebugMessageCallback(MessageCallback, nullptr);
 
     ssbos = std::vector<GLuint>(numBuffers);
-    glGenBuffers(numBuffers, ssbos.data());
+    glGenBuffers((int) numBuffers, ssbos.data());
 
     coherentBufferMask = std::vector<bool>(numBuffers + 1, false);
 
@@ -68,7 +68,7 @@ GLFWwindow * GLHandler::initializeGL(bool debug) {
 }
 
 void GLHandler::uninitializeGL() {
-    glDeleteBuffers(numBuffers, ssbos.data());
+    glDeleteBuffers((int) numBuffers, ssbos.data());
     glfwTerminate();
     initialized = false;
 }

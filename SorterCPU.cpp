@@ -38,7 +38,7 @@ pointGrid SorterCPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
         add(&grid, coords.first, coords.second, normalizeValue(*it, pointCloud->min, pointCloud->max));
     }
 
-    grid.numberOfPoints = pointCloud->groundPoints.size();
+    grid.numberOfPoints = (unsigned int) pointCloud->groundPoints.size();
 
     return grid;
 }
