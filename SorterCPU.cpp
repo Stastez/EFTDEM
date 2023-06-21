@@ -1,10 +1,11 @@
 #include <iostream>
+#include <cmath>
 #include "SorterCPU.h"
 
 std::pair<unsigned long, unsigned long> SorterCPU::calculateGridCoordinates(pointGrid *grid, rawPointCloud *pointCloud, double xCoord, double yCoord){
     unsigned long x, y;
-    x = std::min(grid->resolutionX - 1, (unsigned long) floor(normalizeValue(xCoord, pointCloud->min.x, pointCloud->max.x) * grid->resolutionX));
-    y = std::min(grid->resolutionY - 1, (unsigned long) floor(normalizeValue(yCoord, pointCloud->min.y, pointCloud->max.y) * grid->resolutionY));
+    x = std::min(grid->resolutionX - 1, (unsigned long) std::floor(normalizeValue(xCoord, pointCloud->min.x, pointCloud->max.x) * grid->resolutionX));
+    y = std::min(grid->resolutionY - 1, (unsigned long) std::floor(normalizeValue(yCoord, pointCloud->min.y, pointCloud->max.y) * grid->resolutionY));
     return {x, y};
 }
 
