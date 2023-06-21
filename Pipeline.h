@@ -24,8 +24,8 @@ private:
 public:
     ~Pipeline();
 
-    Pipeline();
-    Pipeline(ICloudReader *, ICloudSorter *, ICloudRasterizer *, IHeightMapFiller *, IHeightMapWriter *);
+    explicit Pipeline(std::string shaderDirectory);
+    Pipeline(ICloudReader *, ICloudSorter *, ICloudRasterizer *, IHeightMapFiller *, IHeightMapWriter *, std::string shaderDirectory);
     Pipeline(ICloudReader *, ICloudSorter *, ICloudRasterizer *, IHeightMapFiller *, IHeightMapWriter *, GLHandler *);
     bool isOperable();
 

@@ -6,17 +6,17 @@ Pipeline::~Pipeline() {
     glHandler->uninitializeGL();
 }
 
-Pipeline::Pipeline() {
-    this->glHandler = new GLHandler();
+Pipeline::Pipeline(std::string shaderDirectory) {
+    this->glHandler = new GLHandler(std::move(shaderDirectory));
     this->glHandler->initializeGL(false);
 }
 
-Pipeline::Pipeline(ICloudReader *reader, ICloudSorter *sorter, ICloudRasterizer *rasterizer, IHeightMapFiller *filler, IHeightMapWriter *writer)
-                    : Pipeline(reader, sorter, rasterizer, filler, writer, new GLHandler()) {}
+Pipeline::Pipeline(ICloudReader *reader, ICloudSorter *sorter, ICloudRasterizer *rasterizer, IHeightMapFiller *filler, IHeightMapWriter *writer, std::string shaderDirectory)
+                    : Pipeline(reader, sorter, rasterizer, filler, writer, new GLHandler(std::move(shaderDirectory))) {}
 
-Pipeline::Pipeline(ICloudReader *reader, ICloudSorter *sorter, ICloudRasterizer *rasterizer, IHeightMapFiller *filler, IHeightMapWriter *writer, GLHandler *glHandler)
-                    : Pipeline() {
+Pipeline::Pipeline(ICloudReader *reader, ICloudSorter *sorter, ICloudRasterizer *rasterizer, IHeightMapFiller *filler, IHeightMapWriter *writer, GLHandler *glHandler) {
     attachElements(reader, sorter, rasterizer, filler, writer);
+    glHandler->initializeGL(false);
 }
 
 bool adjacentStagesUseGPU(IPipelineComponent *first, IPipelineComponent *second) {

@@ -18,7 +18,7 @@ heightMap RasterizerGPU::apply(pointGrid *pointGrid, bool generateOutput) {
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    auto shader = glHandler->getShaderPrograms({"../../shaders/countChunks.glsl", "../../shaders/sumChunks.glsl", "../../shaders/makeHeightmap.glsl"});
+    auto shader = glHandler->getShaderPrograms({"countChunks.glsl", "sumChunks.glsl", "makeHeightmap.glsl"}, true);
     glHandler->setProgram(shader[0]);
 
     auto workgroupSize = (unsigned int) (std::ceil(std::sqrt((double) pointGrid->numberOfPoints)));

@@ -16,10 +16,7 @@ heightMap IKernelBasedFilter::applySingleFilter(heightMap *map, bool generateOut
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    bool debug = false;
-
-    if (!glHandler->isInitialized(debug)) glHandler->initializeGL(debug);
-    auto shader = glHandler->getShaderPrograms(shaderPaths);
+    auto shader = glHandler->getShaderPrograms(shaderPaths, true);
     glUseProgram(shader[0]);
 
 

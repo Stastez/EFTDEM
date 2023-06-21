@@ -45,7 +45,7 @@ std::pair<YAML::Node, bool> ConfigProvider::checkValidityAndReturn(YAML::Node no
 Pipeline *ConfigProvider::providePipeline() {
     auto config = readConfig();
 
-    auto pipeline = new Pipeline();
+    auto pipeline = new Pipeline(checkValidityAndReturn(config["OpenGLOptions"]["shaderDirectory"], true).first.as<std::string>());
 
     auto reader = new CloudReader(
             checkValidityAndReturn(

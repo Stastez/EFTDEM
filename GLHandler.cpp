@@ -10,6 +10,10 @@
 
 using namespace gl;
 
+GLHandler::GLHandler(std::string shaderDirectory) {
+    GLHandler::shaderDirectory = shaderDirectory;
+}
+
 void GLAPIENTRY MessageCallback( GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
     fprintf( stderr, "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
              ( type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "" ),
@@ -65,13 +69,16 @@ void GLHandler::uninitializeGL() {
     initialized = false;
 }
 
-std::vector<GLuint> GLHandler::getShaderPrograms(const std::vector<std::string>& shaderFiles) {
+std::vector<GLuint> GLHandler::getShaderPrograms(const std::vector<std::string>& shaderFiles, bool useStandardDirectory) {
     std::vector<GLuint> programs;
 
     for (const auto& shaderFile : shaderFiles) {
         std::ifstream shaderFileStream;
         std::stringstream shaderStream;
-        shaderFileStream.open(shaderFile);
+
+        if (useStandardDirectory) shaderFileStream.open(shaderDirectory + "/" + shaderFile);
+        else shaderFileStream.open(shaderFile);
+
         if (!shaderFileStream.is_open()) {
             std::cout << "Specified shader could not be opened: " << shaderFile << std::endl;
             exit(Pipeline::EXIT_IO_ERROR);
@@ -238,3 +245,5 @@ void GLHandler::replaceBufferPlaceholders(std::string &shaderSource) {
         }
     }
 }
+
+std::string GLHandler::getShaderDir() { return shaderDirectory; }

@@ -17,8 +17,8 @@ pointGrid SorterGPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
 
     std::cout << "Sorting points into grid using OpenGL..." << std::endl;
 
-    std::vector<std::string> shaderPaths = {"../../shaders/chunkSortingAndCounting.glsl"};
-    auto shaderPrograms = glHandler->getShaderPrograms(shaderPaths);
+    std::vector<std::string> shaderPaths = {"chunkSortingAndCounting.glsl"};
+    auto shaderPrograms = glHandler->getShaderPrograms(shaderPaths, true);
     glHandler->setProgram(shaderPrograms[0]);
 
     auto points = new double[pointCloud->numberOfPoints * 3];
