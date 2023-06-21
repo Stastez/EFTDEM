@@ -43,7 +43,7 @@ heightMap IKernelBasedFilter::applySingleFilter(heightMap *map, bool generateOut
     }
 
     auto end = std::chrono::high_resolution_clock::now();
-    std::cout << "Elapsed time for closing: " << duration_cast<std::chrono::milliseconds>(end - start) << std::endl;
+    std::cout << "Elapsed time for closing: " << duration_cast<std::chrono::milliseconds>(end - start).count() << "ms" << std::endl;
 
     if (!generateOutput) return emptyHeightMapfromHeightMap(map);
 
