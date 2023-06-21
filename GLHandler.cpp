@@ -163,7 +163,7 @@ std::vector<bool> GLHandler::getCoherentBufferMask() {
 bool GLHandler::isInitialized(bool debug) const {return initialized && (this->isDebug == debug);}
 
 void GLHandler::dispatchShader(unsigned int localBatchSize, unsigned long resolutionX, unsigned long resolutionY) const {
-    std::chrono::time_point<std::chrono::system_clock> startInvocation, endInvocation;
+    auto startInvocation = std::chrono::high_resolution_clock::now(), endInvocation = std::chrono::high_resolution_clock::now();
 
     if (localBatchSize == 0) {
         unsigned int batchSize = 1;
