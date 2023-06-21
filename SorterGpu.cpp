@@ -1,5 +1,6 @@
 #include "SorterGpu.h"
 #include <iostream>
+#include <cmath>
 
 SorterGPU::SorterGPU(GLHandler *glHandler, unsigned long pixelPerUnit) {
     SorterGPU::stageUsesGPU = true;
@@ -42,7 +43,7 @@ pointGrid SorterGPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
     auto counts = new GLuint[resolutionX * resolutionY];
     for (auto i = 0; i < resolutionX * resolutionY; i++) counts[i] = 0u;
     glHandler->dataToBuffer(GLHandler::EFTDEM_SORTED_POINT_COUNT_BUFFER,
-                            (long long) sizeof(GLuint) * resolutionX * resolutionY,
+                            (long) (sizeof(GLuint) * resolutionX * resolutionY),
                             counts, GL_STREAM_READ);
 
     glHandler->dataToBuffer(GLHandler::EFTDEM_RAW_POINT_INDEX_BUFFER, (long long) (pointCloud->numberOfPoints * sizeof(GLuint)), nullptr, GL_STREAM_READ);
