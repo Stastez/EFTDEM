@@ -34,12 +34,12 @@ void Pipeline::execute() {
     writer->cleanUp();
 }
 
-void Pipeline::attachElements(ICloudReader *reader, ICloudSorter *sorter, ICloudRasterizer *rasterizer, IHeightMapFiller *filler, IHeightMapWriter *writer) {
-    this->reader = reader;
-    this->sorter = sorter;
-    this->rasterizer = rasterizer;
-    this->filler = filler;
-    this->writer = writer;
+void Pipeline::attachElements(ICloudReader *readerParameter, ICloudSorter *sorterParameter, ICloudRasterizer *rasterizerParameter, IHeightMapFiller *fillerParameter, IHeightMapWriter *writerParameter) {
+    this->reader = readerParameter;
+    this->sorter = sorterParameter;
+    this->rasterizer = rasterizerParameter;
+    this->filler = fillerParameter;
+    this->writer = writerParameter;
 }
 
 bool Pipeline::isOperable() {
