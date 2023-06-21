@@ -4,6 +4,12 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_executable(EFTDEM main.cpp DataStructures.cpp GLHandler.cpp GLHandler.h ClosingFilter.cpp ClosingFilter.h Pipeline.h ICloudSorter.h ICloudReader.h ICloudRasterizer.h IHeightMapFiller.h IHeightMapWriter.h Pipeline.cpp IPipelineComponent.h CloudReader.cpp CloudReader.h GTiffWriter.cpp GTiffWriter.h SorterCPU.cpp SorterCPU.h RasterizerCpu.cpp RasterizerCpu.h RasterizerGpu.cpp RasterizerGpu.h SorterGpu.cpp SorterGpu.h IKernelBasedFilter.h IKernelBasedFilter.cpp InverseDistanceWeightedFilter.h InverseDistanceWeightedFilter.cpp ConfigProvider.cpp ConfigProvider.h)
 
+if(MSVC)
+    target_compile_options(EFTDEM PRIVATE /W4)
+else()
+    target_compile_options(EFTDEM PRIVATE -Wall -Wextra -Wpedantic)
+endif()
+
 find_package(GDAL CONFIG REQUIRED)
 
 find_package(glm CONFIG REQUIRED)

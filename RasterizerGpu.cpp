@@ -48,7 +48,7 @@ heightMap RasterizerGPU::apply(pointGrid *pointGrid, bool generateOutput) {
             auto indices = new std::vector<GLuint>(pointGrid->numberOfPoints);
 
             unsigned long long maxIndex = 0;
-            for (auto i = 0; i < pointGrid->points.size(); i++) {
+            for (size_t i = 0; i < pointGrid->points.size(); i++) {
                 for (auto j = maxIndex; j < pointGrid->points[i].size() + maxIndex; j++) {
                     indices->at(j) = i;
                 }
@@ -64,7 +64,7 @@ heightMap RasterizerGPU::apply(pointGrid *pointGrid, bool generateOutput) {
         if (!(bufferMask[GLHandler::EFTDEM_SORTED_POINT_COUNT_BUFFER])) {
             //countChunks.glsl
             auto counts = new GLuint[pointGrid->resolutionX * pointGrid->resolutionY];
-            for (auto i = 0; i < pointGrid->resolutionX * pointGrid->resolutionY; i++) counts[i] = 0u;
+            for (unsigned long i = 0; i < pointGrid->resolutionX * pointGrid->resolutionY; i++) counts[i] = 0u;
             glHandler->dataToBuffer(GLHandler::EFTDEM_SORTED_POINT_COUNT_BUFFER,
                                     (long) (sizeof(GLuint) * pointGrid->resolutionX * pointGrid->resolutionY),
                                     counts, GL_STREAM_READ);
@@ -80,7 +80,7 @@ heightMap RasterizerGPU::apply(pointGrid *pointGrid, bool generateOutput) {
     //sumChunks.glsl
     glHandler->setProgram(shader[1]);
     auto sums = new GLuint[pointGrid->resolutionX * pointGrid->resolutionY];
-    for (auto i = 0; i < pointGrid->resolutionX * pointGrid->resolutionY; i++) sums[i] = 0u;
+    for (unsigned long i = 0; i < pointGrid->resolutionX * pointGrid->resolutionY; i++) sums[i] = 0u;
     glHandler->dataToBuffer(GLHandler::EFTDEM_SORTED_POINT_SUM_BUFFER,
                             (long) (sizeof(GLuint) * pointGrid->resolutionX * pointGrid->resolutionY),
                             sums, GL_STREAM_READ);

@@ -39,7 +39,7 @@ void GTiffWriter::apply(const heightMap *map, bool generateOutput) {
     if (!CSLFetchBoolean(GDALGetMetadata(driver, nullptr), GDAL_DCAP_CREATE, FALSE)) { std::cout << "Driver does not support creation!" << std::endl; exit(Pipeline::EXIT_IO_ERROR); }
 
     auto denormalizedHeights = new double[map->resolutionX * map->resolutionY];
-    for (int i = 0; i < map->resolutionX * map->resolutionY; i++)
+    for (unsigned long i = 0; i < map->resolutionX * map->resolutionY; i++)
         denormalizedHeights[i] = denormalizeValue(map->heights[i], map->min.z, map->max.z);
 
     char** gdalDriverOptions = nullptr;

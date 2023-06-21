@@ -16,6 +16,9 @@ GLHandler::GLHandler(std::string shaderDirectory) {
 }
 
 void GLAPIENTRY MessageCallback( GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
+    // must conform to GL specified template
+    (void) source; (void) type; (void) id; (void) severity; (void) length; (void) userParam;
+
     fprintf( stderr, "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
              ( type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "" ),
              (unsigned int) type, (unsigned int) severity, message );
@@ -224,7 +227,7 @@ void GLHandler::dispatchShader(unsigned int localBatchSize, unsigned long resolu
 }
 
 void GLHandler::replaceBufferPlaceholders(std::string &shaderSource) {
-    for (auto i = 1; i < magic_enum::enum_count<bufferIndices>(); i++) {
+    for (unsigned long i = 1; i < magic_enum::enum_count<bufferIndices>(); i++) {
         size_t index = 0;
         auto bufferName = magic_enum::enum_name<bufferIndices>(magic_enum::enum_value<bufferIndices>(i));
 

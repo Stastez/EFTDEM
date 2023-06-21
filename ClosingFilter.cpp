@@ -41,7 +41,7 @@ ClosingFilter::ClosingFilter(GLHandler *glHandler, std::vector<unsigned int> ker
 heightMap ClosingFilter::apply(heightMap *map, bool generateOutput) {
     using namespace gl;
 
-    for (int i=0; i<kernelRadii.size()-1; i++){
+    for (size_t i=0; i<kernelRadii.size()-1; i++){
         applySingleFilter(map, false, kernelRadii[i]);
     }
 
