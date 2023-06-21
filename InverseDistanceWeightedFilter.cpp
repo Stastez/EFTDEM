@@ -15,7 +15,7 @@ InverseDistanceWeightedFilter::InverseDistanceWeightedFilter(GLHandler *glHandle
     shaderPaths.emplace_back("horizontalAmount.glsl");
     shaderPaths.emplace_back("erosion.glsl");
 
-    bufferSpecifications b;
+    bufferSpecifications b{};
     interimBufferSpecifications = std::vector<bufferSpecifications>();
     b = {.buffer = GLHandler::EFTDEM_SUM_BUFFER, .elementSize = (long long) sizeof(double)};
     interimBufferSpecifications.emplace_back(b);

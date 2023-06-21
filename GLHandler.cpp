@@ -7,17 +7,18 @@
 #include <cmath>
 #include <sstream>
 #include <magic_enum.hpp>
+#include <utility>
 
 using namespace gl;
 
 GLHandler::GLHandler(std::string shaderDirectory) {
-    GLHandler::shaderDirectory = shaderDirectory;
+    GLHandler::shaderDirectory = std::move(shaderDirectory);
 }
 
 void GLAPIENTRY MessageCallback( GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
     fprintf( stderr, "GL CALLBACK: %s type = 0x%x, severity = 0x%x, message = %s\n",
              ( type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "" ),
-             type, severity, message );
+             (unsigned int) type, (unsigned int) severity, message );
 }
 
 GLFWwindow * GLHandler::initializeGL(bool debug) {
@@ -139,10 +140,6 @@ void GLHandler::dataFromBuffer(GLHandler::bufferIndices buffer, gl::GLsizeiptr o
     glGetBufferSubData(GL_SHADER_STORAGE_BUFFER, offset, size, data);
 }
 
-std::vector<gl::GLuint> GLHandler::getBuffers() {
-    return ssbos;
-}
-
 void GLHandler::setProgram(gl::GLuint program) {
     glUseProgram(program);
     currentProgram = program;
@@ -159,10 +156,10 @@ void GLHandler::waitForShaderStorageIntegrity() {
 std::vector<bool> GLHandler::getCoherentBufferMask() {
     return coherentBufferMask;
 }
-bool GLHandler::isInitialized() const {return isInitialized(false) || isInitialized(true);}
+
 bool GLHandler::isInitialized(bool debug) const {return initialized && (this->isDebug == debug);}
 
-void GLHandler::dispatchShader(unsigned int shader, unsigned int localBatchSize, unsigned long resolutionX, unsigned long resolutionY){
+void GLHandler::dispatchShader(unsigned int localBatchSize, unsigned long resolutionX, unsigned long resolutionY) const {
     std::chrono::time_point<std::chrono::system_clock> startInvocation, endInvocation;
 
     if (localBatchSize == 0) {
@@ -172,7 +169,7 @@ void GLHandler::dispatchShader(unsigned int shader, unsigned int localBatchSize,
         while (duration_cast<std::chrono::milliseconds>(endInvocation - startInvocation) <
                std::chrono::milliseconds{500}) {
             startInvocation = std::chrono::high_resolution_clock::now();
-            glUniform2ui(glGetUniformLocation(shader, "currentInvocation"), batchSize, batchSize);
+            glUniform2ui(glGetUniformLocation(getProgram(), "currentInvocation"), batchSize, batchSize);
             glDispatchCompute(batchSize, batchSize, 1);
             auto sync = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
             glClientWaitSync(sync, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED);
@@ -180,22 +177,20 @@ void GLHandler::dispatchShader(unsigned int shader, unsigned int localBatchSize,
 
             endInvocation = std::chrono::high_resolution_clock::now();
 
-            batchSize = std::min((unsigned long) batchSize * 2, std::max((unsigned long) std::ceil(resolutionX / 8.), (unsigned long) std::ceil(resolutionY / 4.)));
-            if (batchSize == std::max((unsigned long) std::ceil(resolutionX / 8.), (unsigned long) std::ceil(resolutionY / 4.))) break;
+            batchSize = std::min((unsigned long) batchSize * 2, std::max((unsigned long) std::ceil((double) resolutionX / 8.), (unsigned long) std::ceil((double) resolutionY / 4.)));
+            if (batchSize == std::max((unsigned long) std::ceil((double) resolutionX / 8.), (unsigned long) std::ceil((double) resolutionY / 4.))) break;
         }
 
         localBatchSize = batchSize;
     }
 
     bool first = true;
-    unsigned int totalInvocations = std::ceil(resolutionX * resolutionY), currentInvocation;
     for (unsigned long batchX = 0; batchX < resolutionX; batchX += localBatchSize * 8) {
         for (unsigned long batchY = 0; batchY < resolutionY; batchY += localBatchSize * 4) {
-            glUniform2ui(glGetUniformLocation(shader, "currentInvocation"), batchX, batchY);
+            glUniform2ui(glGetUniformLocation(getProgram(), "currentInvocation"), batchX, batchY);
             glDispatchCompute(localBatchSize, localBatchSize, 1);
             auto sync = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
 
-            currentInvocation = batchX * resolutionY + batchY;
             if (!first) {
                 std::cout << "\x1b[2K"; // Delete current line
                 for (int i = 0; i < 5; i++) {

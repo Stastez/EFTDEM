@@ -25,29 +25,13 @@ public:
     ~Pipeline();
 
     explicit Pipeline(std::string shaderDirectory);
-    Pipeline(ICloudReader *, ICloudSorter *, ICloudRasterizer *, IHeightMapFiller *, IHeightMapWriter *, std::string shaderDirectory);
-    Pipeline(ICloudReader *, ICloudSorter *, ICloudRasterizer *, IHeightMapFiller *, IHeightMapWriter *, GLHandler *);
     bool isOperable();
 
     void attachElements(ICloudReader *, ICloudSorter *, ICloudRasterizer *, IHeightMapFiller *, IHeightMapWriter *);
 
     void execute();
 
-    ICloudReader *getReader();
-    void setReader(ICloudReader *reader);
-    ICloudSorter *getSorter();
-    void setSorter(ICloudSorter *sorter);
-    ICloudRasterizer *getRasterizer();
-    void setRasterizer(ICloudRasterizer *rasterizer);
-    IHeightMapFiller *getFiller();
-    void setFiller(IHeightMapFiller *filler);
-    IHeightMapWriter *getWriter();
-    void setWriter(IHeightMapWriter *writer);
-    GLHandler *getGLHandler();
-    void setGLHandler(GLHandler *glHandler);
-
     enum exitCodes {
-        EXIT_REGULAR_EXECUTION,
         EXIT_INVALID_COMMAND_LINE_ARGUMENTS = 101,
         EXIT_INVALID_FUNCTION_PARAMETERS,
         EXIT_IO_ERROR,

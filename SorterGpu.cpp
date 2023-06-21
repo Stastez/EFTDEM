@@ -34,8 +34,8 @@ pointGrid SorterGPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
     glHandler->dataToBuffer(GLHandler::EFTDEM_RAW_POINT_BUFFER, (long long) (3 * pointCloud->numberOfPoints * sizeof(GLdouble)), points, GL_STATIC_DRAW);
     delete[] points;
 
-    unsigned long resolutionX = std::max((unsigned long) std::ceil((pointCloud->max.x - pointCloud->min.x) * pixelPerUnit), 1ul);
-    unsigned long resolutionY = std::max((unsigned long) std::ceil((pointCloud->max.y - pointCloud->min.y) * pixelPerUnit), 1ul);
+    unsigned long resolutionX = std::max((unsigned long) std::ceil((pointCloud->max.x - pointCloud->min.x) * (double) pixelPerUnit), 1ul);
+    unsigned long resolutionY = std::max((unsigned long) std::ceil((pointCloud->max.y - pointCloud->min.y) * (double) pixelPerUnit), 1ul);
 
     glUniform2ui(glGetUniformLocation(shaderPrograms[0], "resolution"), resolutionX, resolutionY);
     glUniform1ui(glGetUniformLocation(shaderPrograms[0], "numberOfPoints"), pointCloud->numberOfPoints);
@@ -53,7 +53,7 @@ pointGrid SorterGPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
     glDispatchCompute(std::ceil(workgroupSize / 8.), std::ceil(workgroupSize / 8.), 1);
 
     if (!generateOutput) {
-        glHandler->waitForShaderStorageIntegrity();
+        GLHandler::waitForShaderStorageIntegrity();
         return {.points = {},
                 .resolutionX = resolutionX,
                 .resolutionY = resolutionY,

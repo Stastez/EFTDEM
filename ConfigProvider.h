@@ -8,7 +8,7 @@ class ConfigProvider {
 private:
     std::string configPath;
     YAML::Node readConfig();
-    std::pair<YAML::Node, bool> checkValidityAndReturn(const YAML::Node& node, bool required);
+    static std::pair<YAML::Node, bool> checkValidityAndReturn(const YAML::Node& node, bool required);
 
 public:
     explicit ConfigProvider(std::string configPath);

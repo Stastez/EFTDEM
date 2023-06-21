@@ -1,5 +1,4 @@
 #include <iostream>
-#include <utility>
 #include "GTiffWriter.h"
 #include "Pipeline.h"
 #include <gdal_priv.h>
@@ -49,7 +48,7 @@ void GTiffWriter::apply(const heightMap *map, bool generateOutput) {
 
     auto dataset = driver->Create((destinationDEM + ".tiff").c_str(), resolutionX, resolutionY, 1, GDT_Float64,gdalDriverOptions);
     auto rasterBand = dataset->GetRasterBand(1);
-    rasterBand->RasterIO(GF_Write, 0, 0, resolutionX, resolutionY, denormalizedHeights, resolutionX, resolutionY, GDT_Float64, 0, 0, nullptr);
+    (void)! rasterBand->RasterIO(GF_Write, 0, 0, resolutionX, resolutionY, denormalizedHeights, resolutionX, resolutionY, GDT_Float64, 0, 0, nullptr);
     GDALClose(dataset);
 
     if (writeLowDepth) {
@@ -62,7 +61,7 @@ void GTiffWriter::apply(const heightMap *map, bool generateOutput) {
 
         dataset = driver->Create((destinationDEM + "_lowDepth.tiff").c_str(), resolutionX, resolutionY, 1, GDT_Byte, gdalDriverOptions);
         rasterBand = dataset->GetRasterBand(1);
-        rasterBand->RasterIO(GF_Write, 0, 0, resolutionX, resolutionY, heightsLowDepth, resolutionX, resolutionY, GDT_Byte, 4, 4 * resolutionX, nullptr);
+        (void)! rasterBand->RasterIO(GF_Write, 0, 0, resolutionX, resolutionY, heightsLowDepth, resolutionX, resolutionY, GDT_Byte, 4, 4 * resolutionX, nullptr);
         GDALClose(dataset);
     }
 }

@@ -37,32 +37,30 @@ public:
     void bindBuffer(bufferIndices buffer);
     void dataToBuffer(bufferIndices buffer, gl::GLsizeiptr size, const void *data, gl::GLenum usage);
     void dataFromBuffer(bufferIndices buffer, gl::GLsizeiptr offset, gl::GLsizeiptr size, void *data);
-    void dispatchShader(unsigned int shader, unsigned int localBatchSize, unsigned long resolutionX, unsigned long resolutionY);
-    void waitForShaderStorageIntegrity();
-    std::vector<gl::GLuint> getBuffers();
+    void dispatchShader(unsigned int localBatchSize, unsigned long resolutionX, unsigned long resolutionY) const;
+    static void waitForShaderStorageIntegrity();
 
     void setProgram(gl::GLuint program);
-    gl::GLuint getProgram() const;
+    [[nodiscard]] gl::GLuint getProgram() const;
 
-    bool isInitialized() const;
-    bool isInitialized(bool debug) const;
+    [[nodiscard]] bool isInitialized(bool debug) const;
     std::vector<bool> getCoherentBufferMask();
 
     std::string getShaderDir();
 
 private:
-    GLFWwindow* context;
+    GLFWwindow* context{};
     bool initialized = false;
-    bool isDebug;
+    bool isDebug{};
     std::string shaderDirectory;
 
     std::vector<bool> coherentBufferMask;
     std::vector<gl::GLuint> ssbos;
-    gl::GLuint currentProgram;
+    gl::GLuint currentProgram{};
 
     int numBuffers = magic_enum::enum_count<bufferIndices>() - 1;
 
-    void replaceBufferPlaceholders(std::string &shaderSource);
+    static void replaceBufferPlaceholders(std::string &shaderSource);
 };
 
 

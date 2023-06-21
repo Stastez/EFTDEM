@@ -77,7 +77,7 @@ Pipeline *ConfigProvider::providePipeline() {
     }
 
     auto writeLowDepthTest = checkValidityAndReturn(config["CloudWriterOptions"]["writeLowDepth"], false);
-    auto writeLowDepth = (writeLowDepthTest.second) ? writeLowDepthTest.first.as<bool>() : false;
+    auto writeLowDepth = writeLowDepthTest.second && writeLowDepthTest.first.as<bool>();
     auto writer = new GTiffWriter(writeLowDepth, checkValidityAndReturn(config["CloudWriterOptions"]["destinationPath"], true).first.as<std::string>());
 
     pipeline->attachElements(reader, sorter, rasterizer, filler, writer);

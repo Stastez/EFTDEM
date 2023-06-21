@@ -40,7 +40,7 @@ heightMap RasterizerGPU::apply(pointGrid *pointGrid, bool generateOutput) {
             }
 
             glHandler->dataToBuffer(GLHandler::EFTDEM_RAW_POINT_BUFFER,
-                                    (long long) sizeof(GLdouble) * pointGrid->numberOfPoints * 3,
+                                    (long) (sizeof(GLdouble) * pointGrid->numberOfPoints * 3),
                                     rawPoints->data(), GL_STATIC_DRAW);
         }
 
@@ -57,7 +57,7 @@ heightMap RasterizerGPU::apply(pointGrid *pointGrid, bool generateOutput) {
             }
 
             glHandler->dataToBuffer(GLHandler::EFTDEM_RAW_POINT_INDEX_BUFFER,
-                                    (long long) sizeof(GLuint) * pointGrid->numberOfPoints,
+                                    (long) (sizeof(GLuint) * pointGrid->numberOfPoints),
                                     indices->data(), GL_STATIC_DRAW);
         }
 
@@ -66,14 +66,14 @@ heightMap RasterizerGPU::apply(pointGrid *pointGrid, bool generateOutput) {
             auto counts = new GLuint[pointGrid->resolutionX * pointGrid->resolutionY];
             for (auto i = 0; i < pointGrid->resolutionX * pointGrid->resolutionY; i++) counts[i] = 0u;
             glHandler->dataToBuffer(GLHandler::EFTDEM_SORTED_POINT_COUNT_BUFFER,
-                                    (long long) sizeof(GLuint) * pointGrid->resolutionX * pointGrid->resolutionY,
+                                    (long) (sizeof(GLuint) * pointGrid->resolutionX * pointGrid->resolutionY),
                                     counts, GL_STREAM_READ);
             glHandler->bindBuffer(GLHandler::EFTDEM_UNBIND);
 
             glUniform1ui(glGetUniformLocation(glHandler->getProgram(), "numberOfPoints"), pointGrid->numberOfPoints);
 
             glDispatchCompute(workgroupSize, workgroupSize, 1);
-            glHandler->waitForShaderStorageIntegrity();
+            GLHandler::waitForShaderStorageIntegrity();
         }
     }
 
@@ -82,7 +82,7 @@ heightMap RasterizerGPU::apply(pointGrid *pointGrid, bool generateOutput) {
     auto sums = new GLuint[pointGrid->resolutionX * pointGrid->resolutionY];
     for (auto i = 0; i < pointGrid->resolutionX * pointGrid->resolutionY; i++) sums[i] = 0u;
     glHandler->dataToBuffer(GLHandler::EFTDEM_SORTED_POINT_SUM_BUFFER,
-                            (long long) sizeof(GLuint) * pointGrid->resolutionX * pointGrid->resolutionY,
+                            (long) (sizeof(GLuint) * pointGrid->resolutionX * pointGrid->resolutionY),
                             sums, GL_STREAM_READ);
     glHandler->bindBuffer(GLHandler::EFTDEM_UNBIND);
 
@@ -90,28 +90,28 @@ heightMap RasterizerGPU::apply(pointGrid *pointGrid, bool generateOutput) {
     glUniform1ui(glGetUniformLocation(glHandler->getProgram(), "numberOfPoints"), pointGrid->numberOfPoints);
 
     glDispatchCompute(workgroupSize, workgroupSize, 1);
-    glHandler->waitForShaderStorageIntegrity();
+    GLHandler::waitForShaderStorageIntegrity();
 
     //makeHeightmap.glsl
     glHandler->setProgram(shader[2]);
     glHandler->dataToBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,
-                            (long long) sizeof(GLdouble) * pointGrid->resolutionX * pointGrid->resolutionY,
+                            (long) (sizeof(GLdouble) * pointGrid->resolutionX * pointGrid->resolutionY),
                             nullptr, GL_STREAM_READ);
     glHandler->bindBuffer(GLHandler::EFTDEM_UNBIND);
 
     glUniform2ui(glGetUniformLocation(glHandler->getProgram(), "resolution"), pointGrid->resolutionX, pointGrid->resolutionY);
 
-    glDispatchCompute(std::ceil(pointGrid->resolutionX / 8.), std::ceil(pointGrid->resolutionY / 8.), 1);
+    glDispatchCompute(std::ceil((double) pointGrid->resolutionX / 8.), std::ceil((double) pointGrid->resolutionY / 8.), 1);
 
     if (!generateOutput) {
-        glHandler->waitForShaderStorageIntegrity();
+        GLHandler::waitForShaderStorageIntegrity();
         return emptyHeightMapfromPointGrid(pointGrid);
     }
 
     heightMap map = emptyHeightMapfromPointGrid(pointGrid);
 
     glHandler->dataFromBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER, 0,
-                              (long long) sizeof(GLdouble) * pointGrid->resolutionX * pointGrid->resolutionY,
+                              (long) (sizeof(GLdouble) * pointGrid->resolutionX * pointGrid->resolutionY),
                               map.heights.data());
 
     auto end = std::chrono::high_resolution_clock::now();

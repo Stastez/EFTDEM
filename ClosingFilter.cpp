@@ -1,4 +1,6 @@
 #include "ClosingFilter.h"
+
+#include <utility>
 #include "DataStructures.h"
 #include "GLHandler.h"
 
@@ -7,7 +9,7 @@ ClosingFilter::ClosingFilter(GLHandler *glHandler, std::vector<unsigned int> ker
     ClosingFilter::batchSize = batchSize;
     ClosingFilter::stageUsesGPU = true;
 
-    ClosingFilter::kernelRadii = kernelRadii;
+    ClosingFilter::kernelRadii = std::move(kernelRadii);
 
     shaderPaths = std::vector<std::string>();
     shaderPaths.emplace_back("discretization.glsl");
@@ -27,8 +29,6 @@ ClosingFilter::ClosingFilter(GLHandler *glHandler, std::vector<unsigned int> ker
 
     shaderPaths.emplace_back("closing.glsl");
 
-
-    bufferSpecifications b;
     interimBufferSpecifications = std::vector<bufferSpecifications>();
     interimBufferSpecifications.emplace_back(bufferSpecifications{.buffer = GLHandler::EFTDEM_CLOSING_MASK_BUFFER, .elementSize = (long long) sizeof(double)});
     interimBufferSpecifications.emplace_back(bufferSpecifications{.buffer = GLHandler::EFTDEM_HORIZONTAL_AMOUNT_BUFFER, .elementSize = (long long) sizeof(unsigned int)});

@@ -22,21 +22,22 @@ heightMap IKernelBasedFilter::applySingleFilter(heightMap *map, bool generateOut
 
     if (!glHandler->getCoherentBufferMask()[GLHandler::EFTDEM_HEIGHTMAP_BUFFER]){
         glHandler->dataToBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,
-                                (long long) sizeof(double) * map->resolutionX * map->resolutionY,
+                                (long) (sizeof(double) * map->resolutionX * map->resolutionY),
                                 map->heights.data(), GL_STATIC_DRAW);
     }
-    for (int i=0; i<interimBufferSpecifications.size(); i++){
-        glHandler->dataToBuffer(interimBufferSpecifications[i].buffer,
-                                (long long) interimBufferSpecifications[i].elementSize * map->resolutionX * map->resolutionY,
+    for (auto & interimBufferSpecification : interimBufferSpecifications){
+        glHandler->dataToBuffer(interimBufferSpecification.buffer,
+                                (long) (interimBufferSpecification.elementSize * map->resolutionX * map->resolutionY),
                                 nullptr, GL_STREAM_READ);
     }
 
-    for (int i=0; i<shader.size(); i++){
-        glUseProgram(shader[i]);
-        glUniform2ui(glGetUniformLocation(shader[i], "resolution"), map->resolutionX, map->resolutionY);
-        glUniform1ui(glGetUniformLocation(shader[i], "kernelRadius"), kernelRadius);
-        glHandler->dispatchShader(shader[i], batchSize, map->resolutionX, map->resolutionY);
-        glHandler->waitForShaderStorageIntegrity();
+    for (unsigned int i : shader){
+        glUseProgram(i);
+        glUniform2ui(glGetUniformLocation(i, "resolution"), map->resolutionX, map->resolutionY);
+        glUniform1ui(glGetUniformLocation(i, "kernelRadius"), kernelRadius);
+        glHandler->setProgram(i);
+        glHandler->dispatchShader(batchSize, map->resolutionX, map->resolutionY);
+        GLHandler::waitForShaderStorageIntegrity();
     }
 
     auto end = std::chrono::high_resolution_clock::now();
@@ -47,7 +48,7 @@ heightMap IKernelBasedFilter::applySingleFilter(heightMap *map, bool generateOut
     heightMap filledMap = emptyHeightMapfromHeightMap(map);
     glHandler->dataFromBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,
                               0,
-                              (long long) sizeof(GLdouble) * filledMap.resolutionX * filledMap.resolutionY,
+                              (long) (sizeof(GLdouble) * filledMap.resolutionX * filledMap.resolutionY),
                               filledMap.heights.data());
 
     return filledMap;
