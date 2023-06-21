@@ -12,18 +12,20 @@ ClosingFilter::ClosingFilter(GLHandler *glHandler, std::vector<unsigned int> ker
     shaderPaths = std::vector<std::string>();
     shaderPaths.emplace_back("../../shaders/discretization.glsl");
     shaderPaths.emplace_back("../../shaders/horizontalAmount.glsl");
-    //shaderPaths.emplace_back("../../shaders/amount.glsl");
-    //shaderPaths.emplace_back("../../shaders/dilation.glsl");
-    //shaderPaths.emplace_back("../../shaders/horizontalAmount.glsl");
-    //shaderPaths.emplace_back("../../shaders/amount.glsl");
-    //shaderPaths.emplace_back("../../shaders/erosion.glsl");
+    shaderPaths.emplace_back("../../shaders/amount.glsl");
+    shaderPaths.emplace_back("../../shaders/horizontalSum.glsl");
+    shaderPaths.emplace_back("../../shaders/sum.glsl");
+    shaderPaths.emplace_back("../../shaders/average.glsl");
 
-    //shaderPaths.emplace_back("../../shaders/discretization.glsl");
-    //shaderPaths.emplace_back("../../shaders/horizontalAmount.glsl");
-    //shaderPaths.emplace_back("../../shaders/amount.glsl");
-    //shaderPaths.emplace_back("../../shaders/horizontalSum.glsl");
-    //shaderPaths.emplace_back("../../shaders/sum.glsl");
-    //shaderPaths.emplace_back("../../shaders/closing.glsl");
+    shaderPaths.emplace_back("../../shaders/discretization.glsl");
+    shaderPaths.emplace_back("../../shaders/horizontalAmount.glsl");
+    shaderPaths.emplace_back("../../shaders/amount.glsl");
+    shaderPaths.emplace_back("../../shaders/dilation.glsl");
+    shaderPaths.emplace_back("../../shaders/horizontalAmount.glsl");
+    shaderPaths.emplace_back("../../shaders/amount.glsl");
+    shaderPaths.emplace_back("../../shaders/erosion.glsl");
+
+    shaderPaths.emplace_back("../../shaders/closing.glsl");
 
 
     bufferSpecifications b;
@@ -31,6 +33,7 @@ ClosingFilter::ClosingFilter(GLHandler *glHandler, std::vector<unsigned int> ker
     interimBufferSpecifications.emplace_back(bufferSpecifications{.buffer = GLHandler::EFTDEM_CLOSING_MASK_BUFFER, .elementSize = (long long) sizeof(double)});
     interimBufferSpecifications.emplace_back(bufferSpecifications{.buffer = GLHandler::EFTDEM_HORIZONTAL_AMOUNT_BUFFER, .elementSize = (long long) sizeof(unsigned int)});
     interimBufferSpecifications.emplace_back(bufferSpecifications{.buffer = GLHandler::EFTDEM_AMOUNT_BUFFER, .elementSize = (long long) sizeof(unsigned int)});
+    interimBufferSpecifications.emplace_back(bufferSpecifications{.buffer = GLHandler::EFTDEM_AVERAGE_BUFFER, .elementSize = (long long) sizeof(double)});
     interimBufferSpecifications.emplace_back(bufferSpecifications{.buffer = GLHandler::EFTDEM_HORIZONTAL_SUM_BUFFER, .elementSize = (long long) sizeof(double)});
     interimBufferSpecifications.emplace_back(bufferSpecifications{.buffer = GLHandler::EFTDEM_SUM_BUFFER, .elementSize = (long long) sizeof(double)});
 }

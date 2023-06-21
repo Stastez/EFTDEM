@@ -21,6 +21,7 @@ public:
         EFTDEM_SUM_BUFFER, // double for each grid cell
         EFTDEM_HORIZONTAL_AMOUNT_BUFFER, // unsigned int for each grid cell
         EFTDEM_AMOUNT_BUFFER, // unsigned int for each grid cell
+        EFTDEM_AVERAGE_BUFFER, // double for each grid cell
         EFTDEM_CLOSING_MASK_BUFFER, // double for each grid cell
         EFTDEM_INTERIM_RESULT_BUFFER, // double for each grid cell
         EFTDEM_TOTAL_WEIGHT_BUFFER, // double for each grid cell
