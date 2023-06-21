@@ -4,6 +4,8 @@
 
 #include <iostream>
 #include <fstream>
+#include <cmath>
+#include <sstream>
 #include <magic_enum.hpp>
 
 using namespace gl;
@@ -154,7 +156,7 @@ bool GLHandler::isInitialized() const {return isInitialized(false) || isInitiali
 bool GLHandler::isInitialized(bool debug) const {return initialized && (this->isDebug == debug);}
 
 void GLHandler::dispatchShader(unsigned int shader, unsigned int localBatchSize, unsigned long resolutionX, unsigned long resolutionY){
-    std::chrono::time_point<std::chrono::steady_clock> startInvocation, endInvocation;
+    std::chrono::time_point<std::chrono::system_clock> startInvocation, endInvocation;
 
     if (localBatchSize == 0) {
         unsigned int batchSize = 1;
@@ -202,7 +204,7 @@ void GLHandler::dispatchShader(unsigned int shader, unsigned int localBatchSize,
             auto elapsedTime = endInvocation - startInvocation;
 
             std::cout << "Elapsed time for " << localBatchSize << " invocations: "
-                      << duration_cast<std::chrono::milliseconds>(elapsedTime) << std::endl;
+                      << duration_cast<std::chrono::milliseconds>(elapsedTime).count() << "ms" << std::endl;
             std::cout << "Batch size: " << localBatchSize << std::endl;
 
             if (duration_cast<std::chrono::milliseconds>(endInvocation - startInvocation) > std::chrono::milliseconds {1000}) {
