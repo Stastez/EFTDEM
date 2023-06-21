@@ -12,18 +12,18 @@ ClosingFilter::ClosingFilter(GLHandler *glHandler, std::vector<unsigned int> ker
     shaderPaths = std::vector<std::string>();
     shaderPaths.emplace_back("../../shaders/discretization.glsl");
     shaderPaths.emplace_back("../../shaders/horizontalAmount.glsl");
-    shaderPaths.emplace_back("../../shaders/amount.glsl");
-    shaderPaths.emplace_back("../../shaders/dilation.glsl");
-    shaderPaths.emplace_back("../../shaders/horizontalAmount.glsl");
-    shaderPaths.emplace_back("../../shaders/amount.glsl");
-    shaderPaths.emplace_back("../../shaders/erosion.glsl");
+    //shaderPaths.emplace_back("../../shaders/amount.glsl");
+    //shaderPaths.emplace_back("../../shaders/dilation.glsl");
+    //shaderPaths.emplace_back("../../shaders/horizontalAmount.glsl");
+    //shaderPaths.emplace_back("../../shaders/amount.glsl");
+    //shaderPaths.emplace_back("../../shaders/erosion.glsl");
 
-    shaderPaths.emplace_back("../../shaders/discretization.glsl");
-    shaderPaths.emplace_back("../../shaders/horizontalAmount.glsl");
-    shaderPaths.emplace_back("../../shaders/amount.glsl");
-    shaderPaths.emplace_back("../../shaders/horizontalSum.glsl");
-    shaderPaths.emplace_back("../../shaders/sum.glsl");
-    shaderPaths.emplace_back("../../shaders/closing.glsl");
+    //shaderPaths.emplace_back("../../shaders/discretization.glsl");
+    //shaderPaths.emplace_back("../../shaders/horizontalAmount.glsl");
+    //shaderPaths.emplace_back("../../shaders/amount.glsl");
+    //shaderPaths.emplace_back("../../shaders/horizontalSum.glsl");
+    //shaderPaths.emplace_back("../../shaders/sum.glsl");
+    //shaderPaths.emplace_back("../../shaders/closing.glsl");
 
 
     bufferSpecifications b;
