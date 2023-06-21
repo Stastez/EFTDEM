@@ -104,7 +104,7 @@ heightMap emptyHeightMapfromPointGrid(pointGrid *grid) {
     return {.heights = std::vector<double>(grid->resolutionX * grid->resolutionY),
             .resolutionX = grid->resolutionX,
             .resolutionY = grid->resolutionY,
-            .dataSize = (long long) sizeof(double) * grid->resolutionX * grid->resolutionY,
+            .dataSize = static_cast<long long>(sizeof(double) * grid->resolutionX * grid->resolutionY),
             .min = grid->min,
             .max = grid->max};
 }
