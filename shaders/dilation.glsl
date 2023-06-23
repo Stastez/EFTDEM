@@ -22,5 +22,5 @@ void main() {
     uint coord1D;
 
     coord1D = calculate1DCoordinate(correctedGlobalInvocation);
-    dilationMask[coord1D] = (amounts[coord1D] <= 0) ? 0.0 : 1.0; //double(amounts[coord1D]) / double(kernelRadius*2*kernelRadius*2);  //
+    dilationMask[coord1D] = (amounts[coord1D] <= 0) ? 0.0 : 1.0; //double(amounts[coord1D]) / double(kernelRadius*2*kernelRadius*2);  // (amounts[coord1D] <= 0) * 1.0
 }
