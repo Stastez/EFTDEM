@@ -1,5 +1,5 @@
-#include <iostream>
 #include "RasterizerCpu.h"
+#include <iostream>
 
 RasterizerCPU::RasterizerCPU() {
     RasterizerCPU::stageUsesGPU = false;

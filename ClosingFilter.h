@@ -1,7 +1,6 @@
 #ifndef EFTDEM_CLOSINGFILTER_H
 #define EFTDEM_CLOSINGFILTER_H
 
-
 #include "DataStructures.h"
 #include "GLHandler.h"
 #include "IKernelBasedFilter.h"

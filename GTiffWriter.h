@@ -1,8 +1,8 @@
 #ifndef EFTDEM_GTIFFWRITER_H
 #define EFTDEM_GTIFFWRITER_H
 
-#include <string>
 #include "IHeightMapWriter.h"
+#include <string>
 
 class GTiffWriter : public IHeightMapWriter {
 private:

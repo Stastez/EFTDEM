@@ -1,9 +1,5 @@
-#include <iostream>
 #include "IKernelBasedFilter.h"
-
-
-
-
+#include <iostream>
 
 void IKernelBasedFilter::cleanUp() {
 

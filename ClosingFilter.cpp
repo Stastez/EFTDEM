@@ -1,8 +1,7 @@
 #include "ClosingFilter.h"
-
-#include <utility>
 #include "DataStructures.h"
 #include "GLHandler.h"
+#include <utility>
 
 ClosingFilter::ClosingFilter(GLHandler *glHandler, std::vector<unsigned int> kernelRadii, unsigned int batchSize = 0) {
     ClosingFilter::glHandler = glHandler;

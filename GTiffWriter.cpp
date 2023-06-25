@@ -1,6 +1,6 @@
-#include <iostream>
 #include "GTiffWriter.h"
 #include "Pipeline.h"
+#include <iostream>
 #include <gdal_priv.h>
 
 GTiffWriter::GTiffWriter(bool writeLowDepth, const std::string& destinationDEM) {

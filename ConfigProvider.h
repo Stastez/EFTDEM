@@ -1,8 +1,8 @@
 #ifndef EFTDEM_CONFIGPROVIDER_H
 #define EFTDEM_CONFIGPROVIDER_H
 
-#include <yaml-cpp/yaml.h>
 #include "Pipeline.h"
+#include <yaml-cpp/yaml.h>
 
 class ConfigProvider {
 private:

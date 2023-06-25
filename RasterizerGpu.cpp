@@ -1,6 +1,6 @@
+#include "RasterizerGpu.h"
 #include <iostream>
 #include <cmath>
-#include "RasterizerGpu.h"
 
 RasterizerGPU::RasterizerGPU(GLHandler *glHandler) {
     RasterizerGPU::glHandler = glHandler;

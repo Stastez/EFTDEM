@@ -1,6 +1,6 @@
+#include "SorterCPU.h"
 #include <iostream>
 #include <cmath>
-#include "SorterCPU.h"
 
 std::pair<unsigned long, unsigned long> SorterCPU::calculateGridCoordinates(pointGrid *grid, rawPointCloud *pointCloud, double xCoord, double yCoord){
     unsigned long x, y;
