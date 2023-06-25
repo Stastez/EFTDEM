@@ -60,6 +60,7 @@ GLFWwindow * GLHandler::initializeGL(bool debug) {
     glGenBuffers((int) numBuffers, ssbos.data());
 
     coherentBufferMask = std::vector<bool>(numBuffers + 1, false);
+    deletedBufferMask = std::vector<bool>(numBuffers + 1, false);
 
     initialized = true;
     this->isDebug = debug;
@@ -68,7 +69,10 @@ GLFWwindow * GLHandler::initializeGL(bool debug) {
 }
 
 void GLHandler::uninitializeGL() {
-    glDeleteBuffers((int) numBuffers, ssbos.data());
+    for (unsigned long long i = 1; i < numBuffers; i++) {
+        if (!deletedBufferMask[i]) deleteBuffer((int) i);
+    }
+
     glfwTerminate();
     initialized = false;
 }
@@ -125,11 +129,31 @@ std::vector<GLuint> GLHandler::getShaderPrograms(const std::vector<std::string>&
 }
 
 void GLHandler::bindBuffer(GLHandler::bufferIndices buffer) {
+    if (deletedBufferMask[buffer]) {
+        std::cout << magic_enum::enum_name(buffer) << " was previously deleted." << std::endl;
+        exit(Pipeline::EXIT_OPENGL_ERROR);
+    }
     if (buffer == EFTDEM_UNBIND) glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
     else glBindBufferBase(GL_SHADER_STORAGE_BUFFER, buffer, ssbos[buffer - 1]); //no buffer needed for EFTDEM_UNBIND
 }
 
+void GLHandler::deleteBuffer(GLHandler::bufferIndices buffer) {
+    deleteBuffer((int) buffer);
+}
+
+void GLHandler::deleteBuffer(int buffer) {
+    if (deletedBufferMask[buffer]) return;
+    if (buffer == EFTDEM_UNBIND) exit(Pipeline::EXIT_INVALID_FUNCTION_PARAMETERS);
+    glDeleteBuffers(1, &ssbos[buffer - 1]);
+    deletedBufferMask[buffer] = true;
+    coherentBufferMask[buffer] = false;
+}
+
 void GLHandler::dataToBuffer(GLHandler::bufferIndices buffer, gl::GLsizeiptr size, const void *data, gl::GLenum usage) {
+    if (deletedBufferMask[buffer]) {
+        std::cout << magic_enum::enum_name(buffer) << " was previously deleted." << std::endl;
+        exit(Pipeline::EXIT_OPENGL_ERROR);
+    }
     if (buffer == EFTDEM_UNBIND) exit(Pipeline::EXIT_INVALID_FUNCTION_PARAMETERS);
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, buffer, ssbos[buffer - 1]); //no buffer needed for EFTDEM_UNBIND
     glBufferData(GL_SHADER_STORAGE_BUFFER, size, data, usage);
@@ -137,6 +161,10 @@ void GLHandler::dataToBuffer(GLHandler::bufferIndices buffer, gl::GLsizeiptr siz
 }
 
 void GLHandler::dataFromBuffer(GLHandler::bufferIndices buffer, gl::GLsizeiptr offset, gl::GLsizeiptr size, void *data) {
+    if (deletedBufferMask[buffer]) {
+        std::cout << magic_enum::enum_name(buffer) << " was previously deleted." << std::endl;
+        exit(Pipeline::EXIT_OPENGL_ERROR);
+    }
     if (buffer == EFTDEM_UNBIND) exit(Pipeline::EXIT_INVALID_FUNCTION_PARAMETERS);
     bindBuffer(buffer);
     waitForShaderStorageIntegrity();

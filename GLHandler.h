@@ -27,7 +27,7 @@ public:
         EFTDEM_TOTAL_WEIGHT_BUFFER, // double for each grid cell
     };
 
-    GLHandler(std::string shaderDirectory);
+    explicit GLHandler(std::string shaderDirectory);
 
     GLFWwindow * initializeGL(bool debug);
     void uninitializeGL();
@@ -35,6 +35,8 @@ public:
     std::vector<gl::GLuint> getShaderPrograms(const std::vector<std::string>& shaderFiles, bool useStandardDirectory);
 
     void bindBuffer(bufferIndices buffer);
+    void deleteBuffer(bufferIndices buffer);
+    void deleteBuffer(int buffer);
     void dataToBuffer(bufferIndices buffer, gl::GLsizeiptr size, const void *data, gl::GLenum usage);
     void dataFromBuffer(bufferIndices buffer, gl::GLsizeiptr offset, gl::GLsizeiptr size, void *data);
     void dispatchShader(unsigned int localBatchSize, unsigned long resolutionX, unsigned long resolutionY) const;
@@ -55,6 +57,7 @@ private:
     std::string shaderDirectory;
 
     std::vector<bool> coherentBufferMask;
+    std::vector<bool> deletedBufferMask;
     std::vector<gl::GLuint> ssbos;
     gl::GLuint currentProgram{};
 

@@ -2,6 +2,7 @@
 #define EFTDEM_IHEIGHTMAPWRITER_H
 
 #include "IPipelineComponent.h"
+#include <string>
 
 class IHeightMapWriter : public IPipelineComponent {
 protected:

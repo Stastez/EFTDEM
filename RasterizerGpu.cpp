@@ -8,7 +8,12 @@ RasterizerGPU::RasterizerGPU(GLHandler *glHandler) {
 }
 
 void RasterizerGPU::cleanUp() {
+    auto bufferCoherency = glHandler->getCoherentBufferMask();
 
+    if (bufferCoherency[GLHandler::EFTDEM_RAW_POINT_BUFFER]) glHandler->deleteBuffer(GLHandler::EFTDEM_RAW_POINT_BUFFER);
+    if (bufferCoherency[GLHandler::EFTDEM_RAW_POINT_INDEX_BUFFER]) glHandler->deleteBuffer(GLHandler::EFTDEM_RAW_POINT_INDEX_BUFFER);
+    if (bufferCoherency[GLHandler::EFTDEM_SORTED_POINT_SUM_BUFFER]) glHandler->deleteBuffer(GLHandler::EFTDEM_SORTED_POINT_SUM_BUFFER);
+    if (bufferCoherency[GLHandler::EFTDEM_SORTED_POINT_COUNT_BUFFER]) glHandler->deleteBuffer(GLHandler::EFTDEM_SORTED_POINT_COUNT_BUFFER);
 }
 
 heightMap RasterizerGPU::apply(pointGrid *pointGrid, bool generateOutput) {
