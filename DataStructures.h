@@ -44,4 +44,7 @@ point normalizeValue(point value, point min, point max);
 
 [[maybe_unused]] point denormalizeValue(point value, point min, point max);
 
+std::pair<point, point> mergePoints(point p1, point p2);
+std::pair<point, point> mergePoints(const std::vector<point>& points);
+
 #endif //EFTDEM_DATASTRUCTURES_H

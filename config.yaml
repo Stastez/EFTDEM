@@ -1,8 +1,8 @@
 CloudReaderOptions:
-  pointCloudPath: "../../res/20220912_SZE(2)-001_LAS1_2_05.txt"
+  pointCloudPath: "../resources/20220912_SZE(2)-001_LAS1_2_full.txt"
 
 CloudSorterOptions:
-  pixelPerUnit: 20
+  pixelPerUnit: 50
   useGPU: true
 
 CloudRasterizerOptions:
@@ -11,13 +11,17 @@ CloudRasterizerOptions:
 HeightMapFillerOptions:
   useGPU: true
 
-  # Currently implemented: closingFilter, averageDistanceWeightedFilter
+  # Currently implemented: closingFilter, inverseDistanceWeightedFilter
   filler: closingFilter
 
   kernelBasedFilterOptions:
     kernelSizes:
-      - 30
+      - 100
+    batchSize: 512
 
 CloudWriterOptions:
-  destinationPath: "../../res/map"
+  destinationPath: "../resources/map"
   writeLowDepth: true
+
+OpenGLOptions:
+  shaderDirectory: "../shaders"

@@ -117,3 +117,32 @@ heightMap emptyHeightMapfromHeightMap(heightMap *map){
             .min = map->min,
             .max = map->max };
 }
+
+std::pair<point, point> mergePoints(point p1, point p2) {
+    auto min = point{
+            .x = std::min(p1.x, p2.x),
+            .y = std::min(p1.y, p2.y),
+            .z = std::min(p1.z, p2.z),
+            .intensity = std::min(p1.intensity, p2.intensity)
+    };
+    auto max = point{
+            .x = std::max(p1.x, p2.x),
+            .y = std::max(p1.y, p2.y),
+            .z = std::max(p1.z, p2.z),
+            .intensity = std::max(p1.intensity, p2.intensity)
+    };
+
+    return {min, max};
+}
+
+std::pair<point, point> mergePoints(const std::vector<point>& points) {
+    auto min = point{std::numeric_limits<double>::max(), std::numeric_limits<double>::max(),std::numeric_limits<double>::max(), std::numeric_limits<int>::max()};
+    auto max = point{std::numeric_limits<double>::min(), std::numeric_limits<double>::min(),std::numeric_limits<double>::min(), std::numeric_limits<int>::min()};
+
+    for (auto point : points) {
+        min = mergePoints(min, point).first;
+        max = mergePoints(max, point).second;
+    }
+
+    return {min, max};
+}

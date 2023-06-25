@@ -24,14 +24,18 @@ void Pipeline::execute() {
     generateOutput = adjacentStagesUseGPU(sorter, rasterizer);
     auto sorterReturn = sorter->apply(&readerReturn, generateOutput);
     sorter->cleanUp();
+    readerReturn = {};
     generateOutput = adjacentStagesUseGPU(rasterizer, filler);
     auto rasterizerReturn = rasterizer->apply(&sorterReturn, generateOutput);
     rasterizer->cleanUp();
+    sorterReturn = {};
     generateOutput = adjacentStagesUseGPU(filler, writer);
     auto fillerReturn = filler->apply(&rasterizerReturn, generateOutput);
     filler->cleanUp();
+    rasterizerReturn = {};
     writer->apply(&fillerReturn, generateOutput);
     writer->cleanUp();
+    fillerReturn = {};
 }
 
 void Pipeline::attachElements(ICloudReader *readerParameter, ICloudSorter *sorterParameter, ICloudRasterizer *rasterizerParameter, IHeightMapFiller *fillerParameter, IHeightMapWriter *writerParameter) {
