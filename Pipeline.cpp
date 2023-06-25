@@ -34,9 +34,8 @@ void Pipeline::execute() {
     generateOutput = adjacentStagesUseGPU(filler, writer) || generateAllOutputs;
     auto fillerReturn = filler->apply(&rasterizerReturn, generateOutput);
     filler->cleanUp();
-    //rasterizerReturn = {};
-    //writer->apply(&fillerReturn, generateOutput);
-    writer->apply(&rasterizerReturn, generateOutput);
+    rasterizerReturn = {};
+    writer->apply(&fillerReturn, generateOutput);
     writer->cleanUp();
     fillerReturn = {};
 }

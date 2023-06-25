@@ -137,7 +137,7 @@ std::pair<point, point> mergePoints(point p1, point p2) {
 
 std::pair<point, point> mergePoints(const std::vector<point>& points) {
     auto min = point{std::numeric_limits<double>::max(), std::numeric_limits<double>::max(),std::numeric_limits<double>::max(), std::numeric_limits<int>::max()};
-    auto max = point{std::numeric_limits<double>::min(), std::numeric_limits<double>::min(),std::numeric_limits<double>::min(), std::numeric_limits<int>::min()};
+    auto max = point{-std::numeric_limits<double>::max(), -std::numeric_limits<double>::max(),-std::numeric_limits<double>::max(), std::numeric_limits<int>::min()};
 
     for (auto point : points) {
         min = mergePoints(min, point).first;

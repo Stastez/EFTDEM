@@ -37,7 +37,7 @@ std::vector<std::string> GroundRadarReader::readFile() {
 
 std::pair<point, point> GroundRadarReader::parseFileContents(std::vector<std::string> *lines, std::vector<point> *groundPoints, unsigned long begin = 0, unsigned long end = -1) {
     point min = {std::numeric_limits<double>::max(), std::numeric_limits<double>::max(),std::numeric_limits<double>::max(), -1};
-    point max = {std::numeric_limits<double>::min(), std::numeric_limits<double>::min(),std::numeric_limits<double>::min(), -1};
+    point max = {-std::numeric_limits<double>::max(), -std::numeric_limits<double>::max(),-std::numeric_limits<double>::max(), -1};
 
     for (auto i = begin; i < end; i++) {
         std::string words[3];
@@ -72,7 +72,7 @@ rawPointCloud GroundRadarReader::apply(bool generateOutput) {
     std::vector<point> groundPoints, environmentPoints;
     std::cout << "Reading point cloud..." << std::endl;
 
-    auto numThreads = 16;
+    auto numThreads = 1;
     auto lines = readFile();
     auto batchSize = lines.size() / numThreads;
     auto extremesVector = std::vector<std::pair<point, point>>(numThreads);

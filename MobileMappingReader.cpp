@@ -40,7 +40,7 @@ std::vector<std::string> MobileMappingReader::readFile() {
 
 std::pair<point, point> MobileMappingReader::parseFileContents(std::vector<std::string> *lines, std::vector<point> *groundPoints, std::vector<point> *environmentPoints, unsigned long begin = 0, unsigned long end = -1) {
     point min = {std::numeric_limits<double>::max(), std::numeric_limits<double>::max(),std::numeric_limits<double>::max(), std::numeric_limits<int>::max()};
-    point max = {std::numeric_limits<double>::min(), std::numeric_limits<double>::min(),std::numeric_limits<double>::min(), std::numeric_limits<int>::min()};
+    point max = {-std::numeric_limits<double>::max(), -std::numeric_limits<double>::max(),-std::numeric_limits<double>::max(), std::numeric_limits<int>::min()};
 
     for (auto i = begin; i < end; i++) {
         std::string words[5];
