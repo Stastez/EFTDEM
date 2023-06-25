@@ -1,26 +1,25 @@
-#include "CloudReader.h"
+#include "MobileMappingReader.h"
 #include "Pipeline.h"
 #include <fstream>
 #include <iostream>
-#include <sstream>
 #include <thread>
 #include <future>
 
 /**
- * Constructs a new CloudReader that will read from the fileName-provided point cloud. The file must be comma-
+ * Constructs a new MobileMappingReader that will read from the fileName-provided point cloud. The file must be comma-
  * separated and conform to the format [x],[y],[z],[ground point? -> 1; environment point? -> 0],[reflection intensity]
  * @param fileName The path to the point cloud to be read from
  */
-CloudReader::CloudReader(const std::string& fileName) {
+MobileMappingReader::MobileMappingReader(const std::string& fileName) {
     stageUsesGPU = false;
-    CloudReader::fileName = fileName;
+    MobileMappingReader::fileName = fileName;
 }
 
-void CloudReader::cleanUp() {
+void MobileMappingReader::cleanUp() {
 
 }
 
-std::vector<std::string> CloudReader::readFile() {
+std::vector<std::string> MobileMappingReader::readFile() {
     std::fstream pointFile (fileName, std::ios::in);
     if (!pointFile.is_open()) {
         std::cout << "Specified file could not be opened." << std::endl;
@@ -39,7 +38,7 @@ std::vector<std::string> CloudReader::readFile() {
     return lines;
 }
 
-std::pair<point, point> CloudReader::parseFileContents(std::vector<std::string> *lines, std::vector<point> *groundPoints, std::vector<point> *environmentPoints, unsigned long begin = 0, unsigned long end = -1) {
+std::pair<point, point> MobileMappingReader::parseFileContents(std::vector<std::string> *lines, std::vector<point> *groundPoints, std::vector<point> *environmentPoints, unsigned long begin = 0, unsigned long end = -1) {
     point min = {std::numeric_limits<double>::max(), std::numeric_limits<double>::max(),std::numeric_limits<double>::max(), std::numeric_limits<int>::max()};
     point max = {std::numeric_limits<double>::min(), std::numeric_limits<double>::min(),std::numeric_limits<double>::min(), std::numeric_limits<int>::min()};
 
@@ -74,7 +73,7 @@ std::pair<point, point> CloudReader::parseFileContents(std::vector<std::string> 
     return {min, max};
 }
 
-rawPointCloud CloudReader::apply(bool generateOutput) {
+rawPointCloud MobileMappingReader::apply(bool generateOutput) {
     if (!generateOutput) return {};
 
     std::vector<point> groundPoints, environmentPoints;
@@ -87,8 +86,6 @@ rawPointCloud CloudReader::apply(bool generateOutput) {
     auto futuresVector = std::vector<std::future<std::pair<point, point>>>(numThreads);
 
     std::vector<std::vector<point>> groundPointsVector(numThreads), environmentPointsVector(numThreads);
-
-    //parseFileContents(&lines, &groundPointsVector[0], &environmentPointsVector[0], batchSize * 0, batchSize);
 
     for (auto i = 0; i < numThreads - 1; i++) {
         futuresVector[i] = std::async(&parseFileContents, &lines, &groundPointsVector[i], &environmentPointsVector[i], batchSize * i, batchSize * (i+1));

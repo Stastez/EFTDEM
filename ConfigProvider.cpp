@@ -1,6 +1,6 @@
 #include "ConfigProvider.h"
 #include "Pipeline.h"
-#include "CloudReader.h"
+#include "MobileMappingReader.h"
 #include "SorterGpu.h"
 #include "SorterCPU.h"
 #include "RasterizerGpu.h"
@@ -8,6 +8,7 @@
 #include "ClosingFilter.h"
 #include "GTiffWriter.h"
 #include "InverseDistanceWeightedFilter.h"
+#include "GroundRadarReader.h"
 
 #include <iostream>
 #include <utility>
@@ -48,15 +49,37 @@ Pipeline *ConfigProvider::providePipeline() {
 
     auto pipeline = new Pipeline(checkValidityAndReturn(config["OpenGLOptions"]["shaderDirectory"], true).first.as<std::string>());
 
-    auto reader = new CloudReader(
-            checkValidityAndReturn(
-                    config["CloudReaderOptions"]["pointCloudPath"], true).first.as<std::string>());
+    ICloudReader *reader;
+    if (checkValidityAndReturn(config["CloudReaderOptions"]["pointCloudType"], true).first.as<std::string>() == "mobileMapping") {
+        reader = new MobileMappingReader(checkValidityAndReturn(config["CloudReaderOptions"]["pointCloudPath"], true).first.as<std::string>());
+    } else if (checkValidityAndReturn(config["CloudReaderOptions"]["pointCloudType"], true).first.as<std::string>() == "groundRadar") {
+        reader = new GroundRadarReader(checkValidityAndReturn(config["CloudReaderOptions"]["pointCloudPath"], true).first.as<std::string>());
+    } else {
+        std::cout << "Unrecognized point cloud type!" << std::endl;
+        exit(Pipeline::EXIT_INVALID_CONFIGURATION);
+    }
 
-    auto pixelPerUnit = checkValidityAndReturn(config["CloudSorterOptions"]["pixelPerUnit"], true).first.as<int>();
+    auto pixelPerUnitTest = checkValidityAndReturn(config["CloudSorterOptions"]["pixelPerUnit"], false);
+    auto pixelPerUnitXTest = checkValidityAndReturn(config["CloudSorterOptions"]["pixelPerUnitX"], false);
+    auto pixelPerUnitYTest = checkValidityAndReturn(config["CloudSorterOptions"]["pixelPerUnitY"], false);
+
+    unsigned long pixelPerUnitX, pixelPerUnitY;
+
+    if (pixelPerUnitTest.second) {
+        pixelPerUnitX = pixelPerUnitTest.first.as<unsigned long>();
+        pixelPerUnitY = pixelPerUnitTest.first.as<unsigned long>();
+    } else if (pixelPerUnitXTest.second && pixelPerUnitYTest.second) {
+        pixelPerUnitX = pixelPerUnitXTest.first.as<unsigned long>();
+        pixelPerUnitY = pixelPerUnitYTest.first.as<unsigned long>();
+    } else {
+        std::cout << "pixelPerUnit or pixelPerUnitX, pixelPerUnitY not specified!" << std::endl;
+        exit(Pipeline::EXIT_INVALID_CONFIGURATION);
+    }
+
     auto sorter = (checkValidityAndReturn(config["CloudSorterOptions"]["useGPU"], true).first.as<bool>()) ?
-            (ICloudSorter *) new SorterGPU(pipeline->glHandler, pixelPerUnit) : (ICloudSorter *) new SorterCPU(pixelPerUnit);
+            (ICloudSorter *) new SorterGPU(pipeline->glHandler, pixelPerUnitX, pixelPerUnitY) : (ICloudSorter *) new SorterCPU(pixelPerUnitX, pixelPerUnitY);
     
-    auto rasterizer = (checkValidityAndReturn(config["CloudRasterizerOptions"]["useGPU"], true).first) ?
+    auto rasterizer = (checkValidityAndReturn(config["CloudRasterizerOptions"]["useGPU"], true).first.as<bool>()) ?
             (ICloudRasterizer *) new RasterizerGPU(pipeline->glHandler) : (ICloudRasterizer *) new RasterizerCPU();
     
     IHeightMapFiller *filler;

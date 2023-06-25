@@ -18,22 +18,25 @@ bool adjacentStagesUseGPU(IPipelineComponent *first, IPipelineComponent *second)
 void Pipeline::execute() {
     if (!isOperable()) exit(EXIT_INVALID_FUNCTION_PARAMETERS);
 
-    bool generateOutput = adjacentStagesUseGPU(reader, sorter);
+    bool generateAllOutputs = true;
+
+    bool generateOutput = adjacentStagesUseGPU(reader, sorter) || generateAllOutputs;
     auto readerReturn = reader->apply(generateOutput);
     reader->cleanUp();
-    generateOutput = adjacentStagesUseGPU(sorter, rasterizer);
+    generateOutput = adjacentStagesUseGPU(sorter, rasterizer) || generateAllOutputs;
     auto sorterReturn = sorter->apply(&readerReturn, generateOutput);
     sorter->cleanUp();
     readerReturn = {};
-    generateOutput = adjacentStagesUseGPU(rasterizer, filler);
+    generateOutput = adjacentStagesUseGPU(rasterizer, filler) || generateAllOutputs;
     auto rasterizerReturn = rasterizer->apply(&sorterReturn, generateOutput);
     rasterizer->cleanUp();
     sorterReturn = {};
-    generateOutput = adjacentStagesUseGPU(filler, writer);
+    generateOutput = adjacentStagesUseGPU(filler, writer) || generateAllOutputs;
     auto fillerReturn = filler->apply(&rasterizerReturn, generateOutput);
     filler->cleanUp();
-    rasterizerReturn = {};
-    writer->apply(&fillerReturn, generateOutput);
+    //rasterizerReturn = {};
+    //writer->apply(&fillerReturn, generateOutput);
+    writer->apply(&rasterizerReturn, generateOutput);
     writer->cleanUp();
     fillerReturn = {};
 }
