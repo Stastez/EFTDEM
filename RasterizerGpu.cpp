@@ -102,6 +102,9 @@ heightMap RasterizerGPU::apply(pointGrid *pointGrid, bool generateOutput) {
     glUniform1ui(glGetUniformLocation(glHandler->getProgram(), "numberOfPoints"), pointGrid->numberOfPoints);
 
     glDispatchCompute(workgroupSize, workgroupSize, 1);
+
+    delete[] sums;
+
     GLHandler::waitForShaderStorageIntegrity();
 
     //makeHeightmap.glsl

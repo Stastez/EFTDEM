@@ -11,7 +11,7 @@ protected:
      */
     bool stageUsesGPU = false;
 public:
-    virtual ~IPipelineComponent() = 0;
+    virtual ~IPipelineComponent() = default;
     /**
      * Check if the described stage uses OpenGL. If adjacent stages both use OpenGL, the former may choose to forgo
      * returning fully formed return types and only include necessary metadata, as the buffers already set on the GPU may be reused.

@@ -22,21 +22,21 @@ void Pipeline::execute() {
 
     bool generateOutput = adjacentStagesUseGPU(reader, sorter) || generateAllOutputs;
     auto readerReturn = reader->apply(generateOutput);
-    reader->cleanUp();
+    delete reader;
     generateOutput = adjacentStagesUseGPU(sorter, rasterizer) || generateAllOutputs;
     auto sorterReturn = sorter->apply(&readerReturn, generateOutput);
-    sorter->cleanUp();
+    delete sorter;
     readerReturn = {};
     generateOutput = adjacentStagesUseGPU(rasterizer, filler) || generateAllOutputs;
     auto rasterizerReturn = rasterizer->apply(&sorterReturn, generateOutput);
-    rasterizer->cleanUp();
+    delete rasterizer;
     sorterReturn = {};
     generateOutput = adjacentStagesUseGPU(filler, writer) || generateAllOutputs;
     auto fillerReturn = filler->apply(&rasterizerReturn, generateOutput);
-    filler->cleanUp();
+    delete filler;
     rasterizerReturn = {};
     writer->apply(&fillerReturn, generateOutput);
-    writer->cleanUp();
+    delete writer;
     fillerReturn = {};
 }
 
@@ -46,11 +46,6 @@ void Pipeline::attachElements(ICloudReader *readerParameter, ICloudSorter *sorte
     this->rasterizer = rasterizerParameter;
     this->filler = fillerParameter;
     this->writer = writerParameter;
-}
-
-void Pipeline::freeElements() {
-    delete reader;
-
 }
 
 bool Pipeline::isOperable() {
