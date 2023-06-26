@@ -77,7 +77,8 @@ rawPointCloud MobileMappingReader::apply(bool generateOutput) {
     std::vector<point> groundPoints, environmentPoints;
     std::cout << "Reading point cloud..." << std::endl;
 
-    auto numThreads = 16;
+    //auto numThreads = 16;
+    auto numThreads = 1;
     auto lines = readFile();
     auto batchSize = lines.size() / numThreads;
     auto extremesVector = std::vector<std::pair<point, point>>(numThreads);
@@ -85,14 +86,16 @@ rawPointCloud MobileMappingReader::apply(bool generateOutput) {
 
     std::vector<std::vector<point>> groundPointsVector(numThreads), environmentPointsVector(numThreads);
 
-    for (auto i = 0; i < numThreads - 1; i++) {
+    /*for (auto i = 0; i < numThreads - 1; i++) {
         futuresVector[i] = std::async(&parseFileContents, &lines, &groundPointsVector[i], &environmentPointsVector[i], batchSize * i, batchSize * (i+1));
     }
     futuresVector[numThreads - 1] = std::async(&parseFileContents, &lines, &groundPointsVector[numThreads - 1], &environmentPointsVector[numThreads - 1], batchSize * (numThreads - 1), lines.size());
 
     for (auto i = 0; i < numThreads; i++) {
         extremesVector[i] = futuresVector[i].get();
-    }
+    }*/
+
+    extremesVector[0] = parseFileContents(&lines, &groundPointsVector[0], &environmentPointsVector[0], 0, lines.size());
 
     std::vector<point> minVector, maxVector;
     for (auto extremes : extremesVector) {
