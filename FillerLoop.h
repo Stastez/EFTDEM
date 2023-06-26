@@ -10,8 +10,8 @@ private:
 
 public:
     explicit FillerLoop(std::vector<IHeightMapFiller *> distinctFillers);
-    ~FillerLoop() override;
-    heightMap apply(heightMap *map, bool generateOutput);
+    ~FillerLoop() noexcept override;
+    heightMap apply(heightMap *map, bool generateOutput) override;
 };
 
 

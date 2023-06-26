@@ -14,7 +14,7 @@ private:
 
 public:
     ClosingFilter_Old(GLHandler *glHandler, unsigned int kernelRadius, unsigned int batchSize);
-    ~ClosingFilter_Old() noexcept override;
+    ~ClosingFilter_Old() override;
     heightMap apply(heightMap *map, bool generateOutput) override;
 };
 

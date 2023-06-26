@@ -8,14 +8,15 @@ FillerLoop::FillerLoop(std::vector<IHeightMapFiller *> distinctFillers) {
     for (auto filler : fillers) FillerLoop::stageUsesGPU |= filler->usesGPU();
 }
 
-FillerLoop::~FillerLoop() {
-    for (auto filler : fillers) delete filler;
-}
+FillerLoop::~FillerLoop() noexcept = default;
 
 heightMap FillerLoop::apply(heightMap *map, bool generateOutput) {
     heightMap result = *map;
 
-    for (auto filler : fillers) result = filler->apply(&result, generateOutput);
+    for (auto filler : fillers)  {
+        result = filler->apply(&result, generateOutput);
+        delete filler;
+    }
 
     return result;
 }

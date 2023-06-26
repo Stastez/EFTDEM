@@ -10,7 +10,16 @@ ClosingFilter_Old::ClosingFilter_Old(GLHandler *glHandler, unsigned int kernelRa
     ClosingFilter_Old::stageUsesGPU = true;
 }
 
-ClosingFilter_Old::~ClosingFilter_Old() noexcept = default;
+ClosingFilter_Old::~ClosingFilter_Old() {
+    auto bufferMask = glHandler->getCoherentBufferMask();
+
+    glHandler->deleteBuffer(GLHandler::EFTDEM_CLOSING_MASK_BUFFER);
+    glHandler->deleteBuffer(GLHandler::EFTDEM_HORIZONTAL_AMOUNT_BUFFER);
+    glHandler->deleteBuffer(GLHandler::EFTDEM_AMOUNT_BUFFER);
+    glHandler->deleteBuffer(GLHandler::EFTDEM_HORIZONTAL_SUM_BUFFER);
+    glHandler->deleteBuffer(GLHandler::EFTDEM_SUM_BUFFER);
+    glHandler->deleteBuffer(GLHandler::EFTDEM_AVERAGE_BUFFER);
+};
 
 void ClosingFilter_Old::allocBuffer(GLHandler::bufferIndices buffer, long singleDataSize, long dataCount) {
     glHandler->dataToBuffer(buffer, singleDataSize * dataCount, nullptr, gl::GL_STREAM_READ);
@@ -53,7 +62,8 @@ heightMap ClosingFilter_Old::apply(heightMap *map, bool generateOutput) {
                                 map->heights.data(), GL_STATIC_DRAW);
     }
 
-    auto bufferSpecs = std::vector<std::vector<bufferSpecifications>>(shader.size());
+    auto bufferSpecs = std::vector<std::vector<bufferSpecifications>>();
+    bufferSpecs.reserve(shaderPaths.size());
     // discretization
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_CLOSING_MASK_BUFFER, sizeof(double)}});
     // horizontalAmount
