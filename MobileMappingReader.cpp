@@ -46,7 +46,7 @@ std::pair<point, point> MobileMappingReader::parseFileContents(std::vector<std::
         for (auto & word : words) {
             ++lastPosition;
             auto delimiterPosition = lines->at(i).find(',', lastPosition);
-            word = lines->at(i).substr(lastPosition, std::min(delimiterPosition - lastPosition, lines->at(i).size() - 1 - lastPosition));
+            word = lines->at(i).substr(lastPosition, std::min(delimiterPosition - lastPosition, lines->at(i).size() - lastPosition));
             lastPosition = delimiterPosition;
         }
 
