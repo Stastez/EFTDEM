@@ -9,6 +9,8 @@
 #include "GTiffWriter.h"
 #include "InverseDistanceWeightedFilter.h"
 #include "GroundRadarReader.h"
+#include "ClosingFilter_Old.h"
+#include "FillerLoop.h"
 
 #include <iostream>
 #include <utility>
@@ -88,8 +90,18 @@ Pipeline *ConfigProvider::providePipeline() {
         auto kernelRadii = checkValidityAndReturn(config["HeightMapFillerOptions"]["kernelBasedFilterOptions"]["kernelSizes"], true).first.as<std::vector<unsigned int>>();
         auto batchSizeTest = checkValidityAndReturn(config["HeightMapFillerOptions"]["kernelBasedFilterOptions"]["batchSize"], false);
         auto batchSize = (batchSizeTest.second) ? batchSizeTest.first.as<unsigned int>() : 0;
+
+        std::vector<IHeightMapFiller *> filters;
+        filters.reserve(kernelRadii.size());
+        for (auto radius : kernelRadii) filters.emplace_back(new ClosingFilter_Old(pipeline->glHandler, radius, batchSize));
+        filler = new FillerLoop(filters);
+    }
+    /*if (fillingAlgorithm == "closingFilter") {
+        auto kernelRadii = checkValidityAndReturn(config["HeightMapFillerOptions"]["kernelBasedFilterOptions"]["kernelSizes"], true).first.as<std::vector<unsigned int>>();
+        auto batchSizeTest = checkValidityAndReturn(config["HeightMapFillerOptions"]["kernelBasedFilterOptions"]["batchSize"], false);
+        auto batchSize = (batchSizeTest.second) ? batchSizeTest.first.as<unsigned int>() : 0;
         filler = new ClosingFilter(pipeline->glHandler, kernelRadii, batchSize);
-    } else if (fillingAlgorithm == "inverseDistanceWeightedFilter") {
+    }*/ else if (fillingAlgorithm == "inverseDistanceWeightedFilter") {
         auto kernelRadii = checkValidityAndReturn(config["HeightMapFillerOptions"]["kernelBasedFilterOptions"]["kernelSizes"], true).first.as<std::vector<unsigned int>>();
         auto batchSizeTest = checkValidityAndReturn(config["HeightMapFillerOptions"]["kernelBasedFilterOptions"]["batchSize"], false);
         auto batchSize = (batchSizeTest.second) ? batchSizeTest.first.as<unsigned int>() : 0;
