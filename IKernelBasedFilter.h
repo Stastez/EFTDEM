@@ -18,7 +18,7 @@ protected:
 
     heightMap applySingleFilter(heightMap *map, bool generateOutput, unsigned int kernelRadius);
 public:
-    void cleanUp() override;
+    ~IKernelBasedFilter() noexcept override;
 };
 
 

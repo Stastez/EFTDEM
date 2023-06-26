@@ -11,7 +11,7 @@ private:
 
 public:
     explicit SorterGPU(GLHandler *glHandler, unsigned long pixelPerUnitX, unsigned long pixelPerUnitY);
-    void cleanUp() override;
+    ~SorterGPU() override;
     pointGrid apply(rawPointCloud *pointCloud, bool generateOutput) override;
 };
 

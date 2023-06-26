@@ -7,7 +7,7 @@ RasterizerGPU::RasterizerGPU(GLHandler *glHandler) {
     RasterizerGPU::stageUsesGPU = true;
 }
 
-void RasterizerGPU::cleanUp() {
+RasterizerGPU::~RasterizerGPU() {
     auto bufferCoherency = glHandler->getCoherentBufferMask();
 
     if (bufferCoherency[GLHandler::EFTDEM_RAW_POINT_BUFFER]) glHandler->deleteBuffer(GLHandler::EFTDEM_RAW_POINT_BUFFER);
@@ -47,6 +47,8 @@ heightMap RasterizerGPU::apply(pointGrid *pointGrid, bool generateOutput) {
             glHandler->dataToBuffer(GLHandler::EFTDEM_RAW_POINT_BUFFER,
                                     (long) (sizeof(GLdouble) * pointGrid->numberOfPoints * 3),
                                     rawPoints->data(), GL_STATIC_DRAW);
+
+            delete rawPoints;
         }
 
         if (!(bufferMask[GLHandler::EFTDEM_RAW_POINT_INDEX_BUFFER])) {
@@ -64,6 +66,8 @@ heightMap RasterizerGPU::apply(pointGrid *pointGrid, bool generateOutput) {
             glHandler->dataToBuffer(GLHandler::EFTDEM_RAW_POINT_INDEX_BUFFER,
                                     (long) (sizeof(GLuint) * pointGrid->numberOfPoints),
                                     indices->data(), GL_STATIC_DRAW);
+
+            delete indices;
         }
 
         if (!(bufferMask[GLHandler::EFTDEM_SORTED_POINT_COUNT_BUFFER])) {
@@ -78,6 +82,9 @@ heightMap RasterizerGPU::apply(pointGrid *pointGrid, bool generateOutput) {
             glUniform1ui(glGetUniformLocation(glHandler->getProgram(), "numberOfPoints"), pointGrid->numberOfPoints);
 
             glDispatchCompute(workgroupSize, workgroupSize, 1);
+
+            delete[] counts;
+
             GLHandler::waitForShaderStorageIntegrity();
         }
     }

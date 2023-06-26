@@ -11,7 +11,7 @@ private:
 
 public:
     explicit RasterizerGPU(GLHandler *glHandler);
-    void cleanUp() override;
+    ~RasterizerGPU() override;
     heightMap apply(pointGrid *pointGrid, bool generateOutput) override;
 };
 

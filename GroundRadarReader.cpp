@@ -10,9 +10,7 @@ GroundRadarReader::GroundRadarReader(const std::string& fileName) {
     GroundRadarReader::fileName = fileName;
 }
 
-void GroundRadarReader::cleanUp() {
-
-}
+GroundRadarReader::~GroundRadarReader() noexcept = default;
 
 std::vector<std::string> GroundRadarReader::readFile() {
     std::fstream pointFile (fileName, std::ios::in);

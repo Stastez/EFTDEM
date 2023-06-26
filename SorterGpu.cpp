@@ -9,9 +9,7 @@ SorterGPU::SorterGPU(GLHandler *glHandler, unsigned long pixelPerUnitX, unsigned
     SorterGPU::pixelPerUnitY = pixelPerUnitY;
 }
 
-void SorterGPU::cleanUp() {
-
-}
+SorterGPU::~SorterGPU() = default;
 
 pointGrid SorterGPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
     using namespace gl;
@@ -46,6 +44,8 @@ pointGrid SorterGPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
     glHandler->dataToBuffer(GLHandler::EFTDEM_SORTED_POINT_COUNT_BUFFER,
                             (long) (sizeof(GLuint) * resolutionX * resolutionY),
                             counts, GL_STREAM_READ);
+
+    delete[] counts;
 
     glHandler->dataToBuffer(GLHandler::EFTDEM_RAW_POINT_INDEX_BUFFER, (long long) (pointCloud->numberOfPoints * sizeof(GLuint)), nullptr, GL_STREAM_READ);
     glHandler->bindBuffer(GLHandler::EFTDEM_UNBIND);

@@ -1,10 +1,6 @@
 #include "IKernelBasedFilter.h"
 #include <iostream>
 
-void IKernelBasedFilter::cleanUp() {
-
-}
-
 heightMap IKernelBasedFilter::applySingleFilter(heightMap *map, bool generateOutput, unsigned int kernelRadius) {
     using namespace gl;
 
@@ -49,3 +45,5 @@ heightMap IKernelBasedFilter::applySingleFilter(heightMap *map, bool generateOut
 
     return filledMap;
 }
+
+IKernelBasedFilter::~IKernelBasedFilter() noexcept = default;

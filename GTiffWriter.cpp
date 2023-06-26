@@ -9,9 +9,7 @@ GTiffWriter::GTiffWriter(bool writeLowDepth, const std::string& destinationDEM) 
     GTiffWriter::stageUsesGPU = false;
 }
 
-void GTiffWriter::cleanUp() {
-
-}
+GTiffWriter::~GTiffWriter() noexcept = default;
 
 /**
  * Exports the provided height map into GeoTiff format. The resolution of the height map must be within int limits.
@@ -51,6 +49,8 @@ void GTiffWriter::apply(const heightMap *map, bool generateOutput) {
     (void)! rasterBand->RasterIO(GF_Write, 0, 0, resolutionX, resolutionY, denormalizedHeights, resolutionX, resolutionY, GDT_Float64, 0, 0, nullptr);
     GDALClose(dataset);
 
+    delete[] denormalizedHeights;
+
     if (writeLowDepth) {
         std::cout << "Writing second GeoTIFF with reduced depth..." << std::endl;
 
@@ -63,5 +63,7 @@ void GTiffWriter::apply(const heightMap *map, bool generateOutput) {
         rasterBand = dataset->GetRasterBand(1);
         (void)! rasterBand->RasterIO(GF_Write, 0, 0, resolutionX, resolutionY, heightsLowDepth, resolutionX, resolutionY, GDT_Byte, 4, 4 * resolutionX, nullptr);
         GDALClose(dataset);
+
+        delete[] heightsLowDepth;
     }
 }

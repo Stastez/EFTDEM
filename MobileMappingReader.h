@@ -13,8 +13,8 @@ private:
 
 public:
     explicit MobileMappingReader(const std::string& fileName);
+    ~MobileMappingReader() noexcept override;
     rawPointCloud apply(bool generateOutput) override;
-    void cleanUp() override;
 };
 
 

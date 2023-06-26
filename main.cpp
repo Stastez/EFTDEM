@@ -10,6 +10,7 @@ int main(int argc, char** argv) {
     auto configProvider = new ConfigProvider(argv[1]);
     auto pipeline = configProvider->providePipeline();
     pipeline->execute();
-
+    delete pipeline;
+    delete configProvider;
     return 0;
 }

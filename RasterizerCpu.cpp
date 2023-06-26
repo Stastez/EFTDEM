@@ -5,9 +5,7 @@ RasterizerCPU::RasterizerCPU() {
     RasterizerCPU::stageUsesGPU = false;
 }
 
-void RasterizerCPU::cleanUp() {
-
-}
+RasterizerCPU::~RasterizerCPU() noexcept = default;
 
 /**
  * Creates a heightmap from the given point grid by averaging the points of every grid cell.

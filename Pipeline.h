@@ -28,6 +28,7 @@ public:
     bool isOperable();
 
     void attachElements(ICloudReader *, ICloudSorter *, ICloudRasterizer *, IHeightMapFiller *, IHeightMapWriter *);
+    void freeElements();
 
     void execute();
 

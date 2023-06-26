@@ -15,9 +15,7 @@ SorterCPU::SorterCPU(unsigned long pixelPerUnitX, unsigned long pixelPerUnitY) {
     SorterCPU::pixelPerUnitY = pixelPerUnitY;
 }
 
-void SorterCPU::cleanUp() {
-
-}
+SorterCPU::~SorterCPU() noexcept = default;
 
 pointGrid SorterCPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
     std::cout << "Sorting points into grid using CPU..." << std::endl;

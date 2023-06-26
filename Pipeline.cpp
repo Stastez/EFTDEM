@@ -48,6 +48,11 @@ void Pipeline::attachElements(ICloudReader *readerParameter, ICloudSorter *sorte
     this->writer = writerParameter;
 }
 
+void Pipeline::freeElements() {
+    delete reader;
+
+}
+
 bool Pipeline::isOperable() {
     return !(reader == nullptr
             || sorter == nullptr

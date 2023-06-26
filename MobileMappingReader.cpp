@@ -15,9 +15,7 @@ MobileMappingReader::MobileMappingReader(const std::string& fileName) {
     MobileMappingReader::fileName = fileName;
 }
 
-void MobileMappingReader::cleanUp() {
-
-}
+MobileMappingReader::~MobileMappingReader() noexcept = default;
 
 std::vector<std::string> MobileMappingReader::readFile() {
     std::fstream pointFile (fileName, std::ios::in);

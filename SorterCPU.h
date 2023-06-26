@@ -11,7 +11,7 @@ private:
 
 public:
     explicit SorterCPU(unsigned long pixelPerUnitX, unsigned long pixelPerUnitY);
-    void cleanUp() override;
+    ~SorterCPU() noexcept override;
     pointGrid apply(rawPointCloud *pointCloud, bool generateOutput) override;
 };
 
