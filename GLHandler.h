@@ -35,6 +35,8 @@ public:
     std::vector<gl::GLuint> getShaderPrograms(const std::vector<std::string>& shaderFiles, bool useStandardDirectory);
 
     void bindBuffer(bufferIndices buffer);
+    void generateBuffer(bufferIndices buffer);
+    void generateBuffer(int buffer);
     void deleteBuffer(bufferIndices buffer);
     void deleteBuffer(int buffer);
     void dataToBuffer(bufferIndices buffer, gl::GLsizeiptr size, const void *data, gl::GLenum usage);
