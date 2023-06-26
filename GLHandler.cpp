@@ -191,9 +191,9 @@ std::vector<bool> GLHandler::getCoherentBufferMask() {
 bool GLHandler::isInitialized(bool debug) const {return initialized && (this->isDebug == debug);}
 
 void GLHandler::dispatchShader(unsigned int localBatchSize, unsigned long resolutionX, unsigned long resolutionY) const {
-    auto startInvocation = std::chrono::high_resolution_clock::now(), endInvocation = std::chrono::high_resolution_clock::now();
-
     const auto currentInvocationLocation = glGetUniformLocation(getProgram(), "currentInvocation");
+
+    auto startInvocation = std::chrono::high_resolution_clock::now(), endInvocation = std::chrono::high_resolution_clock::now();
 
     if (localBatchSize == 0) {
         unsigned int batchSize = 1;
@@ -217,6 +217,9 @@ void GLHandler::dispatchShader(unsigned int localBatchSize, unsigned long resolu
         localBatchSize = batchSize;
     }
 
+    std::cout << "Shader number: " << getProgram() << " Batch size: " << localBatchSize << std::endl;
+
+    bool multipleBatches = false;
     GLsync previousSync = nullptr;
     for (unsigned long batchX = 0; batchX < resolutionX; batchX += localBatchSize * 8) {
         for (unsigned long batchY = 0; batchY < resolutionY; batchY += localBatchSize * 4) {
@@ -225,40 +228,19 @@ void GLHandler::dispatchShader(unsigned int localBatchSize, unsigned long resolu
             glDispatchCompute(localBatchSize, localBatchSize, 1);
 
             if (previousSync != nullptr) {
+                multipleBatches = true;
+                std::cout << ".";
                 glClientWaitSync(previousSync, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED);
                 glDeleteSync(previousSync);
             }
 
             auto currentSync = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
 
-            if (previousSync != nullptr) {
-                std::cout << "\x1b[2K"; // Delete current line
-                for (int i = 0; i < 5; i++) {
-                    std::cout
-                            << "\x1b[1A" // Move cursor up one
-                            << "\x1b[2K"; // Delete the entire line
-                }
-                std::cout << "\r";
-            }
-
-            endInvocation = std::chrono::high_resolution_clock::now();
-            auto elapsedTime = endInvocation - startInvocation;
-
-            std::cout << "Elapsed time for " << localBatchSize << " invocations: "
-                      << duration_cast<std::chrono::milliseconds>(elapsedTime).count() << "ms" << std::endl;
-            std::cout << "Batch size: " << localBatchSize << std::endl;
-
-            /*if (duration_cast<std::chrono::milliseconds>(endInvocation - startInvocation) > std::chrono::milliseconds {1000}) {
-                localBatchSize /= 2;
-                batchX = 0;
-                batchY = 0;
-            }*/
-
-            startInvocation = std::chrono::high_resolution_clock::now();
-
             std::swap(previousSync, currentSync);
         }
     }
+
+    if (multipleBatches) std::cout << std::endl;
 
     if (previousSync != nullptr) {
         glClientWaitSync(previousSync, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED);
