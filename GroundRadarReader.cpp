@@ -39,7 +39,7 @@ std::pair<point, point> GroundRadarReader::parseFileContents(std::vector<std::st
 
     for (auto i = begin; i < end; i++) {
         std::string words[3];
-        size_t lastPosition = -1;
+        auto lastPosition = (unsigned long long) -1;
         for (auto & word : words) {
             ++lastPosition;
             auto delimiterPosition = lines->at(i).find(',', lastPosition);
