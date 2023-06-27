@@ -15,7 +15,7 @@ bool adjacentStagesUseGPU(IPipelineComponent *first, IPipelineComponent *second)
     return !(first->usesGPU() && second->usesGPU());
 }
 
-void Pipeline::execute() {
+heightMap Pipeline::execute() {
     if (!isOperable()) exit(EXIT_INVALID_FUNCTION_PARAMETERS);
 
     bool generateAllOutputs = true;
@@ -37,7 +37,7 @@ void Pipeline::execute() {
     rasterizerReturn = {};
     writer->apply(&fillerReturn, generateOutput);
     delete writer;
-    fillerReturn = {};
+    return fillerReturn;
 }
 
 void Pipeline::attachElements(ICloudReader *readerParameter, ICloudSorter *sorterParameter, ICloudRasterizer *rasterizerParameter, IHeightMapFiller *fillerParameter, IHeightMapWriter *writerParameter) {

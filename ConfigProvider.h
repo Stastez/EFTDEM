@@ -11,8 +11,10 @@ private:
     static std::pair<YAML::Node, bool> checkValidityAndReturn(const YAML::Node& node, bool required);
 
 public:
+    ConfigProvider();
     explicit ConfigProvider(std::string configPath);
     Pipeline *providePipeline();
+    Pipeline *providePipeline(std::string configPath);
 };
 
 

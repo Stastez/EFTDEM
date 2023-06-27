@@ -28,9 +28,8 @@ public:
     bool isOperable();
 
     void attachElements(ICloudReader *, ICloudSorter *, ICloudRasterizer *, IHeightMapFiller *, IHeightMapWriter *);
-    void freeElements();
 
-    void execute();
+    heightMap execute();
 
     enum exitCodes {
         EXIT_INVALID_COMMAND_LINE_ARGUMENTS = 101,

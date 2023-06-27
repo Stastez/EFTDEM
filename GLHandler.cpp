@@ -145,6 +145,7 @@ void GLHandler::generateBuffer(int buffer) {
     if (!deletedBufferMask[buffer]) return;
     if (buffer == EFTDEM_UNBIND) exit(Pipeline::EXIT_INVALID_FUNCTION_PARAMETERS);
     glGenBuffers(1, &ssbos[buffer - 1]);
+    glFlush();
     deletedBufferMask[buffer] = false;
     coherentBufferMask[buffer] = false;
 }
@@ -157,6 +158,7 @@ void GLHandler::deleteBuffer(int buffer) {
     if (deletedBufferMask[buffer]) return;
     if (buffer == EFTDEM_UNBIND) exit(Pipeline::EXIT_INVALID_FUNCTION_PARAMETERS);
     glDeleteBuffers(1, &ssbos[buffer - 1]);
+    glFlush();
     deletedBufferMask[buffer] = true;
     coherentBufferMask[buffer] = false;
 }

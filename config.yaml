@@ -1,17 +1,18 @@
 CloudReaderOptions:
-  #pointCloudPath: "../resources/20220912_SZE(2)-001_LAS1_2_full.txt"
-  pointCloudPath: "../resources/middle_horizont.csv"
+  pointCloudPath: "../resources/20220912_SZE(2)-001_LAS1_2_full.txt"
+  #pointCloudPath: "../resources/middle_horizont.csv"
 
   # Currently implemented: mobileMapping, groundRadar
-  pointCloudType: groundRadar
+  #pointCloudType: groundRadar
+  pointCloudType: mobileMapping
 
 CloudSorterOptions:
-  pixelPerUnitX: 500000
-  pixelPerUnitY: 500000
-  useGPU: false
+  pixelPerUnitX: 50
+  pixelPerUnitY: 50
+  useGPU: true
 
 CloudRasterizerOptions:
-  useGPU: false
+  useGPU: true
 
 HeightMapFillerOptions:
   useGPU: true
@@ -21,7 +22,9 @@ HeightMapFillerOptions:
 
   kernelBasedFilterOptions:
     kernelSizes:
-      - 1
+      - 5
+      - 10
+      - 50
     batchSize: 1024
 
 CloudWriterOptions:

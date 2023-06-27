@@ -9,11 +9,12 @@
 #include "GTiffWriter.h"
 #include "InverseDistanceWeightedFilter.h"
 #include "GroundRadarReader.h"
-#include "ClosingFilter_Old.h"
 #include "FillerLoop.h"
 
 #include <iostream>
 #include <utility>
+
+ConfigProvider::ConfigProvider() = default;
 
 ConfigProvider::ConfigProvider(std::string configPath) {
     ConfigProvider::configPath = std::move(configPath);
@@ -45,6 +46,8 @@ std::pair<YAML::Node, bool> ConfigProvider::checkValidityAndReturn(const YAML::N
 
     return returnPair;
 }
+
+
 
 Pipeline *ConfigProvider::providePipeline() {
     auto config = readConfig();
@@ -93,7 +96,7 @@ Pipeline *ConfigProvider::providePipeline() {
 
         std::vector<IHeightMapFiller *> filters;
         filters.reserve(kernelRadii.size());
-        for (auto radius : kernelRadii) filters.emplace_back(new ClosingFilter_Old(pipeline->glHandler, radius, batchSize));
+        for (auto radius : kernelRadii) filters.emplace_back(new ClosingFilter(pipeline->glHandler, radius, batchSize));
         filler = new FillerLoop(filters);
     }
     /*if (fillingAlgorithm == "closingFilter") {
