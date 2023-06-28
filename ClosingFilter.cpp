@@ -32,7 +32,7 @@ heightMap ClosingFilter::apply(heightMap *map, bool generateOutput) {
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    std::vector<std::string> shaderPaths;
+    shaderPaths = std::vector<std::string>();
     shaderPaths.emplace_back("discretization.glsl");
     shaderPaths.emplace_back("horizontalAmount.glsl");
     shaderPaths.emplace_back("amount.glsl");
@@ -85,7 +85,7 @@ heightMap ClosingFilter::apply(heightMap *map, bool generateOutput) {
     bufferSpecs.emplace_back();
 
     for (auto i = 0ul; i < bufferSpecs.size(); i++) {
-        for (auto spec : bufferSpecs[i]) allocBuffer(spec.buffer, spec.elementSize, pixelCount);
+        for (auto spec : bufferSpecs[i]) allocBuffer(spec.buffer, long(spec.size), pixelCount);
 
         glHandler->setProgram(shader[i]);
         glUniform2ui(glGetUniformLocation(shader[i], "resolution"), map->resolutionX, map->resolutionY);

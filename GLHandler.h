@@ -25,6 +25,8 @@ public:
         EFTDEM_CLOSING_MASK_BUFFER, // double for each grid cell
         EFTDEM_INTERIM_RESULT_BUFFER, // double for each grid cell
         EFTDEM_TOTAL_WEIGHT_BUFFER, // double for each grid cell
+        EFTDEM_HORIZONTAL_TOTAL_WEIGHT_BUFFER, // double for each grid cell
+        EFTDEM_KERNEL_BUFFER, // double for as manny fields as Kernel Radius
     };
 
     explicit GLHandler(std::string shaderDirectory);
@@ -32,7 +34,8 @@ public:
     GLFWwindow * initializeGL(bool debug);
     void uninitializeGL();
 
-    std::vector<gl::GLuint> getShaderPrograms(const std::vector<std::string>& shaderFiles, bool useStandardDirectory);
+    std::vector<gl::GLuint> getShaderPrograms(const std::vector<std::string>& shaderFile, bool useStandardDirectory);
+    gl::GLuint getShaderProgram(const std::string shaderFiles, bool useStandardDirectory);
 
     void bindBuffer(bufferIndices buffer);
     void generateBuffer(bufferIndices buffer);

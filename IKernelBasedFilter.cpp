@@ -19,7 +19,7 @@ heightMap IKernelBasedFilter::applySingleFilter(heightMap *map, bool generateOut
     }
     for (auto & interimBufferSpecification : interimBufferSpecifications){
         glHandler->dataToBuffer(interimBufferSpecification.buffer,
-                                (long) (interimBufferSpecification.elementSize * map->resolutionX * map->resolutionY),
+                                (long) (interimBufferSpecification.size * map->resolutionX * map->resolutionY),
                                 nullptr, GL_STREAM_READ);
     }
 

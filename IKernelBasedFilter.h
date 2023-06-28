@@ -6,7 +6,7 @@
 
 struct bufferSpecifications {
     GLHandler::bufferIndices buffer;
-    gl::GLsizeiptr elementSize;
+    gl::GLsizeiptr size;
 };
 
 class IKernelBasedFilter : public IHeightMapFiller {

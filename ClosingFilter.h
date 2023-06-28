@@ -11,7 +11,6 @@ private:
     GLHandler *glHandler;
     unsigned int kernelRadius, batchSize;
     void allocBuffer(GLHandler::bufferIndices buffer, long singleDataSize, long dataCount);
-
 public:
     ClosingFilter(GLHandler *glHandler, unsigned int kernelRadius, unsigned int batchSize);
     ~ClosingFilter() override;

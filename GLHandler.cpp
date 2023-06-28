@@ -77,51 +77,56 @@ void GLHandler::uninitializeGL() {
     initialized = false;
 }
 
+
+gl::GLuint GLHandler::getShaderProgram(const std::string shaderFile, bool useStandardDirectory){
+    std::ifstream shaderFileStream;
+    std::stringstream shaderStream;
+
+    if (useStandardDirectory) shaderFileStream.open(shaderDirectory + "/" + shaderFile);
+    else shaderFileStream.open(shaderFile);
+
+    if (!shaderFileStream.is_open()) {
+        std::cout << "Specified shader could not be opened: " << shaderFile << std::endl;
+        exit(Pipeline::EXIT_IO_ERROR);
+    }
+    shaderStream << shaderFileStream.rdbuf();
+    auto shaderString = shaderStream.str();
+    replaceBufferPlaceholders(shaderString);
+    auto shader = shaderString.c_str();
+
+    int success;
+    char infoLog[512];
+    auto shaderNumber = glCreateShader(GL_COMPUTE_SHADER);
+    glShaderSource(shaderNumber, 1, &shader, nullptr);
+    glCompileShader(shaderNumber);
+    glGetShaderiv(shaderNumber, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        glGetShaderInfoLog(shaderNumber, 512, nullptr, infoLog);
+        std::cout << infoLog << std::endl;
+        exit(Pipeline::EXIT_OPENGL_ERROR);
+    }
+
+    auto program = glCreateProgram();
+    glAttachShader(program, shaderNumber);
+
+    glLinkProgram(program);
+
+    glGetProgramiv(program, GL_LINK_STATUS, &success);
+    if (!success) {
+        glGetProgramInfoLog(program, 512, nullptr, infoLog);
+        std::cout << infoLog << std::endl;
+        exit(Pipeline::EXIT_OPENGL_ERROR);
+    }
+
+    glDeleteShader(shaderNumber);
+
+    return program;
+}
 std::vector<GLuint> GLHandler::getShaderPrograms(const std::vector<std::string>& shaderFiles, bool useStandardDirectory) {
     std::vector<GLuint> programs;
 
     for (const auto& shaderFile : shaderFiles) {
-        std::ifstream shaderFileStream;
-        std::stringstream shaderStream;
-
-        if (useStandardDirectory) shaderFileStream.open(shaderDirectory + "/" + shaderFile);
-        else shaderFileStream.open(shaderFile);
-
-        if (!shaderFileStream.is_open()) {
-            std::cout << "Specified shader could not be opened: " << shaderFile << std::endl;
-            exit(Pipeline::EXIT_IO_ERROR);
-        }
-        shaderStream << shaderFileStream.rdbuf();
-        auto shaderString = shaderStream.str();
-        replaceBufferPlaceholders(shaderString);
-        auto shader = shaderString.c_str();
-
-        int success;
-        char infoLog[512];
-        auto shaderNumber = glCreateShader(GL_COMPUTE_SHADER);
-        glShaderSource(shaderNumber, 1, &shader, nullptr);
-        glCompileShader(shaderNumber);
-        glGetShaderiv(shaderNumber, GL_COMPILE_STATUS, &success);
-        if (!success) {
-            glGetShaderInfoLog(shaderNumber, 512, nullptr, infoLog);
-            std::cout << infoLog << std::endl;
-            exit(Pipeline::EXIT_OPENGL_ERROR);
-        }
-
-        auto program = glCreateProgram();
-        glAttachShader(program, shaderNumber);
-
-        glLinkProgram(program);
-
-        glGetProgramiv(program, GL_LINK_STATUS, &success);
-        if (!success) {
-            glGetProgramInfoLog(program, 512, nullptr, infoLog);
-            std::cout << infoLog << std::endl;
-            exit(Pipeline::EXIT_OPENGL_ERROR);
-        }
-
-        glDeleteShader(shaderNumber);
-
+        GLuint program = getShaderProgram(shaderFile, useStandardDirectory);
         programs.emplace_back(program);
     }
 
