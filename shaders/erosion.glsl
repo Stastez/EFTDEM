@@ -19,8 +19,13 @@ uint calculate1DCoordinate(uvec2 pos) {
 void main() {
     uvec2 correctedGlobalInvocation = gl_GlobalInvocationID.xy + currentInvocation;
     if (any(greaterThanEqual(correctedGlobalInvocation, resolution))) return;
-    uint coord1D;
 
-    coord1D = calculate1DCoordinate(correctedGlobalInvocation);
-    closingMask[coord1D] = (amounts[coord1D] >= (2*kernelRadius+1)*(2*kernelRadius+1)) ? 1.0 : 0.0;
+    uint x = correctedGlobalInvocation.x;
+    uint y = correctedGlobalInvocation.y;
+    uint xx = min(kernelRadius,x) + min(kernelRadius, resolution.x-x-1) + 1;
+    uint yx = min(kernelRadius,y) + min(kernelRadius, resolution.y-y-1) + 1;
+    uint extend = xx * yx;
+
+    uint coord1D = calculate1DCoordinate(correctedGlobalInvocation);
+    closingMask[coord1D] = (amounts[coord1D] >= extend) ? 1.0 : 0.0;
 }

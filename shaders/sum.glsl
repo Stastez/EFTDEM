@@ -25,10 +25,12 @@ void main() {
 
     for (uint ky = 0; ky <= 2*kernelRadius; ky++) {
         uint x = correctedGlobalInvocation.x;
-        uint y = min(resolution.y-1u, max(0u, ky - kernelRadius + correctedGlobalInvocation.y));
+        uint y = ky - kernelRadius + correctedGlobalInvocation.y;
 
-        coord1D = calculate1DCoordinate(uvec2(x,y));
-        sum += horizontalSums[coord1D];
+        if (0u <= y && y < resolution.y){
+            coord1D = calculate1DCoordinate(uvec2(x,y));
+            sum += horizontalSums[coord1D];
+        }
     }
 
     coord1D = calculate1DCoordinate(correctedGlobalInvocation);

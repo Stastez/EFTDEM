@@ -28,12 +28,14 @@ void main() {
     double totalWeight = 0;
 
     for (uint kx = 0; kx <= 2*kernelRadius; kx++) {
-        uint x = min(resolution.x-1u, max(0u, kx - kernelRadius + correctedGlobalInvocation.x));
+        uint x = kx - kernelRadius + correctedGlobalInvocation.x;
         uint y = correctedGlobalInvocation.y;
 
-        double currentHeight = double(discreteValues[calculate1DCoordinate(uvec2(x,y))]);
-        uint kernelIndex = (kx>kernelRadius) ? kx-kernelRadius : kernelRadius-kx;
-        totalWeight += kernel[kernelIndex] * currentHeight;
+        if (0u <= x && x < resolution.x){
+            double currentHeight = double(discreteValues[calculate1DCoordinate(uvec2(x,y))]);
+            uint kernelIndex = (kx>kernelRadius) ? kx-kernelRadius : kernelRadius-kx;
+            totalWeight += kernel[kernelIndex] * currentHeight;
+        }
     }
 
     horizontalTotalWiegts[coord1D] = totalWeight;

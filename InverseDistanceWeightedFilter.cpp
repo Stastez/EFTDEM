@@ -49,7 +49,7 @@ heightMap InverseDistanceWeightedFilter::apply(heightMap *map, bool generateOutp
     shaderPaths.emplace_back("amount.glsl");
     shaderPaths.emplace_back("erosion.glsl");
 
-    shaderPaths.emplace_back("closing.glsl");/**/
+    shaderPaths.emplace_back("closing.glsl");
 
     auto shader = glHandler->getShaderPrograms(shaderPaths, true);
 

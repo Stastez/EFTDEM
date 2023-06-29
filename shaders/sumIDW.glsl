@@ -22,20 +22,19 @@ uint calculate1DCoordinate(uvec2 pos) {
 void main() {
     uvec2 correctedGlobalInvocation = gl_GlobalInvocationID.xy + currentInvocation;
     if (any(greaterThanEqual(correctedGlobalInvocation, resolution))) return;
-    uint coord1D;
+    uint coord1D = calculate1DCoordinate(correctedGlobalInvocation);
 
     double sum = 0.0;
 
     for (uint ky = 0; ky <= 2*kernelRadius; ky++) {
         uint x = correctedGlobalInvocation.x;
-        uint y = min(resolution.y-1u, max(0u, ky - kernelRadius + correctedGlobalInvocation.y));
+        uint y = ky - kernelRadius + correctedGlobalInvocation.y;
 
-        coord1D = calculate1DCoordinate(uvec2(x,y));
-
-        uint kernelIndex = (ky>kernelRadius) ? ky-kernelRadius : kernelRadius-ky;
-        sum += kernel[kernelIndex] * horizontalSums[coord1D];
+        if (0u <= y && y < resolution.y){
+            uint kernelIndex = (ky>kernelRadius) ? ky-kernelRadius : kernelRadius-ky;
+            sum += kernel[kernelIndex] * horizontalSums[calculate1DCoordinate(uvec2(x,y))];
+        }
     }
 
-    coord1D = calculate1DCoordinate(correctedGlobalInvocation);
     sums[coord1D] = sum;
 }
