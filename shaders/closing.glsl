@@ -25,5 +25,5 @@ void main() {
     uint coord1D;
 
     coord1D = calculate1DCoordinate(correctedGlobalInvocation);
-    heights[coord1D] = closingMask[coord1D];// * average[coord1D];
+    heights[coord1D] = closingMask[coord1D] * average[coord1D];
 }
