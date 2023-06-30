@@ -12,6 +12,7 @@ public:
     explicit GTiffWriter(bool writeLowDepth, const std::string& destinationDEM);
     ~GTiffWriter() noexcept override;
     void apply(const heightMap *map, bool generateOutput) override;
+    void setDestinationDEM(const std::string& destinationDEM);
 };
 
 

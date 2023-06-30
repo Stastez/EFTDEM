@@ -11,6 +11,10 @@ GTiffWriter::GTiffWriter(bool writeLowDepth, const std::string& destinationDEM) 
 
 GTiffWriter::~GTiffWriter() noexcept = default;
 
+void GTiffWriter::setDestinationDEM(const std::string &destinationDEM) {
+    GTiffWriter::destinationDEM = destinationDEM;
+}
+
 /**
  * Exports the provided height map into GeoTiff format. The resolution of the height map must be within int limits.
  *

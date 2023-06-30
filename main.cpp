@@ -1,4 +1,5 @@
 #include "ConfigProvider.h"
+#include "RadarComparator.h"
 #include <iostream>
 
 int main(int argc, char** argv) {
@@ -13,4 +14,9 @@ int main(int argc, char** argv) {
     delete pipeline;
     delete configProvider;
     return 0;
+
+    /*auto comparator = new RadarComparator(std::vector<std::string>(argv + 1, argv + argc));
+
+    auto comparisons = comparator->compareMaps();
+    comparator->writeComparisons(comparisons);*/
 }
