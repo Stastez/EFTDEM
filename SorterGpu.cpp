@@ -40,6 +40,7 @@ pointGrid SorterGPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
     glUniform1ui(glGetUniformLocation(shaderPrograms[0], "numberOfPoints"), pointCloud->numberOfPoints);
 
     auto counts = new GLuint[resolutionX * resolutionY];
+
     for (unsigned long i = 0; i < resolutionX * resolutionY; i++) counts[i] = 0u;
     glHandler->dataToBuffer(GLHandler::EFTDEM_SORTED_POINT_COUNT_BUFFER,
                             (long) (sizeof(GLuint) * resolutionX * resolutionY),
@@ -74,7 +75,7 @@ pointGrid SorterGPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
                       .numberOfPoints = pointCloud->numberOfPoints};
 
     for (size_t i = 0; i < gridIndices.size(); i++) {
-        grid.points[gridIndices[i]].emplace_back(normalizeValue(pointCloud->groundPoints[i], min, max));
+        grid.points[gridIndices[i]].emplace_back(normalizeValue(pointCloud->groundPoints.at(i), min, max));
     }
 
     return grid;

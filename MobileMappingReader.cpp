@@ -71,31 +71,30 @@ std::pair<point, point> MobileMappingReader::parseFileContents(std::vector<std::
     return {min, max};
 }
 
-rawPointCloud MobileMappingReader::apply(bool generateOutput) {
+rawPointCloud * MobileMappingReader::apply(bool generateOutput) {
     if (!generateOutput) return {};
 
-    std::vector<point> groundPoints, environmentPoints;
+    auto *groundPoints = new std::vector<point>(),
+        *environmentPoints = new std::vector<point>();
     std::cout << "Reading point cloud..." << std::endl;
 
     auto numThreads = 16;
-    //auto numThreads = 1;
     auto lines = readFile();
     auto batchSize = lines.size() / numThreads;
     auto extremesVector = std::vector<std::pair<point, point>>(numThreads);
     auto futuresVector = std::vector<std::future<std::pair<point, point>>>(numThreads);
 
-    std::vector<std::vector<point>> groundPointsVector(numThreads), environmentPointsVector(numThreads);
+    auto groundPointsVector = new std::vector<std::vector<point>>(numThreads),
+        environmentPointsVector = new std::vector<std::vector<point>>(numThreads);
 
     for (auto i = 0; i < numThreads - 1; i++) {
-        futuresVector[i] = std::async(&parseFileContents, &lines, &groundPointsVector[i], &environmentPointsVector[i], batchSize * i, batchSize * (i+1));
+        futuresVector[i] = std::async(&parseFileContents, &lines, &(groundPointsVector->at(i)), &(environmentPointsVector->at(i)), batchSize * i, batchSize * (i+1));
     }
-    futuresVector[numThreads - 1] = std::async(&parseFileContents, &lines, &groundPointsVector[numThreads - 1], &environmentPointsVector[numThreads - 1], batchSize * (numThreads - 1), lines.size());
+    futuresVector[numThreads - 1] = std::async(&parseFileContents, &lines, &(groundPointsVector->at(numThreads - 1)), &(environmentPointsVector->at(numThreads - 1)), batchSize * (numThreads - 1), lines.size());
 
     for (auto i = 0; i < numThreads; i++) {
         extremesVector[i] = futuresVector[i].get();
     }
-
-    //extremesVector[0] = parseFileContents(&lines, &groundPointsVector[0], &environmentPointsVector[0], 0, lines.size());
 
     std::vector<point> minVector, maxVector;
     for (auto extremes : extremesVector) {
@@ -107,13 +106,15 @@ rawPointCloud MobileMappingReader::apply(bool generateOutput) {
     extremes.second = mergePoints(maxVector).second;
 
     for (auto i = 0; i < numThreads; i++) {
-        groundPoints.insert(groundPoints.end(), groundPointsVector[i].begin(), groundPointsVector[i].end());
-        environmentPoints.insert(environmentPoints.end(), environmentPointsVector[i].begin(), environmentPointsVector[i].end());
+        groundPoints->insert(groundPoints->end(), groundPointsVector->at(i).begin(), groundPointsVector->at(i).end());
+        environmentPoints->insert(environmentPoints->end(), environmentPointsVector->at(i).begin(), environmentPointsVector->at(i).end());
     }
 
-    if (groundPoints.empty()) {
+    if (groundPoints->empty()) {
         extremes.first = {0,0,0, 0}; extremes.second = {0,0,0, 0};
     }
 
-    return {.groundPoints = groundPoints, .environmentPoints = environmentPoints, .min = extremes.first, .max = extremes.second, .numberOfPoints = static_cast<unsigned int>(groundPoints.size())};
+    auto test = *groundPoints;
+
+    return new rawPointCloud{.groundPoints = *groundPoints, .environmentPoints = *environmentPoints, .min = extremes.first, .max = extremes.second, .numberOfPoints = static_cast<unsigned int>(groundPoints->size())};
 }

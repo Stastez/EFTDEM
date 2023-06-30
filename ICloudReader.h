@@ -17,7 +17,7 @@ public:
      *      uses OpenGL and can employ the already set buffers on the GPU
      * @return A fully formed rawPointCloud if generateOutput is true, a rawPointCloud only containing all necessary metadata otherwise
      */
-    virtual rawPointCloud apply(bool generateOutput) = 0;
+    virtual rawPointCloud * apply(bool generateOutput) = 0;
 };
 
 

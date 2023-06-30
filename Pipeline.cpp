@@ -1,14 +1,14 @@
 #include "Pipeline.h"
 
-#include <utility>
-
 Pipeline::~Pipeline() {
     glHandler->uninitializeGL();
 }
 
-Pipeline::Pipeline(std::string shaderDirectory) {
-    this->glHandler = new GLHandler(std::move(shaderDirectory));
-    this->glHandler->initializeGL(false);
+Pipeline::Pipeline(const std::string& shaderDirectory) : Pipeline(new GLHandler(shaderDirectory)) {}
+
+Pipeline::Pipeline(GLHandler *glHandler) {
+    Pipeline::glHandler = glHandler;
+    Pipeline::glHandler->initializeGL(false);
 }
 
 bool adjacentStagesUseGPU(IPipelineComponent *first, IPipelineComponent *second) {
@@ -18,13 +18,13 @@ bool adjacentStagesUseGPU(IPipelineComponent *first, IPipelineComponent *second)
 heightMap Pipeline::execute() {
     if (!isOperable()) exit(EXIT_INVALID_FUNCTION_PARAMETERS);
 
-    bool generateAllOutputs = true;
+    bool generateAllOutputs = false;
 
     bool generateOutput = adjacentStagesUseGPU(reader, sorter) || generateAllOutputs;
     auto readerReturn = reader->apply(generateOutput);
     delete reader;
     generateOutput = adjacentStagesUseGPU(sorter, rasterizer) || generateAllOutputs;
-    auto sorterReturn = sorter->apply(&readerReturn, generateOutput);
+    auto sorterReturn = sorter->apply(readerReturn, generateOutput);
     delete sorter;
     readerReturn = {};
     generateOutput = adjacentStagesUseGPU(rasterizer, filler) || generateAllOutputs;
@@ -34,6 +34,7 @@ heightMap Pipeline::execute() {
     generateOutput = adjacentStagesUseGPU(filler, writer) || generateAllOutputs;
     auto fillerReturn = filler->apply(&rasterizerReturn, generateOutput);
     delete filler;
+    //writer->apply(&rasterizerReturn, true);
     rasterizerReturn = {};
     writer->apply(&fillerReturn, generateOutput);
     delete writer;

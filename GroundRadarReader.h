@@ -11,7 +11,7 @@ private:
 public:
     explicit GroundRadarReader(const std::string& fileName);
     ~GroundRadarReader() noexcept override;
-    rawPointCloud apply(bool generateOutput) override;
+    rawPointCloud * apply(bool generateOutput) override;
 };
 
 

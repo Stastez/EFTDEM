@@ -47,12 +47,17 @@ std::pair<YAML::Node, bool> ConfigProvider::checkValidityAndReturn(const YAML::N
     return returnPair;
 }
 
-
+Pipeline *ConfigProvider::providePipeline(std::string cfgPath) {
+    ConfigProvider::configPath = std::move(cfgPath);
+    return providePipeline();
+}
 
 Pipeline *ConfigProvider::providePipeline() {
-    auto config = readConfig();
+    config = readConfig();
 
-    auto pipeline = new Pipeline(checkValidityAndReturn(config["OpenGLOptions"]["shaderDirectory"], true).first.as<std::string>());
+    glHandler = new GLHandler(checkValidityAndReturn(config["OpenGLOptions"]["shaderDirectory"], true).first.as<std::string>());
+
+    auto pipeline = new Pipeline(glHandler);
 
     ICloudReader *reader;
     if (checkValidityAndReturn(config["CloudReaderOptions"]["pointCloudType"], true).first.as<std::string>() == "mobileMapping") {
@@ -82,10 +87,10 @@ Pipeline *ConfigProvider::providePipeline() {
     }
 
     auto sorter = (checkValidityAndReturn(config["CloudSorterOptions"]["useGPU"], true).first.as<bool>()) ?
-            (ICloudSorter *) new SorterGPU(pipeline->glHandler, pixelPerUnitX, pixelPerUnitY) : (ICloudSorter *) new SorterCPU(pixelPerUnitX, pixelPerUnitY);
+            (ICloudSorter *) new SorterGPU(glHandler, pixelPerUnitX, pixelPerUnitY) : (ICloudSorter *) new SorterCPU(pixelPerUnitX, pixelPerUnitY);
     
     auto rasterizer = (checkValidityAndReturn(config["CloudRasterizerOptions"]["useGPU"], true).first.as<bool>()) ?
-            (ICloudRasterizer *) new RasterizerGPU(pipeline->glHandler) : (ICloudRasterizer *) new RasterizerCPU();
+            (ICloudRasterizer *) new RasterizerGPU(glHandler) : (ICloudRasterizer *) new RasterizerCPU();
     
     IHeightMapFiller *filler;
     auto fillingAlgorithm = checkValidityAndReturn(config["HeightMapFillerOptions"]["filler"], true).first.as<std::string>();
@@ -96,19 +101,13 @@ Pipeline *ConfigProvider::providePipeline() {
 
         std::vector<IHeightMapFiller *> filters;
         filters.reserve(kernelRadii.size());
-        for (auto radius : kernelRadii) filters.emplace_back(new ClosingFilter(pipeline->glHandler, radius, batchSize));
+        for (auto radius : kernelRadii) filters.emplace_back(new ClosingFilter(glHandler, radius, batchSize));
         filler = new FillerLoop(filters);
-    }
-    /*if (fillingAlgorithm == "closingFilter") {
+    } else if (fillingAlgorithm == "inverseDistanceWeightedFilter") {
         auto kernelRadii = checkValidityAndReturn(config["HeightMapFillerOptions"]["kernelBasedFilterOptions"]["kernelSizes"], true).first.as<std::vector<unsigned int>>();
         auto batchSizeTest = checkValidityAndReturn(config["HeightMapFillerOptions"]["kernelBasedFilterOptions"]["batchSize"], false);
         auto batchSize = (batchSizeTest.second) ? batchSizeTest.first.as<unsigned int>() : 0;
-        filler = new ClosingFilter(pipeline->glHandler, kernelRadii, batchSize);
-    }*/ else if (fillingAlgorithm == "inverseDistanceWeightedFilter") {
-        auto kernelRadii = checkValidityAndReturn(config["HeightMapFillerOptions"]["kernelBasedFilterOptions"]["kernelSizes"], true).first.as<std::vector<unsigned int>>();
-        auto batchSizeTest = checkValidityAndReturn(config["HeightMapFillerOptions"]["kernelBasedFilterOptions"]["batchSize"], false);
-        auto batchSize = (batchSizeTest.second) ? batchSizeTest.first.as<unsigned int>() : 0;
-        filler = new InverseDistanceWeightedFilter(pipeline->glHandler, kernelRadii[0], batchSize);
+        filler = new InverseDistanceWeightedFilter(glHandler, kernelRadii[0], batchSize);
     } else {
         std::cout << "Unrecognized filling algorithm!" << std::endl;
         exit(Pipeline::EXIT_INVALID_CONFIGURATION);
@@ -121,4 +120,12 @@ Pipeline *ConfigProvider::providePipeline() {
     pipeline->attachElements(reader, sorter, rasterizer, filler, writer);
 
     return pipeline;
+}
+
+GLHandler *ConfigProvider::getGLHandler() {
+    return glHandler;
+}
+
+std::string ConfigProvider::getComparisonPath() {
+    return checkValidityAndReturn(config["ComparisonOptions"]["destinationPath"], true).first.as<std::string>();
 }

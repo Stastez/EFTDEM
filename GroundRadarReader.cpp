@@ -64,24 +64,24 @@ std::pair<point, point> GroundRadarReader::parseFileContents(std::vector<std::st
     return {min, max};
 }
 
-rawPointCloud GroundRadarReader::apply(bool generateOutput) {
+rawPointCloud * GroundRadarReader::apply(bool generateOutput) {
     if (!generateOutput) return {};
 
-    std::vector<point> groundPoints, environmentPoints;
+    auto *groundPoints = new std::vector<point>();
     std::cout << "Reading point cloud..." << std::endl;
 
-    auto numThreads = 1;
+    auto numThreads = 16;
     auto lines = readFile();
     auto batchSize = lines.size() / numThreads;
     auto extremesVector = std::vector<std::pair<point, point>>(numThreads);
     auto futuresVector = std::vector<std::future<std::pair<point, point>>>(numThreads);
 
-    std::vector<std::vector<point>> groundPointsVector(numThreads);
+    auto groundPointsVector = new std::vector<std::vector<point>>(numThreads);
 
     for (auto i = 0; i < numThreads - 1; i++) {
-        futuresVector[i] = std::async(&parseFileContents, &lines, &groundPointsVector[i], batchSize * i, batchSize * (i+1));
+        futuresVector[i] = std::async(&parseFileContents, &lines, &(groundPointsVector->at(i)), batchSize * i, batchSize * (i+1));
     }
-    futuresVector[numThreads - 1] = std::async(&parseFileContents, &lines, &groundPointsVector[numThreads - 1], batchSize * (numThreads - 1), lines.size());
+    futuresVector[numThreads - 1] = std::async(&parseFileContents, &lines, &(groundPointsVector->at(numThreads - 1)), batchSize * (numThreads - 1), lines.size());
 
     for (auto i = 0; i < numThreads; i++) {
         extremesVector[i] = futuresVector[i].get();
@@ -97,12 +97,12 @@ rawPointCloud GroundRadarReader::apply(bool generateOutput) {
     extremes.second = mergePoints(maxVector).second;
 
     for (auto i = 0; i < numThreads; i++) {
-        groundPoints.insert(groundPoints.end(), groundPointsVector[i].begin(), groundPointsVector[i].end());
+        groundPoints->insert(groundPoints->end(), groundPointsVector->at(i).begin(), groundPointsVector->at(i).end());
     }
 
-    if (groundPoints.empty()) {
+    if (groundPoints->empty()) {
         extremes.first = {0,0,0, 0}; extremes.second = {0,0,0, 0};
     }
 
-    return {.groundPoints = groundPoints, .environmentPoints = std::vector<point>(0), .min = extremes.first, .max = extremes.second, .numberOfPoints = static_cast<unsigned int>(groundPoints.size())};
+    return new rawPointCloud{.groundPoints = *groundPoints, .environmentPoints = std::vector<point>(0), .min = extremes.first, .max = extremes.second, .numberOfPoints = static_cast<unsigned int>(groundPoints->size())};
 }

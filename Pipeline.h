@@ -24,7 +24,8 @@ private:
 public:
     ~Pipeline();
 
-    explicit Pipeline(std::string shaderDirectory);
+    explicit Pipeline(GLHandler *glHandler);
+    explicit Pipeline(const std::string& shaderDirectory);
     bool isOperable();
 
     void attachElements(ICloudReader *, ICloudSorter *, ICloudRasterizer *, IHeightMapFiller *, IHeightMapWriter *);
