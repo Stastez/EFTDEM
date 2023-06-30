@@ -16,7 +16,7 @@ RasterizerGPU::~RasterizerGPU() {
     if (bufferCoherency[GLHandler::EFTDEM_SORTED_POINT_COUNT_BUFFER]) glHandler->deleteBuffer(GLHandler::EFTDEM_SORTED_POINT_COUNT_BUFFER);
 }
 
-heightMap RasterizerGPU::apply(pointGrid *pointGrid, bool generateOutput) {
+heightMap * RasterizerGPU::apply(pointGrid *pointGrid, bool generateOutput) {
     using namespace gl;
 
     std::cout << "Rasterizing points to height map using OpenGL..." << std::endl;
@@ -123,11 +123,11 @@ heightMap RasterizerGPU::apply(pointGrid *pointGrid, bool generateOutput) {
         return emptyHeightMapfromPointGrid(pointGrid);
     }
 
-    heightMap map = emptyHeightMapfromPointGrid(pointGrid);
+    auto map = emptyHeightMapfromPointGrid(pointGrid);
 
     glHandler->dataFromBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER, 0,
                               (long) (sizeof(GLdouble) * pointGrid->resolutionX * pointGrid->resolutionY),
-                              map.heights.data());
+                              map->heights.data());
 
     auto end = std::chrono::high_resolution_clock::now();
     std::cout << "Elapsed time for averaging: " << duration_cast<std::chrono::milliseconds>(end - start).count() << "ms" << std::endl;

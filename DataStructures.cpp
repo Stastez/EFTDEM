@@ -100,8 +100,8 @@ point denormalizeValue(point value, point min, point max) {
             .intensity = value.intensity};
 }
 
-heightMap emptyHeightMapfromPointGrid(pointGrid *grid) {
-    return {.heights = std::vector<double>(grid->resolutionX * grid->resolutionY),
+heightMap * emptyHeightMapfromPointGrid(pointGrid *grid) {
+    return new heightMap{.heights = std::vector<double>(grid->resolutionX * grid->resolutionY),
             .resolutionX = grid->resolutionX,
             .resolutionY = grid->resolutionY,
             .dataSize = static_cast<long long>(sizeof(double) * grid->resolutionX * grid->resolutionY),
@@ -109,8 +109,8 @@ heightMap emptyHeightMapfromPointGrid(pointGrid *grid) {
             .max = grid->max};
 }
 
-heightMap emptyHeightMapfromHeightMap(heightMap *map){
-    return {.heights = std::vector<double>(map->resolutionX * map->resolutionY),
+heightMap * emptyHeightMapfromHeightMap(heightMap *map){
+    return new heightMap{.heights = std::vector<double>(map->resolutionX * map->resolutionY),
             .resolutionX = map->resolutionX,
             .resolutionY = map->resolutionY,
             .dataSize = map->dataSize,

@@ -9,7 +9,7 @@ class RasterizerCPU : public ICloudRasterizer {
 public:
     RasterizerCPU();
     ~RasterizerCPU() noexcept override;
-    heightMap apply(pointGrid *pointGrid, bool generateOutput) override;
+    heightMap * apply(pointGrid *pointGrid, bool generateOutput) override;
 };
 
 

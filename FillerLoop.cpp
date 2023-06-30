@@ -10,11 +10,11 @@ FillerLoop::FillerLoop(std::vector<IHeightMapFiller *> distinctFillers) {
 
 FillerLoop::~FillerLoop() noexcept = default;
 
-heightMap FillerLoop::apply(heightMap *map, bool generateOutput) {
-    heightMap result = *map;
+heightMap * FillerLoop::apply(heightMap *map, bool generateOutput) {
+    auto result = map;
 
     for (auto filler : fillers)  {
-        result = filler->apply(&result, generateOutput);
+        result = filler->apply(result, generateOutput);
         delete filler;
     }
 

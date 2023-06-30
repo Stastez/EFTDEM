@@ -15,7 +15,7 @@ bool adjacentStagesUseGPU(IPipelineComponent *first, IPipelineComponent *second)
     return !(first->usesGPU() && second->usesGPU());
 }
 
-heightMap Pipeline::execute() {
+heightMap * Pipeline::execute() {
     if (!isOperable()) exit(EXIT_INVALID_FUNCTION_PARAMETERS);
 
     bool generateAllOutputs = false;
@@ -32,11 +32,11 @@ heightMap Pipeline::execute() {
     delete rasterizer;
     delete sorterReturn;
     generateOutput = adjacentStagesUseGPU(filler, writer) || generateAllOutputs;
-    auto fillerReturn = filler->apply(&rasterizerReturn, generateOutput);
+    auto fillerReturn = filler->apply(rasterizerReturn, generateOutput);
     delete filler;
     //writer->apply(&rasterizerReturn, true);
-    rasterizerReturn = {};
-    writer->apply(&fillerReturn, generateOutput);
+    delete rasterizerReturn;
+    writer->apply(fillerReturn, generateOutput);
     delete writer;
     return fillerReturn;
 }

@@ -25,7 +25,7 @@ void ClosingFilter::allocBuffer(GLHandler::bufferIndices buffer, long singleData
     glHandler->dataToBuffer(buffer, singleDataSize * dataCount, nullptr, gl::GL_STREAM_READ);
 }
 
-heightMap ClosingFilter::apply(heightMap *map, bool generateOutput) {
+heightMap * ClosingFilter::apply(heightMap *map, bool generateOutput) {
     using namespace gl;
 
     std::cout << "Applying closing filter using OpenGL..." << std::endl << std::endl;
@@ -99,11 +99,11 @@ heightMap ClosingFilter::apply(heightMap *map, bool generateOutput) {
 
     if (!generateOutput) return emptyHeightMapfromHeightMap(map);
 
-    heightMap filledMap = emptyHeightMapfromHeightMap(map);
+    auto filledMap = emptyHeightMapfromHeightMap(map);
     glHandler->dataFromBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,
                               0,
-                              (long) (sizeof(GLdouble) * filledMap.resolutionX * filledMap.resolutionY),
-                              filledMap.heights.data());
+                              (long) (sizeof(GLdouble) * filledMap->resolutionX * filledMap->resolutionY),
+                              filledMap->heights.data());
 
     return filledMap;
 }

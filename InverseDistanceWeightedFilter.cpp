@@ -26,7 +26,7 @@ void InverseDistanceWeightedFilter::allocBuffer(GLHandler::bufferIndices buffer,
 }
 
 
-heightMap InverseDistanceWeightedFilter::apply(heightMap *map, bool generateOutput) {
+heightMap * InverseDistanceWeightedFilter::apply(heightMap *map, bool generateOutput) {
     using namespace gl;
 
     std::cout << "Applying inverse distance weighted filter using OpenGL..." << std::endl << std::endl;
@@ -109,11 +109,11 @@ heightMap InverseDistanceWeightedFilter::apply(heightMap *map, bool generateOutp
 
     if (!generateOutput) return emptyHeightMapfromHeightMap(map);
 
-    heightMap filledMap = emptyHeightMapfromHeightMap(map);
+    auto filledMap = emptyHeightMapfromHeightMap(map);
     glHandler->dataFromBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,
                               0,
-                              (long) (sizeof(GLdouble) * filledMap.resolutionX * filledMap.resolutionY),
-                              filledMap.heights.data());
+                              (long) (sizeof(GLdouble) * filledMap->resolutionX * filledMap->resolutionY),
+                              filledMap->heights.data());
 
     return filledMap;
 }

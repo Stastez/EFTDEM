@@ -30,7 +30,7 @@ public:
 
     void attachElements(ICloudReader *, ICloudSorter *, ICloudRasterizer *, IHeightMapFiller *, IHeightMapWriter *);
 
-    heightMap execute();
+    heightMap * execute();
 
     enum exitCodes {
         EXIT_INVALID_COMMAND_LINE_ARGUMENTS = 101,

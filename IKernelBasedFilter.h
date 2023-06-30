@@ -16,7 +16,6 @@ protected:
     std::vector<std::string> shaderPaths;
     std::vector<bufferSpecifications> interimBufferSpecifications;
 
-    heightMap applySingleFilter(heightMap *map, bool generateOutput, unsigned int kernelRadius);
 public:
     ~IKernelBasedFilter() noexcept override;
 };

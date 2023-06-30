@@ -11,7 +11,7 @@ public:
      *      uses OpenGL and can employ the already set buffers on the GPU
      * @return A fully formed heightMap if generateOutput is true, a heightMap only containing all necessary metadata otherwise
      */
-    virtual heightMap apply(heightMap *map, bool generateOutput) = 0;
+    virtual heightMap * apply(heightMap *map, bool generateOutput) = 0;
 };
 
 

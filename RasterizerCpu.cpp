@@ -14,21 +14,21 @@ RasterizerCPU::~RasterizerCPU() noexcept = default;
  * @param glHandler If GPU-acceleration is used, the GLHandler for creating contexts and reading shaders
  * @return A new heightMap struct
  */
-heightMap RasterizerCPU::apply(pointGrid *pointGrid, bool generateOutput) {
+heightMap * RasterizerCPU::apply(pointGrid *pointGrid, bool generateOutput) {
     std::cout << "Rasterizing points to height map using CPU..." << std::endl;
 
     if (!generateOutput) return {};
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    heightMap map = emptyHeightMapfromPointGrid(pointGrid);
+    auto map = emptyHeightMapfromPointGrid(pointGrid);
     long double sum;
 
-    for (unsigned long long i = 0; i < map.resolutionX * map.resolutionY; i++){
+    for (unsigned long long i = 0; i < map->resolutionX * map->resolutionY; i++){
         sum = 0;
 
         for (auto & it : pointGrid->points[i]) sum += it.z;
-        map.heights[i] = static_cast<double>(sum / std::max(static_cast<long double>(pointGrid->points[i].size()), (long double) 1));
+        map->heights[i] = static_cast<double>(sum / std::max(static_cast<long double>(pointGrid->points[i].size()), (long double) 1));
     }
 
     auto end = std::chrono::high_resolution_clock::now();

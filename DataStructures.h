@@ -35,8 +35,8 @@ struct heightMap {
     point min, max;
 };
 
-heightMap emptyHeightMapfromHeightMap(heightMap *originalMap);
-heightMap emptyHeightMapfromPointGrid(pointGrid *grid);
+heightMap * emptyHeightMapfromHeightMap(heightMap *map);
+heightMap * emptyHeightMapfromPointGrid(pointGrid *grid);
 
 double denormalizeValue(double value, double min, double max);
 double normalizeValue(double value, double min, double max);
