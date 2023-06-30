@@ -19,7 +19,7 @@ public:
      *      uses OpenGL and can employ the already set buffers on the GPU
      * @return A fully formed pointGrid if generateOutput is true, a pointGrid only containing all necessary metadata otherwise
      */
-    virtual pointGrid apply(rawPointCloud *pointCloud, bool generateOutput) = 0;
+    virtual pointGrid * apply(rawPointCloud *pointCloud, bool generateOutput) = 0;
 };
 
 

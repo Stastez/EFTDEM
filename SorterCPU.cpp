@@ -17,7 +17,7 @@ SorterCPU::SorterCPU(unsigned long pixelPerUnitX, unsigned long pixelPerUnitY) {
 
 SorterCPU::~SorterCPU() noexcept = default;
 
-pointGrid SorterCPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
+pointGrid * SorterCPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
     std::cout << "Sorting points into grid using CPU..." << std::endl;
 
     if (!generateOutput) return {};
@@ -25,7 +25,7 @@ pointGrid SorterCPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
     unsigned long resolutionX = std::max((unsigned long) std::ceil((std::abs(pointCloud->max.x - pointCloud->min.x)) * (double) pixelPerUnitX) + 1, 1ul);
     unsigned long resolutionY = std::max((unsigned long) std::ceil((std::abs(pointCloud->max.y - pointCloud->min.y)) * (double) pixelPerUnitY) + 1, 1ul);
 
-    pointGrid grid = {.points = std::vector<std::vector<point>>(resolutionX * resolutionY),
+    auto grid = new pointGrid{.points = std::vector<std::vector<point>>(resolutionX * resolutionY),
                       .resolutionX = resolutionX,
                       .resolutionY = resolutionY,
                       .min = pointCloud->min,
@@ -33,11 +33,11 @@ pointGrid SorterCPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
                       .numberOfPoints = pointCloud->numberOfPoints};
 
     for (auto it = pointCloud->groundPoints.begin(); it != pointCloud->groundPoints.end(); it++){
-        std::pair<unsigned long, unsigned long> coords = calculateGridCoordinates(&grid, pointCloud, it->x, it->y);
-        add(&grid, coords.first, coords.second, normalizeValue(*it, pointCloud->min, pointCloud->max));
+        std::pair<unsigned long, unsigned long> coords = calculateGridCoordinates(grid, pointCloud, it->x, it->y);
+        add(grid, coords.first, coords.second, normalizeValue(*it, pointCloud->min, pointCloud->max));
     }
 
-    grid.numberOfPoints = (unsigned int) pointCloud->groundPoints.size();
+    grid->numberOfPoints = (unsigned int) pointCloud->groundPoints.size();
 
     return grid;
 }

@@ -26,11 +26,11 @@ heightMap Pipeline::execute() {
     generateOutput = adjacentStagesUseGPU(sorter, rasterizer) || generateAllOutputs;
     auto sorterReturn = sorter->apply(readerReturn, generateOutput);
     delete sorter;
-    readerReturn = {};
+    delete readerReturn;
     generateOutput = adjacentStagesUseGPU(rasterizer, filler) || generateAllOutputs;
-    auto rasterizerReturn = rasterizer->apply(&sorterReturn, generateOutput);
+    auto rasterizerReturn = rasterizer->apply(sorterReturn, generateOutput);
     delete rasterizer;
-    sorterReturn = {};
+    delete sorterReturn;
     generateOutput = adjacentStagesUseGPU(filler, writer) || generateAllOutputs;
     auto fillerReturn = filler->apply(&rasterizerReturn, generateOutput);
     delete filler;

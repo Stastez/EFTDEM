@@ -102,15 +102,6 @@ heightMap InverseDistanceWeightedFilter::apply(heightMap *map, bool generateOutp
         glUniform1ui(glGetUniformLocation(shader[i], "kernelRadius"), kernelRadius);
         glHandler->dispatchShader(batchSize, map->resolutionX, map->resolutionY);
         GLHandler::waitForShaderStorageIntegrity();
-
-        if (i < 0) {
-            std::vector<double> buffer(map->resolutionX * map->resolutionY);
-            glHandler->dataFromBuffer(GLHandler::EFTDEM_HORIZONTAL_TOTAL_WEIGHT_BUFFER,
-                                      0,
-                                      (long) (sizeof(GLdouble) * map->resolutionX * map->resolutionY),
-                                      buffer.data());
-        }
-
     }
 
     auto end = std::chrono::high_resolution_clock::now();

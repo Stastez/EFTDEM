@@ -11,7 +11,7 @@ SorterGPU::SorterGPU(GLHandler *glHandler, unsigned long pixelPerUnitX, unsigned
 
 SorterGPU::~SorterGPU() = default;
 
-pointGrid SorterGPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
+pointGrid * SorterGPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
     using namespace gl;
 
     std::cout << "Sorting points into grid using OpenGL..." << std::endl;
@@ -56,7 +56,7 @@ pointGrid SorterGPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
 
     if (!generateOutput) {
         GLHandler::waitForShaderStorageIntegrity();
-        return {.points = {},
+        return new pointGrid{.points = {},
                 .resolutionX = resolutionX,
                 .resolutionY = resolutionY,
                 .min = min,
@@ -67,7 +67,7 @@ pointGrid SorterGPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
     std::vector<unsigned int> gridIndices(pointCloud->numberOfPoints);
     glHandler->dataFromBuffer(GLHandler::EFTDEM_RAW_POINT_INDEX_BUFFER, 0, (long long) (pointCloud->numberOfPoints * sizeof(GLuint)), gridIndices.data());
 
-    pointGrid grid = {.points = std::vector<std::vector<point>>(resolutionX * resolutionY),
+    auto grid = new pointGrid{.points = std::vector<std::vector<point>>(resolutionX * resolutionY),
                       .resolutionX = resolutionX,
                       .resolutionY = resolutionY,
                       .min = min,
@@ -75,7 +75,7 @@ pointGrid SorterGPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
                       .numberOfPoints = pointCloud->numberOfPoints};
 
     for (size_t i = 0; i < gridIndices.size(); i++) {
-        grid.points[gridIndices[i]].emplace_back(normalizeValue(pointCloud->groundPoints.at(i), min, max));
+        grid->points[gridIndices[i]].emplace_back(normalizeValue(pointCloud->groundPoints.at(i), min, max));
     }
 
     return grid;
