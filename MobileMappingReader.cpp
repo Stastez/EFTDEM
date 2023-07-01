@@ -88,12 +88,12 @@ rawPointCloud * MobileMappingReader::apply(bool generateOutput) {
         environmentPointsVector = new std::vector<std::vector<point>>(numThreads);
 
     for (auto i = 0; i < numThreads - 1; i++) {
-        futuresVector[i] = std::async(&parseFileContents, &lines, &(groundPointsVector->at(i)), &(environmentPointsVector->at(i)), batchSize * i, batchSize * (i+1));
+        futuresVector.at(i) = std::async(&parseFileContents, &lines, &(groundPointsVector->at(i)), &(environmentPointsVector->at(i)), batchSize * i, batchSize * (i+1));
     }
-    futuresVector[numThreads - 1] = std::async(&parseFileContents, &lines, &(groundPointsVector->at(numThreads - 1)), &(environmentPointsVector->at(numThreads - 1)), batchSize * (numThreads - 1), lines.size());
+    futuresVector.at(numThreads - 1) = std::async(&parseFileContents, &lines, &(groundPointsVector->at(numThreads - 1)), &(environmentPointsVector->at(numThreads - 1)), batchSize * (numThreads - 1), lines.size());
 
     for (auto i = 0; i < numThreads; i++) {
-        extremesVector[i] = futuresVector[i].get();
+        extremesVector.at(i) = futuresVector.at(i).get();
     }
 
     std::vector<point> minVector, maxVector;
@@ -110,11 +110,12 @@ rawPointCloud * MobileMappingReader::apply(bool generateOutput) {
         environmentPoints->insert(environmentPoints->end(), environmentPointsVector->at(i).begin(), environmentPointsVector->at(i).end());
     }
 
+    delete groundPointsVector;
+    delete environmentPointsVector;
+
     if (groundPoints->empty()) {
         extremes.first = {0,0,0, 0}; extremes.second = {0,0,0, 0};
     }
-
-    auto test = *groundPoints;
 
     return new rawPointCloud{.groundPoints = *groundPoints, .environmentPoints = *environmentPoints, .min = extremes.first, .max = extremes.second, .numberOfPoints = static_cast<unsigned int>(groundPoints->size())};
 }

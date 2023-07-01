@@ -67,7 +67,7 @@ std::pair<point, point> GroundRadarReader::parseFileContents(std::vector<std::st
 rawPointCloud * GroundRadarReader::apply(bool generateOutput) {
     if (!generateOutput) return {};
 
-    auto *groundPoints = new std::vector<point>();
+    auto groundPoints = new std::vector<point>();
     std::cout << "Reading point cloud..." << std::endl;
 
     auto numThreads = 16;
@@ -79,12 +79,12 @@ rawPointCloud * GroundRadarReader::apply(bool generateOutput) {
     auto groundPointsVector = new std::vector<std::vector<point>>(numThreads);
 
     for (auto i = 0; i < numThreads - 1; i++) {
-        futuresVector[i] = std::async(&parseFileContents, &lines, &(groundPointsVector->at(i)), batchSize * i, batchSize * (i+1));
+        futuresVector.at(i) = std::async(&parseFileContents, &lines, &(groundPointsVector->at(i)), batchSize * i, batchSize * (i+1));
     }
-    futuresVector[numThreads - 1] = std::async(&parseFileContents, &lines, &(groundPointsVector->at(numThreads - 1)), batchSize * (numThreads - 1), lines.size());
+    futuresVector.at(numThreads - 1) = std::async(&parseFileContents, &lines, &(groundPointsVector->at(numThreads - 1)), batchSize * (numThreads - 1), lines.size());
 
     for (auto i = 0; i < numThreads; i++) {
-        extremesVector[i] = futuresVector[i].get();
+        extremesVector.at(i) = futuresVector.at(i).get();
     }
 
     std::vector<point> minVector, maxVector;
@@ -99,6 +99,8 @@ rawPointCloud * GroundRadarReader::apply(bool generateOutput) {
     for (auto i = 0; i < numThreads; i++) {
         groundPoints->insert(groundPoints->end(), groundPointsVector->at(i).begin(), groundPointsVector->at(i).end());
     }
+
+    delete groundPointsVector;
 
     if (groundPoints->empty()) {
         extremes.first = {0,0,0, 0}; extremes.second = {0,0,0, 0};

@@ -18,7 +18,7 @@ pointGrid * SorterGPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
 
     std::vector<std::string> shaderPaths = {"chunkSortingAndCounting.glsl"};
     auto shaderPrograms = glHandler->getShaderPrograms(shaderPaths, true);
-    glHandler->setProgram(shaderPrograms[0]);
+    glHandler->setProgram(shaderPrograms.at(0));
 
     auto points = new double[pointCloud->numberOfPoints * 3];
 
@@ -33,11 +33,11 @@ pointGrid * SorterGPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
     glHandler->dataToBuffer(GLHandler::EFTDEM_RAW_POINT_BUFFER, (long long) (3 * pointCloud->numberOfPoints * sizeof(GLdouble)), points, GL_STATIC_DRAW);
     delete[] points;
 
-    unsigned long resolutionX = std::max((unsigned long) std::ceil((std::abs(pointCloud->max.x - pointCloud->min.x)) * (double) pixelPerUnitX), 1ul);
-    unsigned long resolutionY = std::max((unsigned long) std::ceil((std::abs(pointCloud->max.y - pointCloud->min.y)) * (double) pixelPerUnitY), 1ul);
+    unsigned long resolutionX = std::max((unsigned long) std::ceil((std::abs(pointCloud->max.x - pointCloud->min.x)) * (double) pixelPerUnitX) + 1, 1ul);
+    unsigned long resolutionY = std::max((unsigned long) std::ceil((std::abs(pointCloud->max.y - pointCloud->min.y)) * (double) pixelPerUnitY) + 1, 1ul);
 
-    glUniform2ui(glGetUniformLocation(shaderPrograms[0], "resolution"), resolutionX, resolutionY);
-    glUniform1ui(glGetUniformLocation(shaderPrograms[0], "numberOfPoints"), pointCloud->numberOfPoints);
+    glUniform2ui(glGetUniformLocation(glHandler->getProgram(), "resolution"), resolutionX, resolutionY);
+    glUniform1ui(glGetUniformLocation(glHandler->getProgram(), "numberOfPoints"), pointCloud->numberOfPoints);
 
     auto counts = new GLuint[resolutionX * resolutionY];
 
@@ -74,8 +74,12 @@ pointGrid * SorterGPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
                       .max = max,
                       .numberOfPoints = pointCloud->numberOfPoints};
 
+    for (auto i : gridIndices) {
+        if (i > grid->points.size()) std::cout << "Size: " << grid->points.size() << " Index: " << i << std::endl;
+    }
+
     for (size_t i = 0; i < gridIndices.size(); i++) {
-        grid->points[gridIndices[i]].emplace_back(normalizeValue(pointCloud->groundPoints.at(i), min, max));
+        grid->points.at(gridIndices.at(i)).emplace_back(normalizeValue(pointCloud->groundPoints.at(i), min, max));
     }
 
     return grid;

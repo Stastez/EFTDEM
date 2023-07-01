@@ -94,24 +94,26 @@ Pipeline *ConfigProvider::providePipeline() {
     
     IHeightMapFiller *filler;
     auto fillingAlgorithm = checkValidityAndReturn(config["HeightMapFillerOptions"]["filler"], true).first.as<std::string>();
-    if (fillingAlgorithm == "closingFilter") {
-        auto kernelRadii = checkValidityAndReturn(config["HeightMapFillerOptions"]["kernelBasedFilterOptions"]["kernelSizes"], true).first.as<std::vector<unsigned int>>();
-        auto batchSizeTest = checkValidityAndReturn(config["HeightMapFillerOptions"]["kernelBasedFilterOptions"]["batchSize"], false);
-        auto batchSize = (batchSizeTest.second) ? batchSizeTest.first.as<unsigned int>() : 0;
+    auto kernelRadii = checkValidityAndReturn(config["HeightMapFillerOptions"]["kernelBasedFilterOptions"]["kernelSizes"], true).first.as<std::vector<unsigned int>>();
+    auto batchSizeTest = checkValidityAndReturn(config["HeightMapFillerOptions"]["kernelBasedFilterOptions"]["batchSize"], false);
+    auto batchSize = (batchSizeTest.second) ? batchSizeTest.first.as<unsigned int>() : 0;
 
-        std::vector<IHeightMapFiller *> filters;
-        filters.reserve(kernelRadii.size());
-        for (auto radius : kernelRadii) filters.emplace_back(new ClosingFilter(glHandler, radius, batchSize));
-        filler = new FillerLoop(filters);
-    } else if (fillingAlgorithm == "inverseDistanceWeightedFilter") {
-        auto kernelRadii = checkValidityAndReturn(config["HeightMapFillerOptions"]["kernelBasedFilterOptions"]["kernelSizes"], true).first.as<std::vector<unsigned int>>();
-        auto batchSizeTest = checkValidityAndReturn(config["HeightMapFillerOptions"]["kernelBasedFilterOptions"]["batchSize"], false);
-        auto batchSize = (batchSizeTest.second) ? batchSizeTest.first.as<unsigned int>() : 0;
-        filler = new InverseDistanceWeightedFilter(glHandler, kernelRadii[0], batchSize);
-    } else {
-        std::cout << "Unrecognized filling algorithm!" << std::endl;
-        exit(Pipeline::EXIT_INVALID_CONFIGURATION);
+    std::vector<IHeightMapFiller *> filters;
+    filters.reserve(kernelRadii.size());
+    for (auto radius : kernelRadii) {
+        IHeightMapFiller *fillerToAppend;
+        if (fillingAlgorithm == "closingFilter")
+            fillerToAppend = new ClosingFilter(glHandler, radius, batchSize);
+        else if (fillingAlgorithm == "inverseDistanceWeightedFilter")
+            fillerToAppend = new InverseDistanceWeightedFilter(glHandler, radius, batchSize);
+        else {
+            std::cout << fillingAlgorithm << " is either misspelled or not implemented." << std::endl;
+            exit(Pipeline::EXIT_INVALID_CONFIGURATION);
+        }
+
+        filters.emplace_back(fillerToAppend);
     }
+    filler = new FillerLoop(filters);
 
     auto writeLowDepthTest = checkValidityAndReturn(config["CloudWriterOptions"]["writeLowDepth"], false);
     auto writeLowDepth = writeLowDepthTest.second && writeLowDepthTest.first.as<bool>();

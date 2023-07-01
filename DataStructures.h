@@ -26,7 +26,7 @@ struct pointGrid {
 std::vector<point> get(pointGrid *g, unsigned long x, unsigned long y);
 void set(pointGrid *g, unsigned long x, unsigned long y, std::vector<point> value);
 void add(pointGrid *g, unsigned long x, unsigned long y, point value);
-unsigned long long calculate1DCoordinate(pointGrid *g, unsigned long x, unsigned long y);
+unsigned long long calculate1DCoordinate(const pointGrid *g, unsigned long x, unsigned long y);
 
 struct heightMap {
     std::vector<double> heights;
@@ -37,6 +37,8 @@ struct heightMap {
 
 heightMap * emptyHeightMapfromHeightMap(heightMap *map);
 heightMap * emptyHeightMapfromPointGrid(pointGrid *grid);
+
+unsigned long long calculate1DCoordinate(const heightMap *h, unsigned long x, unsigned long y);
 
 double denormalizeValue(double value, double min, double max);
 double normalizeValue(double value, double min, double max);

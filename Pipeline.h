@@ -11,15 +11,16 @@
 
 class Pipeline {
 friend class ConfigProvider;
+friend class RadarComparator;
 
 private:
-
     ICloudReader *reader{};
     ICloudSorter *sorter{};
     ICloudRasterizer *rasterizer{};
     IHeightMapFiller *filler{};
     IHeightMapWriter *writer{};
     GLHandler *glHandler{};
+    heightMap * executeAfterReader(rawPointCloud *pointCloud);
 
 public:
     ~Pipeline();

@@ -10,7 +10,7 @@ private:
     std::string configPath;
     YAML::Node readConfig();
     static std::pair<YAML::Node, bool> checkValidityAndReturn(const YAML::Node& node, bool required);
-    GLHandler *glHandler;
+    GLHandler *glHandler{};
 
 public:
     ConfigProvider();

@@ -1,4 +1,5 @@
 #include "Pipeline.h"
+#include <unistd.h>
 
 Pipeline::~Pipeline() {
     glHandler->uninitializeGL();
@@ -8,7 +9,6 @@ Pipeline::Pipeline(const std::string& shaderDirectory) : Pipeline(new GLHandler(
 
 Pipeline::Pipeline(GLHandler *glHandler) {
     Pipeline::glHandler = glHandler;
-    Pipeline::glHandler->initializeGL(false);
 }
 
 bool adjacentStagesUseGPU(IPipelineComponent *first, IPipelineComponent *second) {
@@ -17,16 +17,27 @@ bool adjacentStagesUseGPU(IPipelineComponent *first, IPipelineComponent *second)
 
 heightMap * Pipeline::execute() {
     if (!isOperable()) exit(EXIT_INVALID_FUNCTION_PARAMETERS);
+    glHandler->initializeGL(false);
 
     bool generateAllOutputs = false;
 
     bool generateOutput = adjacentStagesUseGPU(reader, sorter) || generateAllOutputs;
     auto readerReturn = reader->apply(generateOutput);
+    return executeAfterReader(readerReturn);
+}
+
+heightMap *Pipeline::executeAfterReader(rawPointCloud *pointCloud) {
+    if (!isOperable()) exit(EXIT_INVALID_FUNCTION_PARAMETERS);
+    if (!glHandler->isInitialized(false)) glHandler->initializeGL(false);
+
+    bool generateAllOutputs = true;
+
     delete reader;
-    generateOutput = adjacentStagesUseGPU(sorter, rasterizer) || generateAllOutputs;
-    auto sorterReturn = sorter->apply(readerReturn, generateOutput);
+    auto generateOutput = adjacentStagesUseGPU(sorter, rasterizer) || generateAllOutputs;
+    //usleep(500000);
+    auto sorterReturn = sorter->apply(pointCloud, generateOutput);
     delete sorter;
-    delete readerReturn;
+    delete pointCloud;
     generateOutput = adjacentStagesUseGPU(rasterizer, filler) || generateAllOutputs;
     auto rasterizerReturn = rasterizer->apply(sorterReturn, generateOutput);
     delete rasterizer;

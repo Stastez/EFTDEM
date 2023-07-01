@@ -41,8 +41,14 @@ void GTiffWriter::apply(const heightMap *map, bool generateOutput) {
     if (!CSLFetchBoolean(GDALGetMetadata(driver, nullptr), GDAL_DCAP_CREATE, FALSE)) { std::cout << "Driver does not support creation!" << std::endl; exit(Pipeline::EXIT_IO_ERROR); }
 
     auto denormalizedHeights = new double[map->resolutionX * map->resolutionY];
-    for (unsigned long i = 0; i < map->resolutionX * map->resolutionY; i++)
-        denormalizedHeights[i] = denormalizeValue(map->heights[i], map->min.z, map->max.z);
+    auto arrayIndex = 0ul;
+    for (auto y = map->resolutionY; y > 0ul; y--) {
+        for (auto x = 0ul; x < map->resolutionX; x++) {
+            denormalizedHeights[arrayIndex++] = denormalizeValue(map->heights.at(calculate1DCoordinate(map, x, y - 1)), map->min.z, map->max.z);
+        }
+    }
+    /*for (unsigned long i = 0; i < map->resolutionX * map->resolutionY; i++)
+        denormalizedHeights[i] = denormalizeValue(map->heights[map->resolutionX * map->resolutionY - 1 - i], map->min.z, map->max.z);*/
 
     char** gdalDriverOptions = nullptr;
     gdalDriverOptions = CSLAddNameValue(gdalDriverOptions, "COMPRESS", "LZW");
@@ -59,8 +65,11 @@ void GTiffWriter::apply(const heightMap *map, bool generateOutput) {
         std::cout << "Writing second GeoTIFF with reduced depth..." << std::endl;
 
         auto heightsLowDepth = new int[resolutionX * resolutionY];
-        for (auto i = 0; i < resolutionX * resolutionY; i++) {
-            heightsLowDepth[i] = (int) (map->heights[i] * (double) 255);
+        arrayIndex = 0ul;
+        for (auto y = map->resolutionY; y > 0ul; y--) {
+            for (auto x = 0ul; x < map->resolutionX; x++) {
+                heightsLowDepth[arrayIndex++] = (int) (map->heights.at(calculate1DCoordinate(map, x, y - 1)) * (double) 255);
+            }
         }
 
         dataset = driver->Create((destinationDEM + "_lowDepth.tiff").c_str(), resolutionX, resolutionY, 1, GDT_Byte, gdalDriverOptions);

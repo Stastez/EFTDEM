@@ -55,9 +55,9 @@ heightMap * InverseDistanceWeightedFilter::apply(heightMap *map, bool generateOu
 
     auto pixelCount = (long) (map->resolutionX * map->resolutionY);
 
-    glHandler->setProgram(shader[0]);
+    glHandler->setProgram(shader.at(0));
 
-    if (!glHandler->getCoherentBufferMask()[GLHandler::EFTDEM_HEIGHTMAP_BUFFER]){
+    if (!glHandler->getCoherentBufferMask().at(GLHandler::EFTDEM_HEIGHTMAP_BUFFER)){
         glHandler->dataToBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,
                                 (long) (sizeof(double) * pixelCount),
                                 map->heights.data(), GL_STATIC_DRAW);
@@ -95,11 +95,11 @@ heightMap * InverseDistanceWeightedFilter::apply(heightMap *map, bool generateOu
     bufferSpecs.emplace_back();
 
     for (auto i = 0ul; i < shader.size(); i++) {
-        for (auto spec : bufferSpecs[i]) allocBuffer(spec.buffer, long(spec.size));
+        for (auto spec : bufferSpecs.at(i)) allocBuffer(spec.buffer, long(spec.size));
 
-        glHandler->setProgram(shader[i]);
-        glUniform2ui(glGetUniformLocation(shader[i], "resolution"), map->resolutionX, map->resolutionY);
-        glUniform1ui(glGetUniformLocation(shader[i], "kernelRadius"), kernelRadius);
+        glHandler->setProgram(shader.at(i));
+        glUniform2ui(glGetUniformLocation(shader.at(i), "resolution"), map->resolutionX, map->resolutionY);
+        glUniform1ui(glGetUniformLocation(shader.at(i), "kernelRadius"), kernelRadius);
         glHandler->dispatchShader(batchSize, map->resolutionX, map->resolutionY);
         GLHandler::waitForShaderStorageIntegrity();
     }

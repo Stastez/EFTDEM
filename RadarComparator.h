@@ -16,7 +16,7 @@ private:
 public:
     explicit RadarComparator(std::vector<std::string> configPaths);
     std::vector<heightMap *> compareMaps();
-    void writeComparisons(std::vector<heightMap> comparisons);
+    void writeComparisons(std::vector<heightMap *> comparisons);
 };
 
 

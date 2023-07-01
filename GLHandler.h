@@ -31,15 +31,17 @@ public:
         EFTDEM_KERNEL_BUFFER, // double for as manny fields as Kernel Radius
     };
 
+    GLHandler();
     explicit GLHandler(std::string shaderDirectory);
 
     GLFWwindow * initializeGL(bool debug);
     void uninitializeGL();
 
     std::vector<gl::GLuint> getShaderPrograms(const std::vector<std::string>& shaderFile, bool useStandardDirectory);
-    gl::GLuint getShaderProgram(const std::string shaderFiles, bool useStandardDirectory);
+    gl::GLuint getShaderProgram(const std::string& shaderFiles, bool useStandardDirectory);
 
     void bindBuffer(bufferIndices buffer);
+    void resetBuffers();
     void generateBuffer(bufferIndices buffer);
     void generateBuffer(int buffer);
     void deleteBuffer(bufferIndices buffer);
