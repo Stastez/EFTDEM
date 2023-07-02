@@ -47,8 +47,6 @@ void GTiffWriter::apply(const heightMap *map, bool generateOutput) {
             denormalizedHeights[arrayIndex++] = denormalizeValue(map->heights.at(calculate1DCoordinate(map, x, y - 1)), map->min.z, map->max.z);
         }
     }
-    /*for (unsigned long i = 0; i < map->resolutionX * map->resolutionY; i++)
-        denormalizedHeights[i] = denormalizeValue(map->heights[map->resolutionX * map->resolutionY - 1 - i], map->min.z, map->max.z);*/
 
     char** gdalDriverOptions = nullptr;
     gdalDriverOptions = CSLAddNameValue(gdalDriverOptions, "COMPRESS", "LZW");
