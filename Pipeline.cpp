@@ -1,5 +1,4 @@
 #include "Pipeline.h"
-#include <unistd.h>
 
 Pipeline::~Pipeline() {
     glHandler->uninitializeGL();
