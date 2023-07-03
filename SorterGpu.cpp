@@ -48,7 +48,7 @@ pointGrid * SorterGPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
 
     delete[] counts;
 
-    glHandler->dataToBuffer(GLHandler::EFTDEM_RAW_POINT_INDEX_BUFFER, (long long) (pointCloud->numberOfPoints * sizeof(GLuint)), nullptr, GL_STREAM_READ);
+    glHandler->dataToBuffer(GLHandler::EFTDEM_RAW_POINT_INDEX_BUFFER, (long long) (pointCloud->numberOfPoints * sizeof(GLuint)), nullptr, GL_STATIC_DRAW);
     glHandler->bindBuffer(GLHandler::EFTDEM_UNBIND);
 
     auto workgroupSize = (unsigned int) std::ceil(std::sqrt(pointCloud->numberOfPoints));

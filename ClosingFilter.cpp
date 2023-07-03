@@ -22,7 +22,7 @@ ClosingFilter::~ClosingFilter() {
 };
 
 void ClosingFilter::allocBuffer(GLHandler::bufferIndices buffer, long singleDataSize, long dataCount) {
-    glHandler->dataToBuffer(buffer, singleDataSize * dataCount, nullptr, gl::GL_STREAM_READ);
+    glHandler->dataToBuffer(buffer, singleDataSize * dataCount, nullptr, gl::GL_DYNAMIC_DRAW);
 }
 
 heightMap * ClosingFilter::apply(heightMap *map, bool generateOutput) {

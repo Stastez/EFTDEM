@@ -22,7 +22,7 @@ InverseDistanceWeightedFilter::~InverseDistanceWeightedFilter() {
 };
 
 void InverseDistanceWeightedFilter::allocBuffer(GLHandler::bufferIndices buffer, long size) {
-    glHandler->dataToBuffer(buffer, size, nullptr, gl::GL_STREAM_READ);
+    glHandler->dataToBuffer(buffer, size, nullptr, gl::GL_DYNAMIC_DRAW);
 }
 
 

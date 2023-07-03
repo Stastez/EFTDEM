@@ -95,7 +95,7 @@ heightMap * RasterizerGPU::apply(pointGrid *pointGrid, bool generateOutput) {
     for (unsigned long i = 0; i < pointGrid->resolutionX * pointGrid->resolutionY; i++) sums[i] = 0u;
     glHandler->dataToBuffer(GLHandler::EFTDEM_SORTED_POINT_SUM_BUFFER,
                             (long) (sizeof(GLuint) * pointGrid->resolutionX * pointGrid->resolutionY),
-                            sums, GL_STREAM_READ);
+                            sums, GL_STATIC_DRAW);
     glHandler->bindBuffer(GLHandler::EFTDEM_UNBIND);
 
     glUniform2ui(glGetUniformLocation(glHandler->getProgram(), "resolution"), pointGrid->resolutionX, pointGrid->resolutionY);
@@ -111,7 +111,7 @@ heightMap * RasterizerGPU::apply(pointGrid *pointGrid, bool generateOutput) {
     glHandler->setProgram(shader.at(2));
     glHandler->dataToBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,
                             (long) (sizeof(GLdouble) * pointGrid->resolutionX * pointGrid->resolutionY),
-                            nullptr, GL_STREAM_READ);
+                            nullptr, GL_DYNAMIC_DRAW);
     glHandler->bindBuffer(GLHandler::EFTDEM_UNBIND);
 
     glUniform2ui(glGetUniformLocation(glHandler->getProgram(), "resolution"), pointGrid->resolutionX, pointGrid->resolutionY);
