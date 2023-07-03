@@ -76,7 +76,7 @@ heightMap * RasterizerGPU::apply(pointGrid *pointGrid, bool generateOutput) {
             for (unsigned long i = 0; i < pointGrid->resolutionX * pointGrid->resolutionY; i++) counts[i] = 0u;
             glHandler->dataToBuffer(GLHandler::EFTDEM_SORTED_POINT_COUNT_BUFFER,
                                     (long) (sizeof(GLuint) * pointGrid->resolutionX * pointGrid->resolutionY),
-                                    counts, GL_STREAM_READ);
+                                    counts, GL_STATIC_DRAW);
             glHandler->bindBuffer(GLHandler::EFTDEM_UNBIND);
 
             glUniform1ui(glGetUniformLocation(glHandler->getProgram(), "numberOfPoints"), pointGrid->numberOfPoints);
