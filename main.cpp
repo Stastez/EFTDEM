@@ -9,7 +9,7 @@ int main(int argc, char** argv) {
     } else if (argc == 2) {
         auto configProvider = new ConfigProvider(argv[1]);
         auto pipeline = configProvider->providePipeline();
-        pipeline->execute();
+        delete pipeline->execute();
         delete pipeline;
         delete configProvider;
     } else {

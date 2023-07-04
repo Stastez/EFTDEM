@@ -17,6 +17,7 @@ RadarComparator::RadarComparator(std::vector<std::string> configPaths) {
 
 RadarComparator::~RadarComparator() {
     delete configProvider;
+    for (auto pipeline : pipelines) delete pipeline;
     configProvider = nullptr;
 }
 
@@ -59,24 +60,12 @@ std::vector<heightMap *> RadarComparator::compareMaps() {
         glHandler->dataToBuffer(GLHandler::EFTDEM_COMPARISON_BUFFER,
                                 (long) (sizeof(double) * pixelCount),
                                 nullptr, gl::GLenum::GL_STREAM_READ);
-        /*glHandler->dataFromBuffer(GLHandler::EFTDEM_COMPARISON_BUFFER,
-                                  0,
-                                  (long) (sizeof(double) * pixelCount),
-                                  heights);*/
         glHandler->dataToBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,
                                 (long) (sizeof(double) * pixelCount),
                                 bottomMap->heights.data(), gl::GLenum::GL_STATIC_DRAW);
-        /*glHandler->dataFromBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,
-                                  0,
-                                  (long) (sizeof(double) * pixelCount),
-                                  heights);*/
         glHandler->dataToBuffer(GLHandler::EFTDEM_SECOND_HEIGHTMAP_BUFFER,
                                 (long) (sizeof(double) * pixelCount),
                                 topMap->heights.data(), gl::GLenum::GL_STATIC_DRAW);
-        /*glHandler->dataFromBuffer(GLHandler::EFTDEM_SECOND_HEIGHTMAP_BUFFER,
-                                  0,
-                                  (long) (sizeof(double) * pixelCount),
-                                  heights);*/
         gl::glDispatchCompute((unsigned int) std::ceil((double) bottomMap->resolutionX / 8.), (unsigned int) std::ceil((double) bottomMap->resolutionY / 8.), 1);
         GLHandler::waitForShaderStorageIntegrity();
 
@@ -90,6 +79,7 @@ std::vector<heightMap *> RadarComparator::compareMaps() {
         comparisons.emplace_back(temp);
 
         if (i < pipelines.size() - 1) {
+            delete topMap;
             topMap = bottomMap;
             glHandler->uninitializeGL();
             delete glHandler;

@@ -76,6 +76,8 @@ GLFWwindow * GLHandler::initializeGL(bool debug) {
 }
 
 void GLHandler::uninitializeGL() {
+    if (!initialized) return;
+
     for (unsigned long long i = 1; i < numBuffers; i++) {
         if (!deletedBufferMask.at(i)) deleteBuffer((int) i);
     }

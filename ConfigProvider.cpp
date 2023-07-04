@@ -20,9 +20,7 @@ ConfigProvider::ConfigProvider(std::string configPath) {
     ConfigProvider::configPath = std::move(configPath);
 }
 
-ConfigProvider::~ConfigProvider() {
-    delete glHandler;
-}
+ConfigProvider::~ConfigProvider() = default;
 
 YAML::Node ConfigProvider::readConfig() {
     YAML::Node localConfig;

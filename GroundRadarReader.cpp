@@ -106,5 +106,7 @@ rawPointCloud * GroundRadarReader::apply(bool generateOutput) {
         extremes.first = {0,0,0, 0}; extremes.second = {0,0,0, 0};
     }
 
-    return new rawPointCloud{.groundPoints = *groundPoints, .environmentPoints = std::vector<point>(0), .min = extremes.first, .max = extremes.second, .numberOfPoints = static_cast<unsigned int>(groundPoints->size())};
+    auto readerReturn = new rawPointCloud{.groundPoints = *groundPoints, .environmentPoints = std::vector<point>(0), .min = extremes.first, .max = extremes.second, .numberOfPoints = static_cast<unsigned int>(groundPoints->size())};
+    delete groundPoints;
+    return readerReturn;
 }
