@@ -117,8 +117,10 @@ rawPointCloud * MobileMappingReader::apply(bool generateOutput) {
         extremes.first = {0,0,0, 0}; extremes.second = {0,0,0, 0};
     }
 
-    delete groundPoints;
-    delete environmentPoints;
+    auto returnCloud = new rawPointCloud{.groundPoints = *groundPoints, .environmentPoints = *environmentPoints, .min = extremes.first, .max = extremes.second, .numberOfPoints = static_cast<unsigned int>(groundPoints->size())};
 
-    return new rawPointCloud{.groundPoints = *groundPoints, .environmentPoints = *environmentPoints, .min = extremes.first, .max = extremes.second, .numberOfPoints = static_cast<unsigned int>(groundPoints->size())};
+    delete environmentPoints;
+    delete groundPoints;
+
+    return returnCloud;
 }
