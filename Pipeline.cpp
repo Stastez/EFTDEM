@@ -39,7 +39,6 @@ heightMap *Pipeline::executeAfterReader(rawPointCloud *pointCloud) {
     delete reader;
     reader = nullptr;
     auto generateOutput = adjacentStagesUseGPU(sorter, rasterizer) || generateAllOutputs;
-    //usleep(500000);
     auto sorterReturn = sorter->apply(pointCloud, generateOutput);
     delete sorter;
     sorter = nullptr;
@@ -49,12 +48,14 @@ heightMap *Pipeline::executeAfterReader(rawPointCloud *pointCloud) {
     delete rasterizer;
     rasterizer = nullptr;
     delete sorterReturn;
+    sorterReturn = nullptr;
     generateOutput = adjacentStagesUseGPU(filler, writer) || generateAllOutputs;
     auto fillerReturn = filler->apply(rasterizerReturn, generateOutput);
     delete filler;
     filler = nullptr;
     //writer->apply(&rasterizerReturn, true);
     delete rasterizerReturn;
+    rasterizerReturn = nullptr;
     writer->apply(fillerReturn, generateOutput);
     delete writer;
     writer = nullptr;

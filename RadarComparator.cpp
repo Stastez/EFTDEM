@@ -6,14 +6,18 @@
 
 RadarComparator::RadarComparator(std::vector<std::string> configPaths) {
     RadarComparator::configPaths = std::move(configPaths);
-    auto configProvider = new ConfigProvider();
+    configProvider = new ConfigProvider();
     pipelines.reserve(RadarComparator::configPaths.size());
     for (const auto& config : RadarComparator::configPaths) {
         pipelines.emplace_back(configProvider->providePipeline(config));
         destinationPaths.emplace_back(configProvider->getComparisonPath());
     }
     RadarComparator::glHandler = pipelines.at(0)->glHandler;
+}
+
+RadarComparator::~RadarComparator() {
     delete configProvider;
+    configProvider = nullptr;
 }
 
 std::vector<heightMap *> RadarComparator::compareMaps() {

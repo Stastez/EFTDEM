@@ -13,9 +13,13 @@ FillerLoop::~FillerLoop() noexcept = default;
 heightMap * FillerLoop::apply(heightMap *map, bool generateOutput) {
     auto result = map;
 
-    for (auto filler : fillers)  {
-        result = filler->apply(result, generateOutput);
-        delete filler;
+    for (auto i = 0ul; i < fillers.size(); i++)  {
+        auto oldResult = result;
+        result = fillers.at(i)->apply(oldResult, generateOutput);
+
+        // Pipeline deletes rasterizerReturn which points to the same data as map
+        if (i > 1) delete oldResult;
+        delete fillers.at(i);
     }
 
     return result;

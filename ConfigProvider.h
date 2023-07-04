@@ -15,6 +15,7 @@ private:
 public:
     ConfigProvider();
     explicit ConfigProvider(std::string configPath);
+    ~ConfigProvider();
     Pipeline *providePipeline();
     Pipeline *providePipeline(std::string configPath);
     GLHandler *getGLHandler();

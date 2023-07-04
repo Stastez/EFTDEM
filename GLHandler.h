@@ -33,6 +33,7 @@ public:
 
     GLHandler();
     explicit GLHandler(std::string shaderDirectory);
+    ~GLHandler();
 
     GLFWwindow * initializeGL(bool debug);
     void uninitializeGL();

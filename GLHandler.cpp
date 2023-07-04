@@ -17,6 +17,10 @@ GLHandler::GLHandler(std::string shaderDirectory) {
     GLHandler::shaderDirectory = std::move(shaderDirectory);
 }
 
+GLHandler::~GLHandler() {
+    uninitializeGL();
+}
+
 void GLAPIENTRY MessageCallback( GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
     // must conform to GL specified template
     (void) source; (void) type; (void) id; (void) severity; (void) length; (void) userParam;
@@ -77,6 +81,7 @@ void GLHandler::uninitializeGL() {
     }
 
     glfwTerminate();
+    context = nullptr;
     initialized = false;
 }
 

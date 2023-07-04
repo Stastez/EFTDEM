@@ -20,17 +20,21 @@ ConfigProvider::ConfigProvider(std::string configPath) {
     ConfigProvider::configPath = std::move(configPath);
 }
 
+ConfigProvider::~ConfigProvider() {
+    delete glHandler;
+}
+
 YAML::Node ConfigProvider::readConfig() {
-    YAML::Node config;
+    YAML::Node localConfig;
 
     try {
-        config = YAML::LoadFile(configPath);
+        localConfig = YAML::LoadFile(configPath);
     } catch (const std::exception& e) {
         std::cout << e.what() << std::endl;
         exit(Pipeline::EXIT_INVALID_COMMAND_LINE_ARGUMENTS);
     }
 
-    return config;
+    return localConfig;
 }
 
 std::pair<YAML::Node, bool> ConfigProvider::checkValidityAndReturn(const YAML::Node& node, bool required) {

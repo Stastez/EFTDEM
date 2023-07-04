@@ -48,9 +48,8 @@ pointGrid * SorterGPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
 
     delete[] counts;
 
-    auto indices = new GLuint[pointCloud->numberOfPoints];
-    for (auto i = 0ul; i < pointCloud->numberOfPoints; i++) indices[i] = 0u;
-    glHandler->dataToBuffer(GLHandler::EFTDEM_RAW_POINT_INDEX_BUFFER, (long long) (pointCloud->numberOfPoints * sizeof(GLuint)), indices, GL_STATIC_DRAW);
+    auto gridIndices = new std::vector<GLuint>(pointCloud->numberOfPoints, 0u);
+    glHandler->dataToBuffer(GLHandler::EFTDEM_RAW_POINT_INDEX_BUFFER, (long long) (pointCloud->numberOfPoints * sizeof(GLuint)), gridIndices->data(), GL_STATIC_DRAW);
     glHandler->bindBuffer(GLHandler::EFTDEM_UNBIND);
 
     auto workgroupSize = (unsigned int) std::ceil(std::sqrt(pointCloud->numberOfPoints));
@@ -66,7 +65,6 @@ pointGrid * SorterGPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
                 .numberOfPoints = pointCloud->numberOfPoints};
     }
 
-    auto gridIndices = new std::vector<GLuint>(pointCloud->numberOfPoints);
     glHandler->dataFromBuffer(GLHandler::EFTDEM_RAW_POINT_INDEX_BUFFER, 0, (long long) (pointCloud->numberOfPoints * sizeof(GLuint)), gridIndices->data());
 
     auto grid = new pointGrid{.points = std::vector<std::vector<point>>(resolutionX * resolutionY),
