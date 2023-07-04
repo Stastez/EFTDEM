@@ -36,7 +36,6 @@ public:
     ~GLHandler();
 
     GLFWwindow * initializeGL(bool debug);
-    void uninitializeGL();
 
     std::vector<gl::GLuint> getShaderPrograms(const std::vector<std::string>& shaderFile, bool useStandardDirectory);
     gl::GLuint getShaderProgram(const std::string& shaderFiles, bool useStandardDirectory);

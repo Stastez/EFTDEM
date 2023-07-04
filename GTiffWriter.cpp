@@ -53,6 +53,10 @@ void GTiffWriter::apply(const heightMap *map, bool generateOutput) {
     gdalDriverOptions = CSLAddNameValue(gdalDriverOptions, "NUM_THREADS", "16");
 
     auto dataset = driver->Create((destinationDEM + ".tiff").c_str(), resolutionX, resolutionY, 1, GDT_Float64,gdalDriverOptions);
+    if (dataset == nullptr) {
+        std::cout << "WARNING :: GeoTIFF dataset could not be created at " << destinationDEM << ".tiff!" << std::endl;
+        return;
+    }
     auto rasterBand = dataset->GetRasterBand(1);
     (void)! rasterBand->RasterIO(GF_Write, 0, 0, resolutionX, resolutionY, denormalizedHeights, resolutionX, resolutionY, GDT_Float64, 0, 0, nullptr);
     GDALClose(dataset);

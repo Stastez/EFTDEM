@@ -1,7 +1,7 @@
 #include "Pipeline.h"
 
 Pipeline::~Pipeline() {
-    glHandler->uninitializeGL();
+    delete glHandler;
     delete reader;
     delete sorter;
     delete rasterizer;
@@ -48,14 +48,12 @@ heightMap *Pipeline::executeAfterReader(rawPointCloud *pointCloud) {
     delete rasterizer;
     rasterizer = nullptr;
     delete sorterReturn;
-    sorterReturn = nullptr;
     generateOutput = adjacentStagesUseGPU(filler, writer) || generateAllOutputs;
     auto fillerReturn = filler->apply(rasterizerReturn, generateOutput);
     delete filler;
     filler = nullptr;
     //writer->apply(&rasterizerReturn, true);
     delete rasterizerReturn;
-    rasterizerReturn = nullptr;
     writer->apply(fillerReturn, generateOutput);
     delete writer;
     writer = nullptr;

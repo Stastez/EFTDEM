@@ -81,8 +81,8 @@ std::vector<heightMap *> RadarComparator::compareMaps() {
         if (i < pipelines.size() - 1) {
             delete topMap;
             topMap = bottomMap;
-            glHandler->uninitializeGL();
-            delete glHandler;
+            delete pipelines.at(i);
+            pipelines.at(i) = nullptr;
             glHandler = pipelines.at(i + 1)->glHandler;
             bottomMap = pipelines.at(i + 1)->executeAfterReader(readerReturns.at(i + 1));
             shaders = glHandler->getShaderPrograms({"compare.glsl"}, true);
@@ -102,5 +102,8 @@ void RadarComparator::writeComparisons(std::vector<heightMap *> comparisons) {
     for (auto i = 0ul; i < comparisons.size(); i++) {
         writer->setDestinationDEM(destinationPaths.at(i) + "_" + std::to_string(i));
         writer->apply(comparisons.at(i), true);
+        delete comparisons.at(i);
     }
+
+    delete writer;
 }

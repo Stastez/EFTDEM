@@ -18,7 +18,15 @@ GLHandler::GLHandler(std::string shaderDirectory) {
 }
 
 GLHandler::~GLHandler() {
-    uninitializeGL();
+    if (!initialized) return;
+
+    for (unsigned long long i = 1; i <= numBuffers; i++) {
+        if (!deletedBufferMask.at(i)) deleteBuffer((int) i);
+    }
+
+    glfwTerminate();
+    context = nullptr;
+    initialized = false;
 }
 
 void GLAPIENTRY MessageCallback( GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
@@ -74,19 +82,6 @@ GLFWwindow * GLHandler::initializeGL(bool debug) {
 
     return context;
 }
-
-void GLHandler::uninitializeGL() {
-    if (!initialized) return;
-
-    for (unsigned long long i = 1; i < numBuffers; i++) {
-        if (!deletedBufferMask.at(i)) deleteBuffer((int) i);
-    }
-
-    glfwTerminate();
-    context = nullptr;
-    initialized = false;
-}
-
 
 gl::GLuint GLHandler::getShaderProgram(const std::string& shaderFile, bool useStandardDirectory){
     std::ifstream shaderFileStream;
