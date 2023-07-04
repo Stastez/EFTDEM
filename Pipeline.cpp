@@ -2,6 +2,11 @@
 
 Pipeline::~Pipeline() {
     glHandler->uninitializeGL();
+    delete reader;
+    delete sorter;
+    delete rasterizer;
+    delete filler;
+    delete writer;
 }
 
 Pipeline::Pipeline(const std::string& shaderDirectory) : Pipeline(new GLHandler(shaderDirectory)) {}
@@ -32,22 +37,27 @@ heightMap *Pipeline::executeAfterReader(rawPointCloud *pointCloud) {
     bool generateAllOutputs = true;
 
     delete reader;
+    reader = nullptr;
     auto generateOutput = adjacentStagesUseGPU(sorter, rasterizer) || generateAllOutputs;
     //usleep(500000);
     auto sorterReturn = sorter->apply(pointCloud, generateOutput);
     delete sorter;
+    sorter = nullptr;
     delete pointCloud;
     generateOutput = adjacentStagesUseGPU(rasterizer, filler) || generateAllOutputs;
     auto rasterizerReturn = rasterizer->apply(sorterReturn, generateOutput);
     delete rasterizer;
+    rasterizer = nullptr;
     delete sorterReturn;
     generateOutput = adjacentStagesUseGPU(filler, writer) || generateAllOutputs;
     auto fillerReturn = filler->apply(rasterizerReturn, generateOutput);
     delete filler;
+    filler = nullptr;
     //writer->apply(&rasterizerReturn, true);
     delete rasterizerReturn;
     writer->apply(fillerReturn, generateOutput);
     delete writer;
+    writer = nullptr;
     return fillerReturn;
 }
 

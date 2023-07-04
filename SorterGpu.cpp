@@ -48,7 +48,9 @@ pointGrid * SorterGPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
 
     delete[] counts;
 
-    glHandler->dataToBuffer(GLHandler::EFTDEM_RAW_POINT_INDEX_BUFFER, (long long) (pointCloud->numberOfPoints * sizeof(GLuint)), nullptr, GL_STATIC_DRAW);
+    auto indices = new GLuint[pointCloud->numberOfPoints];
+    for (auto i = 0ul; i < pointCloud->numberOfPoints; i++) indices[i] = 0u;
+    glHandler->dataToBuffer(GLHandler::EFTDEM_RAW_POINT_INDEX_BUFFER, (long long) (pointCloud->numberOfPoints * sizeof(GLuint)), indices, GL_STATIC_DRAW);
     glHandler->bindBuffer(GLHandler::EFTDEM_UNBIND);
 
     auto workgroupSize = (unsigned int) std::ceil(std::sqrt(pointCloud->numberOfPoints));
@@ -64,8 +66,8 @@ pointGrid * SorterGPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
                 .numberOfPoints = pointCloud->numberOfPoints};
     }
 
-    std::vector<unsigned int> gridIndices(pointCloud->numberOfPoints);
-    glHandler->dataFromBuffer(GLHandler::EFTDEM_RAW_POINT_INDEX_BUFFER, 0, (long long) (pointCloud->numberOfPoints * sizeof(GLuint)), gridIndices.data());
+    auto gridIndices = new std::vector<GLuint>(pointCloud->numberOfPoints);
+    glHandler->dataFromBuffer(GLHandler::EFTDEM_RAW_POINT_INDEX_BUFFER, 0, (long long) (pointCloud->numberOfPoints * sizeof(GLuint)), gridIndices->data());
 
     auto grid = new pointGrid{.points = std::vector<std::vector<point>>(resolutionX * resolutionY),
                       .resolutionX = resolutionX,
@@ -74,13 +76,11 @@ pointGrid * SorterGPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
                       .max = max,
                       .numberOfPoints = pointCloud->numberOfPoints};
 
-    for (auto i : gridIndices) {
-        if (i > grid->points.size()) std::cout << "Size: " << grid->points.size() << " Index: " << i << std::endl;
+    for (size_t i = 0; i < gridIndices->size(); i++) {
+        grid->points.at(gridIndices->at(i)).emplace_back(normalizeValue(pointCloud->groundPoints.at(i), min, max));
     }
 
-    for (size_t i = 0; i < gridIndices.size(); i++) {
-        grid->points.at(gridIndices.at(i)).emplace_back(normalizeValue(pointCloud->groundPoints.at(i), min, max));
-    }
+    delete gridIndices;
 
     return grid;
 }
