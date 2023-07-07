@@ -3,7 +3,7 @@ precision highp int;
 
 layout (local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
 layout (binding = EFTDEM_RAW_POINT_BUFFER) restrict buffer pointBuffer{
-    double points[];
+    float points[];
 };
 layout (binding = EFTDEM_RAW_POINT_INDEX_BUFFER) restrict buffer indexBuffer{
     uint indices[];
@@ -31,8 +31,8 @@ void main() {
     uint pointIndexIndices = calculatePointIndex(gl_GlobalInvocationID.xy);
     uint pointIndexPoints = pointIndexIndices * 3u;
 
-    double z = points[pointIndexPoints + 2];
-    uint zRepresentation = uint(z * (double(~0u) / double(counts[indices[pointIndexIndices]])));
+    float z = points[pointIndexPoints + 2];
+    uint zRepresentation = uint(double(z) * (double(~0u) / double(counts[indices[pointIndexIndices]])));
 
     atomicAdd(heights[indices[pointIndexIndices]], zRepresentation);
 }

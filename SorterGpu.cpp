@@ -20,17 +20,17 @@ pointGrid * SorterGPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
     auto shaderPrograms = glHandler->getShaderPrograms(shaderPaths, true);
     glHandler->setProgram(shaderPrograms.at(0));
 
-    auto points = new double[pointCloud->numberOfPoints * 3];
+    auto points = new float[pointCloud->numberOfPoints * 3];
 
     unsigned int dataIndex = 0;
-    point max = pointCloud->max, min = pointCloud->min;
+    doublePoint max = pointCloud->max, min = pointCloud->min;
     for (auto point : pointCloud->groundPoints) {
         points[dataIndex++] = normalizeValue(point.x, min.x, max.x);
         points[dataIndex++] = normalizeValue(point.y, min.y, max.y);
         points[dataIndex++] = normalizeValue(point.z, min.z, max.z);
     }
 
-    glHandler->dataToBuffer(GLHandler::EFTDEM_RAW_POINT_BUFFER, (long long) (3 * pointCloud->numberOfPoints * sizeof(GLdouble)), points, GL_STATIC_DRAW);
+    glHandler->dataToBuffer(GLHandler::EFTDEM_RAW_POINT_BUFFER, (long long) (3 * pointCloud->numberOfPoints * sizeof(GLfloat)), points, GL_STATIC_DRAW);
     delete[] points;
 
     unsigned long resolutionX = std::max((unsigned long) std::ceil((std::abs(pointCloud->max.x - pointCloud->min.x)) * (double) pixelPerUnitX) + 1, 1ul);
@@ -67,14 +67,14 @@ pointGrid * SorterGPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
 
     glHandler->dataFromBuffer(GLHandler::EFTDEM_RAW_POINT_INDEX_BUFFER, 0, (long long) (pointCloud->numberOfPoints * sizeof(GLuint)), gridIndices->data());
 
-    auto grid = new pointGrid{.points = std::vector<std::vector<point>>(resolutionX * resolutionY),
+    auto grid = new pointGrid{.points = std::vector<std::vector<floatPoint>>(resolutionX * resolutionY),
                       .resolutionX = resolutionX,
                       .resolutionY = resolutionY,
                       .min = min,
                       .max = max,
                       .numberOfPoints = pointCloud->numberOfPoints};
 
-    for (size_t i = 0; i < gridIndices->size(); i++) {
+    for (auto i = 0ul; i < gridIndices->size(); i++) {
         grid->points.at(gridIndices->at(i)).emplace_back(normalizeValue(pointCloud->groundPoints.at(i), min, max));
     }
 

@@ -2,13 +2,13 @@
 
 layout (local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
 layout (binding = EFTDEM_HEIGHTMAP_BUFFER) restrict buffer bottomBuffer{
-    double bottom[];
+    float bottom[];
 };
 layout (binding = EFTDEM_SECOND_HEIGHTMAP_BUFFER) restrict buffer topBuffer{
-    double top[];
+    float top[];
 };
 layout (binding = EFTDEM_COMPARISON_BUFFER) restrict buffer comparisonBuffer{
-    double results[];
+    float results[];
 };
 
 uniform uvec2 resolution;
@@ -23,5 +23,5 @@ void main() {
     uint position = calculate1DCoordinate(gl_GlobalInvocationID.xy, resolution);
 
     // depth measured in positive amount of seconds taken by wave
-    results[position] = clamp(bottom[position] - top[position], double(0), double(1));
+    results[position] = clamp(bottom[position] - top[position], 0., 1.);
 }

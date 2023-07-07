@@ -3,15 +3,15 @@
 layout (local_size_x = 8, local_size_y = 4, local_size_z = 1) in;
 
 layout (binding = EFTDEM_KERNEL_BUFFER) restrict buffer kernelBuffer{
-    double kernel[];
+    float kernel[];
 };
 
 uniform uvec2 resolution;
 uniform uint kernelRadius;
 uniform uvec2 currentInvocation;
-double scattering = 1.0; // the bigger this Value, the heiger the impact of far Values that are further away from the pixel
+float scattering = 1.0; // the bigger this Value, the heigher the impact of values that are further away from the pixel
 
-double weightingFunktion(double x) {
+float weightingFunction(float x) {
     return exp(float(-abs(x/scattering)));
 }
 
@@ -20,5 +20,5 @@ void main() {
     if (any(greaterThanEqual(correctedGlobalInvocation, resolution))) return;
     uint coord1D = correctedGlobalInvocation.x;
 
-    kernel[coord1D] = weightingFunktion(coord1D);
+    kernel[coord1D] = weightingFunction(coord1D);
 }

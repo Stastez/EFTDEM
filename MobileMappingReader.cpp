@@ -36,9 +36,9 @@ std::vector<std::string> MobileMappingReader::readFile() {
     return lines;
 }
 
-std::pair<point, point> MobileMappingReader::parseFileContents(std::vector<std::string> *lines, std::vector<point> *groundPoints, std::vector<point> *environmentPoints, unsigned long begin = 0, unsigned long end = -1) {
-    point min = {std::numeric_limits<double>::max(), std::numeric_limits<double>::max(),std::numeric_limits<double>::max(), std::numeric_limits<int>::max()};
-    point max = {-std::numeric_limits<double>::max(), -std::numeric_limits<double>::max(),-std::numeric_limits<double>::max(), std::numeric_limits<int>::min()};
+std::pair<doublePoint, doublePoint> MobileMappingReader::parseFileContents(std::vector<std::string> *lines, std::vector<doublePoint> *groundPoints, std::vector<doublePoint> *environmentPoints, unsigned long begin = 0, unsigned long end = -1) {
+    doublePoint min = {std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<int>::max()};
+    doublePoint max = {-std::numeric_limits<double>::max(), -std::numeric_limits<double>::max(), -std::numeric_limits<double>::max(), std::numeric_limits<int>::min()};
 
     for (auto i = begin; i < end; i++) {
         std::string words[5];
@@ -50,7 +50,7 @@ std::pair<point, point> MobileMappingReader::parseFileContents(std::vector<std::
             lastPosition = delimiterPosition;
         }
 
-        point p = {.x=stod(words[0]), .y=stod(words[1]), .z=stod(words[2]), .intensity=stoi(words[4])};
+        doublePoint p = {.x=stod(words[0]), .y=stod(words[1]), .z=stod(words[2]), .intensity=stoi(words[4])};
 
         if (words[3] == "1") {
             min.x = std::min(min.x, p.x);
@@ -74,18 +74,18 @@ std::pair<point, point> MobileMappingReader::parseFileContents(std::vector<std::
 rawPointCloud * MobileMappingReader::apply(bool generateOutput) {
     if (!generateOutput) return {};
 
-    auto *groundPoints = new std::vector<point>(),
-        *environmentPoints = new std::vector<point>();
+    auto *groundPoints = new std::vector<doublePoint>(),
+        *environmentPoints = new std::vector<doublePoint>();
     std::cout << "Reading point cloud..." << std::endl;
 
     auto numThreads = 16;
     auto lines = readFile();
     auto batchSize = lines.size() / numThreads;
-    auto extremesVector = std::vector<std::pair<point, point>>(numThreads);
-    auto futuresVector = std::vector<std::future<std::pair<point, point>>>(numThreads);
+    auto extremesVector = std::vector<std::pair<doublePoint, doublePoint>>(numThreads);
+    auto futuresVector = std::vector<std::future<std::pair<doublePoint, doublePoint>>>(numThreads);
 
-    auto groundPointsVector = new std::vector<std::vector<point>>(numThreads),
-        environmentPointsVector = new std::vector<std::vector<point>>(numThreads);
+    auto groundPointsVector = new std::vector<std::vector<doublePoint>>(numThreads),
+        environmentPointsVector = new std::vector<std::vector<doublePoint>>(numThreads);
 
     for (auto i = 0; i < numThreads - 1; i++) {
         futuresVector.at(i) = std::async(&parseFileContents, &lines, &(groundPointsVector->at(i)), &(environmentPointsVector->at(i)), batchSize * i, batchSize * (i+1));
@@ -96,14 +96,14 @@ rawPointCloud * MobileMappingReader::apply(bool generateOutput) {
         extremesVector.at(i) = futuresVector.at(i).get();
     }
 
-    std::vector<point> minVector, maxVector;
+    std::vector<doublePoint> minVector, maxVector;
     for (auto extremes : extremesVector) {
         minVector.emplace_back(extremes.first);
         maxVector.emplace_back(extremes.second);
     }
-    std::pair<point,point> extremes;
-    extremes.first = mergePoints(minVector).first;
-    extremes.second = mergePoints(maxVector).second;
+    std::pair<doublePoint,doublePoint> extremes;
+    extremes.first = mergeDoublePoints(minVector).first;
+    extremes.second = mergeDoublePoints(maxVector).second;
 
     for (auto i = 0; i < numThreads; i++) {
         groundPoints->insert(groundPoints->end(), groundPointsVector->at(i).begin(), groundPointsVector->at(i).end());

@@ -9,7 +9,7 @@ layout (binding = EFTDEM_SORTED_POINT_COUNT_BUFFER) restrict buffer countBuffer{
     uint counts[];
 };
 layout (binding = EFTDEM_HEIGHTMAP_BUFFER) restrict buffer heightMapBuffer{
-    double heights[];
+    float heights[];
 };
 uniform uvec2 resolution;
 
@@ -23,7 +23,7 @@ void main() {
     uint coordinate = calculate1DCoordinate(gl_GlobalInvocationID.xy, resolution);
 
     double heightRepresentation = max(double(sums[coordinate]) / double(counts[coordinate]), double(0));
-    double height = heightRepresentation / (double(~0u) / double(counts[coordinate]));
+    float height = float(heightRepresentation / (double(~0u) / double(counts[coordinate])));
 
     height = (isnan(height)) ? 0. : height;
 

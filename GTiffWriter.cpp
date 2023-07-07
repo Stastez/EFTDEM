@@ -11,8 +11,8 @@ GTiffWriter::GTiffWriter(bool writeLowDepth, const std::string& destinationDEM) 
 
 GTiffWriter::~GTiffWriter() noexcept = default;
 
-void GTiffWriter::setDestinationDEM(const std::string &destinationDEM) {
-    GTiffWriter::destinationDEM = destinationDEM;
+void GTiffWriter::setDestinationDEM(const std::string &newDestinationDEM) {
+    GTiffWriter::destinationDEM = newDestinationDEM;
 }
 
 /**

@@ -6,7 +6,7 @@
 class GroundRadarReader : public ICloudReader {
 private:
     std::vector<std::string> readFile();
-    static std::pair<point, point> parseFileContents(std::vector<std::string> *lines, std::vector<point> *groundPoints, unsigned long begin, unsigned long end);
+    static std::pair<doublePoint, doublePoint> parseFileContents(std::vector<std::string> *lines, std::vector<doublePoint> *groundPoints, unsigned long begin, unsigned long end);
 
 public:
     explicit GroundRadarReader(const std::string& fileName);

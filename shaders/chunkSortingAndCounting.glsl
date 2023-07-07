@@ -2,7 +2,7 @@
 
 layout (local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
 layout (binding = EFTDEM_RAW_POINT_BUFFER) restrict buffer pointBuffer{
-    double points[];
+    float points[];
 };
 layout (binding = EFTDEM_RAW_POINT_INDEX_BUFFER) restrict buffer gridCoordinateBuffer{
     uint coordinates[];
@@ -27,7 +27,7 @@ void main() {
 
     uint pointIndex = calculatePointIndex(gl_GlobalInvocationID.xy);
 
-    dvec3 point = dvec3(points[pointIndex], points[pointIndex + 1], points[pointIndex + 2]);
+    vec3 point = vec3(points[pointIndex], points[pointIndex + 1], points[pointIndex + 2]);
 
     uvec2 returnXY = uvec2(floor(vec2(resolution) * point.xy));
     returnXY.x = clamp(returnXY.x, 0u, resolution.x - 1);

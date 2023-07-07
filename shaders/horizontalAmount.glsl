@@ -3,7 +3,7 @@
 layout (local_size_x = 8, local_size_y = 4, local_size_z = 1) in;
 
 layout (binding = EFTDEM_CLOSING_MASK_BUFFER) restrict buffer mapBuffer{
-    double discreteValues[];
+    float discreteValues[];
 };
 layout (binding = EFTDEM_HORIZONTAL_AMOUNT_BUFFER) restrict buffer horizontalAmountsBuffer{
     uint horizontalAmounts[];
@@ -29,7 +29,7 @@ void main() {
         uint y = correctedGlobalInvocation.y;
 
         if (0u <= x && x < resolution.x){
-            double currentHeight = discreteValues[calculate1DCoordinate(uvec2(x,y))];
+            float currentHeight = discreteValues[calculate1DCoordinate(uvec2(x,y))];
             amount += uint(currentHeight);
         }
     }

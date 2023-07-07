@@ -12,13 +12,13 @@ class GLHandler {
 public:
     enum bufferIndices {
         EFTDEM_UNBIND,
-        EFTDEM_RAW_POINT_BUFFER, // 3 double for each point
+        EFTDEM_RAW_POINT_BUFFER, // 3 float for each point
         EFTDEM_RAW_POINT_INDEX_BUFFER, // unsigned int for each point
         EFTDEM_SORTED_POINT_SUM_BUFFER, // unsigned int for each grid cell
         EFTDEM_SORTED_POINT_COUNT_BUFFER, // unsigned int for each grid cell
-        EFTDEM_HEIGHTMAP_BUFFER, // double for each grid cell
-        EFTDEM_SECOND_HEIGHTMAP_BUFFER, // double for each grid cell
-        EFTDEM_COMPARISON_BUFFER, // double for each grid cell
+        EFTDEM_HEIGHTMAP_BUFFER, // float for each grid cell
+        EFTDEM_SECOND_HEIGHTMAP_BUFFER, // float for each grid cell
+        EFTDEM_COMPARISON_BUFFER, // float for each grid cell
         EFTDEM_HORIZONTAL_SUM_BUFFER, // unsigned int for each grid cell
         EFTDEM_SUM_BUFFER, // double for each grid cell
         EFTDEM_HORIZONTAL_AMOUNT_BUFFER, // unsigned int for each grid cell

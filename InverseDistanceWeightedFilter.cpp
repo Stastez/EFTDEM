@@ -59,26 +59,26 @@ heightMap * InverseDistanceWeightedFilter::apply(heightMap *map, bool generateOu
 
     if (!glHandler->getCoherentBufferMask().at(GLHandler::EFTDEM_HEIGHTMAP_BUFFER)){
         glHandler->dataToBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,
-                                (long) (sizeof(double) * pixelCount),
+                                (long) (sizeof(GLfloat) * pixelCount),
                                 map->heights.data(), GL_STATIC_DRAW);
     }
 
     auto bufferSpecs = std::vector<std::vector<bufferSpecifications>>();
     bufferSpecs.reserve(shaderPaths.size());
     // kernel
-    bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_KERNEL_BUFFER, long(sizeof(double) * kernelRadius)}});
+    bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_KERNEL_BUFFER, long(sizeof(GLfloat) * kernelRadius)}});
     // discretization
-    bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_CLOSING_MASK_BUFFER, long(sizeof(double) * pixelCount)}});
+    bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_CLOSING_MASK_BUFFER, long(sizeof(GLfloat) * pixelCount)}});
     // horizontalTotalWeights
-    bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_HORIZONTAL_TOTAL_WEIGHT_BUFFER, long(sizeof(double) *  pixelCount)}});
+    bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_HORIZONTAL_TOTAL_WEIGHT_BUFFER, long(sizeof(GLfloat) *  pixelCount)}});
     // totalWeights
-    bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_TOTAL_WEIGHT_BUFFER, long(sizeof(double) * pixelCount)}});
+    bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_TOTAL_WEIGHT_BUFFER, long(sizeof(GLfloat) * pixelCount)}});
     // horizontalSumIDW
-    bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_HORIZONTAL_SUM_BUFFER, long(sizeof(double) * pixelCount)}});
+    bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_HORIZONTAL_SUM_BUFFER, long(sizeof(GLfloat) * pixelCount)}});
     // sumIDW
-    bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_SUM_BUFFER, long(sizeof(double) * pixelCount)}});
+    bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_SUM_BUFFER, long(sizeof(GLfloat) * pixelCount)}});
     // averageIDW
-    bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_AVERAGE_BUFFER, long(sizeof(double) * pixelCount)}});
+    bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_AVERAGE_BUFFER, long(sizeof(GLfloat) * pixelCount)}});
     // horizontalAmount
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_HORIZONTAL_AMOUNT_BUFFER, long(sizeof(unsigned) * pixelCount)}});
     // amount
@@ -107,12 +107,12 @@ heightMap * InverseDistanceWeightedFilter::apply(heightMap *map, bool generateOu
     auto end = std::chrono::high_resolution_clock::now();
     std::cout << "Elapsed time for closing: " << duration_cast<std::chrono::milliseconds>(end - start).count() << "ms" << std::endl;
 
-    if (!generateOutput) return emptyHeightMapfromHeightMap(map);
+    if (!generateOutput) return emptyHeightMapFromHeightMap(map);
 
-    auto filledMap = emptyHeightMapfromHeightMap(map);
+    auto filledMap = emptyHeightMapFromHeightMap(map);
     glHandler->dataFromBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,
                               0,
-                              (long) (sizeof(GLdouble) * filledMap->resolutionX * filledMap->resolutionY),
+                              (long) (sizeof(GLfloat) * filledMap->resolutionX * filledMap->resolutionY),
                               filledMap->heights.data());
 
     return filledMap;

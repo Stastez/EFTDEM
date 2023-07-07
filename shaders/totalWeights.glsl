@@ -2,13 +2,13 @@
 
 layout (local_size_x = 8, local_size_y = 4, local_size_z = 1) in;
 layout (binding = EFTDEM_HORIZONTAL_TOTAL_WEIGHT_BUFFER) restrict buffer horizontalTotalWeightsBuffer{
-    double horizontalTotalWeigts[];
+    float horizontalTotalWeigts[];
 };
 layout (binding = EFTDEM_KERNEL_BUFFER) restrict buffer kernelBuffer{
-    double kernel[];
+    float kernel[];
 };
 layout (binding = EFTDEM_TOTAL_WEIGHT_BUFFER) restrict buffer totalWeightsBuffer{
-    double totalWeights[];
+    float totalWeights[];
 };
 
 uniform uvec2 resolution;
@@ -24,7 +24,7 @@ void main() {
     if (any(greaterThanEqual(correctedGlobalInvocation, resolution))) return;
     uint coord1D;
 
-    double totalWeight = 0.0;
+    float totalWeight = 0.0;
 
     for (uint ky = 0; ky <= 2*kernelRadius; ky++) {
         uint x = correctedGlobalInvocation.x;

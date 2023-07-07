@@ -2,13 +2,13 @@
 
 layout (local_size_x = 8, local_size_y = 4, local_size_z = 1) in;
 layout (binding = EFTDEM_CLOSING_MASK_BUFFER) restrict buffer closingMaskBuffer{
-    double closingMask[];
+    float closingMask[];
 };
 layout (binding = EFTDEM_AVERAGE_BUFFER) restrict buffer averagesBuffer{
-    double average[];
+    float average[];
 };
 layout (binding = EFTDEM_HEIGHTMAP_BUFFER) restrict buffer heightsBuffer{
-    double heights[];
+    float heights[];
 };
 
 uniform uvec2 resolution;

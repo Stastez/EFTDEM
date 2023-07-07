@@ -25,7 +25,7 @@ pointGrid * SorterCPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
     unsigned long resolutionX = std::max((unsigned long) std::ceil((std::abs(pointCloud->max.x - pointCloud->min.x)) * (double) pixelPerUnitX) + 1, 1ul);
     unsigned long resolutionY = std::max((unsigned long) std::ceil((std::abs(pointCloud->max.y - pointCloud->min.y)) * (double) pixelPerUnitY) + 1, 1ul);
 
-    auto grid = new pointGrid{.points = std::vector<std::vector<point>>(resolutionX * resolutionY),
+    auto grid = new pointGrid{.points = std::vector<std::vector<floatPoint>>(resolutionX * resolutionY),
                       .resolutionX = resolutionX,
                       .resolutionY = resolutionY,
                       .min = pointCloud->min,

@@ -5,7 +5,7 @@ layout (binding = EFTDEM_AMOUNT_BUFFER) restrict buffer amountBuffer{
     uint amounts[];
 };
 layout (binding = EFTDEM_CLOSING_MASK_BUFFER) restrict buffer resultBuffer{
-    double closingMask[];
+    float closingMask[];
 };
 
 uniform uvec2 resolution;

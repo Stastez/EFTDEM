@@ -21,14 +21,14 @@ heightMap * RasterizerCPU::apply(pointGrid *pointGrid, bool generateOutput) {
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    auto map = emptyHeightMapfromPointGrid(pointGrid);
-    long double sum;
+    auto map = emptyHeightMapFromPointGrid(pointGrid);
+    double sum;
 
     for (unsigned long long i = 0; i < map->resolutionX * map->resolutionY; i++){
         sum = 0;
 
         for (auto & it : pointGrid->points.at(i)) sum += it.z;
-        map->heights.at(i) = static_cast<double>(sum / std::max(static_cast<long double>(pointGrid->points.at(i).size()), (long double) 1));
+        map->heights.at(i) = static_cast<float>(sum / std::max(static_cast<double>(pointGrid->points.at(i).size()), (double) 1));
     }
 
     auto end = std::chrono::high_resolution_clock::now();

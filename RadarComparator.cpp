@@ -30,14 +30,14 @@ std::vector<heightMap *> RadarComparator::compareMaps() {
         readerReturns.at(i) = pipelines.at(i)->reader->apply(true);
     }
 
-    std::vector<point> mins, maxs;
+    std::vector<doublePoint> mins, maxs;
     for (auto pointCloud : readerReturns) {
         mins.emplace_back(pointCloud->min);
         maxs.emplace_back(pointCloud->max);
     }
 
-    auto absoluteMin = mergePoints(mins).first,
-        absoluteMax = mergePoints(maxs).second;
+    auto absoluteMin = mergeDoublePoints(mins).first,
+        absoluteMax = mergeDoublePoints(maxs).second;
 
     for (auto pointCloud : readerReturns) {
         pointCloud->min = absoluteMin;
@@ -45,8 +45,8 @@ std::vector<heightMap *> RadarComparator::compareMaps() {
     }
 
     auto bottomMap = pipelines.at(0)->executeAfterReader(readerReturns.at(0));
-    auto topMap = emptyHeightMapfromHeightMap(bottomMap);
-    topMap->heights = std::vector<double>(bottomMap->resolutionX * bottomMap->resolutionY, 0);
+    auto topMap = emptyHeightMapFromHeightMap(bottomMap);
+    topMap->heights = std::vector<float>(bottomMap->resolutionX * bottomMap->resolutionY, 0);
 
     auto pixelCount = bottomMap->resolutionX * bottomMap->resolutionY;
 
@@ -54,28 +54,28 @@ std::vector<heightMap *> RadarComparator::compareMaps() {
     glHandler->setProgram(shaders.at(0));
     gl::glUniform2ui(gl::glGetUniformLocation(glHandler->getProgram(), "resolution"), bottomMap->resolutionX, bottomMap->resolutionY);
 
-    auto heights = new double[pixelCount];
+    auto heights = new gl::GLfloat[pixelCount];
 
     for (auto i = 0ul; i < pipelines.size(); i++) {
         glHandler->dataToBuffer(GLHandler::EFTDEM_COMPARISON_BUFFER,
-                                (long) (sizeof(double) * pixelCount),
+                                (long) (sizeof(gl::GLfloat) * pixelCount),
                                 nullptr, gl::GLenum::GL_STREAM_READ);
         glHandler->dataToBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,
-                                (long) (sizeof(double) * pixelCount),
+                                (long) (sizeof(gl::GLfloat) * pixelCount),
                                 bottomMap->heights.data(), gl::GLenum::GL_STATIC_DRAW);
         glHandler->dataToBuffer(GLHandler::EFTDEM_SECOND_HEIGHTMAP_BUFFER,
-                                (long) (sizeof(double) * pixelCount),
+                                (long) (sizeof(gl::GLfloat) * pixelCount),
                                 topMap->heights.data(), gl::GLenum::GL_STATIC_DRAW);
         gl::glDispatchCompute((unsigned int) std::ceil((double) bottomMap->resolutionX / 8.), (unsigned int) std::ceil((double) bottomMap->resolutionY / 8.), 1);
         GLHandler::waitForShaderStorageIntegrity();
 
         glHandler->dataFromBuffer(GLHandler::EFTDEM_COMPARISON_BUFFER,
                                   0,
-                                  (long) (sizeof(double) * pixelCount),
+                                  (long) (sizeof(gl::GLfloat) * pixelCount),
                                   heights);
 
-        auto temp = emptyHeightMapfromHeightMap(bottomMap);
-        temp->heights = std::vector<double>(heights, heights + pixelCount);
+        auto temp = emptyHeightMapFromHeightMap(bottomMap);
+        temp->heights = std::vector<float>(heights, heights + pixelCount);
         comparisons.emplace_back(temp);
 
         if (i < pipelines.size() - 1) {

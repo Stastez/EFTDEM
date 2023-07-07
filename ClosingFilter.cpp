@@ -55,24 +55,24 @@ heightMap * ClosingFilter::apply(heightMap *map, bool generateOutput) {
 
     if (!glHandler->getCoherentBufferMask().at(GLHandler::EFTDEM_HEIGHTMAP_BUFFER)){
         glHandler->dataToBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,
-                                (long) (sizeof(double) * pixelCount),
+                                (long) (sizeof(GLfloat) * pixelCount),
                                 map->heights.data(), GL_STATIC_DRAW);
     }
 
     auto bufferSpecs = std::vector<std::vector<bufferSpecifications>>();
     bufferSpecs.reserve(shaderPaths.size());
     // discretization
-    bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_CLOSING_MASK_BUFFER, sizeof(double)}});
+    bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_CLOSING_MASK_BUFFER, sizeof(GLfloat)}});
     // horizontalAmount
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_HORIZONTAL_AMOUNT_BUFFER, sizeof(unsigned)}});
     // amount
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_AMOUNT_BUFFER, sizeof(unsigned)}});
     // horizontalSum
-    bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_HORIZONTAL_SUM_BUFFER, sizeof(double)}});
+    bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_HORIZONTAL_SUM_BUFFER, sizeof(GLfloat)}});
     // sum
-    bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_SUM_BUFFER, sizeof(double)}});
+    bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_SUM_BUFFER, sizeof(GLfloat)}});
     // average
-    bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_AVERAGE_BUFFER, sizeof(double)}});
+    bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_AVERAGE_BUFFER, sizeof(GLfloat)}});
     // dilation
     bufferSpecs.emplace_back();
     // horizontalAmount again
@@ -97,12 +97,12 @@ heightMap * ClosingFilter::apply(heightMap *map, bool generateOutput) {
     auto end = std::chrono::high_resolution_clock::now();
     std::cout << "Elapsed time for closing: " << duration_cast<std::chrono::milliseconds>(end - start).count() << "ms" << std::endl;
 
-    if (!generateOutput) return emptyHeightMapfromHeightMap(map);
+    if (!generateOutput) return emptyHeightMapFromHeightMap(map);
 
-    auto filledMap = emptyHeightMapfromHeightMap(map);
+    auto filledMap = emptyHeightMapFromHeightMap(map);
     glHandler->dataFromBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,
                               0,
-                              (long) (sizeof(GLdouble) * filledMap->resolutionX * filledMap->resolutionY),
+                              (long) (sizeof(GLfloat) * filledMap->resolutionX * filledMap->resolutionY),
                               filledMap->heights.data());
 
     return filledMap;

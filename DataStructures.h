@@ -4,49 +4,56 @@
 
 #include <vector>
 
-struct point {
+struct doublePoint {
     double x, y, z;
     int intensity;
 };
 
+struct floatPoint {
+    float x, y, z;
+    int intensity;
+};
+
 struct rawPointCloud {
-    std::vector<point> groundPoints;
-    std::vector<point> environmentPoints;
-    point min, max;
+    std::vector<doublePoint> groundPoints;
+    std::vector<doublePoint> environmentPoints;
+    doublePoint min, max;
     unsigned int numberOfPoints;
 };
 
 struct pointGrid {
-    std::vector<std::vector<point>> points;
+    std::vector<std::vector<floatPoint>> points;
     unsigned long resolutionX, resolutionY;
-    point min, max;
+    doublePoint min, max;
     unsigned int numberOfPoints;
 };
 
-std::vector<point> get(pointGrid *g, unsigned long x, unsigned long y);
-void set(pointGrid *g, unsigned long x, unsigned long y, std::vector<point> value);
-void add(pointGrid *g, unsigned long x, unsigned long y, point value);
+std::vector<floatPoint> get(pointGrid *g, unsigned long x, unsigned long y);
+void set(pointGrid *g, unsigned long x, unsigned long y, std::vector<floatPoint> value);
+void add(pointGrid *g, unsigned long x, unsigned long y, floatPoint value);
 unsigned long long calculate1DCoordinate(const pointGrid *g, unsigned long x, unsigned long y);
 
 struct heightMap {
-    std::vector<double> heights;
+    std::vector<float> heights;
     unsigned long resolutionX, resolutionY;
     long long dataSize;
-    point min, max;
+    doublePoint min, max;
 };
 
-heightMap * emptyHeightMapfromHeightMap(heightMap *map);
-heightMap * emptyHeightMapfromPointGrid(pointGrid *grid);
+heightMap * emptyHeightMapFromHeightMap(heightMap *map);
+heightMap * emptyHeightMapFromPointGrid(pointGrid *grid);
 
 unsigned long long calculate1DCoordinate(const heightMap *h, unsigned long x, unsigned long y);
 
-double denormalizeValue(double value, double min, double max);
-double normalizeValue(double value, double min, double max);
-point normalizeValue(point value, point min, point max);
+double denormalizeValue(float value, double min, double max);
+float normalizeValue(double value, double min, double max);
+floatPoint normalizeValue(doublePoint value, doublePoint min, doublePoint max);
 
-[[maybe_unused]] point denormalizeValue(point value, point min, point max);
+[[maybe_unused]] doublePoint denormalizeValue(floatPoint value, doublePoint min, doublePoint max);
 
-std::pair<point, point> mergePoints(point p1, point p2);
-std::pair<point, point> mergePoints(const std::vector<point>& points);
+std::pair<doublePoint, doublePoint> mergeDoublePoints(doublePoint p1, doublePoint p2);
+std::pair<doublePoint, doublePoint> mergeDoublePoints(const std::vector<doublePoint>& points);
+std::pair<floatPoint, floatPoint> mergeFloatPoints(floatPoint p1, floatPoint p2);
+std::pair<floatPoint, floatPoint> mergeFloatPoints(const std::vector<floatPoint>& points);
 
 #endif //EFTDEM_DATASTRUCTURES_H

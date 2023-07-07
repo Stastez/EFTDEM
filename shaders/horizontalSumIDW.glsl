@@ -2,13 +2,13 @@
 
 layout (local_size_x = 8, local_size_y = 4, local_size_z = 1) in;
 layout (binding = EFTDEM_HEIGHTMAP_BUFFER) restrict buffer mapBuffer{
-    double discreteValues[];
+    float discreteValues[];
 };
 layout (binding = EFTDEM_KERNEL_BUFFER) restrict buffer kernelBuffer{
-    double kernel[];
+    float kernel[];
 };
 layout (binding = EFTDEM_HORIZONTAL_SUM_BUFFER) restrict buffer horizontalSumBuffer{
-    double horizontalSum[];
+    float horizontalSum[];
 };
 
 uniform uvec2 resolution;
@@ -24,14 +24,14 @@ void main() {
     if (any(greaterThanEqual(correctedGlobalInvocation, resolution))) return;
     uint coord1D = calculate1DCoordinate(correctedGlobalInvocation);
 
-    double sum = 0.0;
+    float sum = 0.0;
 
     for (uint kx = 0; kx <= 2*kernelRadius; kx++) {
         uint x = kx - kernelRadius + correctedGlobalInvocation.x;
         uint y = correctedGlobalInvocation.y;
 
         if (0u <= x && x < resolution.x){
-            double currentHeight = discreteValues[calculate1DCoordinate(uvec2(x,y))];
+            float currentHeight = discreteValues[calculate1DCoordinate(uvec2(x,y))];
             uint kernelIndex = (kx>kernelRadius) ? kx-kernelRadius : kernelRadius-kx;
             sum += kernel[kernelIndex] * currentHeight;
         }
