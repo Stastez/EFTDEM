@@ -36,7 +36,7 @@ unsigned long long calculate1DCoordinate(const pointGrid *g, unsigned long x, un
 struct heightMap {
     std::vector<float> heights;
     unsigned long resolutionX, resolutionY;
-    long long dataSize;
+    long dataSize;
     doublePoint min, max;
 };
 

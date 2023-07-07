@@ -34,7 +34,7 @@ heightMap *Pipeline::executeAfterReader(rawPointCloud *pointCloud) {
     if (!isOperable()) exit(EXIT_INVALID_FUNCTION_PARAMETERS);
     if (!glHandler->isInitialized(false)) glHandler->initializeGL(false);
 
-    bool generateAllOutputs = true;
+    bool generateAllOutputs = false;
 
     delete reader;
     reader = nullptr;

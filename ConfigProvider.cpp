@@ -10,6 +10,9 @@
 #include "InverseDistanceWeightedFilter.h"
 #include "GroundRadarReader.h"
 #include "FillerLoop.h"
+#include "RadialDilator.h"
+#include "RadialBufferSwapper.h"
+#include "RadialEroder.h"
 
 #include <iostream>
 #include <utility>
@@ -115,6 +118,18 @@ Pipeline *ConfigProvider::providePipeline() {
 
         filters.emplace_back(fillerToAppend);
     }
+
+    /*filters = std::vector<IHeightMapFiller *>();
+    for (auto i = 0u; i < kernelRadii.at(0); i++) {
+        filters.emplace_back(new RadialDilator(glHandler, (bool) (i % 2u), batchSize));
+        //filters.emplace_back(new RadialDilator(glHandler, false));
+        //filters.emplace_back(new RadialBufferSwapper(glHandler));
+    }
+    for (auto i = 0u; i < kernelRadii.at(0); i++) {
+        filters.emplace_back(new RadialEroder(glHandler, (bool) ((kernelRadii.at(0) + i) % 2u), batchSize));
+    }
+    if (kernelRadii.at(0) % 2u == 1) filters.emplace_back(new RadialBufferSwapper(glHandler));*/
+
     filler = new FillerLoop(filters);
 
     auto writeLowDepthTest = checkValidityAndReturn(config["CloudWriterOptions"]["writeLowDepth"], false);
