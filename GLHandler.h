@@ -20,15 +20,14 @@ public:
         EFTDEM_SECOND_HEIGHTMAP_BUFFER, // float for each grid cell
         EFTDEM_COMPARISON_BUFFER, // float for each grid cell
         EFTDEM_HORIZONTAL_SUM_BUFFER, // unsigned int for each grid cell
-        EFTDEM_SUM_BUFFER, // double for each grid cell
+        EFTDEM_SUM_BUFFER, // float for each grid cell
         EFTDEM_HORIZONTAL_AMOUNT_BUFFER, // unsigned int for each grid cell
         EFTDEM_AMOUNT_BUFFER, // unsigned int for each grid cell
-        EFTDEM_AVERAGE_BUFFER, // double for each grid cell
-        EFTDEM_CLOSING_MASK_BUFFER, // double for each grid cell
-        EFTDEM_INTERIM_RESULT_BUFFER, // double for each grid cell
-        EFTDEM_TOTAL_WEIGHT_BUFFER, // double for each grid cell
-        EFTDEM_HORIZONTAL_TOTAL_WEIGHT_BUFFER, // double for each grid cell
-        EFTDEM_KERNEL_BUFFER, // double for as manny fields as Kernel Radius
+        EFTDEM_AVERAGE_BUFFER, // float for each grid cell
+        EFTDEM_CLOSING_MASK_BUFFER, // float for each grid cell
+        EFTDEM_TOTAL_WEIGHT_BUFFER, // float for each grid cell
+        EFTDEM_HORIZONTAL_TOTAL_WEIGHT_BUFFER, // float for each grid cell
+        EFTDEM_KERNEL_BUFFER, // float for as manny fields as Kernel Radius
     };
 
     GLHandler();
