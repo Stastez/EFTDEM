@@ -46,9 +46,9 @@ heightMap *RadialEroder::apply(heightMap *map, bool generateOutput) {
     // radialErosion.glsl
     glUniform2ui(glGetUniformLocation(glHandler->getProgram(), "resolution"), map->resolutionX, map->resolutionY);
     glUniform1i(glGetUniformLocation(glHandler->getProgram(), "flipped"), flipped);
-    //glHandler->dispatchShader(batchSize, map->resolutionX, map->resolutionY);
-    glUniform2ui(glGetUniformLocation(glHandler->getProgram(), "currentInvocation"), 0, 0);
-    glDispatchCompute((GLuint) std::ceil((double) map->resolutionX / 8.), (GLuint) std::ceil((double) map->resolutionY / 8.), 1);
+    glHandler->dispatchShader(batchSize, map->resolutionX, map->resolutionY);
+    //glUniform2ui(glGetUniformLocation(glHandler->getProgram(), "currentInvocation"), 0, 0);
+    //glDispatchCompute((GLuint) std::ceil((double) map->resolutionX / 8.), (GLuint) std::ceil((double) map->resolutionY / 4.), 1);
     GLHandler::waitForShaderStorageIntegrity();
 
     if (!generateOutput) return emptyHeightMapFromHeightMap(map);

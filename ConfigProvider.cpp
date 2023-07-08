@@ -32,7 +32,8 @@ YAML::Node ConfigProvider::readConfig() {
         localConfig = YAML::LoadFile(configPath);
     } catch (const std::exception& e) {
         std::cout << e.what() << std::endl;
-        exit(Pipeline::EXIT_INVALID_COMMAND_LINE_ARGUMENTS);
+        //exit(Pipeline::EXIT_INVALID_COMMAND_LINE_ARGUMENTS);
+        throw std::exception();
     }
 
     return localConfig;
@@ -44,8 +45,9 @@ std::pair<YAML::Node, bool> ConfigProvider::checkValidityAndReturn(const YAML::N
     if (!node) {
         returnPair.second = false;
         if (required) {
-            std::cout << node.Tag() << " not specified!" << std::endl;
-            exit(Pipeline::EXIT_INVALID_CONFIGURATION);
+            std::cout << "Required attribute not specified!" << std::endl;
+            //exit(Pipeline::EXIT_INVALID_CONFIGURATION);
+            throw std::exception();
         }
     }
 
@@ -99,38 +101,48 @@ Pipeline *ConfigProvider::providePipeline() {
     
     IHeightMapFiller *filler;
     auto fillingAlgorithm = checkValidityAndReturn(config["HeightMapFillerOptions"]["filler"], true).first.as<std::string>();
-    auto kernelRadii = checkValidityAndReturn(config["HeightMapFillerOptions"]["kernelBasedFilterOptions"]["kernelSizes"], true).first.as<std::vector<unsigned int>>();
-    auto batchSizeTest = checkValidityAndReturn(config["HeightMapFillerOptions"]["kernelBasedFilterOptions"]["batchSize"], false);
-    auto batchSize = (batchSizeTest.second) ? batchSizeTest.first.as<unsigned int>() : 0;
 
-    std::vector<IHeightMapFiller *> filters;
-    filters.reserve(kernelRadii.size());
-    for (auto radius : kernelRadii) {
-        IHeightMapFiller *fillerToAppend;
-        if (fillingAlgorithm == "closingFilter")
-            fillerToAppend = new ClosingFilter(glHandler, radius, batchSize);
-        else if (fillingAlgorithm == "inverseDistanceWeightedFilter")
-            fillerToAppend = new InverseDistanceWeightedFilter(glHandler, radius, batchSize);
-        else {
-            std::cout << fillingAlgorithm << " is either misspelled or not implemented." << std::endl;
-            exit(Pipeline::EXIT_INVALID_CONFIGURATION);
+    if (fillingAlgorithm == "closingFilter" || fillingAlgorithm == "inverseDistanceWeighted") {
+        auto kernelRadii = checkValidityAndReturn(
+                config["HeightMapFillerOptions"]["kernelBasedFilterOptions"]["kernelSizes"],
+                true).first.as<std::vector<unsigned int>>();
+        auto batchSizeTest = checkValidityAndReturn(
+                config["HeightMapFillerOptions"]["kernelBasedFilterOptions"]["batchSize"], false);
+        auto batchSize = (batchSizeTest.second) ? batchSizeTest.first.as<unsigned int>() : 0;
+
+        std::vector<IHeightMapFiller *> filters;
+        filters.reserve(kernelRadii.size());
+        for (auto radius: kernelRadii) {
+            IHeightMapFiller *fillerToAppend;
+            if (fillingAlgorithm == "closingFilter")
+                fillerToAppend = new ClosingFilter(glHandler, radius, batchSize);
+            else if (fillingAlgorithm == "inverseDistanceWeightedFilter")
+                fillerToAppend = new InverseDistanceWeightedFilter(glHandler, radius, batchSize);
+
+            filters.emplace_back(fillerToAppend);
         }
 
-        filters.emplace_back(fillerToAppend);
-    }
+        filler = new FillerLoop(filters);
+    } else if (fillingAlgorithm == "radialFiller") {
+        auto batchSizeTest = checkValidityAndReturn(
+                config["HeightMapFillerOptions"]["radialFillerOptions"]["batchSize"], false);
+        auto batchSize = (batchSizeTest.second) ? batchSizeTest.first.as<unsigned int>() : 0;
+        auto maxHoleRadius = checkValidityAndReturn(config["HeightMapFillerOptions"]["radialFillerOptions"]["maxHoleRadius"], true).first.as<unsigned int>();
 
-    /*filters = std::vector<IHeightMapFiller *>();
-    for (auto i = 0u; i < kernelRadii.at(0); i++) {
-        filters.emplace_back(new RadialDilator(glHandler, (bool) (i % 2u), batchSize));
-        //filters.emplace_back(new RadialDilator(glHandler, false));
-        //filters.emplace_back(new RadialBufferSwapper(glHandler));
-    }
-    for (auto i = 0u; i < kernelRadii.at(0); i++) {
-        filters.emplace_back(new RadialEroder(glHandler, (bool) ((kernelRadii.at(0) + i) % 2u), batchSize));
-    }
-    if (kernelRadii.at(0) % 2u == 1) filters.emplace_back(new RadialBufferSwapper(glHandler));*/
+        auto fillers = std::vector<IHeightMapFiller *>();
+        for (auto i = 0u; i < maxHoleRadius; i++) {
+            fillers.emplace_back(new RadialDilator(glHandler, (bool) (i % 2u), batchSize));
+        }
+        for (auto i = 0u; i < maxHoleRadius; i++) {
+            fillers.emplace_back(new RadialEroder(glHandler, (bool) ((maxHoleRadius + i) % 2u), batchSize));
+        }
+        if (maxHoleRadius % 2u == 1) fillers.emplace_back(new RadialBufferSwapper(glHandler));
 
-    filler = new FillerLoop(filters);
+        filler = new FillerLoop(fillers);
+    } else {
+        std::cout << fillingAlgorithm << " is either misspelled or not implemented." << std::endl;
+        exit(Pipeline::EXIT_INVALID_CONFIGURATION);
+    }
 
     auto writeLowDepthTest = checkValidityAndReturn(config["CloudWriterOptions"]["writeLowDepth"], false);
     auto writeLowDepth = writeLowDepthTest.second && writeLowDepthTest.first.as<bool>();
