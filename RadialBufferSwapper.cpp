@@ -6,6 +6,10 @@ RadialBufferSwapper::RadialBufferSwapper(GLHandler *glHandler) {
     RadialBufferSwapper::stageUsesGPU = true;
 }
 
+RadialBufferSwapper::~RadialBufferSwapper() {
+    glHandler->deleteBuffer(GLHandler::EFTDEM_SECOND_HEIGHTMAP_BUFFER);
+}
+
 heightMap *RadialBufferSwapper::apply(heightMap *map, bool generateOutput) {
     using namespace gl;
 

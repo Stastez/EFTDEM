@@ -9,7 +9,8 @@ private:
     GLHandler * glHandler;
 
 public:
-    RadialBufferSwapper(GLHandler * glHandler);
+    explicit RadialBufferSwapper(GLHandler * glHandler);
+    ~RadialBufferSwapper();
     heightMap * apply(heightMap *map, bool generateOutput) override;
 };
 

@@ -13,6 +13,7 @@
 #include "RadialDilator.h"
 #include "RadialBufferSwapper.h"
 #include "RadialEroder.h"
+#include "RadialFiller.h"
 
 #include <iostream>
 #include <utility>
@@ -131,16 +132,7 @@ Pipeline *ConfigProvider::providePipeline() {
         auto useBatching = checkValidityAndReturn(config["HeightMapFillerOptions"]["radialFillerOptions"]["useBatching"], false);
         auto batched = !(useBatching.second) || useBatching.first.as<bool>();
 
-        auto fillers = std::vector<IHeightMapFiller *>();
-        for (auto i = 0u; i < maxHoleRadius; i++) {
-            fillers.emplace_back(new RadialDilator(glHandler, (bool) (i % 2u), batchSize, batched));
-        }
-        for (auto i = 0u; i < maxHoleRadius; i++) {
-            fillers.emplace_back(new RadialEroder(glHandler, (bool) ((maxHoleRadius + i) % 2u), batchSize, batched));
-        }
-        if (maxHoleRadius % 2u == 1) fillers.emplace_back(new RadialBufferSwapper(glHandler));
-
-        filler = new FillerLoop(fillers);
+        filler = new RadialFiller(glHandler, maxHoleRadius, batched, batchSize);
     } else {
         std::cout << fillingAlgorithm << " is either misspelled or not implemented." << std::endl;
         exit(Pipeline::EXIT_INVALID_CONFIGURATION);
