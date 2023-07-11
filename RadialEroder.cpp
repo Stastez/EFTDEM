@@ -3,23 +3,29 @@
 #include <iostream>
 #include <cmath>
 
-RadialEroder::RadialEroder(GLHandler *glHandler, bool flipped, unsigned int batchSize, bool batched) {
+RadialEroder::RadialEroder(GLHandler *glHandler, bool flipped, unsigned int batchSize, bool batched,
+                           gl::GLuint shaderProgram, gl::GLint resolutionLocation, gl::GLint currentInvocationLocation,
+                           gl::GLint flippedLocation, bool ignoreOutput) {
     RadialEroder::glHandler = glHandler;
     RadialEroder::stageUsesGPU = true;
     RadialEroder::flipped = flipped;
     RadialEroder::batchSize = batchSize;
     RadialEroder::batched = batched;
+    RadialEroder::shaderProgram = shaderProgram;
+    RadialEroder::resolutionLocation = resolutionLocation;
+    RadialEroder::currentInvocationLocation = currentInvocationLocation;
+    RadialEroder::flippedLocation = flippedLocation;
+    RadialEroder::ignoreOutput = ignoreOutput;
 }
 
 heightMap *RadialEroder::apply(heightMap *map, bool generateOutput) {
     using namespace gl;
 
-    auto shaderPaths = new std::vector<std::string>{"radialErosion.glsl"};
+    /*auto shaderPaths = new std::vector<std::string>{"radialErosion.glsl"};
 
-    auto shaders = glHandler->getShaderPrograms(*shaderPaths, true);
+    auto shaders = glHandler->getShaderPrograms(*shaderPaths, true);*/
 
-    glHandler->setProgram(shaders.at(0));
-
+    glHandler->setProgram(shaderProgram);
     if (!glHandler->getCoherentBufferMask().at(GLHandler::EFTDEM_HEIGHTMAP_BUFFER)){
         if (flipped) {
             auto initialState = new std::vector<GLfloat>(map->resolutionX * map->resolutionY, 0);
@@ -45,17 +51,17 @@ heightMap *RadialEroder::apply(heightMap *map, bool generateOutput) {
     }
 
     // radialErosion.glsl
-    glUniform2ui(glGetUniformLocation(glHandler->getProgram(), "resolution"), map->resolutionX, map->resolutionY);
-    glUniform1i(glGetUniformLocation(glHandler->getProgram(), "flipped"), flipped);
+    glUniform2ui(resolutionLocation, map->resolutionX, map->resolutionY);
+    glUniform1i(flippedLocation, flipped);
     if (batched)
         glHandler->dispatchShader(batchSize, map->resolutionX, map->resolutionY);
     else {
-        glUniform2ui(glGetUniformLocation(glHandler->getProgram(), "currentInvocation"), 0, 0);
+        glUniform2ui(currentInvocationLocation, 0, 0);
         glDispatchCompute((GLuint) std::ceil((double) map->resolutionX / 8.), (GLuint) std::ceil((double) map->resolutionY / 4.), 1);
     }
     GLHandler::waitForShaderStorageIntegrity();
 
-    if (!generateOutput) return emptyHeightMapFromHeightMap(map);
+    if (ignoreOutput || !generateOutput) return emptyHeightMapFromHeightMap(map);
 
     auto filledMap = emptyHeightMapFromHeightMap(map);
 
