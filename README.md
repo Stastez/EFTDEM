@@ -9,8 +9,9 @@ CloudReaderOptions:
   pointCloudType: mobileMapping
 
 CloudSorterOptions:
-  pixelPerUnitX: 5
-  pixelPerUnitY: 5
+  pixelPerUnit: 5
+  #pixelPerUnitX: 5 ### optional, remove pixelPerUnit if you want to use this
+  #pixelPerUnitY: 5 ### optional, remove pixelPerUnit if you want to use this
   useGPU: true
 
 CloudRasterizerOptions:
@@ -19,15 +20,22 @@ CloudRasterizerOptions:
 HeightMapFillerOptions:
   useGPU: true
 
-  # Currently implemented: closingFilter, inverseDistanceWeightedFilter
+  # Currently implemented: closingFilter, inverseDistanceWeightedFilter, radialFiller
   filler: inverseDistanceWeightedFilter
 
+  # for closingFilter and inverseDistanceWeightedFilter
   kernelBasedFilterOptions:
     kernelSizes:
       - 5
       - 25
       - 50
-    batchSize: 1024
+    batchSize: 1024 # optional, if not set will default to 0 (automatically trying to find possible batch size)
+
+  # for radialFiller
+  radialFillerOptions:
+    maxHoleRadius: 50
+    batchSize: 8192 # optional, if not set will default to 0 (automatically trying to find possible batch size)
+    useBatching: false # optional, will default to "true". If "false", this will disable batching and make "batchSize" obsolete
 
 CloudWriterOptions:
   destinationPath: "../resources/map"
