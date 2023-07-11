@@ -36,4 +36,5 @@ void main() {
     }
 
     if (!flipped) secondHeightMap[ownCoordinate] = mix(0., secondHeightMap[ownCoordinate], step(0.0000001, minValue));
+    else firstHeightMap[ownCoordinate] = mix(0., secondHeightMap[ownCoordinate], step(0.0000001, minValue));
 }
