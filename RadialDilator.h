@@ -9,9 +9,10 @@ private:
     bool flipped;
     GLHandler * glHandler;
     unsigned int batchSize;
+    bool batched;
 
 public:
-    explicit RadialDilator(GLHandler *glHandler, bool flipped, unsigned int batchSize);
+    explicit RadialDilator(GLHandler *glHandler, bool flipped, unsigned int batchSize, bool batched);
     heightMap * apply(heightMap *map, bool generateOutput) override;
 };
 

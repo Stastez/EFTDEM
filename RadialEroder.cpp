@@ -3,11 +3,12 @@
 #include <iostream>
 #include <cmath>
 
-RadialEroder::RadialEroder(GLHandler *glHandler, bool flipped, unsigned int batchSize) {
+RadialEroder::RadialEroder(GLHandler *glHandler, bool flipped, unsigned int batchSize, bool batched) {
     RadialEroder::glHandler = glHandler;
     RadialEroder::stageUsesGPU = true;
     RadialEroder::flipped = flipped;
     RadialEroder::batchSize = batchSize;
+    RadialEroder::batched = batched;
 }
 
 heightMap *RadialEroder::apply(heightMap *map, bool generateOutput) {
@@ -46,9 +47,12 @@ heightMap *RadialEroder::apply(heightMap *map, bool generateOutput) {
     // radialErosion.glsl
     glUniform2ui(glGetUniformLocation(glHandler->getProgram(), "resolution"), map->resolutionX, map->resolutionY);
     glUniform1i(glGetUniformLocation(glHandler->getProgram(), "flipped"), flipped);
-    glHandler->dispatchShader(batchSize, map->resolutionX, map->resolutionY);
-    //glUniform2ui(glGetUniformLocation(glHandler->getProgram(), "currentInvocation"), 0, 0);
-    //glDispatchCompute((GLuint) std::ceil((double) map->resolutionX / 8.), (GLuint) std::ceil((double) map->resolutionY / 4.), 1);
+    if (batched)
+        glHandler->dispatchShader(batchSize, map->resolutionX, map->resolutionY);
+    else {
+        glUniform2ui(glGetUniformLocation(glHandler->getProgram(), "currentInvocation"), 0, 0);
+        glDispatchCompute((GLuint) std::ceil((double) map->resolutionX / 8.), (GLuint) std::ceil((double) map->resolutionY / 4.), 1);
+    }
     GLHandler::waitForShaderStorageIntegrity();
 
     if (!generateOutput) return emptyHeightMapFromHeightMap(map);

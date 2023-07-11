@@ -13,7 +13,8 @@ uniform uvec2 currentInvocation;
 float scattering = 1.;
 
 float weightingFunction(float x) {
-    return exp(float(-abs(x/scattering)));
+    //return exp(float(-abs(x/scattering)));
+    return (x == 0) ? 1. : pow(x, -2.);
 }
 
 uint calculate1DCoordinate(uvec2 pos, uvec2 referenceResolution) {
@@ -37,8 +38,9 @@ void main() {
             uint actual1DCoordinate = calculate1DCoordinate(actualPosition, resolution);
             float height = (!flipped) ? firstHeightMap[actual1DCoordinate] : secondHeightMap[actual1DCoordinate];
 
-            sum += float(isOnCanvas) * height; //weightingFunction(height);
-            count += float(isOnCanvas) * float(height != 0.);
+            float distanceFromKernelOrigin = length(vec2(xOffset, yOffset));
+            sum += float(isOnCanvas) * weightingFunction(distanceFromKernelOrigin) * height;
+            count += float(isOnCanvas) * weightingFunction(distanceFromKernelOrigin) * float(height != 0.);
         }
     }
 

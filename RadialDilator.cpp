@@ -3,11 +3,12 @@
 #include <iostream>
 #include <cmath>
 
-RadialDilator::RadialDilator(GLHandler *glHandler, bool flipped, unsigned int batchSize) {
+RadialDilator::RadialDilator(GLHandler *glHandler, bool flipped, unsigned int batchSize, bool batched) {
     RadialDilator::glHandler = glHandler;
     RadialDilator::stageUsesGPU = true;
     RadialDilator::flipped = flipped;
     RadialDilator::batchSize = batchSize;
+    RadialDilator::batched = batched;
 }
 
 heightMap *RadialDilator::apply(heightMap *map, bool generateOutput) {
@@ -35,9 +36,12 @@ heightMap *RadialDilator::apply(heightMap *map, bool generateOutput) {
     // radialDilation.glsl
     glUniform2ui(glGetUniformLocation(glHandler->getProgram(), "resolution"), map->resolutionX, map->resolutionY);
     glUniform1i(glGetUniformLocation(glHandler->getProgram(), "flipped"), flipped);
-    glHandler->dispatchShader(batchSize, map->resolutionX, map->resolutionY);
-    //glUniform2ui(glGetUniformLocation(glHandler->getProgram(), "currentInvocation"), 0, 0);
-    //glDispatchCompute((GLuint) std::ceil((double) map->resolutionX / 8.), (GLuint) std::ceil((double) map->resolutionY / 4.), 1);
+    if (batched)
+        glHandler->dispatchShader(batchSize, map->resolutionX, map->resolutionY);
+    else {
+        glUniform2ui(glGetUniformLocation(glHandler->getProgram(), "currentInvocation"), 0, 0);
+        glDispatchCompute((GLuint) std::ceil((double) map->resolutionX / 8.), (GLuint) std::ceil((double) map->resolutionY / 4.), 1);
+    }
     GLHandler::waitForShaderStorageIntegrity();
 
     if (!generateOutput) return emptyHeightMapFromHeightMap(map);

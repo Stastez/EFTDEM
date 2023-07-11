@@ -128,13 +128,15 @@ Pipeline *ConfigProvider::providePipeline() {
                 config["HeightMapFillerOptions"]["radialFillerOptions"]["batchSize"], false);
         auto batchSize = (batchSizeTest.second) ? batchSizeTest.first.as<unsigned int>() : 0;
         auto maxHoleRadius = checkValidityAndReturn(config["HeightMapFillerOptions"]["radialFillerOptions"]["maxHoleRadius"], true).first.as<unsigned int>();
+        auto useBatching = checkValidityAndReturn(config["HeightMapFillerOptions"]["radialFillerOptions"]["useBatching"], false);
+        auto batched = !(useBatching.second) || useBatching.first.as<bool>();
 
         auto fillers = std::vector<IHeightMapFiller *>();
         for (auto i = 0u; i < maxHoleRadius; i++) {
-            fillers.emplace_back(new RadialDilator(glHandler, (bool) (i % 2u), batchSize));
+            fillers.emplace_back(new RadialDilator(glHandler, (bool) (i % 2u), batchSize, batched));
         }
         for (auto i = 0u; i < maxHoleRadius; i++) {
-            fillers.emplace_back(new RadialEroder(glHandler, (bool) ((maxHoleRadius + i) % 2u), batchSize));
+            fillers.emplace_back(new RadialEroder(glHandler, (bool) ((maxHoleRadius + i) % 2u), batchSize, batched));
         }
         if (maxHoleRadius % 2u == 1) fillers.emplace_back(new RadialBufferSwapper(glHandler));
 
