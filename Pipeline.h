@@ -1,6 +1,7 @@
 #ifndef EFTDEM_PIPELINE_H
 #define EFTDEM_PIPELINE_H
 
+#include "IPipeline.h"
 #include "IPipelineComponent.h"
 #include "ICloudReader.h"
 #include "ICloudSorter.h"
@@ -9,9 +10,8 @@
 #include "IHeightMapWriter.h"
 #include "GLHandler.h"
 
-class Pipeline {
+class Pipeline : public IPipeline {
 friend class ConfigProvider;
-friend class RadarComparator;
 
 private:
     ICloudReader *reader{};
@@ -20,7 +20,6 @@ private:
     IHeightMapFiller *filler{};
     IHeightMapWriter *writer{};
     GLHandler *glHandler{};
-    heightMap * executeAfterReader(rawPointCloud *pointCloud);
 
 public:
     ~Pipeline();
@@ -31,7 +30,11 @@ public:
 
     void attachElements(ICloudReader *, ICloudSorter *, ICloudRasterizer *, IHeightMapFiller *, IHeightMapWriter *);
 
-    heightMap * execute();
+    heightMap * execute() override;
+    heightMap * executeAfterReader(rawPointCloud *pointCloud) override;
+
+    GLHandler * getGLHandler() override;
+    ICloudReader * getCloudReader() override;
 
     enum exitCodes {
         EXIT_INVALID_COMMAND_LINE_ARGUMENTS = 101,

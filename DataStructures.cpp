@@ -122,6 +122,14 @@ heightMap * emptyHeightMapFromHeightMap(heightMap *map){
             .max = map->max };
 }
 
+rawPointCloud * emptyPointCloudFromHeightMap(heightMap *map) {
+    return new rawPointCloud{
+            .groundPoints = std::vector<doublePoint>(),
+            .environmentPoints = std::vector<doublePoint>(),
+            .min = map->min, .max = map->max,
+            .numberOfPoints = 0 };
+}
+
 std::pair<doublePoint, doublePoint> mergeDoublePoints(doublePoint p1, doublePoint p2) {
     auto min = doublePoint{
             .x = std::min(p1.x, p2.x),

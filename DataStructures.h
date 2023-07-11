@@ -42,6 +42,7 @@ struct heightMap {
 
 heightMap * emptyHeightMapFromHeightMap(heightMap *map);
 heightMap * emptyHeightMapFromPointGrid(pointGrid *grid);
+rawPointCloud * emptyPointCloudFromHeightMap(heightMap *map);
 
 unsigned long long calculate1DCoordinate(const heightMap *h, unsigned long x, unsigned long y);
 

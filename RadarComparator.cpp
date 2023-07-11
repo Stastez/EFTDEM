@@ -4,6 +4,12 @@
 
 #include <utility>
 
+RadarComparator::~RadarComparator() {
+    delete configProvider;
+    for (auto pipeline : pipelines) delete pipeline;
+    configProvider = nullptr;
+}
+
 RadarComparator::RadarComparator(std::vector<std::string> configPaths) {
     RadarComparator::configPaths = std::move(configPaths);
     configProvider = new ConfigProvider();
@@ -12,22 +18,14 @@ RadarComparator::RadarComparator(std::vector<std::string> configPaths) {
         pipelines.emplace_back(configProvider->providePipeline(config));
         destinationPaths.emplace_back(configProvider->getComparisonPath());
     }
-    RadarComparator::glHandler = pipelines.at(0)->glHandler;
+    RadarComparator::glHandler = pipelines.at(0)->getGLHandler();
+    compareShaderPath = "compare.glsl";
 }
 
-RadarComparator::~RadarComparator() {
-    delete configProvider;
-    for (auto pipeline : pipelines) delete pipeline;
-    configProvider = nullptr;
-}
-
-std::vector<heightMap *> RadarComparator::compareMaps() {
-    std::vector<heightMap *> comparisons;
-    comparisons.reserve(pipelines.size());
-
+std::vector<rawPointCloud *> RadarComparator::setupPointClouds() {
     std::vector<rawPointCloud *> readerReturns(pipelines.size());
     for (auto i = 0ul; i < pipelines.size(); i++) {
-        readerReturns.at(i) = pipelines.at(i)->reader->apply(true);
+        readerReturns.at(i) = pipelines.at(i)->getCloudReader()->apply(true);
     }
 
     std::vector<doublePoint> mins, maxs;
@@ -43,67 +41,5 @@ std::vector<heightMap *> RadarComparator::compareMaps() {
         pointCloud->min = absoluteMin;
         pointCloud->max = absoluteMax;
     }
-
-    auto bottomMap = pipelines.at(0)->executeAfterReader(readerReturns.at(0));
-    auto topMap = emptyHeightMapFromHeightMap(bottomMap);
-    topMap->heights = std::vector<float>(bottomMap->resolutionX * bottomMap->resolutionY, 0);
-
-    auto pixelCount = bottomMap->resolutionX * bottomMap->resolutionY;
-
-    auto shaders = glHandler->getShaderPrograms({"compare.glsl"}, true);
-    glHandler->setProgram(shaders.at(0));
-    gl::glUniform2ui(gl::glGetUniformLocation(glHandler->getProgram(), "resolution"), bottomMap->resolutionX, bottomMap->resolutionY);
-
-    auto heights = new gl::GLfloat[pixelCount];
-
-    for (auto i = 0ul; i < pipelines.size(); i++) {
-        glHandler->dataToBuffer(GLHandler::EFTDEM_COMPARISON_BUFFER,
-                                (long) (sizeof(gl::GLfloat) * pixelCount),
-                                nullptr, gl::GLenum::GL_STREAM_READ);
-        glHandler->dataToBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,
-                                (long) (sizeof(gl::GLfloat) * pixelCount),
-                                bottomMap->heights.data(), gl::GLenum::GL_STATIC_DRAW);
-        glHandler->dataToBuffer(GLHandler::EFTDEM_SECOND_HEIGHTMAP_BUFFER,
-                                (long) (sizeof(gl::GLfloat) * pixelCount),
-                                topMap->heights.data(), gl::GLenum::GL_STATIC_DRAW);
-        gl::glDispatchCompute((unsigned int) std::ceil((double) bottomMap->resolutionX / 8.), (unsigned int) std::ceil((double) bottomMap->resolutionY / 8.), 1);
-        GLHandler::waitForShaderStorageIntegrity();
-
-        glHandler->dataFromBuffer(GLHandler::EFTDEM_COMPARISON_BUFFER,
-                                  0,
-                                  (long) (sizeof(gl::GLfloat) * pixelCount),
-                                  heights);
-
-        auto temp = emptyHeightMapFromHeightMap(bottomMap);
-        temp->heights = std::vector<float>(heights, heights + pixelCount);
-        comparisons.emplace_back(temp);
-
-        if (i < pipelines.size() - 1) {
-            delete topMap;
-            topMap = bottomMap;
-            delete pipelines.at(i);
-            pipelines.at(i) = nullptr;
-            glHandler = pipelines.at(i + 1)->glHandler;
-            bottomMap = pipelines.at(i + 1)->executeAfterReader(readerReturns.at(i + 1));
-            shaders = glHandler->getShaderPrograms({"compare.glsl"}, true);
-            glHandler->setProgram(shaders.at(0));
-            gl::glUniform2ui(gl::glGetUniformLocation(glHandler->getProgram(), "resolution"), bottomMap->resolutionX, bottomMap->resolutionY);
-        }
-    }
-
-    delete[] heights;
-
-    return comparisons;
-}
-
-void RadarComparator::writeComparisons(std::vector<heightMap *> comparisons) {
-    auto writer = new GTiffWriter(true, "");
-
-    for (auto i = 0ul; i < comparisons.size(); i++) {
-        writer->setDestinationDEM(destinationPaths.at(i) + "_" + std::to_string(i));
-        writer->apply(comparisons.at(i), true);
-        delete comparisons.at(i);
-    }
-
-    delete writer;
+    return readerReturns;
 }

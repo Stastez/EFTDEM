@@ -3,23 +3,20 @@
 
 #include "Pipeline.h"
 #include "ConfigProvider.h"
+#include "IComparator.h"
 
 #include <vector>
 #include <string>
 
-class RadarComparator {
+class RadarComparator : public IComparator {
 private:
-    std::vector<std::string> configPaths;
-    std::vector<std::string> destinationPaths;
-    std::vector<Pipeline *> pipelines;
-    GLHandler * glHandler;
-    ConfigProvider * configProvider;
 
 public:
     explicit RadarComparator(std::vector<std::string> configPaths);
-    ~RadarComparator();
-    std::vector<heightMap *> compareMaps();
-    void writeComparisons(std::vector<heightMap *> comparisons);
+    std::vector<rawPointCloud *> setupPointClouds() override;
+
+
+    ~RadarComparator() override;
 };
 
 

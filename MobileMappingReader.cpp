@@ -20,7 +20,7 @@ MobileMappingReader::~MobileMappingReader() noexcept = default;
 std::vector<std::string> MobileMappingReader::readFile() {
     std::fstream pointFile (fileName, std::ios::in);
     if (!pointFile.is_open()) {
-        std::cout << "Specified file could not be opened." << std::endl;
+        std::cout << "Specified file could not be opened: " << fileName << std::endl;
         exit(Pipeline::EXIT_IO_ERROR);
     }
 

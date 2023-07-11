@@ -75,3 +75,6 @@ bool Pipeline::isOperable() {
             || filler == nullptr
             || writer == nullptr);
 }
+
+GLHandler * Pipeline::getGLHandler(){ return glHandler;}
+ICloudReader * Pipeline::getCloudReader() { return reader; }
