@@ -102,7 +102,7 @@ Pipeline *ConfigProvider::providePipeline() {
     IHeightMapFiller *filler;
     auto fillingAlgorithm = checkValidityAndReturn(config["HeightMapFillerOptions"]["filler"], true).first.as<std::string>();
 
-    if (fillingAlgorithm == "closingFilter" || fillingAlgorithm == "inverseDistanceWeighted") {
+    if (fillingAlgorithm == "closingFilter" || fillingAlgorithm == "inverseDistanceWeightedFilter") {
         auto kernelRadii = checkValidityAndReturn(
                 config["HeightMapFillerOptions"]["kernelBasedFilterOptions"]["kernelSizes"],
                 true).first.as<std::vector<unsigned int>>();
