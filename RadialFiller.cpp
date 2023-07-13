@@ -9,6 +9,7 @@ RadialFiller::RadialFiller(GLHandler * glHandler, unsigned int maxHoleRadius, bo
     RadialFiller::batched = batched;
     RadialFiller::batchSize = batchSize;
     RadialFiller::maxHoleRadius = maxHoleRadius;
+    RadialFiller::stageUsesGPU = true;
 }
 
 heightMap *RadialFiller::apply(heightMap *map, bool generateOutput) {

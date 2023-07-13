@@ -10,11 +10,12 @@
 
 class RadarComparator : public IComparator {
 private:
+    std::vector<double> thresholds;
 
 public:
     explicit RadarComparator(std::vector<std::string> configPaths);
     std::vector<rawPointCloud *> setupPointClouds() override;
-
+    void writeThresholdMaps(const std::vector<heightMap *> comparisons, std::vector<std::string> destinationDEM) override;
 
     ~RadarComparator() override;
 };

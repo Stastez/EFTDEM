@@ -1,5 +1,15 @@
 # Tabp Efficient Filling Techniques
 
+## Usage
+### Simple filling
+Provide exactly one .yaml config of the type presented below as a command line argument.
+
+### Comparison between our filling algorithms and a ground-truth DEM
+Provide exactly one .yaml config of the type presented below, as well as exactly one .tiff DEM as a command line argument.
+
+### Comparison between several layers of ground radar
+Provide at least two .yaml configs of the type presented below.
+
 ## Example Config
 ```yaml
 CloudReaderOptions:
@@ -44,8 +54,10 @@ CloudWriterOptions:
 OpenGLOptions:
   shaderDirectory: "../shaders"
 
+# for layer-wise comparison
 ComparisonOptions:
   destinationPath: "../resources/"
+  threshold: 8.336743E-09
 ```
 
 ## Hardware Requirements

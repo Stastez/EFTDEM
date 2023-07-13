@@ -154,3 +154,7 @@ GLHandler *ConfigProvider::getGLHandler() {
 std::string ConfigProvider::getComparisonPath() {
     return checkValidityAndReturn(config["ComparisonOptions"]["destinationPath"], true).first.as<std::string>();
 }
+
+double ConfigProvider::getThreshold() {
+    return checkValidityAndReturn(config["ComparisonOptions"]["threshold"], true).first.as<double>();
+}

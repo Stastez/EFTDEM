@@ -1,6 +1,5 @@
 #include "RadialDilator.h"
 
-#include <iostream>
 #include <cmath>
 
 RadialDilator::RadialDilator(GLHandler *glHandler, bool flipped, unsigned int batchSize, bool batched,
@@ -17,6 +16,7 @@ RadialDilator::RadialDilator(GLHandler *glHandler, bool flipped, unsigned int ba
     RadialDilator::currentInvocationLocation = currentInvocationLocation;
     RadialDilator::flippedLocation = flippedLocation;
     RadialDilator::ignoreOutput = ignoreOutput;
+    RadialDilator::stageUsesGPU = true;
 }
 
 heightMap *RadialDilator::apply(heightMap *map, bool generateOutput) {

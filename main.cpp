@@ -19,7 +19,7 @@ int main(int argc, char** argv) {
         for (int i = 1; i < argc; i++){
             std::string s = argv[i];
             std::string suffix = s.substr(s.length() - 5, s.length() - 1);
-            if (suffix == ".tiff") {groundTruthCompare = true;}
+            if (suffix == ".tiff") { groundTruthCompare = true; }
         }
 
         IComparator * comparator;

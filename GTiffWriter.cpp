@@ -82,3 +82,31 @@ void GTiffWriter::apply(const heightMap *map, bool generateOutput) {
         delete[] heightsLowDepth;
     }
 }
+
+void
+GTiffWriter::writeRGB(const std::vector<std::vector<int>> data, int resolutionX, int resolutionY) {
+    std::cout << "Writing RGB tiff..." << std::endl;
+
+    GDALRegister_GTiff();
+
+    auto driver = GetGDALDriverManager()->GetDriverByName("GTiff");
+    if (driver == nullptr) { std::cout << "Could not get driver!" << std::endl; exit(Pipeline::EXIT_IO_ERROR); }
+    if (!CSLFetchBoolean(GDALGetMetadata(driver, nullptr), GDAL_DCAP_CREATE, FALSE)) { std::cout << "Driver does not support creation!" << std::endl; exit(Pipeline::EXIT_IO_ERROR); }
+
+    char** gdalDriverOptions = nullptr;
+    gdalDriverOptions = CSLAddNameValue(gdalDriverOptions, "COMPRESS", "LZW");
+    gdalDriverOptions = CSLAddNameValue(gdalDriverOptions, "NUM_THREADS", "16");
+
+    auto dataset = driver->Create((destinationDEM + ".tiff").c_str(), resolutionX, resolutionY, 3, GDT_Byte,gdalDriverOptions);
+    if (dataset == nullptr) {
+        std::cout << "WARNING :: GeoTIFF dataset could not be created at " << destinationDEM << ".tiff!" << std::endl;
+        return;
+    }
+    GDALRasterBand * rasterBand;
+    for (auto i = 1; i <= 3; i++) {
+        rasterBand = dataset->GetRasterBand(i);
+        (void) !rasterBand->RasterIO(GF_Write, 0, 0, resolutionX, resolutionY, (void *) data.at(i - 1).data(), resolutionX,
+                                     resolutionY, GDT_Byte, sizeof(int), sizeof(int) * resolutionX, nullptr);
+    }
+    GDALClose(dataset);
+}
