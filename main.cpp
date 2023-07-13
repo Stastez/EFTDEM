@@ -18,10 +18,8 @@ int main(int argc, char** argv) {
         bool groundTruthCompare = false;
         for (int i = 1; i < argc; i++){
             std::string s = argv[i];
-            if (s.length() > 5) {
-                std::string suffix = s.substr(s.length() - 5, s.length() - 1);
-                if (suffix == ".tiff") { groundTruthCompare = true; }
-            }
+            std::string suffix = s.substr(s.length() - 5, s.length() - 1);
+            if (suffix == ".tiff") { groundTruthCompare = true; }
         }
 
         IComparator * comparator;

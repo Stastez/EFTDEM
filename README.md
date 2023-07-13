@@ -8,10 +8,7 @@ Provide exactly one .yaml config of the type presented below as a command line a
 Provide exactly one .yaml config of the type presented below, as well as exactly one .tiff DEM as a command line argument.
 
 ### Comparison between several layers of ground radar
-Provide at least two .yaml configs of the type presented below, followed by the exact same amount of thresholds, beneath which
-the corresponding layer should be viewed as **too thin**. The thresholds must be in ´double´ format, e.g.:  
-  - 1.5
-  - 4.292895E-09
+Provide at least two .yaml configs of the type presented below.
 
 ## Example Config
 ```yaml
@@ -57,8 +54,10 @@ CloudWriterOptions:
 OpenGLOptions:
   shaderDirectory: "../shaders"
 
+# for layer-wise comparison
 ComparisonOptions:
   destinationPath: "../resources/"
+  threshold: 8.336743E-09
 ```
 
 ## Hardware Requirements

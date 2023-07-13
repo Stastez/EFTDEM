@@ -7,17 +7,14 @@
 RadarComparator::RadarComparator(std::vector<std::string> configPaths) {
     RadarComparator::configPaths = std::move(configPaths);
     configProvider = new ConfigProvider();
-    pipelines.reserve(RadarComparator::configPaths.size() / 2);
-    for (auto i = 0ul; i < RadarComparator::configPaths.size() / 2; i++) {
-        pipelines.emplace_back(configProvider->providePipeline(RadarComparator::configPaths.at(i)));
+    pipelines.reserve(RadarComparator::configPaths.size());
+    for (const auto & configPath : RadarComparator::configPaths) {
+        pipelines.emplace_back(configProvider->providePipeline(configPath));
         destinationPaths.emplace_back(configProvider->getComparisonPath());
+        thresholds.emplace_back(configProvider->getThreshold());
     }
     RadarComparator::glHandler = pipelines.at(0)->getGLHandler();
     compareShaderPath = "compare.glsl";
-
-    for (auto i = RadarComparator::configPaths.size() / 2; i < RadarComparator::configPaths.size(); i++) {
-        thresholds.emplace_back(std::stod(RadarComparator::configPaths.at(i), nullptr));
-    }
 }
 
 RadarComparator::~RadarComparator() {

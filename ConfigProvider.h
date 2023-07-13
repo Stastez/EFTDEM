@@ -20,6 +20,7 @@ public:
     Pipeline *providePipeline(std::string configPath);
     GLHandler *getGLHandler();
     std::string getComparisonPath();
+    double getThreshold();
 };
 
 
