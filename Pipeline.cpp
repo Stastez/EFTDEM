@@ -76,5 +76,6 @@ bool Pipeline::isOperable() {
             || writer == nullptr);
 }
 
-GLHandler * Pipeline::getGLHandler(){ return glHandler;}
-ICloudReader * Pipeline::getCloudReader() { return reader; }
+GLHandler * Pipeline::getGLHandler(){return glHandler;}
+ICloudReader * Pipeline::getCloudReader() {return reader;}
+IHeightMapWriter *Pipeline::getHeightMapWriter() {return writer;}

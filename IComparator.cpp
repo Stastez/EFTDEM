@@ -67,6 +67,8 @@ std::vector<heightMap *> IComparator::compareMaps() {
 void IComparator::writeComparisons(std::vector<heightMap *> comparisons) {
     auto writer = new GTiffWriter(true, "");
 
+    writeThresholdMaps(comparisons, destinationPaths);
+
     for (auto i = 0ul; i < comparisons.size(); i++) {
         writer->setDestinationDEM(destinationPaths.at(i) + "_" + std::to_string(i));
         writer->apply(comparisons.at(i), true);
@@ -75,3 +77,5 @@ void IComparator::writeComparisons(std::vector<heightMap *> comparisons) {
 
     delete writer;
 }
+
+void IComparator::writeThresholdMaps(const std::vector<heightMap *> comparisons, std::vector<std::string> destinationDEM) {}

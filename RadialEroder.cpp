@@ -16,6 +16,7 @@ RadialEroder::RadialEroder(GLHandler *glHandler, bool flipped, unsigned int batc
     RadialEroder::currentInvocationLocation = currentInvocationLocation;
     RadialEroder::flippedLocation = flippedLocation;
     RadialEroder::ignoreOutput = ignoreOutput;
+    RadialEroder::stageUsesGPU = true;
 }
 
 heightMap *RadialEroder::apply(heightMap *map, bool generateOutput) {

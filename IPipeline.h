@@ -4,6 +4,7 @@
 #include "DataStructures.h"
 #include "GLHandler.h"
 #include "ICloudReader.h"
+#include "IHeightMapWriter.h"
 
 class IPipeline {
 protected:
@@ -14,6 +15,7 @@ public:
 
     virtual GLHandler * getGLHandler() = 0;
     virtual ICloudReader * getCloudReader() = 0;
+    virtual IHeightMapWriter * getHeightMapWriter() = 0;
 
     virtual ~IPipeline() = default;
 };

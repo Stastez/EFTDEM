@@ -40,7 +40,7 @@ heightMap * GTiffReader::apply(bool generateOutput) {
     //gdalDriverOptions = CSLAddNameValue(gdalDriverOptions, "NUM_THREADS", "16");
 
     GDALAllRegister();//!!!!!!!!!! GDALRegister_GTiff();
-    auto dataset = GDALOpen(sourceDEM.c_str(), GA_ReadOnly);
+    auto dataset = (GDALDataset *) GDALOpen(sourceDEM.c_str(), GA_ReadOnly);
 
     resolutionX = dataset->GetRasterXSize();
     resolutionY = dataset->GetRasterYSize();

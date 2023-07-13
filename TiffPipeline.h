@@ -15,6 +15,7 @@ public:
 
     GLHandler * getGLHandler() override;
     ICloudReader * getCloudReader() override;
+    IHeightMapWriter * getHeightMapWriter() override;
 };
 
 

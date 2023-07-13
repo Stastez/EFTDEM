@@ -23,3 +23,5 @@ heightMap * TiffPipeline::executeAfterReader(rawPointCloud *pointCloud) {
 
 GLHandler * TiffPipeline::getGLHandler() { return glHandler;}
 ICloudReader * TiffPipeline::getCloudReader() {return nullptr; }
+
+IHeightMapWriter *TiffPipeline::getHeightMapWriter() {return nullptr;}

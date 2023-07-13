@@ -22,7 +22,7 @@ private:
     GLHandler *glHandler{};
 
 public:
-    ~Pipeline();
+    ~Pipeline() override;
 
     explicit Pipeline(GLHandler *glHandler);
     explicit Pipeline(const std::string& shaderDirectory);
@@ -35,6 +35,7 @@ public:
 
     GLHandler * getGLHandler() override;
     ICloudReader * getCloudReader() override;
+    IHeightMapWriter * getHeightMapWriter() override;
 
     enum exitCodes {
         EXIT_INVALID_COMMAND_LINE_ARGUMENTS = 101,
