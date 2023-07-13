@@ -6,12 +6,6 @@
 
 #include <utility>
 
-GroundTruthComparator::~GroundTruthComparator() {
-    delete configProvider;
-    for (auto pipeline : pipelines) delete pipeline;
-    configProvider = nullptr;
-}
-
 GroundTruthComparator::GroundTruthComparator(std::vector<std::string> configPaths) {
     GroundTruthComparator::configPaths = std::move(configPaths);
     configProvider = new ConfigProvider();
@@ -25,9 +19,15 @@ GroundTruthComparator::GroundTruthComparator(std::vector<std::string> configPath
             destinationPaths.emplace_back(configProvider->getComparisonPath());
         }
     }
-    GroundTruthComparator::glHandler = pipelines.at(0)->getGLHandler();
+    GroundTruthComparator::glHandler = pipelines.at(1)->getGLHandler();
     delete configProvider;
     compareShaderPath = "compareSquaredError.glsl";
+}
+
+GroundTruthComparator::~GroundTruthComparator() {
+    delete configProvider;
+    for (auto pipeline : pipelines) delete pipeline;
+    configProvider = nullptr;
 }
 
 std::vector<rawPointCloud *> GroundTruthComparator::setupPointClouds() {

@@ -7,7 +7,7 @@ layout (binding = EFTDEM_HEIGHTMAP_BUFFER) restrict buffer mapBuffer{
 layout (binding = EFTDEM_KERNEL_BUFFER) restrict buffer kernelBuffer{
     float kernel[];
 };
-layout (binding = EFTDEM_HORIZONTAL_SUM_BUFFER) restrict buffer horizontalSumBuffer{
+layout (binding = EFTDEM_HORIZONTAL_BUFFER) restrict buffer horizontalSumBuffer{
     float horizontalSum[];
 };
 

@@ -7,8 +7,8 @@ layout (binding = EFTDEM_HEIGHTMAP_BUFFER) restrict buffer heightsBuffer{
 layout (binding = EFTDEM_SUM_BUFFER) restrict buffer sumsBuffer{
     float sums[];
 };
-layout (binding = EFTDEM_AMOUNT_BUFFER) restrict buffer amountsBuffer{
-    uint amounts[];
+layout (binding = EFTDEM_TOTAL_WEIGHT_BUFFER) restrict buffer amountsBuffer{
+    float amounts[];
 };
 layout (binding = EFTDEM_AVERAGE_BUFFER) restrict buffer averagesBuffer{
     float average[];
@@ -30,7 +30,7 @@ void main() {
     coord1D = calculate1DCoordinate(correctedGlobalInvocation);
     average[coord1D] = (heights[coord1D] > 0.)
         ? heights[coord1D]
-        : ((amounts[coord1D] == 0)
+        : ((amounts[coord1D] == 0.0)
             ? 0.0
             : sums[coord1D] / amounts[coord1D]);
 }

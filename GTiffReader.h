@@ -9,7 +9,7 @@ class GTiffReader : public IHeightMapReader {
 public:
     explicit GTiffReader(const std::string& path);
     ~GTiffReader() noexcept override;
-    heightMap * apply(bool generateOutput) override;
+    denormalizedHeightMap * apply(bool generateOutput) override;
     void setSourceDEM(const std::string& sourceDEM);
 };
 

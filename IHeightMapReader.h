@@ -15,7 +15,7 @@ public:
      * Use the currently attached IHeightMapReader to read the heightMap from the given Path.
      * @param generateOutput Whether to generateOutput. Must be true
      */
-    virtual heightMap * apply(bool generateOutput) = 0;
+    virtual denormalizedHeightMap * apply(bool generateOutput) = 0;
 };
 
 #endif //EFTDEM_IHEIGHTMAPREADER_H

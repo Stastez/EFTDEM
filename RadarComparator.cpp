@@ -4,12 +4,6 @@
 
 #include <utility>
 
-RadarComparator::~RadarComparator() {
-    delete configProvider;
-    for (auto pipeline : pipelines) delete pipeline;
-    configProvider = nullptr;
-}
-
 RadarComparator::RadarComparator(std::vector<std::string> configPaths) {
     RadarComparator::configPaths = std::move(configPaths);
     configProvider = new ConfigProvider();
@@ -20,6 +14,12 @@ RadarComparator::RadarComparator(std::vector<std::string> configPaths) {
     }
     RadarComparator::glHandler = pipelines.at(0)->getGLHandler();
     compareShaderPath = "compare.glsl";
+}
+
+RadarComparator::~RadarComparator() {
+    delete configProvider;
+    for (auto pipeline : pipelines) delete pipeline;
+    configProvider = nullptr;
 }
 
 std::vector<rawPointCloud *> RadarComparator::setupPointClouds() {

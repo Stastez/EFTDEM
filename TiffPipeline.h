@@ -5,7 +5,7 @@
 
 class TiffPipeline : public IPipeline{
 private:
-    heightMap * map;
+    denormalizedHeightMap * map;
     std::string path;
 public:
     explicit TiffPipeline(std::string path);

@@ -40,6 +40,13 @@ struct heightMap {
     doublePoint min, max;
 };
 
+struct denormalizedHeightMap {
+    std::vector<double> heights;
+    unsigned long resolutionX, resolutionY;
+    long dataSize;
+    doublePoint min, max;
+};
+
 heightMap * emptyHeightMapFromHeightMap(heightMap *map);
 heightMap * emptyHeightMapFromPointGrid(pointGrid *grid);
 rawPointCloud * emptyPointCloudFromHeightMap(heightMap *map);

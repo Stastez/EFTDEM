@@ -1,7 +1,9 @@
 #include "GTiffReader.h"
 #include "Pipeline.h"
+#include "DataStructures.h"
 #include <iostream>
 #include <gdal_priv.h>
+#include <cmath>
 
 GTiffReader::GTiffReader(const std::string& sourceDEM) {
     GTiffReader::sourceDEM = sourceDEM;
@@ -21,13 +23,13 @@ void GTiffReader::setSourceDEM(const std::string &soureDEM) {
  * @param resolutionX
  * @param resolutionY
  */
-heightMap * GTiffReader::apply(bool generateOutput) {
+denormalizedHeightMap * GTiffReader::apply(bool generateOutput) {
 
     std::cout << "Reading GeoTIFF..." << std::endl;
 
     if (!generateOutput) return nullptr;
 
-    int resolutionX = (int) 16, resolutionY = (int) 16;
+    unsigned long resolutionX, resolutionY;
 
     GDALRegister_GTiff();
 
@@ -40,28 +42,45 @@ heightMap * GTiffReader::apply(bool generateOutput) {
     //gdalDriverOptions = CSLAddNameValue(gdalDriverOptions, "NUM_THREADS", "16");
 
     GDALAllRegister();//!!!!!!!!!! GDALRegister_GTiff();
-    auto dataset = GDALOpen(sourceDEM.c_str(), GA_ReadOnly);
+    GDALDataset * dataset = (GDALDataset *) GDALOpen(sourceDEM.c_str(), GA_ReadOnly);
 
     resolutionX = dataset->GetRasterXSize();
     resolutionY = dataset->GetRasterYSize();
 
-    double * denormalizedHeights;
+    auto rasterBand = dataset->GetRasterBand(1);
 
+    auto heights = std::vector<double>(resolutionX * resolutionY);
+    (void)! rasterBand->RasterIO(GF_Read, 0, 0, resolutionX, resolutionY, heights.data(), resolutionX, resolutionY, GDT_Float64, 0, 0, nullptr);
+
+    double minHeight = std::numeric_limits<double>::max(), maxHeight = 0;
+    for (auto i = 0ul; i < resolutionX * resolutionY; i++){
+        minHeight = std::min(minHeight, heights.at(i));
+        maxHeight = std::max(maxHeight, heights.at(i));
+    }
+
+    return new denormalizedHeightMap{
+            .heights = heights,
+            .resolutionX = resolutionX,
+            .resolutionY = resolutionY,
+            .dataSize = (long) (resolutionX * resolutionY * sizeof(float)),
+            .min = doublePoint{std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), minHeight},
+            .max = doublePoint{std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), maxHeight}
+    };
 
 
     /*GDALDataset * dataset = GDALOpen((sourceDEM + ".tiff").c_str(),GA_ReadOnly);// driver->pfnOpen((sourceDEM + ".tiff").c_str(), resolutionX, resolutionY, 1, GDT_Float64, gdalDriverOptions);
     auto rasterBand = dataset->GetRasterBand(1);
-    (void)! rasterBand->RasterIO(GF_Read, 0, 0, resolutionX, resolutionY, denormalizedHeights, resolutionX, resolutionY, GDT_Float64, 0, 0, nullptr);
+    (void)! rasterBand->RasterIO(GF_Read, 0, 0, resolutionX, resolutionY, heights, resolutionX, resolutionY, GDT_Float64, 0, 0, nullptr);
     GDALClose(dataset);
 
     double * normalizedHeights;
     double minX, minY, maxX, maxY;
 
     for (int i = 0; i < resolutionX * resolutionY; i++){
-        minX = std::min(minX, denormalizedHeights[i]);
-        minY = std::max(minY, denormalizedHeights[i]);
-        maxX = std::max(maxX, denormalizedHeights[i]);
-        maxY = std::max(maxY, denormalizedHeights[i]);
+        minX = std::min(minX, heights[i]);
+        minY = std::max(minY, heights[i]);
+        maxX = std::max(maxX, heights[i]);
+        maxY = std::max(maxY, heights[i]);
     }
 
     for (int i = 0; i < resolutionX * resolutionY; i++){
