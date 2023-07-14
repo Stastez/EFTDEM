@@ -78,21 +78,21 @@ rawPointCloud * MobileMappingReader::apply(bool generateOutput) {
         *environmentPoints = new std::vector<doublePoint>();
     std::cout << "Reading point cloud..." << std::endl;
 
-    auto numThreads = 16;
+    auto numThreads = 16u;
     auto lines = readFile();
-    auto batchSize = lines.size() / numThreads;
+    auto batchSize = (unsigned long) (lines.size() / numThreads);
     auto extremesVector = std::vector<std::pair<doublePoint, doublePoint>>(numThreads);
     auto futuresVector = std::vector<std::future<std::pair<doublePoint, doublePoint>>>(numThreads);
 
     auto groundPointsVector = new std::vector<std::vector<doublePoint>>(numThreads),
         environmentPointsVector = new std::vector<std::vector<doublePoint>>(numThreads);
 
-    for (auto i = 0; i < numThreads - 1; i++) {
+    for (auto i = 0u; i < numThreads - 1u; i++) {
         futuresVector.at(i) = std::async(&parseFileContents, &lines, &(groundPointsVector->at(i)), &(environmentPointsVector->at(i)), batchSize * i, batchSize * (i+1));
     }
-    futuresVector.at(numThreads - 1) = std::async(&parseFileContents, &lines, &(groundPointsVector->at(numThreads - 1)), &(environmentPointsVector->at(numThreads - 1)), batchSize * (numThreads - 1), lines.size());
+    futuresVector.at(numThreads - 1) = std::async(&parseFileContents, &lines, &(groundPointsVector->at(numThreads - 1)), &(environmentPointsVector->at(numThreads - 1)), batchSize * (numThreads - 1), (unsigned long) lines.size());
 
-    for (auto i = 0; i < numThreads; i++) {
+    for (auto i = 0u; i < numThreads; i++) {
         extremesVector.at(i) = futuresVector.at(i).get();
     }
 
@@ -105,7 +105,7 @@ rawPointCloud * MobileMappingReader::apply(bool generateOutput) {
     extremes.first = mergeDoublePoints(minVector).first;
     extremes.second = mergeDoublePoints(maxVector).second;
 
-    for (auto i = 0; i < numThreads; i++) {
+    for (auto i = 0u; i < numThreads; i++) {
         groundPoints->insert(groundPoints->end(), groundPointsVector->at(i).begin(), groundPointsVector->at(i).end());
         environmentPoints->insert(environmentPoints->end(), environmentPointsVector->at(i).begin(), environmentPointsVector->at(i).end());
     }

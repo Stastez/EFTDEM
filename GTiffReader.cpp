@@ -45,7 +45,7 @@ heightMap * GTiffReader::apply(bool generateOutput) {
     resolutionX = dataset->GetRasterXSize();
     resolutionY = dataset->GetRasterYSize();
 
-    double * denormalizedHeights;
+    //double * denormalizedHeights;
 
 
 
@@ -75,5 +75,5 @@ heightMap * GTiffReader::apply(bool generateOutput) {
                         .min = point{minX, minY, },
                         .max =  };*/
 
-
+    return nullptr;
 }
