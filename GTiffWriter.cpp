@@ -42,6 +42,10 @@ void GTiffWriter::apply(const heightMap *map, bool generateOutput) {
 
     auto denormalizedHeights = new double[map->resolutionX * map->resolutionY];
     auto arrayIndex = 0ul;
+    /*
+     * GDAL expects the (0,0) pixel in the top left corner, our code assumes (0,0) in the bottom left.
+     * The following code flips the image vertically to translate our coordinate system to GDAL's.
+    */
     for (auto y = map->resolutionY; y > 0ul; y--) {
         for (auto x = 0ul; x < map->resolutionX; x++) {
             denormalizedHeights[arrayIndex++] = denormalizeValue(map->heights.at(calculate1DCoordinate(map, x, y - 1)), map->min.z, map->max.z);
@@ -68,6 +72,9 @@ void GTiffWriter::apply(const heightMap *map, bool generateOutput) {
 
         auto heightsLowDepth = new int[resolutionX * resolutionY];
         arrayIndex = 0ul;
+        /*
+         * This flips the image vertically. See explanation above.
+         */
         for (auto y = map->resolutionY; y > 0ul; y--) {
             for (auto x = 0ul; x < map->resolutionX; x++) {
                 heightsLowDepth[arrayIndex++] = (int) (map->heights.at(calculate1DCoordinate(map, x, y - 1)) * (double) 255);
@@ -84,8 +91,19 @@ void GTiffWriter::apply(const heightMap *map, bool generateOutput) {
 }
 
 void
-GTiffWriter::writeRGB(const std::vector<std::vector<int>> data, int resolutionX, int resolutionY) {
+GTiffWriter::writeRGB(std::vector<std::vector<int>> data, int resolutionX, int resolutionY) {
     std::cout << "Writing RGB tiff..." << std::endl;
+
+    int temp;
+    for (auto y = 0; y < resolutionY / 2; y++) {
+        for (auto x = 0; x < resolutionX; x++) {
+            for (auto channel = 0; channel < 3; channel++) {
+                temp = data.at(channel).at(x + y * resolutionX);
+                data.at(channel).at(x + y * resolutionX) = data.at(channel).at(x + (resolutionY - 1 - y) * resolutionX);
+                data.at(channel).at(x + (resolutionY - 1 - y) * resolutionX) = temp;
+            }
+        }
+    }
 
     GDALRegister_GTiff();
 
@@ -106,7 +124,7 @@ GTiffWriter::writeRGB(const std::vector<std::vector<int>> data, int resolutionX,
     for (auto i = 1; i <= 3; i++) {
         rasterBand = dataset->GetRasterBand(i);
         (void) !rasterBand->RasterIO(GF_Write, 0, 0, resolutionX, resolutionY, (void *) data.at(i - 1).data(), resolutionX,
-                                     resolutionY, GDT_Byte, sizeof(int), sizeof(int) * resolutionX, nullptr);
+                                     resolutionY, GDT_Byte, sizeof(int), (long long) sizeof(int) * resolutionX, nullptr);
     }
     GDALClose(dataset);
 }
