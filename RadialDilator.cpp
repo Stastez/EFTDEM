@@ -56,8 +56,10 @@ heightMap *RadialDilator::apply(heightMap *map, bool generateOutput) {
 
     auto filledMap = emptyHeightMapFromHeightMap(map);
 
-    glHandler->dataFromBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,
-                              0, map->dataSize, filledMap->heights.data());
+    if (flipped) glHandler->dataFromBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,
+                                            0, map->dataSize, filledMap->heights.data());
+    else glHandler->dataFromBuffer(GLHandler::EFTDEM_SECOND_HEIGHTMAP_BUFFER,
+                                   0, map->dataSize, filledMap->heights.data());
 
     return filledMap;
 }

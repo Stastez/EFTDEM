@@ -39,7 +39,7 @@ heightMap *RadialFiller::apply(heightMap *map, bool generateOutput) {
                                                erosionProgram,
                                                erosionResolutionLocation,
                                                erosionCurrentInvocationLocation,
-                                               erosionFlippedLocation, true));
+                                               erosionFlippedLocation, i != maxHoleRadius - 1));
     }
 
     if (maxHoleRadius % 2u == 1) fillers->emplace_back(new RadialBufferSwapper(glHandler));
