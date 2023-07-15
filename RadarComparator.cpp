@@ -52,7 +52,7 @@ void addColor(std::vector<std::vector<int>>& colors, std::vector<int> color) {
 }
 
 void
-RadarComparator::writeThresholdMaps(const std::vector<heightMap *> comparisons, std::vector<std::string> destinationDEM) {
+RadarComparator::writeThresholdMaps(const std::vector<heightMap *> &comparisons, const std::vector<std::string> &destinationDEM) {
     std::vector<std::vector<int>> colors(3);
 
     auto writer = new GTiffWriter(false, "");

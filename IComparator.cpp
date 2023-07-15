@@ -78,4 +78,6 @@ void IComparator::writeComparisons(std::vector<heightMap *> comparisons) {
     delete writer;
 }
 
-void IComparator::writeThresholdMaps(const std::vector<heightMap *> comparisons, std::vector<std::string> destinationDEM) {}
+void IComparator::writeThresholdMaps(const std::vector<heightMap *> &comparisons, const std::vector<std::string> &destinationDEM) {
+    (void) comparisons; (void) destinationDEM;
+}
