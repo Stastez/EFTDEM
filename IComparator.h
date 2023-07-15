@@ -15,6 +15,7 @@ protected:
     GLHandler * glHandler;
     ConfigProvider * configProvider;
     std::string compareShaderPath;
+    std::vector<bool> betterCompression;
 
 public:
     virtual ~IComparator() = default;

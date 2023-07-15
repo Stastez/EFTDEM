@@ -3,10 +3,11 @@
 #include <iostream>
 #include <gdal_priv.h>
 
-GTiffWriter::GTiffWriter(bool writeLowDepth, const std::string& destinationDEM) {
+GTiffWriter::GTiffWriter(bool writeLowDepth, const std::string &destinationDEM, bool betterCompression) {
     GTiffWriter::destinationDEM = destinationDEM;
     GTiffWriter::writeLowDepth = writeLowDepth;
     GTiffWriter::stageUsesGPU = false;
+    GTiffWriter::compressionAlgorithm = (betterCompression) ? "LZMA" : "LZW";
 }
 
 GTiffWriter::~GTiffWriter() noexcept = default;
@@ -53,7 +54,7 @@ void GTiffWriter::apply(const heightMap *map, bool generateOutput) {
     }
 
     char** gdalDriverOptions = nullptr;
-    gdalDriverOptions = CSLAddNameValue(gdalDriverOptions, "COMPRESS", "LZW");
+    gdalDriverOptions = CSLAddNameValue(gdalDriverOptions, "COMPRESS", compressionAlgorithm.c_str());
     gdalDriverOptions = CSLAddNameValue(gdalDriverOptions, "NUM_THREADS", "16");
 
     auto dataset = driver->Create((destinationDEM + ".tiff").c_str(), resolutionX, resolutionY, 1, GDT_Float64,gdalDriverOptions);
@@ -112,7 +113,7 @@ GTiffWriter::writeRGB(std::vector<std::vector<int>> data, int resolutionX, int r
     if (!CSLFetchBoolean(GDALGetMetadata(driver, nullptr), GDAL_DCAP_CREATE, FALSE)) { std::cout << "Driver does not support creation!" << std::endl; exit(Pipeline::EXIT_IO_ERROR); }
 
     char** gdalDriverOptions = nullptr;
-    gdalDriverOptions = CSLAddNameValue(gdalDriverOptions, "COMPRESS", "LZW");
+    gdalDriverOptions = CSLAddNameValue(gdalDriverOptions, "COMPRESS", compressionAlgorithm.c_str());
     gdalDriverOptions = CSLAddNameValue(gdalDriverOptions, "NUM_THREADS", "16");
 
     auto dataset = driver->Create((destinationDEM + ".tiff").c_str(), resolutionX, resolutionY, 3, GDT_Byte,gdalDriverOptions);

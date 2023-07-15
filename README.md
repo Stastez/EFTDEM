@@ -47,9 +47,13 @@ HeightMapFillerOptions:
     batchSize: 8192 # optional, if not set will default to 0 (automatically trying to find possible batch size)
     useBatching: false # optional, will default to "true". If "false", this will disable batching and make "batchSize" obsolete
 
-CloudWriterOptions:
+HeightMapWriterOptions:
   destinationPath: "../resources/map"
   writeLowDepth: true
+  betterCompression: false # optional, will default to "false". If true, GDAL will use LZMA compression, if false, LZW.
+                           # Using LZMA will reduce file size significantly, however, the export will take a much extended
+                           # amount of time. Also, using LZMA max break compatibility with standard image viewers. You may
+                           # use software such as QGIS to mitigate this issue.
 
 OpenGLOptions:
   shaderDirectory: "../shaders"

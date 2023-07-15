@@ -21,6 +21,7 @@ public:
     GLHandler *getGLHandler();
     std::string getComparisonPath();
     double getThreshold();
+    bool getBetterCompression();
 };
 
 

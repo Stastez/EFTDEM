@@ -138,9 +138,12 @@ Pipeline *ConfigProvider::providePipeline() {
         exit(Pipeline::EXIT_INVALID_CONFIGURATION);
     }
 
-    auto writeLowDepthTest = checkValidityAndReturn(config["CloudWriterOptions"]["writeLowDepth"], false);
+    auto writeLowDepthTest = checkValidityAndReturn(config["HeightMapWriterOptions"]["writeLowDepth"], false);
     auto writeLowDepth = writeLowDepthTest.second && writeLowDepthTest.first.as<bool>();
-    auto writer = new GTiffWriter(writeLowDepth, checkValidityAndReturn(config["CloudWriterOptions"]["destinationPath"], true).first.as<std::string>());
+    auto betterCompression = checkValidityAndReturn(config["HeightMapWriterOptions"]["betterCompression"], false);
+    auto writer = new GTiffWriter(writeLowDepth, checkValidityAndReturn(config["HeightMapWriterOptions"]["destinationPath"],
+                                                                        true).first.as<std::string>(),
+                                                                        betterCompression.second && betterCompression.first.as<bool>());
 
     pipeline->attachElements(reader, sorter, rasterizer, filler, writer);
 
@@ -157,4 +160,9 @@ std::string ConfigProvider::getComparisonPath() {
 
 double ConfigProvider::getThreshold() {
     return checkValidityAndReturn(config["ComparisonOptions"]["threshold"], true).first.as<double>();
+}
+
+bool ConfigProvider::getBetterCompression() {
+    auto betterCompression = checkValidityAndReturn(config["HeightMapWriterOptions"]["betterCompression"], false);
+    return betterCompression.second && betterCompression.first.as<bool>();
 }
