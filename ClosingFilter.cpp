@@ -17,9 +17,8 @@ ClosingFilter::~ClosingFilter() {
     auto bufferMask = glHandler->getCoherentBufferMask();
 
     glHandler->deleteBuffer(GLHandler::EFTDEM_CLOSING_MASK_BUFFER);
-    glHandler->deleteBuffer(GLHandler::EFTDEM_HORIZONTAL_AMOUNT_BUFFER);
-    glHandler->deleteBuffer(GLHandler::EFTDEM_AMOUNT_BUFFER);
-    glHandler->deleteBuffer(GLHandler::EFTDEM_HORIZONTAL_SUM_BUFFER);
+    glHandler->deleteBuffer(GLHandler::EFTDEM_HORIZONTAL_BUFFER);
+    glHandler->deleteBuffer(GLHandler::EFTDEM_TOTAL_WEIGHT_BUFFER);
     glHandler->deleteBuffer(GLHandler::EFTDEM_SUM_BUFFER);
     glHandler->deleteBuffer(GLHandler::EFTDEM_AVERAGE_BUFFER);
 }
@@ -73,11 +72,11 @@ heightMap * ClosingFilter::apply(heightMap *map, bool generateOutput) {
     // discretization
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_CLOSING_MASK_BUFFER, sizeof(GLfloat)}});
     // horizontalAmount
-    bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_HORIZONTAL_AMOUNT_BUFFER, sizeof(unsigned)}});
+    bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_HORIZONTAL_BUFFER, sizeof(GLfloat)}});
     // amount
-    bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_AMOUNT_BUFFER, sizeof(unsigned)}});
+    bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_TOTAL_WEIGHT_BUFFER, long(sizeof(unsigned int) * pixelCount)}});
     // horizontalSum
-    bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_HORIZONTAL_SUM_BUFFER, sizeof(GLfloat)}});
+    bufferSpecs.emplace_back();
     // sum
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_SUM_BUFFER, sizeof(GLfloat)}});
     // average

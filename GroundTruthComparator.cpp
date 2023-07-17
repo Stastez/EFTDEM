@@ -6,28 +6,28 @@
 
 #include <utility>
 
-GroundTruthComparator::~GroundTruthComparator() {
-    delete configProvider;
-    for (auto pipeline : pipelines) delete pipeline;
-    configProvider = nullptr;
-}
-
 GroundTruthComparator::GroundTruthComparator(std::vector<std::string> configPaths) {
     GroundTruthComparator::configPaths = std::move(configPaths);
     configProvider = new ConfigProvider();
     pipelines.reserve(GroundTruthComparator::configPaths.size());
-    for (const auto& config : GroundTruthComparator::configPaths) {
-        if (config.substr(config.length() - 5, config.length() - 1) == ".tiff") {
-            pipelines.emplace_back(new TiffPipeline(config));
-        }
-        else {
-            pipelines.emplace_back(configProvider->providePipeline(config));
-            destinationPaths.emplace_back(configProvider->getComparisonPath());
-        }
+
+    auto pipeline = configProvider->providePipeline(GroundTruthComparator::configPaths.at(1));
+    pipelines.emplace_back(new TiffPipeline(GroundTruthComparator::configPaths.at(0), pipeline->getGLHandler()->getShaderDir()));
+    destinationPaths.emplace_back(configProvider->getComparisonPath());
+    pipelines.emplace_back(pipeline);
+    destinationPaths.emplace_back(configProvider->getComparisonPath());
+    for (auto i = 0ul; i < pipelines.size(); i++){
+        betterCompression.emplace_back(configProvider->getBetterCompression());
     }
+
     GroundTruthComparator::glHandler = pipelines.at(0)->getGLHandler();
+    compareShaderPath = "compare.glsl";
+}
+
+GroundTruthComparator::~GroundTruthComparator() {
     delete configProvider;
-    compareShaderPath = "compareSquaredError.glsl";
+    for (auto pipeline : pipelines) delete pipeline;
+    configProvider = nullptr;
 }
 
 std::vector<rawPointCloud *> GroundTruthComparator::setupPointClouds() {
@@ -40,13 +40,21 @@ std::vector<rawPointCloud *> GroundTruthComparator::setupPointClouds() {
         readerReturns.at(i) = pipelines.at(i)->getCloudReader()->apply(true);
     }
 
-    auto absoluteMin = map->min,
-         absoluteMax = map->max;
+    std::vector<doublePoint> mins, maxs;
+    for (auto pointCloud : readerReturns) {
+        mins.emplace_back(pointCloud->min);
+        maxs.emplace_back(pointCloud->max);
+    }
+
+    auto absoluteMin = mergeDoublePoints(mins).first,
+            absoluteMax = mergeDoublePoints(maxs).second;
 
     for (auto pointCloud : readerReturns) {
         pointCloud->min = absoluteMin;
         pointCloud->max = absoluteMax;
     }
+
+    pipelines.at(1)->getCloudSorter()->setResolution(map->resolutionX, map->resolutionY);
 
     return readerReturns;
 }

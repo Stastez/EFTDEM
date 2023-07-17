@@ -1,5 +1,11 @@
 #include "Pipeline.h"
 
+Pipeline::Pipeline(const std::string& shaderDirectory) : Pipeline(new GLHandler(shaderDirectory)) {}
+
+Pipeline::Pipeline(GLHandler *glHandler) {
+    Pipeline::glHandler = glHandler;
+}
+
 Pipeline::~Pipeline() {
     delete glHandler;
     delete reader;
@@ -7,12 +13,6 @@ Pipeline::~Pipeline() {
     delete rasterizer;
     delete filler;
     delete writer;
-}
-
-Pipeline::Pipeline(const std::string& shaderDirectory) : Pipeline(new GLHandler(shaderDirectory)) {}
-
-Pipeline::Pipeline(GLHandler *glHandler) {
-    Pipeline::glHandler = glHandler;
 }
 
 bool adjacentStagesUseGPU(IPipelineComponent *first, IPipelineComponent *second) {
@@ -76,6 +76,7 @@ bool Pipeline::isOperable() {
             || writer == nullptr);
 }
 
-GLHandler * Pipeline::getGLHandler(){return glHandler;}
-ICloudReader * Pipeline::getCloudReader() {return reader;}
+GLHandler * Pipeline::getGLHandler(){ return glHandler;}
+ICloudReader * Pipeline::getCloudReader() { return reader; }
+ICloudSorter * Pipeline::getCloudSorter() { return sorter; }
 IHeightMapWriter *Pipeline::getHeightMapWriter() {return writer;}

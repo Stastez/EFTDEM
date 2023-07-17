@@ -7,6 +7,8 @@ SorterGPU::SorterGPU(GLHandler *glHandler, unsigned long pixelPerUnitX, unsigned
     SorterGPU::glHandler = glHandler;
     SorterGPU::pixelPerUnitX = pixelPerUnitX;
     SorterGPU::pixelPerUnitY = pixelPerUnitY;
+    SorterGPU::resolutionX = 0;
+    SorterGPU::resolutionY = 0;
 }
 
 SorterGPU::~SorterGPU() = default;
@@ -33,8 +35,10 @@ pointGrid * SorterGPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
     glHandler->dataToBuffer(GLHandler::EFTDEM_RAW_POINT_BUFFER, (long long) (3 * pointCloud->numberOfPoints * sizeof(GLfloat)), points, GL_STATIC_DRAW);
     delete[] points;
 
-    unsigned long resolutionX = std::max((unsigned long) std::ceil((std::abs(pointCloud->max.x - pointCloud->min.x)) * (double) pixelPerUnitX) + 1, 1ul);
-    unsigned long resolutionY = std::max((unsigned long) std::ceil((std::abs(pointCloud->max.y - pointCloud->min.y)) * (double) pixelPerUnitY) + 1, 1ul);
+    if (resolutionX == 0 || resolutionY == 0){
+        resolutionX = std::max((unsigned long) std::ceil((std::abs(pointCloud->max.x - pointCloud->min.x)) * (double) pixelPerUnitX) + 1, 1ul);
+        resolutionY = std::max((unsigned long) std::ceil((std::abs(pointCloud->max.y - pointCloud->min.y)) * (double) pixelPerUnitY) + 1, 1ul);
+    }
 
     glUniform2ui(glGetUniformLocation(glHandler->getProgram(), "resolution"), resolutionX, resolutionY);
     glUniform1ui(glGetUniformLocation(glHandler->getProgram(), "numberOfPoints"), pointCloud->numberOfPoints);

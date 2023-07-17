@@ -8,7 +8,7 @@ layout (binding = EFTDEM_CLOSING_MASK_BUFFER) restrict buffer mapBuffer{
 layout (binding = EFTDEM_KERNEL_BUFFER) restrict buffer kernelBuffer{
     float kernel[];
 };
-layout (binding = EFTDEM_HORIZONTAL_TOTAL_WEIGHT_BUFFER) restrict buffer horizontalTotalWeightsBuffer{
+layout (binding = EFTDEM_HORIZONTAL_BUFFER) restrict buffer horizontalTotalWeightsBuffer{
     float horizontalTotalWiegts[];
 };
 

@@ -79,7 +79,7 @@ GLFWwindow * GLHandler::initializeGL(bool debug) {
 
     initialized = true;
     this->isDebug = debug;
-
+    
     return context;
 }
 

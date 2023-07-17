@@ -1,11 +1,11 @@
 #version 430 core
 
 layout (local_size_x = 8, local_size_y = 4, local_size_z = 1) in;
-layout (binding = EFTDEM_HORIZONTAL_AMOUNT_BUFFER) restrict buffer amountBuffer{
-    uint horizontalAmounts[];
+layout (binding = EFTDEM_HORIZONTAL_BUFFER) restrict buffer amountBuffer{
+    float horizontalAmounts[];
 };
-layout (binding = EFTDEM_AMOUNT_BUFFER) restrict buffer resultBuffer{
-    uint amounts[];
+layout (binding = EFTDEM_TOTAL_WEIGHT_BUFFER) restrict buffer resultBuffer{
+    float amounts[];
 };
 
 uniform uvec2 resolution;
@@ -21,7 +21,7 @@ void main() {
     if (any(greaterThanEqual(correctedGlobalInvocation, resolution))) return;
     uint coord1D;
 
-    uint amount = 0;
+    float amount = 0.0;
 
     for (uint ky = 0; ky <= 2*kernelRadius; ky++) {
         uint x = correctedGlobalInvocation.x;

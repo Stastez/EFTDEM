@@ -9,6 +9,8 @@ protected:
      * Specifies the resolution of the resulting pointGrid by defining how many grid cells
      * shall be allocated for each unit of distance on the xy-plane.
      */
+    unsigned long resolutionX;
+    unsigned long resolutionY;
     unsigned long pixelPerUnitX{};
     unsigned long pixelPerUnitY{};
 public:
@@ -20,6 +22,7 @@ public:
      * @return A fully formed pointGrid if generateOutput is true, a pointGrid only containing all necessary metadata otherwise
      */
     virtual pointGrid * apply(rawPointCloud *pointCloud, bool generateOutput) = 0;
+    void setResolution(unsigned long x, unsigned long y) { resolutionX = x; resolutionY = y; };
 };
 
 

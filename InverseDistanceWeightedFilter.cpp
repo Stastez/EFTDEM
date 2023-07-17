@@ -14,9 +14,8 @@ InverseDistanceWeightedFilter::~InverseDistanceWeightedFilter() {
     auto bufferMask = glHandler->getCoherentBufferMask();
 
     glHandler->deleteBuffer(GLHandler::EFTDEM_CLOSING_MASK_BUFFER);
-    glHandler->deleteBuffer(GLHandler::EFTDEM_HORIZONTAL_AMOUNT_BUFFER);
-    glHandler->deleteBuffer(GLHandler::EFTDEM_AMOUNT_BUFFER);
-    glHandler->deleteBuffer(GLHandler::EFTDEM_HORIZONTAL_SUM_BUFFER);
+    glHandler->deleteBuffer(GLHandler::EFTDEM_HORIZONTAL_BUFFER);
+    glHandler->deleteBuffer(GLHandler::EFTDEM_TOTAL_WEIGHT_BUFFER);
     glHandler->deleteBuffer(GLHandler::EFTDEM_SUM_BUFFER);
     glHandler->deleteBuffer(GLHandler::EFTDEM_AVERAGE_BUFFER);
 };
@@ -70,19 +69,19 @@ heightMap * InverseDistanceWeightedFilter::apply(heightMap *map, bool generateOu
     // discretization
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_CLOSING_MASK_BUFFER, long(sizeof(GLfloat) * pixelCount)}});
     // horizontalTotalWeights
-    bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_HORIZONTAL_TOTAL_WEIGHT_BUFFER, long(sizeof(GLfloat) *  pixelCount)}});
+    bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_HORIZONTAL_BUFFER, long(sizeof(GLfloat) * pixelCount)}});
     // totalWeights
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_TOTAL_WEIGHT_BUFFER, long(sizeof(GLfloat) * pixelCount)}});
     // horizontalSumIDW
-    bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_HORIZONTAL_SUM_BUFFER, long(sizeof(GLfloat) * pixelCount)}});
+    bufferSpecs.emplace_back();
     // sumIDW
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_SUM_BUFFER, long(sizeof(GLfloat) * pixelCount)}});
     // averageIDW
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_AVERAGE_BUFFER, long(sizeof(GLfloat) * pixelCount)}});
     // horizontalAmount
-    bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_HORIZONTAL_AMOUNT_BUFFER, long(sizeof(unsigned) * pixelCount)}});
+    bufferSpecs.emplace_back();
     // amount
-    bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_AMOUNT_BUFFER, long(sizeof(unsigned) * pixelCount)}});
+    bufferSpecs.emplace_back();
     // dilation
     bufferSpecs.emplace_back();
     // horizontalAmount again
