@@ -27,5 +27,8 @@ void main() {
     uint position = calculate1DCoordinate(gl_GlobalInvocationID.xy, resolution);
 
     // depth measured in positive amount of seconds taken by wave
-    results[position] = errorValue(clamp(bottom[position] - top[position], double(0), double(1)));
+    //results[position] = errorValue(clamp(bottom[position] - top[position], double(0), double(1)));
+    double temp = abs(bottom[position] - top[position]);
+    results[position] = clamp(temp * temp, double(0), double(1));
+    //if (isnan(temp)) results[position] = 1.0;
 }

@@ -5,6 +5,7 @@
 #include "DataStructures.h"
 
 #include <utility>
+#include "iostream"
 
 GroundTruthComparator::GroundTruthComparator(std::vector<std::string> configPaths) {
     GroundTruthComparator::configPaths = std::move(configPaths);
@@ -57,4 +58,23 @@ std::vector<rawPointCloud *> GroundTruthComparator::setupPointClouds() {
     pipelines.at(1)->getCloudSorter()->setResolution(map->resolutionX, map->resolutionY);
 
     return readerReturns;
+}
+
+void GroundTruthComparator::writeComparisons(std::vector<heightMap *> comparisons) {
+    std::vector<double> meanSquareErrors(comparisons.size());
+
+    for (auto i = 0ul; i < comparisons.size(); i++) {
+        double averageError = 0;
+        auto amount = comparisons.at(i)->resolutionX * comparisons.at(i)->resolutionX;
+        for (auto j = 0ul; j < amount; j++) {
+            averageError += pow(double(comparisons.at(i)->heights.at(j)), 2) / double(amount);
+        }
+        meanSquareErrors.at(i) = sqrt(averageError);
+    }
+
+    IComparator::writeComparisons(comparisons);
+
+    for (auto i = 0ul; i < comparisons.size(); i++) {
+        std::cout << "Mean-Square-Error: " << meanSquareErrors.at(i) << "\n";
+    }
 }

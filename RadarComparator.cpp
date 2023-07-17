@@ -1,6 +1,7 @@
 #include "RadarComparator.h"
 #include "ConfigProvider.h"
 #include "GTiffWriter.h"
+#include "IComparator.h"
 
 #include <utility>
 
@@ -52,8 +53,7 @@ void addColor(std::vector<std::vector<int>>& colors, std::vector<int> color) {
     colors.at(2).emplace_back(color.at(2));
 }
 
-void
-RadarComparator::writeThresholdMaps(const std::vector<heightMap *> &comparisons, const std::vector<std::string> &destinationDEM) {
+void RadarComparator::writeThresholdMaps(const std::vector<heightMap *> &comparisons, const std::vector<std::string> &destinationDEM) {
     std::vector<std::vector<int>> colors(3);
 
     for (auto i = 0ul; i < comparisons.size(); i++) {
@@ -73,4 +73,9 @@ RadarComparator::writeThresholdMaps(const std::vector<heightMap *> &comparisons,
 
         delete writer;
     }
+}
+
+void RadarComparator::writeComparisons(std::vector<heightMap *> comparisons){
+    writeThresholdMaps(comparisons, destinationPaths);
+    IComparator::writeComparisons(comparisons);
 }

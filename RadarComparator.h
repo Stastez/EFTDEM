@@ -15,6 +15,7 @@ private:
 public:
     explicit RadarComparator(std::vector<std::string> configPaths);
     std::vector<rawPointCloud *> setupPointClouds() override;
+    void writeComparisons(std::vector<heightMap *> comparisons) override;
     void writeThresholdMaps(const std::vector<heightMap *> &comparisons, const std::vector<std::string> &destinationDEM) override;
 
     ~RadarComparator() override;
