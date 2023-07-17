@@ -17,12 +17,21 @@
 
 ConfigProvider::ConfigProvider() = default;
 
+/**
+ * Constructs a new ConfigReader while setting the path of the .yaml to read from later.
+ * @param configPath The path to the .yaml to be read
+ */
 ConfigProvider::ConfigProvider(std::string configPath) {
     ConfigProvider::configPath = std::move(configPath);
 }
 
 ConfigProvider::~ConfigProvider() = default;
 
+/**
+ * Tries to read the .yaml pointed to by configPath.
+ * @throws std::exception When the given path is not valid, or there was an error reading the config.
+ * @return The YAML::Node containing all data found in the given .yaml
+ */
 YAML::Node ConfigProvider::readConfig() {
     YAML::Node localConfig;
 
@@ -37,6 +46,17 @@ YAML::Node ConfigProvider::readConfig() {
     return localConfig;
 }
 
+/**
+ * Tries to get the child node of ConfigProvider::config by following down the path specified. If the requested child
+ * node does not exist and required is true, the program will print out the name of the missing value and exit with
+ * EXIT_INVALID_CONFIGURATION.
+ * @param path The branch path of the wanted .yaml value as a vector of strings, e.g.:
+ * std::vector<std::string>{"OpenGLOptions", "shaderDirectory"}
+ * @param required Whether the requested parameter is absolutely required. If true, the program will exit if the
+ * requested parameter does not exist in the given .yaml
+ * @return A pair containing 1) a YAML::Node containing the requested parameter if it exists, ConfigProvider::config
+ * otherwise and 2) a bool that is true, if the requested parameter exists and false otherwise
+ */
 std::pair<YAML::Node, bool> ConfigProvider::checkValidityAndReturn(const std::vector<std::string> &path, bool required) {
     /*
      * Cloning is necessary here because the copy constructor creates a new Node that points to the same memory, meaning
@@ -49,11 +69,12 @@ std::pair<YAML::Node, bool> ConfigProvider::checkValidityAndReturn(const std::ve
         current = current[name];
 
         if (!current) {
-            returnPair.first = current;
+            returnPair.first = config;
             returnPair.second = false;
 
             if (required) {
-                std::cout << name << " not specified in config!" << std::endl;
+                for (const auto& tempName : path) std::cout << "/" << tempName;
+                std::cout << " not specified in config!" << std::endl;
                 exit(Pipeline::EXIT_INVALID_CONFIGURATION);
             }
 
@@ -65,11 +86,22 @@ std::pair<YAML::Node, bool> ConfigProvider::checkValidityAndReturn(const std::ve
     return returnPair;
 }
 
+/**
+ * Sets ConfigProvider::configPath to cfgPath and calls providePipeline()
+ * @param cfgPath The path to the .yaml containing the requested configurations
+ * @return A pointer to a Pipeline configured in the way specified by the .yaml at cfgPath
+ */
 Pipeline *ConfigProvider::providePipeline(std::string cfgPath) {
     ConfigProvider::configPath = std::move(cfgPath);
     return providePipeline();
 }
 
+/**
+ * Builds a Pipeline configured in the way specified by the .yaml pointed to by ConfigProvider::configPath. If the given
+ * .yaml contains parameter values that are inconsistent or incorrect, the program may (should) exit with
+ * EXIT_INVALID_CONFIGURATION.
+ * @return A pointer to a Pipeline configured in the way specified by the .yaml at ConfigProvider::configPath
+ */
 Pipeline *ConfigProvider::providePipeline() {
     config = readConfig();
 
