@@ -1,0 +1,87 @@
+\hypertarget{class_i_cloud_reader}{}\doxysection{ICloud\+Reader Class Reference}
+\label{class_i_cloud_reader}\index{ICloudReader@{ICloudReader}}
+
+
+{\ttfamily \#include $<$ICloud\+Reader.\+h$>$}
+
+
+
+Inheritance diagram for ICloud\+Reader\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=318pt]{class_i_cloud_reader__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for ICloud\+Reader\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=184pt]{class_i_cloud_reader__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual \mbox{\hyperlink{structraw_point_cloud}{raw\+Point\+Cloud}} $\ast$ \mbox{\hyperlink{class_i_cloud_reader_a2b3b709b1c7294d41c9133764dc3adca}{apply}} (bool generate\+Output)=0
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{class_i_cloud_reader_a28747ae0926ce98a6f13e8bc44520a16}{file\+Name}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 7 of file ICloud\+Reader.\+h.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_i_cloud_reader_a2b3b709b1c7294d41c9133764dc3adca}\label{class_i_cloud_reader_a2b3b709b1c7294d41c9133764dc3adca}} 
+\index{ICloudReader@{ICloudReader}!apply@{apply}}
+\index{apply@{apply}!ICloudReader@{ICloudReader}}
+\doxysubsubsection{\texorpdfstring{apply()}{apply()}}
+{\footnotesize\ttfamily virtual \mbox{\hyperlink{structraw_point_cloud}{raw\+Point\+Cloud}}$\ast$ ICloud\+Reader\+::apply (\begin{DoxyParamCaption}\item[{bool}]{generate\+Output }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Use the currently attached \mbox{\hyperlink{class_i_cloud_reader}{ICloud\+Reader}} to read the previously specified point cloud from disk. 
+\begin{DoxyParams}{Parameters}
+{\em generate\+Output} & Whether to return a fully formed \mbox{\hyperlink{structraw_point_cloud}{raw\+Point\+Cloud}} (including the actual points). This may be set to false if the following stage uses Open\+GL and can employ the already set buffers on the GPU \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A fully formed \mbox{\hyperlink{structraw_point_cloud}{raw\+Point\+Cloud}} if generate\+Output is true, a \mbox{\hyperlink{structraw_point_cloud}{raw\+Point\+Cloud}} only containing all necessary metadata otherwise 
+\end{DoxyReturn}
+
+
+Implemented in \mbox{\hyperlink{class_mobile_mapping_reader_aa0960545736b16b4a6da89b73c1e1073}{Mobile\+Mapping\+Reader}}, and \mbox{\hyperlink{class_ground_radar_reader_a1b609d691c4d78dd781a257c217f001a}{Ground\+Radar\+Reader}}.
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=314pt]{class_i_cloud_reader_a2b3b709b1c7294d41c9133764dc3adca_icgraph}
+\end{center}
+\end{figure}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_i_cloud_reader_a28747ae0926ce98a6f13e8bc44520a16}\label{class_i_cloud_reader_a28747ae0926ce98a6f13e8bc44520a16}} 
+\index{ICloudReader@{ICloudReader}!fileName@{fileName}}
+\index{fileName@{fileName}!ICloudReader@{ICloudReader}}
+\doxysubsubsection{\texorpdfstring{fileName}{fileName}}
+{\footnotesize\ttfamily std\+::string ICloud\+Reader\+::file\+Name\hspace{0.3cm}{\ttfamily [protected]}}
+
+The path of the point cloud to be read from. 
+
+Definition at line 12 of file ICloud\+Reader.\+h.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/media/stastez/data/\+Code/\+EFTDEM/\mbox{\hyperlink{_i_cloud_reader_8h}{ICloud\+Reader.\+h}}\end{DoxyCompactItemize}

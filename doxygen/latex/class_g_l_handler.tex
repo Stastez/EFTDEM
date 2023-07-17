@@ -1,0 +1,466 @@
+\hypertarget{class_g_l_handler}{}\doxysection{GLHandler Class Reference}
+\label{class_g_l_handler}\index{GLHandler@{GLHandler}}
+
+
+{\ttfamily \#include $<$GLHandler.\+h$>$}
+
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebb}{buffer\+Indices}} \{ \newline
+\mbox{\hyperlink{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebba86c19492ff4119bfaa7e11cc64810aef}{EFTDEM\+\_\+\+UNBIND}}
+, \mbox{\hyperlink{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebbadb287ce9b6cd1e885d7d95ad83b00700}{EFTDEM\+\_\+\+RAW\+\_\+\+POINT\+\_\+\+BUFFER}}
+, \mbox{\hyperlink{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebba1dc1dc641bf01fed348e10b2f6240bdb}{EFTDEM\+\_\+\+RAW\+\_\+\+POINT\+\_\+\+INDEX\+\_\+\+BUFFER}}
+, \mbox{\hyperlink{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebba9c419e45992db22cafc506b4019127eb}{EFTDEM\+\_\+\+SORTED\+\_\+\+POINT\+\_\+\+SUM\+\_\+\+BUFFER}}
+, \newline
+\mbox{\hyperlink{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebba14152b9806d6ad739f795b1b8c0e11f3}{EFTDEM\+\_\+\+SORTED\+\_\+\+POINT\+\_\+\+COUNT\+\_\+\+BUFFER}}
+, \mbox{\hyperlink{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebbafdb861f65dd55c84cd7b12cdad9f997e}{EFTDEM\+\_\+\+HEIGHTMAP\+\_\+\+BUFFER}}
+, \mbox{\hyperlink{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebbac57e632f6110dea16f17d86392f7acd9}{EFTDEM\+\_\+\+SECOND\+\_\+\+HEIGHTMAP\+\_\+\+BUFFER}}
+, \mbox{\hyperlink{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebba3bd146233d37a04ca0287993da0a1183}{EFTDEM\+\_\+\+COMPARISON\+\_\+\+BUFFER}}
+, \newline
+\mbox{\hyperlink{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebbabce4ad88aa4e1f3c524c507535c8d3fd}{EFTDEM\+\_\+\+HORIZONTAL\+\_\+\+SUM\+\_\+\+BUFFER}}
+, \mbox{\hyperlink{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebbad191618f643225cf7dbb9b10fae4d544}{EFTDEM\+\_\+\+SUM\+\_\+\+BUFFER}}
+, \mbox{\hyperlink{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebba94f681624c8cc8bde90965f2ec956e31}{EFTDEM\+\_\+\+HORIZONTAL\+\_\+\+AMOUNT\+\_\+\+BUFFER}}
+, \mbox{\hyperlink{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebba00a6b4a1434d0d23d33150beca003ccc}{EFTDEM\+\_\+\+AMOUNT\+\_\+\+BUFFER}}
+, \newline
+\mbox{\hyperlink{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebbaf4ef19ea00adcbbd32d5c159360650f9}{EFTDEM\+\_\+\+AVERAGE\+\_\+\+BUFFER}}
+, \mbox{\hyperlink{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebbafe16b63cfdb6496de4196bccca22078a}{EFTDEM\+\_\+\+CLOSING\+\_\+\+MASK\+\_\+\+BUFFER}}
+, \mbox{\hyperlink{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebbae4361e7a053dd0af2ea1638407b18fa0}{EFTDEM\+\_\+\+TOTAL\+\_\+\+WEIGHT\+\_\+\+BUFFER}}
+, \mbox{\hyperlink{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebba24fdfd7c685fdc8b408d524e5d2906b4}{EFTDEM\+\_\+\+HORIZONTAL\+\_\+\+TOTAL\+\_\+\+WEIGHT\+\_\+\+BUFFER}}
+, \newline
+\mbox{\hyperlink{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebba21e774d1b830e617833ac3166985454b}{EFTDEM\+\_\+\+KERNEL\+\_\+\+BUFFER}}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_g_l_handler_a1b64b4c51019646fbd5a4496ec18f5c7}{GLHandler}} ()
+\item 
+\mbox{\hyperlink{class_g_l_handler_aef3f8df10d8006916bc72025202e9bfe}{GLHandler}} (std\+::string shader\+Directory)
+\item 
+\mbox{\hyperlink{class_g_l_handler_a720c41de329d894cc5cf7880b878c11b}{$\sim$\+GLHandler}} ()
+\item 
+GLFWwindow $\ast$ \mbox{\hyperlink{class_g_l_handler_a83527acf2d2cefec1518c457909eba37}{initialize\+GL}} (bool debug)
+\item 
+std\+::vector$<$ gl\+::\+GLuint $>$ \mbox{\hyperlink{class_g_l_handler_a39e435439a0a6cccc23ae7875aa72ffc}{get\+Shader\+Programs}} (const std\+::vector$<$ std\+::string $>$ \&shader\+File, bool use\+Standard\+Directory)
+\item 
+gl\+::\+GLuint \mbox{\hyperlink{class_g_l_handler_a48cfa878c97bcc54d212a96f0ff8f3f0}{get\+Shader\+Program}} (const std\+::string \&shader\+Files, bool use\+Standard\+Directory)
+\item 
+void \mbox{\hyperlink{class_g_l_handler_a132a1006b1000300239421f792ffc5ad}{bind\+Buffer}} (\mbox{\hyperlink{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebb}{buffer\+Indices}} buffer)
+\item 
+void \mbox{\hyperlink{class_g_l_handler_a8b1d13ab6e7ac051f895af5baa9295a0}{reset\+Buffers}} ()
+\item 
+void \mbox{\hyperlink{class_g_l_handler_af1a479990247142aa1744059440a2fba}{generate\+Buffer}} (\mbox{\hyperlink{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebb}{buffer\+Indices}} buffer)
+\item 
+void \mbox{\hyperlink{class_g_l_handler_a8c4da2ebd20e0cc64f3b1e371229e5e7}{generate\+Buffer}} (int buffer)
+\item 
+void \mbox{\hyperlink{class_g_l_handler_ac46a45d164ba8b34ba33287ad7f0110b}{delete\+Buffer}} (\mbox{\hyperlink{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebb}{buffer\+Indices}} buffer)
+\item 
+void \mbox{\hyperlink{class_g_l_handler_aeb77b118518cbc106df1fd86c7db0ab3}{delete\+Buffer}} (int buffer)
+\item 
+void \mbox{\hyperlink{class_g_l_handler_a9c9bbfe4b44b8c52328d04caac4a8064}{data\+To\+Buffer}} (\mbox{\hyperlink{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebb}{buffer\+Indices}} buffer, gl\+::\+GLsizeiptr size, const void $\ast$data, gl\+::\+GLenum usage)
+\item 
+void \mbox{\hyperlink{class_g_l_handler_a7936083e96092331ef9a716dc2c87d26}{data\+From\+Buffer}} (\mbox{\hyperlink{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebb}{buffer\+Indices}} buffer, gl\+::\+GLsizeiptr offset, gl\+::\+GLsizeiptr size, void $\ast$data)
+\item 
+void \mbox{\hyperlink{class_g_l_handler_a1bc3fbcbe82556d350152910dcc36a57}{dispatch\+Shader}} (unsigned int local\+Batch\+Size, unsigned long resolutionX, unsigned long resolutionY) const
+\item 
+void \mbox{\hyperlink{class_g_l_handler_af370bd74f7c72b36a98792e6e2ca0a9c}{set\+Program}} (gl\+::\+GLuint program)
+\item 
+gl\+::\+GLuint \mbox{\hyperlink{class_g_l_handler_a12f94c6ed44c8896a8e28aedd62cd11d}{get\+Program}} () const
+\item 
+bool \mbox{\hyperlink{class_g_l_handler_a2449a095077f7ecf32ea7ed01f8d5b16}{is\+Initialized}} (bool debug) const
+\item 
+std\+::vector$<$ bool $>$ \mbox{\hyperlink{class_g_l_handler_ad18e0fb1e0cd5da4b6e03d6ea68d411a}{get\+Coherent\+Buffer\+Mask}} ()
+\item 
+std\+::string \mbox{\hyperlink{class_g_l_handler_a5a0a82be58d9dcd556f5d33a8872d214}{get\+Shader\+Dir}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \mbox{\hyperlink{class_g_l_handler_ae0f58c6d4c42c48bd2967101017947f5}{wait\+For\+Shader\+Storage\+Integrity}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 11 of file GLHandler.\+h.
+
+
+
+\doxysubsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebb}\label{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebb}} 
+\index{GLHandler@{GLHandler}!bufferIndices@{bufferIndices}}
+\index{bufferIndices@{bufferIndices}!GLHandler@{GLHandler}}
+\doxysubsubsection{\texorpdfstring{bufferIndices}{bufferIndices}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebb}{GLHandler\+::buffer\+Indices}}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EFTDEM\_UNBIND@{EFTDEM\_UNBIND}!GLHandler@{GLHandler}}\index{GLHandler@{GLHandler}!EFTDEM\_UNBIND@{EFTDEM\_UNBIND}}}\mbox{\Hypertarget{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebba86c19492ff4119bfaa7e11cc64810aef}\label{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebba86c19492ff4119bfaa7e11cc64810aef}} 
+EFTDEM\+\_\+\+UNBIND&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EFTDEM\_RAW\_POINT\_BUFFER@{EFTDEM\_RAW\_POINT\_BUFFER}!GLHandler@{GLHandler}}\index{GLHandler@{GLHandler}!EFTDEM\_RAW\_POINT\_BUFFER@{EFTDEM\_RAW\_POINT\_BUFFER}}}\mbox{\Hypertarget{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebbadb287ce9b6cd1e885d7d95ad83b00700}\label{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebbadb287ce9b6cd1e885d7d95ad83b00700}} 
+EFTDEM\+\_\+\+RAW\+\_\+\+POINT\+\_\+\+BUFFER&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EFTDEM\_RAW\_POINT\_INDEX\_BUFFER@{EFTDEM\_RAW\_POINT\_INDEX\_BUFFER}!GLHandler@{GLHandler}}\index{GLHandler@{GLHandler}!EFTDEM\_RAW\_POINT\_INDEX\_BUFFER@{EFTDEM\_RAW\_POINT\_INDEX\_BUFFER}}}\mbox{\Hypertarget{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebba1dc1dc641bf01fed348e10b2f6240bdb}\label{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebba1dc1dc641bf01fed348e10b2f6240bdb}} 
+EFTDEM\+\_\+\+RAW\+\_\+\+POINT\+\_\+\+INDEX\+\_\+\+BUFFER&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EFTDEM\_SORTED\_POINT\_SUM\_BUFFER@{EFTDEM\_SORTED\_POINT\_SUM\_BUFFER}!GLHandler@{GLHandler}}\index{GLHandler@{GLHandler}!EFTDEM\_SORTED\_POINT\_SUM\_BUFFER@{EFTDEM\_SORTED\_POINT\_SUM\_BUFFER}}}\mbox{\Hypertarget{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebba9c419e45992db22cafc506b4019127eb}\label{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebba9c419e45992db22cafc506b4019127eb}} 
+EFTDEM\+\_\+\+SORTED\+\_\+\+POINT\+\_\+\+SUM\+\_\+\+BUFFER&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EFTDEM\_SORTED\_POINT\_COUNT\_BUFFER@{EFTDEM\_SORTED\_POINT\_COUNT\_BUFFER}!GLHandler@{GLHandler}}\index{GLHandler@{GLHandler}!EFTDEM\_SORTED\_POINT\_COUNT\_BUFFER@{EFTDEM\_SORTED\_POINT\_COUNT\_BUFFER}}}\mbox{\Hypertarget{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebba14152b9806d6ad739f795b1b8c0e11f3}\label{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebba14152b9806d6ad739f795b1b8c0e11f3}} 
+EFTDEM\+\_\+\+SORTED\+\_\+\+POINT\+\_\+\+COUNT\+\_\+\+BUFFER&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EFTDEM\_HEIGHTMAP\_BUFFER@{EFTDEM\_HEIGHTMAP\_BUFFER}!GLHandler@{GLHandler}}\index{GLHandler@{GLHandler}!EFTDEM\_HEIGHTMAP\_BUFFER@{EFTDEM\_HEIGHTMAP\_BUFFER}}}\mbox{\Hypertarget{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebbafdb861f65dd55c84cd7b12cdad9f997e}\label{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebbafdb861f65dd55c84cd7b12cdad9f997e}} 
+EFTDEM\+\_\+\+HEIGHTMAP\+\_\+\+BUFFER&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EFTDEM\_SECOND\_HEIGHTMAP\_BUFFER@{EFTDEM\_SECOND\_HEIGHTMAP\_BUFFER}!GLHandler@{GLHandler}}\index{GLHandler@{GLHandler}!EFTDEM\_SECOND\_HEIGHTMAP\_BUFFER@{EFTDEM\_SECOND\_HEIGHTMAP\_BUFFER}}}\mbox{\Hypertarget{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebbac57e632f6110dea16f17d86392f7acd9}\label{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebbac57e632f6110dea16f17d86392f7acd9}} 
+EFTDEM\+\_\+\+SECOND\+\_\+\+HEIGHTMAP\+\_\+\+BUFFER&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EFTDEM\_COMPARISON\_BUFFER@{EFTDEM\_COMPARISON\_BUFFER}!GLHandler@{GLHandler}}\index{GLHandler@{GLHandler}!EFTDEM\_COMPARISON\_BUFFER@{EFTDEM\_COMPARISON\_BUFFER}}}\mbox{\Hypertarget{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebba3bd146233d37a04ca0287993da0a1183}\label{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebba3bd146233d37a04ca0287993da0a1183}} 
+EFTDEM\+\_\+\+COMPARISON\+\_\+\+BUFFER&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EFTDEM\_HORIZONTAL\_SUM\_BUFFER@{EFTDEM\_HORIZONTAL\_SUM\_BUFFER}!GLHandler@{GLHandler}}\index{GLHandler@{GLHandler}!EFTDEM\_HORIZONTAL\_SUM\_BUFFER@{EFTDEM\_HORIZONTAL\_SUM\_BUFFER}}}\mbox{\Hypertarget{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebbabce4ad88aa4e1f3c524c507535c8d3fd}\label{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebbabce4ad88aa4e1f3c524c507535c8d3fd}} 
+EFTDEM\+\_\+\+HORIZONTAL\+\_\+\+SUM\+\_\+\+BUFFER&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EFTDEM\_SUM\_BUFFER@{EFTDEM\_SUM\_BUFFER}!GLHandler@{GLHandler}}\index{GLHandler@{GLHandler}!EFTDEM\_SUM\_BUFFER@{EFTDEM\_SUM\_BUFFER}}}\mbox{\Hypertarget{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebbad191618f643225cf7dbb9b10fae4d544}\label{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebbad191618f643225cf7dbb9b10fae4d544}} 
+EFTDEM\+\_\+\+SUM\+\_\+\+BUFFER&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EFTDEM\_HORIZONTAL\_AMOUNT\_BUFFER@{EFTDEM\_HORIZONTAL\_AMOUNT\_BUFFER}!GLHandler@{GLHandler}}\index{GLHandler@{GLHandler}!EFTDEM\_HORIZONTAL\_AMOUNT\_BUFFER@{EFTDEM\_HORIZONTAL\_AMOUNT\_BUFFER}}}\mbox{\Hypertarget{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebba94f681624c8cc8bde90965f2ec956e31}\label{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebba94f681624c8cc8bde90965f2ec956e31}} 
+EFTDEM\+\_\+\+HORIZONTAL\+\_\+\+AMOUNT\+\_\+\+BUFFER&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EFTDEM\_AMOUNT\_BUFFER@{EFTDEM\_AMOUNT\_BUFFER}!GLHandler@{GLHandler}}\index{GLHandler@{GLHandler}!EFTDEM\_AMOUNT\_BUFFER@{EFTDEM\_AMOUNT\_BUFFER}}}\mbox{\Hypertarget{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebba00a6b4a1434d0d23d33150beca003ccc}\label{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebba00a6b4a1434d0d23d33150beca003ccc}} 
+EFTDEM\+\_\+\+AMOUNT\+\_\+\+BUFFER&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EFTDEM\_AVERAGE\_BUFFER@{EFTDEM\_AVERAGE\_BUFFER}!GLHandler@{GLHandler}}\index{GLHandler@{GLHandler}!EFTDEM\_AVERAGE\_BUFFER@{EFTDEM\_AVERAGE\_BUFFER}}}\mbox{\Hypertarget{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebbaf4ef19ea00adcbbd32d5c159360650f9}\label{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebbaf4ef19ea00adcbbd32d5c159360650f9}} 
+EFTDEM\+\_\+\+AVERAGE\+\_\+\+BUFFER&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EFTDEM\_CLOSING\_MASK\_BUFFER@{EFTDEM\_CLOSING\_MASK\_BUFFER}!GLHandler@{GLHandler}}\index{GLHandler@{GLHandler}!EFTDEM\_CLOSING\_MASK\_BUFFER@{EFTDEM\_CLOSING\_MASK\_BUFFER}}}\mbox{\Hypertarget{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebbafe16b63cfdb6496de4196bccca22078a}\label{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebbafe16b63cfdb6496de4196bccca22078a}} 
+EFTDEM\+\_\+\+CLOSING\+\_\+\+MASK\+\_\+\+BUFFER&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EFTDEM\_TOTAL\_WEIGHT\_BUFFER@{EFTDEM\_TOTAL\_WEIGHT\_BUFFER}!GLHandler@{GLHandler}}\index{GLHandler@{GLHandler}!EFTDEM\_TOTAL\_WEIGHT\_BUFFER@{EFTDEM\_TOTAL\_WEIGHT\_BUFFER}}}\mbox{\Hypertarget{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebbae4361e7a053dd0af2ea1638407b18fa0}\label{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebbae4361e7a053dd0af2ea1638407b18fa0}} 
+EFTDEM\+\_\+\+TOTAL\+\_\+\+WEIGHT\+\_\+\+BUFFER&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EFTDEM\_HORIZONTAL\_TOTAL\_WEIGHT\_BUFFER@{EFTDEM\_HORIZONTAL\_TOTAL\_WEIGHT\_BUFFER}!GLHandler@{GLHandler}}\index{GLHandler@{GLHandler}!EFTDEM\_HORIZONTAL\_TOTAL\_WEIGHT\_BUFFER@{EFTDEM\_HORIZONTAL\_TOTAL\_WEIGHT\_BUFFER}}}\mbox{\Hypertarget{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebba24fdfd7c685fdc8b408d524e5d2906b4}\label{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebba24fdfd7c685fdc8b408d524e5d2906b4}} 
+EFTDEM\+\_\+\+HORIZONTAL\+\_\+\+TOTAL\+\_\+\+WEIGHT\+\_\+\+BUFFER&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EFTDEM\_KERNEL\_BUFFER@{EFTDEM\_KERNEL\_BUFFER}!GLHandler@{GLHandler}}\index{GLHandler@{GLHandler}!EFTDEM\_KERNEL\_BUFFER@{EFTDEM\_KERNEL\_BUFFER}}}\mbox{\Hypertarget{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebba21e774d1b830e617833ac3166985454b}\label{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebba21e774d1b830e617833ac3166985454b}} 
+EFTDEM\+\_\+\+KERNEL\+\_\+\+BUFFER&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+Definition at line 13 of file GLHandler.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_g_l_handler_a1b64b4c51019646fbd5a4496ec18f5c7}\label{class_g_l_handler_a1b64b4c51019646fbd5a4496ec18f5c7}} 
+\index{GLHandler@{GLHandler}!GLHandler@{GLHandler}}
+\index{GLHandler@{GLHandler}!GLHandler@{GLHandler}}
+\doxysubsubsection{\texorpdfstring{GLHandler()}{GLHandler()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily GLHandler\+::\+GLHandler (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+\mbox{\Hypertarget{class_g_l_handler_aef3f8df10d8006916bc72025202e9bfe}\label{class_g_l_handler_aef3f8df10d8006916bc72025202e9bfe}} 
+\index{GLHandler@{GLHandler}!GLHandler@{GLHandler}}
+\index{GLHandler@{GLHandler}!GLHandler@{GLHandler}}
+\doxysubsubsection{\texorpdfstring{GLHandler()}{GLHandler()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily GLHandler\+::\+GLHandler (\begin{DoxyParamCaption}\item[{std\+::string}]{shader\+Directory }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+Definition at line 16 of file GLHandler.\+cpp.
+
+\mbox{\Hypertarget{class_g_l_handler_a720c41de329d894cc5cf7880b878c11b}\label{class_g_l_handler_a720c41de329d894cc5cf7880b878c11b}} 
+\index{GLHandler@{GLHandler}!````~GLHandler@{$\sim$GLHandler}}
+\index{````~GLHandler@{$\sim$GLHandler}!GLHandler@{GLHandler}}
+\doxysubsubsection{\texorpdfstring{$\sim$GLHandler()}{~GLHandler()}}
+{\footnotesize\ttfamily GLHandler\+::$\sim$\+GLHandler (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 20 of file GLHandler.\+cpp.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_g_l_handler_a132a1006b1000300239421f792ffc5ad}\label{class_g_l_handler_a132a1006b1000300239421f792ffc5ad}} 
+\index{GLHandler@{GLHandler}!bindBuffer@{bindBuffer}}
+\index{bindBuffer@{bindBuffer}!GLHandler@{GLHandler}}
+\doxysubsubsection{\texorpdfstring{bindBuffer()}{bindBuffer()}}
+{\footnotesize\ttfamily void GLHandler\+::bind\+Buffer (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebb}{GLHandler\+::buffer\+Indices}}}]{buffer }\end{DoxyParamCaption})}
+
+
+
+Definition at line 141 of file GLHandler.\+cpp.
+
+\mbox{\Hypertarget{class_g_l_handler_a7936083e96092331ef9a716dc2c87d26}\label{class_g_l_handler_a7936083e96092331ef9a716dc2c87d26}} 
+\index{GLHandler@{GLHandler}!dataFromBuffer@{dataFromBuffer}}
+\index{dataFromBuffer@{dataFromBuffer}!GLHandler@{GLHandler}}
+\doxysubsubsection{\texorpdfstring{dataFromBuffer()}{dataFromBuffer()}}
+{\footnotesize\ttfamily void GLHandler\+::data\+From\+Buffer (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebb}{GLHandler\+::buffer\+Indices}}}]{buffer,  }\item[{gl\+::\+GLsizeiptr}]{offset,  }\item[{gl\+::\+GLsizeiptr}]{size,  }\item[{void $\ast$}]{data }\end{DoxyParamCaption})}
+
+
+
+Definition at line 184 of file GLHandler.\+cpp.
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_g_l_handler_a7936083e96092331ef9a716dc2c87d26_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_g_l_handler_a9c9bbfe4b44b8c52328d04caac4a8064}\label{class_g_l_handler_a9c9bbfe4b44b8c52328d04caac4a8064}} 
+\index{GLHandler@{GLHandler}!dataToBuffer@{dataToBuffer}}
+\index{dataToBuffer@{dataToBuffer}!GLHandler@{GLHandler}}
+\doxysubsubsection{\texorpdfstring{dataToBuffer()}{dataToBuffer()}}
+{\footnotesize\ttfamily void GLHandler\+::data\+To\+Buffer (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebb}{GLHandler\+::buffer\+Indices}}}]{buffer,  }\item[{gl\+::\+GLsizeiptr}]{size,  }\item[{const void $\ast$}]{data,  }\item[{gl\+::\+GLenum}]{usage }\end{DoxyParamCaption})}
+
+
+
+Definition at line 176 of file GLHandler.\+cpp.
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_g_l_handler_a9c9bbfe4b44b8c52328d04caac4a8064_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_g_l_handler_ac46a45d164ba8b34ba33287ad7f0110b}\label{class_g_l_handler_ac46a45d164ba8b34ba33287ad7f0110b}} 
+\index{GLHandler@{GLHandler}!deleteBuffer@{deleteBuffer}}
+\index{deleteBuffer@{deleteBuffer}!GLHandler@{GLHandler}}
+\doxysubsubsection{\texorpdfstring{deleteBuffer()}{deleteBuffer()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void GLHandler\+::delete\+Buffer (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebb}{GLHandler\+::buffer\+Indices}}}]{buffer }\end{DoxyParamCaption})}
+
+
+
+Definition at line 163 of file GLHandler.\+cpp.
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_g_l_handler_ac46a45d164ba8b34ba33287ad7f0110b_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_g_l_handler_aeb77b118518cbc106df1fd86c7db0ab3}\label{class_g_l_handler_aeb77b118518cbc106df1fd86c7db0ab3}} 
+\index{GLHandler@{GLHandler}!deleteBuffer@{deleteBuffer}}
+\index{deleteBuffer@{deleteBuffer}!GLHandler@{GLHandler}}
+\doxysubsubsection{\texorpdfstring{deleteBuffer()}{deleteBuffer()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void GLHandler\+::delete\+Buffer (\begin{DoxyParamCaption}\item[{int}]{buffer }\end{DoxyParamCaption})}
+
+
+
+Definition at line 167 of file GLHandler.\+cpp.
+
+\mbox{\Hypertarget{class_g_l_handler_a1bc3fbcbe82556d350152910dcc36a57}\label{class_g_l_handler_a1bc3fbcbe82556d350152910dcc36a57}} 
+\index{GLHandler@{GLHandler}!dispatchShader@{dispatchShader}}
+\index{dispatchShader@{dispatchShader}!GLHandler@{GLHandler}}
+\doxysubsubsection{\texorpdfstring{dispatchShader()}{dispatchShader()}}
+{\footnotesize\ttfamily void GLHandler\+::dispatch\+Shader (\begin{DoxyParamCaption}\item[{unsigned int}]{local\+Batch\+Size,  }\item[{unsigned long}]{resolutionX,  }\item[{unsigned long}]{resolutionY }\end{DoxyParamCaption}) const}
+
+
+
+Definition at line 214 of file GLHandler.\+cpp.
+
+\mbox{\Hypertarget{class_g_l_handler_af1a479990247142aa1744059440a2fba}\label{class_g_l_handler_af1a479990247142aa1744059440a2fba}} 
+\index{GLHandler@{GLHandler}!generateBuffer@{generateBuffer}}
+\index{generateBuffer@{generateBuffer}!GLHandler@{GLHandler}}
+\doxysubsubsection{\texorpdfstring{generateBuffer()}{generateBuffer()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily void GLHandler\+::generate\+Buffer (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_g_l_handler_ae0ed0bfcb9456162d2c7d06eca7bbebb}{GLHandler\+::buffer\+Indices}}}]{buffer }\end{DoxyParamCaption})}
+
+
+
+Definition at line 150 of file GLHandler.\+cpp.
+
+\mbox{\Hypertarget{class_g_l_handler_a8c4da2ebd20e0cc64f3b1e371229e5e7}\label{class_g_l_handler_a8c4da2ebd20e0cc64f3b1e371229e5e7}} 
+\index{GLHandler@{GLHandler}!generateBuffer@{generateBuffer}}
+\index{generateBuffer@{generateBuffer}!GLHandler@{GLHandler}}
+\doxysubsubsection{\texorpdfstring{generateBuffer()}{generateBuffer()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily void GLHandler\+::generate\+Buffer (\begin{DoxyParamCaption}\item[{int}]{buffer }\end{DoxyParamCaption})}
+
+
+
+Definition at line 154 of file GLHandler.\+cpp.
+
+\mbox{\Hypertarget{class_g_l_handler_ad18e0fb1e0cd5da4b6e03d6ea68d411a}\label{class_g_l_handler_ad18e0fb1e0cd5da4b6e03d6ea68d411a}} 
+\index{GLHandler@{GLHandler}!getCoherentBufferMask@{getCoherentBufferMask}}
+\index{getCoherentBufferMask@{getCoherentBufferMask}!GLHandler@{GLHandler}}
+\doxysubsubsection{\texorpdfstring{getCoherentBufferMask()}{getCoherentBufferMask()}}
+{\footnotesize\ttfamily std\+::vector$<$ bool $>$ GLHandler\+::get\+Coherent\+Buffer\+Mask (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 208 of file GLHandler.\+cpp.
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_g_l_handler_ad18e0fb1e0cd5da4b6e03d6ea68d411a_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_g_l_handler_a12f94c6ed44c8896a8e28aedd62cd11d}\label{class_g_l_handler_a12f94c6ed44c8896a8e28aedd62cd11d}} 
+\index{GLHandler@{GLHandler}!getProgram@{getProgram}}
+\index{getProgram@{getProgram}!GLHandler@{GLHandler}}
+\doxysubsubsection{\texorpdfstring{getProgram()}{getProgram()}}
+{\footnotesize\ttfamily gl\+::\+GLuint GLHandler\+::get\+Program (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+
+
+Definition at line 200 of file GLHandler.\+cpp.
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_g_l_handler_a12f94c6ed44c8896a8e28aedd62cd11d_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_g_l_handler_a5a0a82be58d9dcd556f5d33a8872d214}\label{class_g_l_handler_a5a0a82be58d9dcd556f5d33a8872d214}} 
+\index{GLHandler@{GLHandler}!getShaderDir@{getShaderDir}}
+\index{getShaderDir@{getShaderDir}!GLHandler@{GLHandler}}
+\doxysubsubsection{\texorpdfstring{getShaderDir()}{getShaderDir()}}
+{\footnotesize\ttfamily std\+::string GLHandler\+::get\+Shader\+Dir (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 292 of file GLHandler.\+cpp.
+
+\mbox{\Hypertarget{class_g_l_handler_a48cfa878c97bcc54d212a96f0ff8f3f0}\label{class_g_l_handler_a48cfa878c97bcc54d212a96f0ff8f3f0}} 
+\index{GLHandler@{GLHandler}!getShaderProgram@{getShaderProgram}}
+\index{getShaderProgram@{getShaderProgram}!GLHandler@{GLHandler}}
+\doxysubsubsection{\texorpdfstring{getShaderProgram()}{getShaderProgram()}}
+{\footnotesize\ttfamily gl\+::\+GLuint GLHandler\+::get\+Shader\+Program (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{shader\+Files,  }\item[{bool}]{use\+Standard\+Directory }\end{DoxyParamCaption})}
+
+
+
+Definition at line 86 of file GLHandler.\+cpp.
+
+\mbox{\Hypertarget{class_g_l_handler_a39e435439a0a6cccc23ae7875aa72ffc}\label{class_g_l_handler_a39e435439a0a6cccc23ae7875aa72ffc}} 
+\index{GLHandler@{GLHandler}!getShaderPrograms@{getShaderPrograms}}
+\index{getShaderPrograms@{getShaderPrograms}!GLHandler@{GLHandler}}
+\doxysubsubsection{\texorpdfstring{getShaderPrograms()}{getShaderPrograms()}}
+{\footnotesize\ttfamily std\+::vector$<$ GLuint $>$ GLHandler\+::get\+Shader\+Programs (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ std\+::string $>$ \&}]{shader\+File,  }\item[{bool}]{use\+Standard\+Directory }\end{DoxyParamCaption})}
+
+
+
+Definition at line 130 of file GLHandler.\+cpp.
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_g_l_handler_a39e435439a0a6cccc23ae7875aa72ffc_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_g_l_handler_a83527acf2d2cefec1518c457909eba37}\label{class_g_l_handler_a83527acf2d2cefec1518c457909eba37}} 
+\index{GLHandler@{GLHandler}!initializeGL@{initializeGL}}
+\index{initializeGL@{initializeGL}!GLHandler@{GLHandler}}
+\doxysubsubsection{\texorpdfstring{initializeGL()}{initializeGL()}}
+{\footnotesize\ttfamily GLFWwindow $\ast$ GLHandler\+::initialize\+GL (\begin{DoxyParamCaption}\item[{bool}]{debug }\end{DoxyParamCaption})}
+
+
+
+Definition at line 41 of file GLHandler.\+cpp.
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=328pt]{class_g_l_handler_a83527acf2d2cefec1518c457909eba37_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_g_l_handler_a83527acf2d2cefec1518c457909eba37_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_g_l_handler_a2449a095077f7ecf32ea7ed01f8d5b16}\label{class_g_l_handler_a2449a095077f7ecf32ea7ed01f8d5b16}} 
+\index{GLHandler@{GLHandler}!isInitialized@{isInitialized}}
+\index{isInitialized@{isInitialized}!GLHandler@{GLHandler}}
+\doxysubsubsection{\texorpdfstring{isInitialized()}{isInitialized()}}
+{\footnotesize\ttfamily bool GLHandler\+::is\+Initialized (\begin{DoxyParamCaption}\item[{bool}]{debug }\end{DoxyParamCaption}) const}
+
+
+
+Definition at line 212 of file GLHandler.\+cpp.
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_g_l_handler_a2449a095077f7ecf32ea7ed01f8d5b16_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_g_l_handler_a8b1d13ab6e7ac051f895af5baa9295a0}\label{class_g_l_handler_a8b1d13ab6e7ac051f895af5baa9295a0}} 
+\index{GLHandler@{GLHandler}!resetBuffers@{resetBuffers}}
+\index{resetBuffers@{resetBuffers}!GLHandler@{GLHandler}}
+\doxysubsubsection{\texorpdfstring{resetBuffers()}{resetBuffers()}}
+{\footnotesize\ttfamily void GLHandler\+::reset\+Buffers (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 294 of file GLHandler.\+cpp.
+
+\mbox{\Hypertarget{class_g_l_handler_af370bd74f7c72b36a98792e6e2ca0a9c}\label{class_g_l_handler_af370bd74f7c72b36a98792e6e2ca0a9c}} 
+\index{GLHandler@{GLHandler}!setProgram@{setProgram}}
+\index{setProgram@{setProgram}!GLHandler@{GLHandler}}
+\doxysubsubsection{\texorpdfstring{setProgram()}{setProgram()}}
+{\footnotesize\ttfamily void GLHandler\+::set\+Program (\begin{DoxyParamCaption}\item[{gl\+::\+GLuint}]{program }\end{DoxyParamCaption})}
+
+
+
+Definition at line 195 of file GLHandler.\+cpp.
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_g_l_handler_af370bd74f7c72b36a98792e6e2ca0a9c_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_g_l_handler_ae0f58c6d4c42c48bd2967101017947f5}\label{class_g_l_handler_ae0f58c6d4c42c48bd2967101017947f5}} 
+\index{GLHandler@{GLHandler}!waitForShaderStorageIntegrity@{waitForShaderStorageIntegrity}}
+\index{waitForShaderStorageIntegrity@{waitForShaderStorageIntegrity}!GLHandler@{GLHandler}}
+\doxysubsubsection{\texorpdfstring{waitForShaderStorageIntegrity()}{waitForShaderStorageIntegrity()}}
+{\footnotesize\ttfamily void GLHandler\+::wait\+For\+Shader\+Storage\+Integrity (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line 204 of file GLHandler.\+cpp.
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_g_l_handler_ae0f58c6d4c42c48bd2967101017947f5_icgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/media/stastez/data/\+Code/\+EFTDEM/\mbox{\hyperlink{_g_l_handler_8h}{GLHandler.\+h}}\item 
+/media/stastez/data/\+Code/\+EFTDEM/\mbox{\hyperlink{_g_l_handler_8cpp}{GLHandler.\+cpp}}\end{DoxyCompactItemize}

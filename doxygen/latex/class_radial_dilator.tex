@@ -1,0 +1,90 @@
+\hypertarget{class_radial_dilator}{}\doxysection{Radial\+Dilator Class Reference}
+\label{class_radial_dilator}\index{RadialDilator@{RadialDilator}}
+
+
+{\ttfamily \#include $<$Radial\+Dilator.\+h$>$}
+
+
+
+Inheritance diagram for Radial\+Dilator\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=199pt]{class_radial_dilator__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Radial\+Dilator\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=199pt]{class_radial_dilator__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_radial_dilator_ad0d94dede53192eb3bd61016bf758b0a}{Radial\+Dilator}} (\mbox{\hyperlink{class_g_l_handler}{GLHandler}} $\ast$gl\+Handler, bool flipped, unsigned int batch\+Size, bool batched, gl\+::\+GLuint shader\+Program, gl\+::\+GLint resolution\+Location, gl\+::\+GLint current\+Invocation\+Location, gl\+::\+GLint flipped\+Location, bool ignore\+Output)
+\item 
+\mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$ \mbox{\hyperlink{class_radial_dilator_ab7f45a93d076363928a44e17c4a45a2e}{apply}} (\mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$map, bool generate\+Output) override
+\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 7 of file Radial\+Dilator.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_radial_dilator_ad0d94dede53192eb3bd61016bf758b0a}\label{class_radial_dilator_ad0d94dede53192eb3bd61016bf758b0a}} 
+\index{RadialDilator@{RadialDilator}!RadialDilator@{RadialDilator}}
+\index{RadialDilator@{RadialDilator}!RadialDilator@{RadialDilator}}
+\doxysubsubsection{\texorpdfstring{RadialDilator()}{RadialDilator()}}
+{\footnotesize\ttfamily Radial\+Dilator\+::\+Radial\+Dilator (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_g_l_handler}{GLHandler}} $\ast$}]{gl\+Handler,  }\item[{bool}]{flipped,  }\item[{unsigned int}]{batch\+Size,  }\item[{bool}]{batched,  }\item[{gl\+::\+GLuint}]{shader\+Program,  }\item[{gl\+::\+GLint}]{resolution\+Location,  }\item[{gl\+::\+GLint}]{current\+Invocation\+Location,  }\item[{gl\+::\+GLint}]{flipped\+Location,  }\item[{bool}]{ignore\+Output }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+Definition at line 5 of file Radial\+Dilator.\+cpp.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_radial_dilator_ab7f45a93d076363928a44e17c4a45a2e}\label{class_radial_dilator_ab7f45a93d076363928a44e17c4a45a2e}} 
+\index{RadialDilator@{RadialDilator}!apply@{apply}}
+\index{apply@{apply}!RadialDilator@{RadialDilator}}
+\doxysubsubsection{\texorpdfstring{apply()}{apply()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$ Radial\+Dilator\+::apply (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$}]{map,  }\item[{bool}]{generate\+Output }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Use the currently attached \mbox{\hyperlink{class_i_height_map_filler}{IHeight\+Map\+Filler}} to fill holes in the \mbox{\hyperlink{structheight_map}{height\+Map}} given by map. 
+\begin{DoxyParams}{Parameters}
+{\em generate\+Output} & Whether to return a fully formed \mbox{\hyperlink{structheight_map}{height\+Map}} (including the actual height\+Data for each pixel). This may be set to false if the following stage uses Open\+GL and can employ the already set buffers on the GPU \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A fully formed \mbox{\hyperlink{structheight_map}{height\+Map}} if generate\+Output is true, a \mbox{\hyperlink{structheight_map}{height\+Map}} only containing all necessary metadata otherwise 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_i_radial_filler_component}{IRadial\+Filler\+Component}}.
+
+
+
+Definition at line 22 of file Radial\+Dilator.\+cpp.
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_radial_dilator_ab7f45a93d076363928a44e17c4a45a2e_cgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/media/stastez/data/\+Code/\+EFTDEM/\mbox{\hyperlink{_radial_dilator_8h}{Radial\+Dilator.\+h}}\item 
+/media/stastez/data/\+Code/\+EFTDEM/\mbox{\hyperlink{_radial_dilator_8cpp}{Radial\+Dilator.\+cpp}}\end{DoxyCompactItemize}

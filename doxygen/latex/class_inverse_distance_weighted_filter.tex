@@ -1,0 +1,109 @@
+\hypertarget{class_inverse_distance_weighted_filter}{}\doxysection{Inverse\+Distance\+Weighted\+Filter Class Reference}
+\label{class_inverse_distance_weighted_filter}\index{InverseDistanceWeightedFilter@{InverseDistanceWeightedFilter}}
+
+
+{\ttfamily \#include $<$Inverse\+Distance\+Weighted\+Filter.\+h$>$}
+
+
+
+Inheritance diagram for Inverse\+Distance\+Weighted\+Filter\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=230pt]{class_inverse_distance_weighted_filter__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Inverse\+Distance\+Weighted\+Filter\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=258pt]{class_inverse_distance_weighted_filter__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_inverse_distance_weighted_filter_a63c9e4a5847fb1dfbabda8821f2451ab}{Inverse\+Distance\+Weighted\+Filter}} (\mbox{\hyperlink{class_g_l_handler}{GLHandler}} $\ast$gl\+Handler, unsigned int kernel\+Radius, unsigned int \mbox{\hyperlink{class_i_kernel_based_filter_a961f376385472b3198bc00b05db62926}{batch\+Size}})
+\item 
+\mbox{\hyperlink{class_inverse_distance_weighted_filter_a7d46bed4b3ada7e594a9648effd5658c}{$\sim$\+Inverse\+Distance\+Weighted\+Filter}} () override
+\item 
+\mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$ \mbox{\hyperlink{class_inverse_distance_weighted_filter_a0b9aca09929acc49b68829bb529ccff2}{apply}} (\mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$map, bool generate\+Output) override
+\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 9 of file Inverse\+Distance\+Weighted\+Filter.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_inverse_distance_weighted_filter_a63c9e4a5847fb1dfbabda8821f2451ab}\label{class_inverse_distance_weighted_filter_a63c9e4a5847fb1dfbabda8821f2451ab}} 
+\index{InverseDistanceWeightedFilter@{InverseDistanceWeightedFilter}!InverseDistanceWeightedFilter@{InverseDistanceWeightedFilter}}
+\index{InverseDistanceWeightedFilter@{InverseDistanceWeightedFilter}!InverseDistanceWeightedFilter@{InverseDistanceWeightedFilter}}
+\doxysubsubsection{\texorpdfstring{InverseDistanceWeightedFilter()}{InverseDistanceWeightedFilter()}}
+{\footnotesize\ttfamily Inverse\+Distance\+Weighted\+Filter\+::\+Inverse\+Distance\+Weighted\+Filter (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_g_l_handler}{GLHandler}} $\ast$}]{gl\+Handler,  }\item[{unsigned int}]{kernel\+Radius,  }\item[{unsigned int}]{batch\+Size = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+
+
+Definition at line 6 of file Inverse\+Distance\+Weighted\+Filter.\+cpp.
+
+\mbox{\Hypertarget{class_inverse_distance_weighted_filter_a7d46bed4b3ada7e594a9648effd5658c}\label{class_inverse_distance_weighted_filter_a7d46bed4b3ada7e594a9648effd5658c}} 
+\index{InverseDistanceWeightedFilter@{InverseDistanceWeightedFilter}!````~InverseDistanceWeightedFilter@{$\sim$InverseDistanceWeightedFilter}}
+\index{````~InverseDistanceWeightedFilter@{$\sim$InverseDistanceWeightedFilter}!InverseDistanceWeightedFilter@{InverseDistanceWeightedFilter}}
+\doxysubsubsection{\texorpdfstring{$\sim$InverseDistanceWeightedFilter()}{~InverseDistanceWeightedFilter()}}
+{\footnotesize\ttfamily Inverse\+Distance\+Weighted\+Filter\+::$\sim$\+Inverse\+Distance\+Weighted\+Filter (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}}
+
+
+
+Definition at line 13 of file Inverse\+Distance\+Weighted\+Filter.\+cpp.
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_inverse_distance_weighted_filter_a7d46bed4b3ada7e594a9648effd5658c_cgraph}
+\end{center}
+\end{figure}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_inverse_distance_weighted_filter_a0b9aca09929acc49b68829bb529ccff2}\label{class_inverse_distance_weighted_filter_a0b9aca09929acc49b68829bb529ccff2}} 
+\index{InverseDistanceWeightedFilter@{InverseDistanceWeightedFilter}!apply@{apply}}
+\index{apply@{apply}!InverseDistanceWeightedFilter@{InverseDistanceWeightedFilter}}
+\doxysubsubsection{\texorpdfstring{apply()}{apply()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$ Inverse\+Distance\+Weighted\+Filter\+::apply (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$}]{map,  }\item[{bool}]{generate\+Output }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Use the currently attached \mbox{\hyperlink{class_i_height_map_filler}{IHeight\+Map\+Filler}} to fill holes in the \mbox{\hyperlink{structheight_map}{height\+Map}} given by map. 
+\begin{DoxyParams}{Parameters}
+{\em generate\+Output} & Whether to return a fully formed \mbox{\hyperlink{structheight_map}{height\+Map}} (including the actual height\+Data for each pixel). This may be set to false if the following stage uses Open\+GL and can employ the already set buffers on the GPU \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A fully formed \mbox{\hyperlink{structheight_map}{height\+Map}} if generate\+Output is true, a \mbox{\hyperlink{structheight_map}{height\+Map}} only containing all necessary metadata otherwise 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_i_height_map_filler_a39f19174dfe585c744d045349914489c}{IHeight\+Map\+Filler}}.
+
+
+
+Definition at line 29 of file Inverse\+Distance\+Weighted\+Filter.\+cpp.
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_inverse_distance_weighted_filter_a0b9aca09929acc49b68829bb529ccff2_cgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/media/stastez/data/\+Code/\+EFTDEM/\mbox{\hyperlink{_inverse_distance_weighted_filter_8h}{Inverse\+Distance\+Weighted\+Filter.\+h}}\item 
+/media/stastez/data/\+Code/\+EFTDEM/\mbox{\hyperlink{_inverse_distance_weighted_filter_8cpp}{Inverse\+Distance\+Weighted\+Filter.\+cpp}}\end{DoxyCompactItemize}

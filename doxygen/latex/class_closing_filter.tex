@@ -1,0 +1,109 @@
+\hypertarget{class_closing_filter}{}\doxysection{Closing\+Filter Class Reference}
+\label{class_closing_filter}\index{ClosingFilter@{ClosingFilter}}
+
+
+{\ttfamily \#include $<$Closing\+Filter.\+h$>$}
+
+
+
+Inheritance diagram for Closing\+Filter\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=184pt]{class_closing_filter__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Closing\+Filter\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=258pt]{class_closing_filter__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_closing_filter_ac20c2ab786d24d1f5251b8e00d31a9f0}{Closing\+Filter}} (\mbox{\hyperlink{class_g_l_handler}{GLHandler}} $\ast$gl\+Handler, unsigned int kernel\+Radius, unsigned int batch\+Size)
+\item 
+\mbox{\hyperlink{class_closing_filter_a60a91705866daa0a52b10adc5e845110}{$\sim$\+Closing\+Filter}} () override
+\item 
+\mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$ \mbox{\hyperlink{class_closing_filter_afedb68beaef5232bfc80e432db6d4651}{apply}} (\mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$map, bool generate\+Output) override
+\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 9 of file Closing\+Filter.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_closing_filter_ac20c2ab786d24d1f5251b8e00d31a9f0}\label{class_closing_filter_ac20c2ab786d24d1f5251b8e00d31a9f0}} 
+\index{ClosingFilter@{ClosingFilter}!ClosingFilter@{ClosingFilter}}
+\index{ClosingFilter@{ClosingFilter}!ClosingFilter@{ClosingFilter}}
+\doxysubsubsection{\texorpdfstring{ClosingFilter()}{ClosingFilter()}}
+{\footnotesize\ttfamily Closing\+Filter\+::\+Closing\+Filter (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_g_l_handler}{GLHandler}} $\ast$}]{gl\+Handler,  }\item[{unsigned int}]{kernel\+Radius,  }\item[{unsigned int}]{batch\+Size = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+
+
+Definition at line 6 of file Closing\+Filter.\+cpp.
+
+\mbox{\Hypertarget{class_closing_filter_a60a91705866daa0a52b10adc5e845110}\label{class_closing_filter_a60a91705866daa0a52b10adc5e845110}} 
+\index{ClosingFilter@{ClosingFilter}!````~ClosingFilter@{$\sim$ClosingFilter}}
+\index{````~ClosingFilter@{$\sim$ClosingFilter}!ClosingFilter@{ClosingFilter}}
+\doxysubsubsection{\texorpdfstring{$\sim$ClosingFilter()}{~ClosingFilter()}}
+{\footnotesize\ttfamily Closing\+Filter\+::$\sim$\+Closing\+Filter (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}}
+
+Deletes all buffers used for closing, except for the result buffer. 
+
+Definition at line 16 of file Closing\+Filter.\+cpp.
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_closing_filter_a60a91705866daa0a52b10adc5e845110_cgraph}
+\end{center}
+\end{figure}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_closing_filter_afedb68beaef5232bfc80e432db6d4651}\label{class_closing_filter_afedb68beaef5232bfc80e432db6d4651}} 
+\index{ClosingFilter@{ClosingFilter}!apply@{apply}}
+\index{apply@{apply}!ClosingFilter@{ClosingFilter}}
+\doxysubsubsection{\texorpdfstring{apply()}{apply()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$ Closing\+Filter\+::apply (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$}]{map,  }\item[{bool}]{generate\+Output }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Use the currently attached \mbox{\hyperlink{class_i_height_map_filler}{IHeight\+Map\+Filler}} to fill holes in the \mbox{\hyperlink{structheight_map}{height\+Map}} given by map. 
+\begin{DoxyParams}{Parameters}
+{\em generate\+Output} & Whether to return a fully formed \mbox{\hyperlink{structheight_map}{height\+Map}} (including the actual height\+Data for each pixel). This may be set to false if the following stage uses Open\+GL and can employ the already set buffers on the GPU \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A fully formed \mbox{\hyperlink{structheight_map}{height\+Map}} if generate\+Output is true, a \mbox{\hyperlink{structheight_map}{height\+Map}} only containing all necessary metadata otherwise 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_i_height_map_filler_a39f19174dfe585c744d045349914489c}{IHeight\+Map\+Filler}}.
+
+
+
+Definition at line 37 of file Closing\+Filter.\+cpp.
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_closing_filter_afedb68beaef5232bfc80e432db6d4651_cgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/media/stastez/data/\+Code/\+EFTDEM/\mbox{\hyperlink{_closing_filter_8h}{Closing\+Filter.\+h}}\item 
+/media/stastez/data/\+Code/\+EFTDEM/\mbox{\hyperlink{_closing_filter_8cpp}{Closing\+Filter.\+cpp}}\end{DoxyCompactItemize}

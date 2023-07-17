@@ -1,0 +1,108 @@
+\hypertarget{class_i_height_map_writer}{}\doxysection{IHeight\+Map\+Writer Class Reference}
+\label{class_i_height_map_writer}\index{IHeightMapWriter@{IHeightMapWriter}}
+
+
+{\ttfamily \#include $<$IHeight\+Map\+Writer.\+h$>$}
+
+
+
+Inheritance diagram for IHeight\+Map\+Writer\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=184pt]{class_i_height_map_writer__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for IHeight\+Map\+Writer\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=184pt]{class_i_height_map_writer__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \mbox{\hyperlink{class_i_height_map_writer_ab6d10a0cf878b727bb7c28b5be7299dc}{apply}} (const \mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$map, bool generate\+Output)=0
+\item 
+virtual void \mbox{\hyperlink{class_i_height_map_writer_a60f7a1ab3f56ba03f38f1a3915d46d59}{set\+Destination\+DEM}} (const std\+::string \&new\+Destination\+DEM)=0
+\item 
+virtual void \mbox{\hyperlink{class_i_height_map_writer_a6b2d81c4809604e56fd5372d5f55711b}{write\+RGB}} (const std\+::vector$<$ std\+::vector$<$ int $>$$>$ data, int resolutionX, int resolutionY)=0
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::string \mbox{\hyperlink{class_i_height_map_writer_aa7ead107acb82f134b55ba144e8a83af}{destination\+DEM}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 7 of file IHeight\+Map\+Writer.\+h.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_i_height_map_writer_ab6d10a0cf878b727bb7c28b5be7299dc}\label{class_i_height_map_writer_ab6d10a0cf878b727bb7c28b5be7299dc}} 
+\index{IHeightMapWriter@{IHeightMapWriter}!apply@{apply}}
+\index{apply@{apply}!IHeightMapWriter@{IHeightMapWriter}}
+\doxysubsubsection{\texorpdfstring{apply()}{apply()}}
+{\footnotesize\ttfamily virtual void IHeight\+Map\+Writer\+::apply (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$}]{map,  }\item[{bool}]{generate\+Output }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+Use the currently attached \mbox{\hyperlink{class_i_height_map_writer}{IHeight\+Map\+Writer}} to write the \mbox{\hyperlink{structheight_map}{height\+Map}} given by map to disk. 
+\begin{DoxyParams}{Parameters}
+{\em generate\+Output} & Whether to generate\+Output. Must be true \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \mbox{\hyperlink{class_g_tiff_writer_a9fe9aee04a51acb2e9bc02fb5129b0b1}{GTiff\+Writer}}.
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_i_height_map_writer_ab6d10a0cf878b727bb7c28b5be7299dc_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_i_height_map_writer_a60f7a1ab3f56ba03f38f1a3915d46d59}\label{class_i_height_map_writer_a60f7a1ab3f56ba03f38f1a3915d46d59}} 
+\index{IHeightMapWriter@{IHeightMapWriter}!setDestinationDEM@{setDestinationDEM}}
+\index{setDestinationDEM@{setDestinationDEM}!IHeightMapWriter@{IHeightMapWriter}}
+\doxysubsubsection{\texorpdfstring{setDestinationDEM()}{setDestinationDEM()}}
+{\footnotesize\ttfamily virtual void IHeight\+Map\+Writer\+::set\+Destination\+DEM (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{new\+Destination\+DEM }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{class_g_tiff_writer_ad756e14b4b2a79d0420b5b6573d8fe03}{GTiff\+Writer}}.
+
+\mbox{\Hypertarget{class_i_height_map_writer_a6b2d81c4809604e56fd5372d5f55711b}\label{class_i_height_map_writer_a6b2d81c4809604e56fd5372d5f55711b}} 
+\index{IHeightMapWriter@{IHeightMapWriter}!writeRGB@{writeRGB}}
+\index{writeRGB@{writeRGB}!IHeightMapWriter@{IHeightMapWriter}}
+\doxysubsubsection{\texorpdfstring{writeRGB()}{writeRGB()}}
+{\footnotesize\ttfamily virtual void IHeight\+Map\+Writer\+::write\+RGB (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ std\+::vector$<$ int $>$$>$}]{data,  }\item[{int}]{resolutionX,  }\item[{int}]{resolutionY }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{class_g_tiff_writer_afbe33616856e23f284e33b170044978c}{GTiff\+Writer}}.
+
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_i_height_map_writer_aa7ead107acb82f134b55ba144e8a83af}\label{class_i_height_map_writer_aa7ead107acb82f134b55ba144e8a83af}} 
+\index{IHeightMapWriter@{IHeightMapWriter}!destinationDEM@{destinationDEM}}
+\index{destinationDEM@{destinationDEM}!IHeightMapWriter@{IHeightMapWriter}}
+\doxysubsubsection{\texorpdfstring{destinationDEM}{destinationDEM}}
+{\footnotesize\ttfamily std\+::string IHeight\+Map\+Writer\+::destination\+DEM\hspace{0.3cm}{\ttfamily [protected]}}
+
+The path to where the height map should be written. 
+
+Definition at line 12 of file IHeight\+Map\+Writer.\+h.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/media/stastez/data/\+Code/\+EFTDEM/\mbox{\hyperlink{_i_height_map_writer_8h}{IHeight\+Map\+Writer.\+h}}\end{DoxyCompactItemize}

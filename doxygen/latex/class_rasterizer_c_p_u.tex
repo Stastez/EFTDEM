@@ -1,0 +1,102 @@
+\hypertarget{class_rasterizer_c_p_u}{}\doxysection{Rasterizer\+CPU Class Reference}
+\label{class_rasterizer_c_p_u}\index{RasterizerCPU@{RasterizerCPU}}
+
+
+{\ttfamily \#include $<$Rasterizer\+Cpu.\+h$>$}
+
+
+
+Inheritance diagram for Rasterizer\+CPU\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=184pt]{class_rasterizer_c_p_u__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Rasterizer\+CPU\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=184pt]{class_rasterizer_c_p_u__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_rasterizer_c_p_u_a1b6ff5d7ae9fb4d31c6dd55707acaac4}{Rasterizer\+CPU}} ()
+\item 
+\mbox{\hyperlink{class_rasterizer_c_p_u_a82855b62341cafb1387adada275eeaff}{$\sim$\+Rasterizer\+CPU}} () noexcept override
+\item 
+\mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$ \mbox{\hyperlink{class_rasterizer_c_p_u_a920494e97d39c3343675f76fbd09eb9d}{apply}} (\mbox{\hyperlink{structpoint_grid}{point\+Grid}} $\ast$\mbox{\hyperlink{structpoint_grid}{point\+Grid}}, bool generate\+Output) override
+\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 8 of file Rasterizer\+Cpu.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_rasterizer_c_p_u_a1b6ff5d7ae9fb4d31c6dd55707acaac4}\label{class_rasterizer_c_p_u_a1b6ff5d7ae9fb4d31c6dd55707acaac4}} 
+\index{RasterizerCPU@{RasterizerCPU}!RasterizerCPU@{RasterizerCPU}}
+\index{RasterizerCPU@{RasterizerCPU}!RasterizerCPU@{RasterizerCPU}}
+\doxysubsubsection{\texorpdfstring{RasterizerCPU()}{RasterizerCPU()}}
+{\footnotesize\ttfamily Rasterizer\+CPU\+::\+Rasterizer\+CPU (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 4 of file Rasterizer\+Cpu.\+cpp.
+
+\mbox{\Hypertarget{class_rasterizer_c_p_u_a82855b62341cafb1387adada275eeaff}\label{class_rasterizer_c_p_u_a82855b62341cafb1387adada275eeaff}} 
+\index{RasterizerCPU@{RasterizerCPU}!````~RasterizerCPU@{$\sim$RasterizerCPU}}
+\index{````~RasterizerCPU@{$\sim$RasterizerCPU}!RasterizerCPU@{RasterizerCPU}}
+\doxysubsubsection{\texorpdfstring{$\sim$RasterizerCPU()}{~RasterizerCPU()}}
+{\footnotesize\ttfamily Rasterizer\+CPU\+::$\sim$\+Rasterizer\+CPU (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [default]}, {\ttfamily [noexcept]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_rasterizer_c_p_u_a920494e97d39c3343675f76fbd09eb9d}\label{class_rasterizer_c_p_u_a920494e97d39c3343675f76fbd09eb9d}} 
+\index{RasterizerCPU@{RasterizerCPU}!apply@{apply}}
+\index{apply@{apply}!RasterizerCPU@{RasterizerCPU}}
+\doxysubsubsection{\texorpdfstring{apply()}{apply()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$ Rasterizer\+CPU\+::apply (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structpoint_grid}{point\+Grid}} $\ast$}]{point\+Grid,  }\item[{bool}]{generate\+Output }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Creates a heightmap from the given point grid by averaging the points of every grid cell. 
+\begin{DoxyParams}{Parameters}
+{\em \mbox{\hyperlink{structpoint_grid}{point\+Grid}}} & The point grid containing the point data, sorted into a grid \\
+\hline
+{\em use\+GPU} & Whether to use Open\+GL GPU-\/acceleration \\
+\hline
+{\em gl\+Handler} & If GPU-\/acceleration is used, the \mbox{\hyperlink{class_g_l_handler}{GLHandler}} for creating contexts and reading shaders \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A new \mbox{\hyperlink{structheight_map}{height\+Map}} struct 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_i_cloud_rasterizer_ab36aa8c81682be44a1540c97b22c520c}{ICloud\+Rasterizer}}.
+
+
+
+Definition at line 17 of file Rasterizer\+Cpu.\+cpp.
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_rasterizer_c_p_u_a920494e97d39c3343675f76fbd09eb9d_cgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/media/stastez/data/\+Code/\+EFTDEM/\mbox{\hyperlink{_rasterizer_cpu_8h}{Rasterizer\+Cpu.\+h}}\item 
+/media/stastez/data/\+Code/\+EFTDEM/\mbox{\hyperlink{_rasterizer_cpu_8cpp}{Rasterizer\+Cpu.\+cpp}}\end{DoxyCompactItemize}

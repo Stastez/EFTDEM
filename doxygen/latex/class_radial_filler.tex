@@ -1,0 +1,90 @@
+\hypertarget{class_radial_filler}{}\doxysection{Radial\+Filler Class Reference}
+\label{class_radial_filler}\index{RadialFiller@{RadialFiller}}
+
+
+{\ttfamily \#include $<$Radial\+Filler.\+h$>$}
+
+
+
+Inheritance diagram for Radial\+Filler\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=184pt]{class_radial_filler__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Radial\+Filler\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=184pt]{class_radial_filler__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_radial_filler_ade0f152b1e24c79855533f8dcef4301c}{Radial\+Filler}} (\mbox{\hyperlink{class_g_l_handler}{GLHandler}} $\ast$gl\+Handler, unsigned int max\+Hole\+Radius, bool batched, unsigned int batch\+Size)
+\item 
+\mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$ \mbox{\hyperlink{class_radial_filler_a8ff16ed2a04663b4e3be164cfc223080}{apply}} (\mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$map, bool generate\+Output) override
+\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 7 of file Radial\+Filler.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_radial_filler_ade0f152b1e24c79855533f8dcef4301c}\label{class_radial_filler_ade0f152b1e24c79855533f8dcef4301c}} 
+\index{RadialFiller@{RadialFiller}!RadialFiller@{RadialFiller}}
+\index{RadialFiller@{RadialFiller}!RadialFiller@{RadialFiller}}
+\doxysubsubsection{\texorpdfstring{RadialFiller()}{RadialFiller()}}
+{\footnotesize\ttfamily Radial\+Filler\+::\+Radial\+Filler (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_g_l_handler}{GLHandler}} $\ast$}]{gl\+Handler,  }\item[{unsigned int}]{max\+Hole\+Radius,  }\item[{bool}]{batched,  }\item[{unsigned int}]{batch\+Size }\end{DoxyParamCaption})}
+
+
+
+Definition at line 7 of file Radial\+Filler.\+cpp.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_radial_filler_a8ff16ed2a04663b4e3be164cfc223080}\label{class_radial_filler_a8ff16ed2a04663b4e3be164cfc223080}} 
+\index{RadialFiller@{RadialFiller}!apply@{apply}}
+\index{apply@{apply}!RadialFiller@{RadialFiller}}
+\doxysubsubsection{\texorpdfstring{apply()}{apply()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$ Radial\+Filler\+::apply (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$}]{map,  }\item[{bool}]{generate\+Output }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Use the currently attached \mbox{\hyperlink{class_i_height_map_filler}{IHeight\+Map\+Filler}} to fill holes in the \mbox{\hyperlink{structheight_map}{height\+Map}} given by map. 
+\begin{DoxyParams}{Parameters}
+{\em generate\+Output} & Whether to return a fully formed \mbox{\hyperlink{structheight_map}{height\+Map}} (including the actual height\+Data for each pixel). This may be set to false if the following stage uses Open\+GL and can employ the already set buffers on the GPU \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A fully formed \mbox{\hyperlink{structheight_map}{height\+Map}} if generate\+Output is true, a \mbox{\hyperlink{structheight_map}{height\+Map}} only containing all necessary metadata otherwise 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_i_height_map_filler_a39f19174dfe585c744d045349914489c}{IHeight\+Map\+Filler}}.
+
+
+
+Definition at line 15 of file Radial\+Filler.\+cpp.
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_radial_filler_a8ff16ed2a04663b4e3be164cfc223080_cgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/media/stastez/data/\+Code/\+EFTDEM/\mbox{\hyperlink{_radial_filler_8h}{Radial\+Filler.\+h}}\item 
+/media/stastez/data/\+Code/\+EFTDEM/\mbox{\hyperlink{_radial_filler_8cpp}{Radial\+Filler.\+cpp}}\end{DoxyCompactItemize}

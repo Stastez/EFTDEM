@@ -1,0 +1,146 @@
+\hypertarget{class_tiff_pipeline}{}\doxysection{Tiff\+Pipeline Class Reference}
+\label{class_tiff_pipeline}\index{TiffPipeline@{TiffPipeline}}
+
+
+{\ttfamily \#include $<$Tiff\+Pipeline.\+h$>$}
+
+
+
+Inheritance diagram for Tiff\+Pipeline\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=145pt]{class_tiff_pipeline__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Tiff\+Pipeline\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=158pt]{class_tiff_pipeline__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_tiff_pipeline_a92c531bc5c21d53a140259eef5461c6a}{Tiff\+Pipeline}} (std\+::string path)
+\item 
+\mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$ \mbox{\hyperlink{class_tiff_pipeline_a252a281e9e4f11b159a5c635fc51ce48}{execute}} () override
+\item 
+\mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$ \mbox{\hyperlink{class_tiff_pipeline_a737defaa488d58dde75e80ebec1e0436}{execute\+After\+Reader}} (\mbox{\hyperlink{structraw_point_cloud}{raw\+Point\+Cloud}} $\ast$point\+Cloud) override
+\item 
+\mbox{\hyperlink{class_g_l_handler}{GLHandler}} $\ast$ \mbox{\hyperlink{class_tiff_pipeline_afb9c49200afd356b1a8ae4a26c827ca5}{get\+GLHandler}} () override
+\item 
+\mbox{\hyperlink{class_i_cloud_reader}{ICloud\+Reader}} $\ast$ \mbox{\hyperlink{class_tiff_pipeline_ae9cf359036da761b2653b029392116ba}{get\+Cloud\+Reader}} () override
+\item 
+\mbox{\hyperlink{class_i_height_map_writer}{IHeight\+Map\+Writer}} $\ast$ \mbox{\hyperlink{class_tiff_pipeline_a4c6b25fa2e85582bed26146650daf621}{get\+Height\+Map\+Writer}} () override
+\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 6 of file Tiff\+Pipeline.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_tiff_pipeline_a92c531bc5c21d53a140259eef5461c6a}\label{class_tiff_pipeline_a92c531bc5c21d53a140259eef5461c6a}} 
+\index{TiffPipeline@{TiffPipeline}!TiffPipeline@{TiffPipeline}}
+\index{TiffPipeline@{TiffPipeline}!TiffPipeline@{TiffPipeline}}
+\doxysubsubsection{\texorpdfstring{TiffPipeline()}{TiffPipeline()}}
+{\footnotesize\ttfamily Tiff\+Pipeline\+::\+Tiff\+Pipeline (\begin{DoxyParamCaption}\item[{std\+::string}]{path }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+Definition at line 6 of file Tiff\+Pipeline.\+cpp.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_tiff_pipeline_a252a281e9e4f11b159a5c635fc51ce48}\label{class_tiff_pipeline_a252a281e9e4f11b159a5c635fc51ce48}} 
+\index{TiffPipeline@{TiffPipeline}!execute@{execute}}
+\index{execute@{execute}!TiffPipeline@{TiffPipeline}}
+\doxysubsubsection{\texorpdfstring{execute()}{execute()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$ Tiff\+Pipeline\+::execute (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_i_pipeline_abdae26d8dd56ab30dc115cc578c5c416}{IPipeline}}.
+
+
+
+Definition at line 10 of file Tiff\+Pipeline.\+cpp.
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=319pt]{class_tiff_pipeline_a252a281e9e4f11b159a5c635fc51ce48_cgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_tiff_pipeline_a737defaa488d58dde75e80ebec1e0436}\label{class_tiff_pipeline_a737defaa488d58dde75e80ebec1e0436}} 
+\index{TiffPipeline@{TiffPipeline}!executeAfterReader@{executeAfterReader}}
+\index{executeAfterReader@{executeAfterReader}!TiffPipeline@{TiffPipeline}}
+\doxysubsubsection{\texorpdfstring{executeAfterReader()}{executeAfterReader()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$ Tiff\+Pipeline\+::execute\+After\+Reader (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structraw_point_cloud}{raw\+Point\+Cloud}} $\ast$}]{point\+Cloud }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_i_pipeline_aed3be97ff802ed9c57598c74fb5d3526}{IPipeline}}.
+
+
+
+Definition at line 19 of file Tiff\+Pipeline.\+cpp.
+
+\mbox{\Hypertarget{class_tiff_pipeline_ae9cf359036da761b2653b029392116ba}\label{class_tiff_pipeline_ae9cf359036da761b2653b029392116ba}} 
+\index{TiffPipeline@{TiffPipeline}!getCloudReader@{getCloudReader}}
+\index{getCloudReader@{getCloudReader}!TiffPipeline@{TiffPipeline}}
+\doxysubsubsection{\texorpdfstring{getCloudReader()}{getCloudReader()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_i_cloud_reader}{ICloud\+Reader}} $\ast$ Tiff\+Pipeline\+::get\+Cloud\+Reader (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_i_pipeline_a4ef82b40c8b2097c72cee16b5a119744}{IPipeline}}.
+
+
+
+Definition at line 25 of file Tiff\+Pipeline.\+cpp.
+
+\mbox{\Hypertarget{class_tiff_pipeline_afb9c49200afd356b1a8ae4a26c827ca5}\label{class_tiff_pipeline_afb9c49200afd356b1a8ae4a26c827ca5}} 
+\index{TiffPipeline@{TiffPipeline}!getGLHandler@{getGLHandler}}
+\index{getGLHandler@{getGLHandler}!TiffPipeline@{TiffPipeline}}
+\doxysubsubsection{\texorpdfstring{getGLHandler()}{getGLHandler()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_g_l_handler}{GLHandler}} $\ast$ Tiff\+Pipeline\+::get\+GLHandler (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_i_pipeline_aca65bf845ba547ee335ca769523b43f6}{IPipeline}}.
+
+
+
+Definition at line 24 of file Tiff\+Pipeline.\+cpp.
+
+\mbox{\Hypertarget{class_tiff_pipeline_a4c6b25fa2e85582bed26146650daf621}\label{class_tiff_pipeline_a4c6b25fa2e85582bed26146650daf621}} 
+\index{TiffPipeline@{TiffPipeline}!getHeightMapWriter@{getHeightMapWriter}}
+\index{getHeightMapWriter@{getHeightMapWriter}!TiffPipeline@{TiffPipeline}}
+\doxysubsubsection{\texorpdfstring{getHeightMapWriter()}{getHeightMapWriter()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_i_height_map_writer}{IHeight\+Map\+Writer}} $\ast$ Tiff\+Pipeline\+::get\+Height\+Map\+Writer (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_i_pipeline_ab2659f6fdac349e952b5316c734b3e92}{IPipeline}}.
+
+
+
+Definition at line 27 of file Tiff\+Pipeline.\+cpp.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/media/stastez/data/\+Code/\+EFTDEM/\mbox{\hyperlink{_tiff_pipeline_8h}{Tiff\+Pipeline.\+h}}\item 
+/media/stastez/data/\+Code/\+EFTDEM/\mbox{\hyperlink{_tiff_pipeline_8cpp}{Tiff\+Pipeline.\+cpp}}\end{DoxyCompactItemize}
