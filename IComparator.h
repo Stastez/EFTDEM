@@ -15,6 +15,7 @@ protected:
     GLHandler * glHandler;
     ConfigProvider * configProvider;
     std::string compareShaderPath;
+    std::vector<bool> betterCompression;
 
 public:
     virtual ~IComparator() = default;
@@ -22,7 +23,7 @@ public:
     void writeComparisons(std::vector<heightMap *> comparisons);
 
     virtual std::vector<rawPointCloud *> setupPointClouds() = 0;
-    virtual void writeThresholdMaps(const std::vector<heightMap *> comparisons, std::vector<std::string> destinationDEM);
+    virtual void writeThresholdMaps(const std::vector<heightMap *> &comparisons, const std::vector<std::string> &destinationDEM);
 };
 
 #endif //EFTDEM_ICOMPERATOR_H

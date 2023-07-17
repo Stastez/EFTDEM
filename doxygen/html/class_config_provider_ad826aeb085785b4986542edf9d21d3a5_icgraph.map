@@ -1,0 +1,6 @@
+<map id="ConfigProvider::providePipeline" name="ConfigProvider::providePipeline">
+<area shape="rect" id="node1" title=" " alt="" coords="289,71,493,98"/>
+<area shape="rect" id="node2" href="$class_ground_truth_comparator.html#a7fed5383b7a33191bb1736474afc0d92" title=" " alt="" coords="38,5,209,47"/>
+<area shape="rect" id="node3" href="$class_config_provider.html#a463dd70c6b6abeb31524856cb201a52e" title=" " alt="" coords="21,71,225,98"/>
+<area shape="rect" id="node4" href="$class_radar_comparator.html#a6822357faf3bf9964e9d4fd0581616eb" title=" " alt="" coords="5,122,241,149"/>
+</map>

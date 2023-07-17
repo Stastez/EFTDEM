@@ -1,0 +1,109 @@
+\hypertarget{class_radial_buffer_swapper}{}\doxysection{Radial\+Buffer\+Swapper Class Reference}
+\label{class_radial_buffer_swapper}\index{RadialBufferSwapper@{RadialBufferSwapper}}
+
+
+{\ttfamily \#include $<$Radial\+Buffer\+Swapper.\+h$>$}
+
+
+
+Inheritance diagram for Radial\+Buffer\+Swapper\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=199pt]{class_radial_buffer_swapper__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Radial\+Buffer\+Swapper\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=199pt]{class_radial_buffer_swapper__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_radial_buffer_swapper_a56697424d0c9311abc120849ac12a543}{Radial\+Buffer\+Swapper}} (\mbox{\hyperlink{class_g_l_handler}{GLHandler}} $\ast$gl\+Handler)
+\item 
+\mbox{\hyperlink{class_radial_buffer_swapper_a758fbf87ea2c63c4b4020202b289d234}{$\sim$\+Radial\+Buffer\+Swapper}} ()
+\item 
+\mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$ \mbox{\hyperlink{class_radial_buffer_swapper_a5b42816d2875c357b505c76397e79790}{apply}} (\mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$map, bool generate\+Output) override
+\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 7 of file Radial\+Buffer\+Swapper.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_radial_buffer_swapper_a56697424d0c9311abc120849ac12a543}\label{class_radial_buffer_swapper_a56697424d0c9311abc120849ac12a543}} 
+\index{RadialBufferSwapper@{RadialBufferSwapper}!RadialBufferSwapper@{RadialBufferSwapper}}
+\index{RadialBufferSwapper@{RadialBufferSwapper}!RadialBufferSwapper@{RadialBufferSwapper}}
+\doxysubsubsection{\texorpdfstring{RadialBufferSwapper()}{RadialBufferSwapper()}}
+{\footnotesize\ttfamily Radial\+Buffer\+Swapper\+::\+Radial\+Buffer\+Swapper (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_g_l_handler}{GLHandler}} $\ast$}]{gl\+Handler }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+Definition at line 4 of file Radial\+Buffer\+Swapper.\+cpp.
+
+\mbox{\Hypertarget{class_radial_buffer_swapper_a758fbf87ea2c63c4b4020202b289d234}\label{class_radial_buffer_swapper_a758fbf87ea2c63c4b4020202b289d234}} 
+\index{RadialBufferSwapper@{RadialBufferSwapper}!````~RadialBufferSwapper@{$\sim$RadialBufferSwapper}}
+\index{````~RadialBufferSwapper@{$\sim$RadialBufferSwapper}!RadialBufferSwapper@{RadialBufferSwapper}}
+\doxysubsubsection{\texorpdfstring{$\sim$RadialBufferSwapper()}{~RadialBufferSwapper()}}
+{\footnotesize\ttfamily Radial\+Buffer\+Swapper\+::$\sim$\+Radial\+Buffer\+Swapper (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 9 of file Radial\+Buffer\+Swapper.\+cpp.
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_radial_buffer_swapper_a758fbf87ea2c63c4b4020202b289d234_cgraph}
+\end{center}
+\end{figure}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_radial_buffer_swapper_a5b42816d2875c357b505c76397e79790}\label{class_radial_buffer_swapper_a5b42816d2875c357b505c76397e79790}} 
+\index{RadialBufferSwapper@{RadialBufferSwapper}!apply@{apply}}
+\index{apply@{apply}!RadialBufferSwapper@{RadialBufferSwapper}}
+\doxysubsubsection{\texorpdfstring{apply()}{apply()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$ Radial\+Buffer\+Swapper\+::apply (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$}]{map,  }\item[{bool}]{generate\+Output }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Use the currently attached \mbox{\hyperlink{class_i_height_map_filler}{IHeight\+Map\+Filler}} to fill holes in the \mbox{\hyperlink{structheight_map}{height\+Map}} given by map. 
+\begin{DoxyParams}{Parameters}
+{\em generate\+Output} & Whether to return a fully formed \mbox{\hyperlink{structheight_map}{height\+Map}} (including the actual height\+Data for each pixel). This may be set to false if the following stage uses Open\+GL and can employ the already set buffers on the GPU \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A fully formed \mbox{\hyperlink{structheight_map}{height\+Map}} if generate\+Output is true, a \mbox{\hyperlink{structheight_map}{height\+Map}} only containing all necessary metadata otherwise 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_i_radial_filler_component}{IRadial\+Filler\+Component}}.
+
+
+
+Definition at line 13 of file Radial\+Buffer\+Swapper.\+cpp.
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_radial_buffer_swapper_a5b42816d2875c357b505c76397e79790_cgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/media/stastez/data/\+Code/\+EFTDEM/\mbox{\hyperlink{_radial_buffer_swapper_8h}{Radial\+Buffer\+Swapper.\+h}}\item 
+/media/stastez/data/\+Code/\+EFTDEM/\mbox{\hyperlink{_radial_buffer_swapper_8cpp}{Radial\+Buffer\+Swapper.\+cpp}}\end{DoxyCompactItemize}

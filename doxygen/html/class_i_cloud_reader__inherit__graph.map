@@ -1,0 +1,6 @@
+<map id="ICloudReader" name="ICloudReader">
+<area shape="rect" id="node1" title=" " alt="" coords="110,80,213,107"/>
+<area shape="rect" id="node3" href="$class_ground_radar_reader.html" title=" " alt="" coords="5,155,147,181"/>
+<area shape="rect" id="node4" href="$class_mobile_mapping_reader.html" title=" " alt="" coords="171,155,322,181"/>
+<area shape="rect" id="node2" href="$class_i_pipeline_component.html" title=" " alt="" coords="92,5,231,32"/>
+</map>

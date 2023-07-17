@@ -1,0 +1,97 @@
+\hypertarget{md__media_stastez_data__code__e_f_t_d_e_m__r_e_a_d_m_e_autotoc_md1}{}\doxysection{Usage}\label{md__media_stastez_data__code__e_f_t_d_e_m__r_e_a_d_m_e_autotoc_md1}
+\hypertarget{md__media_stastez_data__code__e_f_t_d_e_m__r_e_a_d_m_e_autotoc_md2}{}\doxysubsection{Simple filling}\label{md__media_stastez_data__code__e_f_t_d_e_m__r_e_a_d_m_e_autotoc_md2}
+Provide exactly one .yaml config of the type presented below as a command line argument.\hypertarget{md__media_stastez_data__code__e_f_t_d_e_m__r_e_a_d_m_e_autotoc_md3}{}\doxysubsection{Comparison between our filling algorithms and a ground-\/truth DEM}\label{md__media_stastez_data__code__e_f_t_d_e_m__r_e_a_d_m_e_autotoc_md3}
+Provide exactly one .yaml config of the type presented below, as well as exactly one .tiff DEM as a command line argument.\hypertarget{md__media_stastez_data__code__e_f_t_d_e_m__r_e_a_d_m_e_autotoc_md4}{}\doxysubsection{Comparison between several layers of ground radar}\label{md__media_stastez_data__code__e_f_t_d_e_m__r_e_a_d_m_e_autotoc_md4}
+Provide at least two .yaml configs of the type presented below.\hypertarget{md__media_stastez_data__code__e_f_t_d_e_m__r_e_a_d_m_e_autotoc_md5}{}\doxysection{Example Config}\label{md__media_stastez_data__code__e_f_t_d_e_m__r_e_a_d_m_e_autotoc_md5}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{CloudReaderOptions:}
+\DoxyCodeLine{  pointCloudPath: "{}../resources/pointCloud.txt"{}}
+\DoxyCodeLine{}
+\DoxyCodeLine{  \# Currently implemented: mobileMapping, groundRadar}
+\DoxyCodeLine{  pointCloudType: mobileMapping}
+\DoxyCodeLine{}
+\DoxyCodeLine{CloudSorterOptions:}
+\DoxyCodeLine{  pixelPerUnit: 5}
+\DoxyCodeLine{  \#pixelPerUnitX: 5 \#\#\# optional, remove pixelPerUnit if you want to use this}
+\DoxyCodeLine{  \#pixelPerUnitY: 5 \#\#\# optional, remove pixelPerUnit if you want to use this}
+\DoxyCodeLine{  useGPU: true}
+\DoxyCodeLine{}
+\DoxyCodeLine{CloudRasterizerOptions:}
+\DoxyCodeLine{  useGPU: true}
+\DoxyCodeLine{}
+\DoxyCodeLine{HeightMapFillerOptions:}
+\DoxyCodeLine{  useGPU: true}
+\DoxyCodeLine{}
+\DoxyCodeLine{  \# Currently implemented: closingFilter, inverseDistanceWeightedFilter, radialFiller}
+\DoxyCodeLine{  filler: inverseDistanceWeightedFilter}
+\DoxyCodeLine{}
+\DoxyCodeLine{  \# for closingFilter and inverseDistanceWeightedFilter}
+\DoxyCodeLine{  kernelBasedFilterOptions:}
+\DoxyCodeLine{    kernelSizes:}
+\DoxyCodeLine{      -\/ 5}
+\DoxyCodeLine{      -\/ 25}
+\DoxyCodeLine{      -\/ 50}
+\DoxyCodeLine{    batchSize: 1024 \# optional, if not set will default to 0 (automatically trying to find possible batch size)}
+\DoxyCodeLine{}
+\DoxyCodeLine{  \# for radialFiller}
+\DoxyCodeLine{  radialFillerOptions:}
+\DoxyCodeLine{    maxHoleRadius: 50}
+\DoxyCodeLine{    batchSize: 8192 \# optional, if not set will default to 0 (automatically trying to find possible batch size)}
+\DoxyCodeLine{    useBatching: false \# optional, will default to "{}true"{}. If "{}false"{}, this will disable batching and make "{}batchSize"{} obsolete}
+\DoxyCodeLine{}
+\DoxyCodeLine{HeightMapWriterOptions:}
+\DoxyCodeLine{  destinationPath: "{}../resources/map"{}}
+\DoxyCodeLine{  writeLowDepth: true}
+\DoxyCodeLine{  betterCompression: false \# optional, will default to "{}false"{}. If true, GDAL will use LZMA compression, if false, LZW.}
+\DoxyCodeLine{                           \# Using LZMA will reduce file size significantly, however, the export will take a much extended}
+\DoxyCodeLine{                           \# amount of time. Also, using LZMA max break compatibility with standard image viewers. You may}
+\DoxyCodeLine{                           \# use software such as QGIS to mitigate this issue.}
+\DoxyCodeLine{}
+\DoxyCodeLine{OpenGLOptions:}
+\DoxyCodeLine{  shaderDirectory: "{}../shaders"{}}
+\DoxyCodeLine{}
+\DoxyCodeLine{\# for layer-\/wise comparison}
+\DoxyCodeLine{ComparisonOptions:}
+\DoxyCodeLine{  destinationPath: "{}../resources/"{}}
+\DoxyCodeLine{  threshold: 8.336743E-\/09}
+
+\end{DoxyCode}
+\hypertarget{md__media_stastez_data__code__e_f_t_d_e_m__r_e_a_d_m_e_autotoc_md6}{}\doxysection{Hardware Requirements}\label{md__media_stastez_data__code__e_f_t_d_e_m__r_e_a_d_m_e_autotoc_md6}
+
+\begin{DoxyItemize}
+\item An Open\+GL 4.\+3 or greater capable combination of GPU and graphics driver
+\item Lots of RAM
+\begin{DoxyItemize}
+\item EFTDEM uses 64 bit doubles for the values of points and height data
+\item Optimization of computation time requires lots of (shared) GPU memory
+\end{DoxyItemize}
+\end{DoxyItemize}\hypertarget{md__media_stastez_data__code__e_f_t_d_e_m__r_e_a_d_m_e_autotoc_md7}{}\doxysection{Installation}\label{md__media_stastez_data__code__e_f_t_d_e_m__r_e_a_d_m_e_autotoc_md7}
+You may choose to provide a built version of all dependencies listed below yourself. For added convenience, we also provide installation scripts that fetch and build these dependencies for you. As a last step, these scripts also set up a valid CMake project for EFTDEM while copying all necessary shared libraries. For all systems, these scripts require CMake and git.\hypertarget{md__media_stastez_data__code__e_f_t_d_e_m__r_e_a_d_m_e_autotoc_md8}{}\doxysubsection{Windows}\label{md__media_stastez_data__code__e_f_t_d_e_m__r_e_a_d_m_e_autotoc_md8}
+You may run \href{./build_deps.bat}{\texttt{ build\+\_\+deps.\+bat}}. The installation script requires CMake to be installed in the system PATH, git, Power\+Shell and Visual Studio 2022. Running the script will create a Power\+Shell instance that bypasses script execution policies and run \href{./.build_deps.ps1}{\texttt{ .build\+\_\+deps.\+ps1}}. This will clone all necessary dependencies from Git\+Hub and compile them into a directory called {\ttfamily .deps}. GDAL will be installed via vcpkg. Lastly, the script will execute \href{./.build_config.ps1}{\texttt{ .build\+\_\+config.\+ps1}} which will set up a valid CMake project for EFTDEM with the build-\/directory specified as {\ttfamily build}.\hypertarget{md__media_stastez_data__code__e_f_t_d_e_m__r_e_a_d_m_e_autotoc_md9}{}\doxysubsection{Linux (\+X11)}\label{md__media_stastez_data__code__e_f_t_d_e_m__r_e_a_d_m_e_autotoc_md9}
+You may run \href{./build_deps.sh}{\texttt{ build\+\_\+deps.\+sh}}. The installation script requires CMake and git to be to be installed in the system PATH, as well as a working C++ compiler. The script will clone all necessary dependencies from Git\+Hub and compile them into a directory called \char`\"{}deps\char`\"{}. GDAL will be installed via vcpkg. Lastly, the script will execute \href{./build_config.sh}{\texttt{ build\+\_\+config.\+sh}} which will set up a valid CMake project for EFTDEM with the build-\/directories specified as {\ttfamily build-\/debug}, {\ttfamily build-\/debug-\/coverage} and {\ttfamily build-\/release}.\hypertarget{md__media_stastez_data__code__e_f_t_d_e_m__r_e_a_d_m_e_autotoc_md10}{}\doxysection{Dependencies}\label{md__media_stastez_data__code__e_f_t_d_e_m__r_e_a_d_m_e_autotoc_md10}
+\href{https://gdal.org/}{\texttt{ GDAL}} ~\newline
+ \href{https://www.glfw.org/}{\texttt{ glfw}} ~\newline
+ \href{https://github.com/g-truc/glm}{\texttt{ glm}} ~\newline
+ \href{https://github.com/cginternals/glbinding}{\texttt{ glbinding}} ~\newline
+ \href{https://github.com/Neargye/magic_enum}{\texttt{ magic\+\_\+enum}} ~\newline
+ \href{https://github.com/jbeder/yaml-cpp}{\texttt{ yaml-\/cpp}} ~\newline
+ Open\+GL\hypertarget{md__media_stastez_data__code__e_f_t_d_e_m__r_e_a_d_m_e_autotoc_md11}{}\doxysection{Known Errors}\label{md__media_stastez_data__code__e_f_t_d_e_m__r_e_a_d_m_e_autotoc_md11}
+
+\begin{DoxyItemize}
+\item When executing shaders on the GPU, Windows may terminate the graphics driver when a single compute invocations exceeds a certain time limit (usually 2 seconds). This may lead to a program crash or visual artifacts in the resulting output.
+\begin{DoxyItemize}
+\item {\bfseries{Fix\+:}} Specify a smaller {\ttfamily batch\+Size} in your config or set {\ttfamily batch\+Size=0} to trigger automatic testing for a good batch size (note\+: automatic testing may conclude with batch sizes that are smaller than technically possible. This leads to decreased performance. In rare cases automatic testing may also still choose batch sizes that are too large.)
+\end{DoxyItemize}
+\item EFTDEM may crash in either scenario\+:
+\begin{DoxyItemize}
+\item Amount of points in the specified point cloud file is too great for {\ttfamily std\+::vector} allocation with your current setup
+\begin{DoxyItemize}
+\item {\bfseries{Fix\+:}} Tile the data into multiple files and run EFTDEM on them seperately.
+\end{DoxyItemize}
+\item Resolution specified in the config is too great for GPU buffers or {\ttfamily std\+::vector} allocations
+\begin{DoxyItemize}
+\item {\bfseries{Fix\+:}} Reduce either {\ttfamily pixel\+Per\+UnitX} or {\ttfamily pixel\+Per\+UnitY}, or both. You may also tile your data as described above. In that case, make sure to sort the point cloud file in at least the {\ttfamily x} or {\ttfamily y} axis before proceeding with the tiling operation. 
+\end{DoxyItemize}
+\end{DoxyItemize}
+\end{DoxyItemize}

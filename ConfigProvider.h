@@ -9,7 +9,7 @@ private:
     YAML::Node config;
     std::string configPath;
     YAML::Node readConfig();
-    static std::pair<YAML::Node, bool> checkValidityAndReturn(const YAML::Node& node, bool required);
+    std::pair<YAML::Node, bool> checkValidityAndReturn(const std::vector<std::string> &path, bool required);
     GLHandler *glHandler{};
 
 public:
@@ -21,6 +21,7 @@ public:
     GLHandler *getGLHandler();
     std::string getComparisonPath();
     double getThreshold();
+    bool getBetterCompression();
 };
 
 

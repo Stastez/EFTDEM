@@ -12,6 +12,7 @@ RadarComparator::RadarComparator(std::vector<std::string> configPaths) {
         pipelines.emplace_back(configProvider->providePipeline(configPath));
         destinationPaths.emplace_back(configProvider->getComparisonPath());
         thresholds.emplace_back(configProvider->getThreshold());
+        betterCompression.emplace_back(configProvider->getBetterCompression());
     }
     RadarComparator::glHandler = pipelines.at(0)->getGLHandler();
     compareShaderPath = "compare.glsl";
@@ -52,12 +53,12 @@ void addColor(std::vector<std::vector<int>>& colors, std::vector<int> color) {
 }
 
 void
-RadarComparator::writeThresholdMaps(const std::vector<heightMap *> comparisons, std::vector<std::string> destinationDEM) {
+RadarComparator::writeThresholdMaps(const std::vector<heightMap *> &comparisons, const std::vector<std::string> &destinationDEM) {
     std::vector<std::vector<int>> colors(3);
 
-    auto writer = new GTiffWriter(false, "");
-
     for (auto i = 0ul; i < comparisons.size(); i++) {
+        auto writer = new GTiffWriter(false, "", betterCompression.at(i));
+
         for (auto pos = 0ul; pos < comparisons.at(i)->resolutionX * comparisons.at(i)->resolutionY; pos++) {
             auto height = comparisons.at(i)->heights.at(pos);
             auto integerHeight = (int) (height * 255);
@@ -69,7 +70,7 @@ RadarComparator::writeThresholdMaps(const std::vector<heightMap *> comparisons, 
         writer->setDestinationDEM(destinationDEM.at(i) + "_color_" + std::to_string(i));
         writer->writeRGB(colors, (int) comparisons.at(i)->resolutionX, (int) comparisons.at(i)->resolutionY);
         colors = std::vector<std::vector<int>>(3);
-    }
 
-    delete writer;
+        delete writer;
+    }
 }

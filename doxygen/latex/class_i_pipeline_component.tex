@@ -1,0 +1,84 @@
+\hypertarget{class_i_pipeline_component}{}\doxysection{IPipeline\+Component Class Reference}
+\label{class_i_pipeline_component}\index{IPipelineComponent@{IPipelineComponent}}
+
+
+{\ttfamily \#include $<$IPipeline\+Component.\+h$>$}
+
+
+
+Inheritance diagram for IPipeline\+Component\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_i_pipeline_component__inherit__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual \mbox{\hyperlink{class_i_pipeline_component_ace875d6166e77f28243371c17f1a449e}{$\sim$\+IPipeline\+Component}} ()=default
+\item 
+virtual bool \mbox{\hyperlink{class_i_pipeline_component_adfa2df0264fa6800126e9444f875f2c6}{uses\+GPU}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{class_i_pipeline_component_a048c521b3ec7ec490624980a49de6efc}{stage\+Uses\+GPU}} = false
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 6 of file IPipeline\+Component.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_i_pipeline_component_ace875d6166e77f28243371c17f1a449e}\label{class_i_pipeline_component_ace875d6166e77f28243371c17f1a449e}} 
+\index{IPipelineComponent@{IPipelineComponent}!````~IPipelineComponent@{$\sim$IPipelineComponent}}
+\index{````~IPipelineComponent@{$\sim$IPipelineComponent}!IPipelineComponent@{IPipelineComponent}}
+\doxysubsubsection{\texorpdfstring{$\sim$IPipelineComponent()}{~IPipelineComponent()}}
+{\footnotesize\ttfamily virtual IPipeline\+Component\+::$\sim$\+IPipeline\+Component (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [virtual]}, {\ttfamily [default]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_i_pipeline_component_adfa2df0264fa6800126e9444f875f2c6}\label{class_i_pipeline_component_adfa2df0264fa6800126e9444f875f2c6}} 
+\index{IPipelineComponent@{IPipelineComponent}!usesGPU@{usesGPU}}
+\index{usesGPU@{usesGPU}!IPipelineComponent@{IPipelineComponent}}
+\doxysubsubsection{\texorpdfstring{usesGPU()}{usesGPU()}}
+{\footnotesize\ttfamily bool IPipeline\+Component\+::uses\+GPU (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+Check if the described stage uses Open\+GL. If adjacent stages both use Open\+GL, the former may choose to forgo returning fully formed return types and only include necessary metadata, as the buffers already set on the GPU may be reused. \begin{DoxyReturn}{Returns}
+Whether the the described stage uses Open\+GL 
+\end{DoxyReturn}
+
+
+Definition at line 23 of file IPipeline\+Component.\+h.
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_i_pipeline_component_adfa2df0264fa6800126e9444f875f2c6_icgraph}
+\end{center}
+\end{figure}
+
+
+\doxysubsection{Member Data Documentation}
+\mbox{\Hypertarget{class_i_pipeline_component_a048c521b3ec7ec490624980a49de6efc}\label{class_i_pipeline_component_a048c521b3ec7ec490624980a49de6efc}} 
+\index{IPipelineComponent@{IPipelineComponent}!stageUsesGPU@{stageUsesGPU}}
+\index{stageUsesGPU@{stageUsesGPU}!IPipelineComponent@{IPipelineComponent}}
+\doxysubsubsection{\texorpdfstring{stageUsesGPU}{stageUsesGPU}}
+{\footnotesize\ttfamily bool IPipeline\+Component\+::stage\+Uses\+GPU = false\hspace{0.3cm}{\ttfamily [protected]}}
+
+Whether or not the described stage uses Open\+GL. If adjacent stages both use Open\+GL, the former may choose to forgo returning fully formed return types and only include necessary metadata, as the buffers already set on the GPU may be reused. 
+
+Definition at line 12 of file IPipeline\+Component.\+h.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/media/stastez/data/\+Code/\+EFTDEM/\mbox{\hyperlink{_i_pipeline_component_8h}{IPipeline\+Component.\+h}}\end{DoxyCompactItemize}

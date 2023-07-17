@@ -1,0 +1,103 @@
+\hypertarget{class_mobile_mapping_reader}{}\doxysection{Mobile\+Mapping\+Reader Class Reference}
+\label{class_mobile_mapping_reader}\index{MobileMappingReader@{MobileMappingReader}}
+
+
+{\ttfamily \#include $<$Mobile\+Mapping\+Reader.\+h$>$}
+
+
+
+Inheritance diagram for Mobile\+Mapping\+Reader\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=193pt]{class_mobile_mapping_reader__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Mobile\+Mapping\+Reader\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=193pt]{class_mobile_mapping_reader__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_mobile_mapping_reader_a68243c12b6045ef9785c4aa9bfc9b88b}{Mobile\+Mapping\+Reader}} (const std\+::string \&\mbox{\hyperlink{class_i_cloud_reader_a28747ae0926ce98a6f13e8bc44520a16}{file\+Name}})
+\item 
+\mbox{\hyperlink{class_mobile_mapping_reader_ad912dd773d4b766cffb9c2ed23a01e16}{$\sim$\+Mobile\+Mapping\+Reader}} () noexcept override
+\item 
+\mbox{\hyperlink{structraw_point_cloud}{raw\+Point\+Cloud}} $\ast$ \mbox{\hyperlink{class_mobile_mapping_reader_aa0960545736b16b4a6da89b73c1e1073}{apply}} (bool generate\+Output) override
+\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 9 of file Mobile\+Mapping\+Reader.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_mobile_mapping_reader_a68243c12b6045ef9785c4aa9bfc9b88b}\label{class_mobile_mapping_reader_a68243c12b6045ef9785c4aa9bfc9b88b}} 
+\index{MobileMappingReader@{MobileMappingReader}!MobileMappingReader@{MobileMappingReader}}
+\index{MobileMappingReader@{MobileMappingReader}!MobileMappingReader@{MobileMappingReader}}
+\doxysubsubsection{\texorpdfstring{MobileMappingReader()}{MobileMappingReader()}}
+{\footnotesize\ttfamily Mobile\+Mapping\+Reader\+::\+Mobile\+Mapping\+Reader (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{file\+Name }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+Constructs a new \mbox{\hyperlink{class_mobile_mapping_reader}{Mobile\+Mapping\+Reader}} that will read from the file\+Name-\/provided point cloud. The file must be comma-\/ separated and conform to the format \mbox{[}x\mbox{]},\mbox{[}y\mbox{]},\mbox{[}z\mbox{]},\mbox{[}ground point? -\/$>$ 1; environment point? -\/$>$ 0\mbox{]},\mbox{[}reflection intensity\mbox{]} 
+\begin{DoxyParams}{Parameters}
+{\em file\+Name} & The path to the point cloud to be read from \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 13 of file Mobile\+Mapping\+Reader.\+cpp.
+
+\mbox{\Hypertarget{class_mobile_mapping_reader_ad912dd773d4b766cffb9c2ed23a01e16}\label{class_mobile_mapping_reader_ad912dd773d4b766cffb9c2ed23a01e16}} 
+\index{MobileMappingReader@{MobileMappingReader}!````~MobileMappingReader@{$\sim$MobileMappingReader}}
+\index{````~MobileMappingReader@{$\sim$MobileMappingReader}!MobileMappingReader@{MobileMappingReader}}
+\doxysubsubsection{\texorpdfstring{$\sim$MobileMappingReader()}{~MobileMappingReader()}}
+{\footnotesize\ttfamily Mobile\+Mapping\+Reader\+::$\sim$\+Mobile\+Mapping\+Reader (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [default]}, {\ttfamily [noexcept]}}
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_mobile_mapping_reader_aa0960545736b16b4a6da89b73c1e1073}\label{class_mobile_mapping_reader_aa0960545736b16b4a6da89b73c1e1073}} 
+\index{MobileMappingReader@{MobileMappingReader}!apply@{apply}}
+\index{apply@{apply}!MobileMappingReader@{MobileMappingReader}}
+\doxysubsubsection{\texorpdfstring{apply()}{apply()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structraw_point_cloud}{raw\+Point\+Cloud}} $\ast$ Mobile\+Mapping\+Reader\+::apply (\begin{DoxyParamCaption}\item[{bool}]{generate\+Output }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+Use the currently attached \mbox{\hyperlink{class_i_cloud_reader}{ICloud\+Reader}} to read the previously specified point cloud from disk. 
+\begin{DoxyParams}{Parameters}
+{\em generate\+Output} & Whether to return a fully formed \mbox{\hyperlink{structraw_point_cloud}{raw\+Point\+Cloud}} (including the actual points). This may be set to false if the following stage uses Open\+GL and can employ the already set buffers on the GPU \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A fully formed \mbox{\hyperlink{structraw_point_cloud}{raw\+Point\+Cloud}} if generate\+Output is true, a \mbox{\hyperlink{structraw_point_cloud}{raw\+Point\+Cloud}} only containing all necessary metadata otherwise 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{class_i_cloud_reader_a2b3b709b1c7294d41c9133764dc3adca}{ICloud\+Reader}}.
+
+
+
+Definition at line 74 of file Mobile\+Mapping\+Reader.\+cpp.
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=331pt]{class_mobile_mapping_reader_aa0960545736b16b4a6da89b73c1e1073_cgraph}
+\end{center}
+\end{figure}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/media/stastez/data/\+Code/\+EFTDEM/\mbox{\hyperlink{_mobile_mapping_reader_8h}{Mobile\+Mapping\+Reader.\+h}}\item 
+/media/stastez/data/\+Code/\+EFTDEM/\mbox{\hyperlink{_mobile_mapping_reader_8cpp}{Mobile\+Mapping\+Reader.\+cpp}}\end{DoxyCompactItemize}

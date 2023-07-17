@@ -1,0 +1,290 @@
+\hypertarget{class_pipeline}{}\doxysection{Pipeline Class Reference}
+\label{class_pipeline}\index{Pipeline@{Pipeline}}
+
+
+{\ttfamily \#include $<$Pipeline.\+h$>$}
+
+
+
+Inheritance diagram for Pipeline\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=134pt]{class_pipeline__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Pipeline\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=157pt]{class_pipeline__coll__graph}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{class_pipeline_a173f4ddf14504cf1c964844661bde812}{exit\+Codes}} \{ \newline
+\mbox{\hyperlink{class_pipeline_a173f4ddf14504cf1c964844661bde812a8f56b5699767d4e5d4dd4bea026e03b2}{EXIT\+\_\+\+INVALID\+\_\+\+COMMAND\+\_\+\+LINE\+\_\+\+ARGUMENTS}} = 101
+, \mbox{\hyperlink{class_pipeline_a173f4ddf14504cf1c964844661bde812a9fc1d050271966227cbb796ce1a3e2bb}{EXIT\+\_\+\+INVALID\+\_\+\+FUNCTION\+\_\+\+PARAMETERS}}
+, \mbox{\hyperlink{class_pipeline_a173f4ddf14504cf1c964844661bde812a8f0c392b05a71183c196c388bab21ed4}{EXIT\+\_\+\+IO\+\_\+\+ERROR}}
+, \mbox{\hyperlink{class_pipeline_a173f4ddf14504cf1c964844661bde812a1231bbaf6db18d9e27049e1f3df616de}{EXIT\+\_\+\+OPENGL\+\_\+\+ERROR}}
+, \newline
+\mbox{\hyperlink{class_pipeline_a173f4ddf14504cf1c964844661bde812a88142cf8e9cdd8fec819d1a4b3aa1ded}{EXIT\+\_\+\+DEPENDENCY\+\_\+\+ERROR}}
+, \mbox{\hyperlink{class_pipeline_a173f4ddf14504cf1c964844661bde812ab54e2c8d55ae2bd3b7e2ba17b938a75f}{EXIT\+\_\+\+INVALID\+\_\+\+CONFIGURATION}}
+, \mbox{\hyperlink{class_pipeline_a173f4ddf14504cf1c964844661bde812a04295de2e5728897d97c2a2815b32fb7}{EXIT\+\_\+\+NOT\+\_\+\+YET\+\_\+\+IMPLEMENTED}}
+ \}
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_pipeline_a1703d47d00dbde0ba0b2654f6e610e74}{$\sim$\+Pipeline}} () override
+\item 
+\mbox{\hyperlink{class_pipeline_a23035678e2cae73a5af2a31666e025e1}{Pipeline}} (\mbox{\hyperlink{class_g_l_handler}{GLHandler}} $\ast$gl\+Handler)
+\item 
+\mbox{\hyperlink{class_pipeline_a58fce701b564e92dc4640549c1b1dacc}{Pipeline}} (const std\+::string \&shader\+Directory)
+\item 
+bool \mbox{\hyperlink{class_pipeline_aefe3caf518bd64164959ac3aa4af0ad8}{is\+Operable}} ()
+\item 
+void \mbox{\hyperlink{class_pipeline_a700719e2c84930d4d80064b7086da1ae}{attach\+Elements}} (\mbox{\hyperlink{class_i_cloud_reader}{ICloud\+Reader}} $\ast$, \mbox{\hyperlink{class_i_cloud_sorter}{ICloud\+Sorter}} $\ast$, \mbox{\hyperlink{class_i_cloud_rasterizer}{ICloud\+Rasterizer}} $\ast$, \mbox{\hyperlink{class_i_height_map_filler}{IHeight\+Map\+Filler}} $\ast$, \mbox{\hyperlink{class_i_height_map_writer}{IHeight\+Map\+Writer}} $\ast$)
+\item 
+\mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$ \mbox{\hyperlink{class_pipeline_a667c1dc404c27551d94d6600c2a56e50}{execute}} () override
+\item 
+\mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$ \mbox{\hyperlink{class_pipeline_a87e22508386dec68911fa9ea445bcaf5}{execute\+After\+Reader}} (\mbox{\hyperlink{structraw_point_cloud}{raw\+Point\+Cloud}} $\ast$point\+Cloud) override
+\item 
+\mbox{\hyperlink{class_g_l_handler}{GLHandler}} $\ast$ \mbox{\hyperlink{class_pipeline_acba31f087183732bcf6df9130bd8376f}{get\+GLHandler}} () override
+\item 
+\mbox{\hyperlink{class_i_cloud_reader}{ICloud\+Reader}} $\ast$ \mbox{\hyperlink{class_pipeline_acfe2b7059f84d716d46e9f76c71cb00a}{get\+Cloud\+Reader}} () override
+\item 
+\mbox{\hyperlink{class_i_height_map_writer}{IHeight\+Map\+Writer}} $\ast$ \mbox{\hyperlink{class_pipeline_a09b8e11faffa8894def7abb23558ad08}{get\+Height\+Map\+Writer}} () override
+\end{DoxyCompactItemize}
+\doxysubsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{class_pipeline_a113ee36c1b381240b394af4f18bb6b68}{Config\+Provider}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+
+
+Definition at line 13 of file Pipeline.\+h.
+
+
+
+\doxysubsection{Member Enumeration Documentation}
+\mbox{\Hypertarget{class_pipeline_a173f4ddf14504cf1c964844661bde812}\label{class_pipeline_a173f4ddf14504cf1c964844661bde812}} 
+\index{Pipeline@{Pipeline}!exitCodes@{exitCodes}}
+\index{exitCodes@{exitCodes}!Pipeline@{Pipeline}}
+\doxysubsubsection{\texorpdfstring{exitCodes}{exitCodes}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{class_pipeline_a173f4ddf14504cf1c964844661bde812}{Pipeline\+::exit\+Codes}}}
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EXIT\_INVALID\_COMMAND\_LINE\_ARGUMENTS@{EXIT\_INVALID\_COMMAND\_LINE\_ARGUMENTS}!Pipeline@{Pipeline}}\index{Pipeline@{Pipeline}!EXIT\_INVALID\_COMMAND\_LINE\_ARGUMENTS@{EXIT\_INVALID\_COMMAND\_LINE\_ARGUMENTS}}}\mbox{\Hypertarget{class_pipeline_a173f4ddf14504cf1c964844661bde812a8f56b5699767d4e5d4dd4bea026e03b2}\label{class_pipeline_a173f4ddf14504cf1c964844661bde812a8f56b5699767d4e5d4dd4bea026e03b2}} 
+EXIT\+\_\+\+INVALID\+\_\+\+COMMAND\+\_\+\+LINE\+\_\+\+ARGUMENTS&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EXIT\_INVALID\_FUNCTION\_PARAMETERS@{EXIT\_INVALID\_FUNCTION\_PARAMETERS}!Pipeline@{Pipeline}}\index{Pipeline@{Pipeline}!EXIT\_INVALID\_FUNCTION\_PARAMETERS@{EXIT\_INVALID\_FUNCTION\_PARAMETERS}}}\mbox{\Hypertarget{class_pipeline_a173f4ddf14504cf1c964844661bde812a9fc1d050271966227cbb796ce1a3e2bb}\label{class_pipeline_a173f4ddf14504cf1c964844661bde812a9fc1d050271966227cbb796ce1a3e2bb}} 
+EXIT\+\_\+\+INVALID\+\_\+\+FUNCTION\+\_\+\+PARAMETERS&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EXIT\_IO\_ERROR@{EXIT\_IO\_ERROR}!Pipeline@{Pipeline}}\index{Pipeline@{Pipeline}!EXIT\_IO\_ERROR@{EXIT\_IO\_ERROR}}}\mbox{\Hypertarget{class_pipeline_a173f4ddf14504cf1c964844661bde812a8f0c392b05a71183c196c388bab21ed4}\label{class_pipeline_a173f4ddf14504cf1c964844661bde812a8f0c392b05a71183c196c388bab21ed4}} 
+EXIT\+\_\+\+IO\+\_\+\+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EXIT\_OPENGL\_ERROR@{EXIT\_OPENGL\_ERROR}!Pipeline@{Pipeline}}\index{Pipeline@{Pipeline}!EXIT\_OPENGL\_ERROR@{EXIT\_OPENGL\_ERROR}}}\mbox{\Hypertarget{class_pipeline_a173f4ddf14504cf1c964844661bde812a1231bbaf6db18d9e27049e1f3df616de}\label{class_pipeline_a173f4ddf14504cf1c964844661bde812a1231bbaf6db18d9e27049e1f3df616de}} 
+EXIT\+\_\+\+OPENGL\+\_\+\+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EXIT\_DEPENDENCY\_ERROR@{EXIT\_DEPENDENCY\_ERROR}!Pipeline@{Pipeline}}\index{Pipeline@{Pipeline}!EXIT\_DEPENDENCY\_ERROR@{EXIT\_DEPENDENCY\_ERROR}}}\mbox{\Hypertarget{class_pipeline_a173f4ddf14504cf1c964844661bde812a88142cf8e9cdd8fec819d1a4b3aa1ded}\label{class_pipeline_a173f4ddf14504cf1c964844661bde812a88142cf8e9cdd8fec819d1a4b3aa1ded}} 
+EXIT\+\_\+\+DEPENDENCY\+\_\+\+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EXIT\_INVALID\_CONFIGURATION@{EXIT\_INVALID\_CONFIGURATION}!Pipeline@{Pipeline}}\index{Pipeline@{Pipeline}!EXIT\_INVALID\_CONFIGURATION@{EXIT\_INVALID\_CONFIGURATION}}}\mbox{\Hypertarget{class_pipeline_a173f4ddf14504cf1c964844661bde812ab54e2c8d55ae2bd3b7e2ba17b938a75f}\label{class_pipeline_a173f4ddf14504cf1c964844661bde812ab54e2c8d55ae2bd3b7e2ba17b938a75f}} 
+EXIT\+\_\+\+INVALID\+\_\+\+CONFIGURATION&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EXIT\_NOT\_YET\_IMPLEMENTED@{EXIT\_NOT\_YET\_IMPLEMENTED}!Pipeline@{Pipeline}}\index{Pipeline@{Pipeline}!EXIT\_NOT\_YET\_IMPLEMENTED@{EXIT\_NOT\_YET\_IMPLEMENTED}}}\mbox{\Hypertarget{class_pipeline_a173f4ddf14504cf1c964844661bde812a04295de2e5728897d97c2a2815b32fb7}\label{class_pipeline_a173f4ddf14504cf1c964844661bde812a04295de2e5728897d97c2a2815b32fb7}} 
+EXIT\+\_\+\+NOT\+\_\+\+YET\+\_\+\+IMPLEMENTED&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+Definition at line 40 of file Pipeline.\+h.
+
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_pipeline_a1703d47d00dbde0ba0b2654f6e610e74}\label{class_pipeline_a1703d47d00dbde0ba0b2654f6e610e74}} 
+\index{Pipeline@{Pipeline}!````~Pipeline@{$\sim$Pipeline}}
+\index{````~Pipeline@{$\sim$Pipeline}!Pipeline@{Pipeline}}
+\doxysubsubsection{\texorpdfstring{$\sim$Pipeline()}{~Pipeline()}}
+{\footnotesize\ttfamily Pipeline\+::$\sim$\+Pipeline (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}}
+
+
+
+Definition at line 3 of file Pipeline.\+cpp.
+
+\mbox{\Hypertarget{class_pipeline_a23035678e2cae73a5af2a31666e025e1}\label{class_pipeline_a23035678e2cae73a5af2a31666e025e1}} 
+\index{Pipeline@{Pipeline}!Pipeline@{Pipeline}}
+\index{Pipeline@{Pipeline}!Pipeline@{Pipeline}}
+\doxysubsubsection{\texorpdfstring{Pipeline()}{Pipeline()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Pipeline\+::\+Pipeline (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_g_l_handler}{GLHandler}} $\ast$}]{gl\+Handler }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+Definition at line 14 of file Pipeline.\+cpp.
+
+\mbox{\Hypertarget{class_pipeline_a58fce701b564e92dc4640549c1b1dacc}\label{class_pipeline_a58fce701b564e92dc4640549c1b1dacc}} 
+\index{Pipeline@{Pipeline}!Pipeline@{Pipeline}}
+\index{Pipeline@{Pipeline}!Pipeline@{Pipeline}}
+\doxysubsubsection{\texorpdfstring{Pipeline()}{Pipeline()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Pipeline\+::\+Pipeline (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{shader\+Directory }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+Definition at line 12 of file Pipeline.\+cpp.
+
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_pipeline_a700719e2c84930d4d80064b7086da1ae}\label{class_pipeline_a700719e2c84930d4d80064b7086da1ae}} 
+\index{Pipeline@{Pipeline}!attachElements@{attachElements}}
+\index{attachElements@{attachElements}!Pipeline@{Pipeline}}
+\doxysubsubsection{\texorpdfstring{attachElements()}{attachElements()}}
+{\footnotesize\ttfamily void Pipeline\+::attach\+Elements (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_i_cloud_reader}{ICloud\+Reader}} $\ast$}]{reader\+Parameter,  }\item[{\mbox{\hyperlink{class_i_cloud_sorter}{ICloud\+Sorter}} $\ast$}]{sorter\+Parameter,  }\item[{\mbox{\hyperlink{class_i_cloud_rasterizer}{ICloud\+Rasterizer}} $\ast$}]{rasterizer\+Parameter,  }\item[{\mbox{\hyperlink{class_i_height_map_filler}{IHeight\+Map\+Filler}} $\ast$}]{filler\+Parameter,  }\item[{\mbox{\hyperlink{class_i_height_map_writer}{IHeight\+Map\+Writer}} $\ast$}]{writer\+Parameter }\end{DoxyParamCaption})}
+
+
+
+Definition at line 63 of file Pipeline.\+cpp.
+
+\mbox{\Hypertarget{class_pipeline_a667c1dc404c27551d94d6600c2a56e50}\label{class_pipeline_a667c1dc404c27551d94d6600c2a56e50}} 
+\index{Pipeline@{Pipeline}!execute@{execute}}
+\index{execute@{execute}!Pipeline@{Pipeline}}
+\doxysubsubsection{\texorpdfstring{execute()}{execute()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$ Pipeline\+::execute (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_i_pipeline_abdae26d8dd56ab30dc115cc578c5c416}{IPipeline}}.
+
+
+
+Definition at line 22 of file Pipeline.\+cpp.
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_pipeline_a667c1dc404c27551d94d6600c2a56e50_cgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_pipeline_a87e22508386dec68911fa9ea445bcaf5}\label{class_pipeline_a87e22508386dec68911fa9ea445bcaf5}} 
+\index{Pipeline@{Pipeline}!executeAfterReader@{executeAfterReader}}
+\index{executeAfterReader@{executeAfterReader}!Pipeline@{Pipeline}}
+\doxysubsubsection{\texorpdfstring{executeAfterReader()}{executeAfterReader()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$ Pipeline\+::execute\+After\+Reader (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structraw_point_cloud}{raw\+Point\+Cloud}} $\ast$}]{point\+Cloud }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_i_pipeline_aed3be97ff802ed9c57598c74fb5d3526}{IPipeline}}.
+
+
+
+Definition at line 33 of file Pipeline.\+cpp.
+
+Here is the call graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_pipeline_a87e22508386dec68911fa9ea445bcaf5_cgraph}
+\end{center}
+\end{figure}
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_pipeline_a87e22508386dec68911fa9ea445bcaf5_icgraph}
+\end{center}
+\end{figure}
+\mbox{\Hypertarget{class_pipeline_acfe2b7059f84d716d46e9f76c71cb00a}\label{class_pipeline_acfe2b7059f84d716d46e9f76c71cb00a}} 
+\index{Pipeline@{Pipeline}!getCloudReader@{getCloudReader}}
+\index{getCloudReader@{getCloudReader}!Pipeline@{Pipeline}}
+\doxysubsubsection{\texorpdfstring{getCloudReader()}{getCloudReader()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_i_cloud_reader}{ICloud\+Reader}} $\ast$ Pipeline\+::get\+Cloud\+Reader (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_i_pipeline_a4ef82b40c8b2097c72cee16b5a119744}{IPipeline}}.
+
+
+
+Definition at line 80 of file Pipeline.\+cpp.
+
+\mbox{\Hypertarget{class_pipeline_acba31f087183732bcf6df9130bd8376f}\label{class_pipeline_acba31f087183732bcf6df9130bd8376f}} 
+\index{Pipeline@{Pipeline}!getGLHandler@{getGLHandler}}
+\index{getGLHandler@{getGLHandler}!Pipeline@{Pipeline}}
+\doxysubsubsection{\texorpdfstring{getGLHandler()}{getGLHandler()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_g_l_handler}{GLHandler}} $\ast$ Pipeline\+::get\+GLHandler (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_i_pipeline_aca65bf845ba547ee335ca769523b43f6}{IPipeline}}.
+
+
+
+Definition at line 79 of file Pipeline.\+cpp.
+
+\mbox{\Hypertarget{class_pipeline_a09b8e11faffa8894def7abb23558ad08}\label{class_pipeline_a09b8e11faffa8894def7abb23558ad08}} 
+\index{Pipeline@{Pipeline}!getHeightMapWriter@{getHeightMapWriter}}
+\index{getHeightMapWriter@{getHeightMapWriter}!Pipeline@{Pipeline}}
+\doxysubsubsection{\texorpdfstring{getHeightMapWriter()}{getHeightMapWriter()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_i_height_map_writer}{IHeight\+Map\+Writer}} $\ast$ Pipeline\+::get\+Height\+Map\+Writer (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_i_pipeline_ab2659f6fdac349e952b5316c734b3e92}{IPipeline}}.
+
+
+
+Definition at line 81 of file Pipeline.\+cpp.
+
+\mbox{\Hypertarget{class_pipeline_aefe3caf518bd64164959ac3aa4af0ad8}\label{class_pipeline_aefe3caf518bd64164959ac3aa4af0ad8}} 
+\index{Pipeline@{Pipeline}!isOperable@{isOperable}}
+\index{isOperable@{isOperable}!Pipeline@{Pipeline}}
+\doxysubsubsection{\texorpdfstring{isOperable()}{isOperable()}}
+{\footnotesize\ttfamily bool Pipeline\+::is\+Operable (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 71 of file Pipeline.\+cpp.
+
+Here is the caller graph for this function\+:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_pipeline_aefe3caf518bd64164959ac3aa4af0ad8_icgraph}
+\end{center}
+\end{figure}
+
+
+\doxysubsection{Friends And Related Function Documentation}
+\mbox{\Hypertarget{class_pipeline_a113ee36c1b381240b394af4f18bb6b68}\label{class_pipeline_a113ee36c1b381240b394af4f18bb6b68}} 
+\index{Pipeline@{Pipeline}!ConfigProvider@{ConfigProvider}}
+\index{ConfigProvider@{ConfigProvider}!Pipeline@{Pipeline}}
+\doxysubsubsection{\texorpdfstring{ConfigProvider}{ConfigProvider}}
+{\footnotesize\ttfamily friend class \mbox{\hyperlink{class_config_provider}{Config\+Provider}}\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+Definition at line 14 of file Pipeline.\+h.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/media/stastez/data/\+Code/\+EFTDEM/\mbox{\hyperlink{_pipeline_8h}{Pipeline.\+h}}\item 
+/media/stastez/data/\+Code/\+EFTDEM/\mbox{\hyperlink{_pipeline_8cpp}{Pipeline.\+cpp}}\end{DoxyCompactItemize}
