@@ -22,10 +22,11 @@ private:
     GLHandler *glHandler{};
 
 public:
-    ~Pipeline() override;
-
     explicit Pipeline(GLHandler *glHandler);
     explicit Pipeline(const std::string& shaderDirectory);
+
+    ~Pipeline() override;
+
     bool isOperable();
 
     void attachElements(ICloudReader *, ICloudSorter *, ICloudRasterizer *, IHeightMapFiller *, IHeightMapWriter *);
@@ -35,7 +36,9 @@ public:
 
     GLHandler * getGLHandler() override;
     ICloudReader * getCloudReader() override;
+    ICloudSorter * getCloudSorter() override;
     IHeightMapWriter * getHeightMapWriter() override;
+
 
     enum exitCodes {
         EXIT_INVALID_COMMAND_LINE_ARGUMENTS = 101,

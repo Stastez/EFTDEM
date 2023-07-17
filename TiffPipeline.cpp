@@ -1,13 +1,15 @@
 #include "TiffPipeline.h"
 #include "GTiffReader.h"
 #include "DataStructures.h"
+#include "IHeightMapWriter.h"
 
 #include <utility>
 
-TiffPipeline::TiffPipeline(std::string path){
-    TiffPipeline::path = std::move(path);
-    glHandler = new GLHandler();
-    glHandler->initializeGL(false);
+TiffPipeline::TiffPipeline(const std::string& tiffPath, const std::string& shaderDirectory) : TiffPipeline(tiffPath, new GLHandler(shaderDirectory)){}
+
+TiffPipeline::TiffPipeline(const std::string& tiffPath, GLHandler *glHandler){
+    TiffPipeline::path = std::move(tiffPath);
+    TiffPipeline::glHandler = glHandler;
 }
 
 heightMap * TiffPipeline::execute() {
@@ -46,3 +48,5 @@ heightMap * TiffPipeline::executeAfterReader(rawPointCloud *pointCloud) {
 
 GLHandler * TiffPipeline::getGLHandler() { return glHandler; }
 ICloudReader * TiffPipeline::getCloudReader() { return nullptr; }
+ICloudSorter * TiffPipeline::getCloudSorter() { return nullptr; }
+IHeightMapWriter * TiffPipeline::getHeightMapWriter() { return nullptr; }

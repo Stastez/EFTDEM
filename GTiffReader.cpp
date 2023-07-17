@@ -32,7 +32,9 @@ denormalizedHeightMap * GTiffReader::apply(bool generateOutput) {
     unsigned long resolutionX, resolutionY;
 
     GDALRegister_GTiff();
-    auto dataset = (GDALDataset *) GDALOpen(sourceDEM.c_str(), GA_ReadOnly);
+
+    GDALAllRegister();//!!!!!!!!!! GDALRegister_GTiff();
+    GDALDataset * dataset = (GDALDataset *) GDALOpen(sourceDEM.c_str(), GA_ReadOnly);
 
     resolutionX = dataset->GetRasterXSize();
     resolutionY = dataset->GetRasterYSize();
@@ -43,9 +45,20 @@ denormalizedHeightMap * GTiffReader::apply(bool generateOutput) {
     (void)! rasterBand->RasterIO(GF_Read, 0, 0, resolutionX, resolutionY, heights.data(), resolutionX, resolutionY, GDT_Float64, 0, 0, nullptr);
 
     double minHeight = std::numeric_limits<double>::max(), maxHeight = 0;
-    for (auto i = 0ul; i < resolutionX * resolutionY; i++){
+    for (auto i = 0ul; i < resolutionY; i++){
         minHeight = std::min(minHeight, heights.at(i));
         maxHeight = std::max(maxHeight, heights.at(i));
+    }
+
+    for (auto y = 0ul; y < (resolutionY / 2); y++){
+        for (auto x = 0ul; x < resolutionX; x++) {
+            auto coord1D = resolutionX * y + x;
+            auto flippedCoord1D = resolutionX * (resolutionY-1 - y) + x;
+
+            auto temp = heights.at(flippedCoord1D);
+            heights.at(flippedCoord1D) = heights.at(coord1D);
+            heights.at(coord1D) = temp;
+        }
     }
 
     return new denormalizedHeightMap{

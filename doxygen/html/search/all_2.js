@@ -9,7 +9,7 @@ var searchData=
   ['compare_2eglsl_20',['compare.glsl',['../compare_8glsl.html',1,'']]],
   ['comparemaps_21',['compareMaps',['../class_i_comparator.html#adb5731d69bfacb064025819bce4fd4cd',1,'IComparator']]],
   ['compareshaderpath_22',['compareShaderPath',['../class_i_comparator.html#ab78836fb2cc51894c3bc56edc7e99818',1,'IComparator']]],
-  ['comparesquarederror_2eglsl_23',['compareSquaredError.glsl',['../compare_squared_error_8glsl.html',1,'']]],
+  ['comparesquarederror_2eglsl_23',['compareSquareError.glsl',['../compare_squared_error_8glsl.html',1,'']]],
   ['configpaths_24',['configPaths',['../class_i_comparator.html#adaa50243d7bc197aa6c3bf77fff6526a',1,'IComparator']]],
   ['configprovider_25',['ConfigProvider',['../class_pipeline.html#a113ee36c1b381240b394af4f18bb6b68',1,'Pipeline::ConfigProvider()'],['../class_config_provider.html#a2f44c2615b408fed699ac03a94ef8886',1,'ConfigProvider::ConfigProvider()'],['../class_config_provider.html#a55c5588feeb07ee6f5b81d6554e98ca7',1,'ConfigProvider::ConfigProvider(std::string configPath)']]],
   ['configprovider_26',['configProvider',['../class_i_comparator.html#aec78e3a6cbfb73db241529ee5c4b858f',1,'IComparator']]],

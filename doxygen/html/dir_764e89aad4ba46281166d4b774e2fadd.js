@@ -6,7 +6,7 @@ var dir_764e89aad4ba46281166d4b774e2fadd =
     [ "chunkSortingAndCounting.glsl", "chunk_sorting_and_counting_8glsl.html", null ],
     [ "closing.glsl", "closing_8glsl.html", null ],
     [ "compare.glsl", "compare_8glsl.html", null ],
-    [ "compareSquaredError.glsl", "compare_squared_error_8glsl.html", null ],
+    [ "compareSquareError.glsl", "compare_squared_error_8glsl.html", null ],
     [ "countChunks.glsl", "count_chunks_8glsl.html", null ],
     [ "dilation.glsl", "dilation_8glsl.html", null ],
     [ "discretization.glsl", "discretization_8glsl.html", null ],
