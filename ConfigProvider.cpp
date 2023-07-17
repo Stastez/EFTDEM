@@ -10,9 +10,6 @@
 #include "InverseDistanceWeightedFilter.h"
 #include "GroundRadarReader.h"
 #include "FillerLoop.h"
-#include "RadialDilator.h"
-#include "RadialBufferSwapper.h"
-#include "RadialEroder.h"
 #include "RadialFiller.h"
 
 #include <iostream>
@@ -40,18 +37,31 @@ YAML::Node ConfigProvider::readConfig() {
     return localConfig;
 }
 
-std::pair<YAML::Node, bool> ConfigProvider::checkValidityAndReturn(const YAML::Node& node, bool required) {
-    auto returnPair = std::pair{node, true};
+std::pair<YAML::Node, bool> ConfigProvider::checkValidityAndReturn(const std::vector<std::string> &path, bool required) {
+    /*
+     * Cloning is necessary here because the copy constructor creates a new Node that points to the same memory, meaning
+     * that assignments to current would also assign to config.
+    */
+    auto current = Clone(config);
+    auto returnPair = std::pair{current, true};
 
-    if (!node) {
-        returnPair.second = false;
-        if (required) {
-            std::cout << "Required attribute not specified!" << std::endl;
-            //exit(Pipeline::EXIT_INVALID_CONFIGURATION);
-            throw std::exception();
+    for (const auto& name : path) {
+        current = current[name];
+
+        if (!current) {
+            returnPair.first = current;
+            returnPair.second = false;
+
+            if (required) {
+                std::cout << name << " not specified in config!" << std::endl;
+                exit(Pipeline::EXIT_INVALID_CONFIGURATION);
+            }
+
+            return returnPair;
         }
     }
 
+    returnPair.first = current;
     return returnPair;
 }
 
@@ -63,23 +73,24 @@ Pipeline *ConfigProvider::providePipeline(std::string cfgPath) {
 Pipeline *ConfigProvider::providePipeline() {
     config = readConfig();
 
-    glHandler = new GLHandler(checkValidityAndReturn(config["OpenGLOptions"]["shaderDirectory"], true).first.as<std::string>());
+    glHandler = new GLHandler(checkValidityAndReturn({"OpenGLOptions", "shaderDirectory"},
+                                                     true).first.as<std::string>());
 
     auto pipeline = new Pipeline(glHandler);
 
     ICloudReader *reader;
-    if (checkValidityAndReturn(config["CloudReaderOptions"]["pointCloudType"], true).first.as<std::string>() == "mobileMapping") {
-        reader = new MobileMappingReader(checkValidityAndReturn(config["CloudReaderOptions"]["pointCloudPath"], true).first.as<std::string>());
-    } else if (checkValidityAndReturn(config["CloudReaderOptions"]["pointCloudType"], true).first.as<std::string>() == "groundRadar") {
-        reader = new GroundRadarReader(checkValidityAndReturn(config["CloudReaderOptions"]["pointCloudPath"], true).first.as<std::string>());
+    if (checkValidityAndReturn({"CloudReaderOptions", "pointCloudType"}, true).first.as<std::string>() == "mobileMapping") {
+        reader = new MobileMappingReader(checkValidityAndReturn({"CloudReaderOptions", "pointCloudPath"}, true).first.as<std::string>());
+    } else if (checkValidityAndReturn({"CloudReaderOptions", "pointCloudType"}, true).first.as<std::string>() == "groundRadar") {
+        reader = new GroundRadarReader(checkValidityAndReturn({"CloudReaderOptions", "pointCloudPath"}, true).first.as<std::string>());
     } else {
         std::cout << "Unrecognized point cloud type!" << std::endl;
         exit(Pipeline::EXIT_INVALID_CONFIGURATION);
     }
 
-    auto pixelPerUnitTest = checkValidityAndReturn(config["CloudSorterOptions"]["pixelPerUnit"], false);
-    auto pixelPerUnitXTest = checkValidityAndReturn(config["CloudSorterOptions"]["pixelPerUnitX"], false);
-    auto pixelPerUnitYTest = checkValidityAndReturn(config["CloudSorterOptions"]["pixelPerUnitY"], false);
+    auto pixelPerUnitTest = checkValidityAndReturn({"CloudSorterOptions", "pixelPerUnit"}, false);
+    auto pixelPerUnitXTest = checkValidityAndReturn({"CloudSorterOptions", "pixelPerUnitX"}, false);
+    auto pixelPerUnitYTest = checkValidityAndReturn({"CloudSorterOptions", "pixelPerUnitY"}, false);
 
     unsigned long pixelPerUnitX, pixelPerUnitY;
 
@@ -94,21 +105,21 @@ Pipeline *ConfigProvider::providePipeline() {
         exit(Pipeline::EXIT_INVALID_CONFIGURATION);
     }
 
-    auto sorter = (checkValidityAndReturn(config["CloudSorterOptions"]["useGPU"], true).first.as<bool>()) ?
+    auto sorter = (checkValidityAndReturn({"CloudSorterOptions", "useGPU"}, true).first.as<bool>()) ?
             (ICloudSorter *) new SorterGPU(glHandler, pixelPerUnitX, pixelPerUnitY) : (ICloudSorter *) new SorterCPU(pixelPerUnitX, pixelPerUnitY);
     
-    auto rasterizer = (checkValidityAndReturn(config["CloudRasterizerOptions"]["useGPU"], true).first.as<bool>()) ?
+    auto rasterizer = (checkValidityAndReturn({"CloudRasterizerOptions", "useGPU"}, true).first.as<bool>()) ?
             (ICloudRasterizer *) new RasterizerGPU(glHandler) : (ICloudRasterizer *) new RasterizerCPU();
     
     IHeightMapFiller *filler;
-    auto fillingAlgorithm = checkValidityAndReturn(config["HeightMapFillerOptions"]["filler"], true).first.as<std::string>();
+    auto fillingAlgorithm = checkValidityAndReturn({"HeightMapFillerOptions", "filler"}, true).first.as<std::string>();
 
     if (fillingAlgorithm == "closingFilter" || fillingAlgorithm == "inverseDistanceWeightedFilter") {
         auto kernelRadii = checkValidityAndReturn(
-                config["HeightMapFillerOptions"]["kernelBasedFilterOptions"]["kernelSizes"],
+                {"HeightMapFillerOptions", "kernelBasedFilterOptions", "kernelSizes"},
                 true).first.as<std::vector<unsigned int>>();
         auto batchSizeTest = checkValidityAndReturn(
-                config["HeightMapFillerOptions"]["kernelBasedFilterOptions"]["batchSize"], false);
+                {"HeightMapFillerOptions", "kernelBasedFilterOptions", "batchSize"}, false);
         auto batchSize = (batchSizeTest.second) ? batchSizeTest.first.as<unsigned int>() : 0;
 
         std::vector<IHeightMapFiller *> filters;
@@ -126,10 +137,10 @@ Pipeline *ConfigProvider::providePipeline() {
         filler = new FillerLoop(filters);
     } else if (fillingAlgorithm == "radialFiller") {
         auto batchSizeTest = checkValidityAndReturn(
-                config["HeightMapFillerOptions"]["radialFillerOptions"]["batchSize"], false);
+                {"HeightMapFillerOptions", "radialFillerOptions", "batchSize"}, false);
         auto batchSize = (batchSizeTest.second) ? batchSizeTest.first.as<unsigned int>() : 0;
-        auto maxHoleRadius = checkValidityAndReturn(config["HeightMapFillerOptions"]["radialFillerOptions"]["maxHoleRadius"], true).first.as<unsigned int>();
-        auto useBatching = checkValidityAndReturn(config["HeightMapFillerOptions"]["radialFillerOptions"]["useBatching"], false);
+        auto maxHoleRadius = checkValidityAndReturn({"HeightMapFillerOptions", "radialFillerOptions", "maxHoleRadius"}, true).first.as<unsigned int>();
+        auto useBatching = checkValidityAndReturn({"HeightMapFillerOptions", "radialFillerOptions", "useBatching"}, false);
         auto batched = !(useBatching.second) || useBatching.first.as<bool>();
 
         filler = new RadialFiller(glHandler, maxHoleRadius, batched, batchSize);
@@ -138,10 +149,10 @@ Pipeline *ConfigProvider::providePipeline() {
         exit(Pipeline::EXIT_INVALID_CONFIGURATION);
     }
 
-    auto writeLowDepthTest = checkValidityAndReturn(config["HeightMapWriterOptions"]["writeLowDepth"], false);
+    auto writeLowDepthTest = checkValidityAndReturn({"HeightMapWriterOptions", "writeLowDepth"}, false);
     auto writeLowDepth = writeLowDepthTest.second && writeLowDepthTest.first.as<bool>();
-    auto betterCompression = checkValidityAndReturn(config["HeightMapWriterOptions"]["betterCompression"], false);
-    auto writer = new GTiffWriter(writeLowDepth, checkValidityAndReturn(config["HeightMapWriterOptions"]["destinationPath"],
+    auto betterCompression = checkValidityAndReturn({"HeightMapWriterOptions", "betterCompression"}, false);
+    auto writer = new GTiffWriter(writeLowDepth, checkValidityAndReturn({"HeightMapWriterOptions", "destinationPath"},
                                                                         true).first.as<std::string>(),
                                                                         betterCompression.second && betterCompression.first.as<bool>());
 
@@ -155,14 +166,14 @@ GLHandler *ConfigProvider::getGLHandler() {
 }
 
 std::string ConfigProvider::getComparisonPath() {
-    return checkValidityAndReturn(config["ComparisonOptions"]["destinationPath"], true).first.as<std::string>();
+    return checkValidityAndReturn({"ComparisonOptions", "destinationPath"}, true).first.as<std::string>();
 }
 
 double ConfigProvider::getThreshold() {
-    return checkValidityAndReturn(config["ComparisonOptions"]["threshold"], true).first.as<double>();
+    return checkValidityAndReturn({"ComparisonOptions", "threshold"}, true).first.as<double>();
 }
 
 bool ConfigProvider::getBetterCompression() {
-    auto betterCompression = checkValidityAndReturn(config["HeightMapWriterOptions"]["betterCompression"], false);
+    auto betterCompression = checkValidityAndReturn({"HeightMapWriterOptions", "betterCompression"}, false);
     return betterCompression.second && betterCompression.first.as<bool>();
 }

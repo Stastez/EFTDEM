@@ -10,6 +10,9 @@ ClosingFilter::ClosingFilter(GLHandler *glHandler, unsigned int kernelRadius, un
     ClosingFilter::stageUsesGPU = true;
 }
 
+/**
+ * Deletes all buffers used for closing, except for the result buffer.
+ */
 ClosingFilter::~ClosingFilter() {
     auto bufferMask = glHandler->getCoherentBufferMask();
 
@@ -19,8 +22,14 @@ ClosingFilter::~ClosingFilter() {
     glHandler->deleteBuffer(GLHandler::EFTDEM_HORIZONTAL_SUM_BUFFER);
     glHandler->deleteBuffer(GLHandler::EFTDEM_SUM_BUFFER);
     glHandler->deleteBuffer(GLHandler::EFTDEM_AVERAGE_BUFFER);
-};
+}
 
+/**
+ * Allocates the specified buffer for singleDataSize * dataCount bytes WITHOUT initializing the memory.
+ * @param buffer The GLHandler bufferIndices member to be allocated
+ * @param singleDataSize The size of a single value in bytes (e.g. sizeof(float))
+ * @param dataCount The number of cells of singleDataSize to allocate
+ */
 void ClosingFilter::allocBuffer(GLHandler::bufferIndices buffer, long singleDataSize, long dataCount) {
     glHandler->dataToBuffer(buffer, singleDataSize * dataCount, nullptr, gl::GL_STATIC_DRAW);
 }
