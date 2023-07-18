@@ -13,10 +13,17 @@ using namespace gl;
 
 GLHandler::GLHandler() = default;
 
+/**
+ * Constructs a GLHandler that will prepend shaderDirectory to all given shader paths if later calls request this.
+ * @param shaderDirectory The path to the default shader directory
+ */
 GLHandler::GLHandler(std::string shaderDirectory) {
     GLHandler::shaderDirectory = std::move(shaderDirectory);
 }
 
+/**
+ * Destroys the GLHandler, deletes all buffers and terminates GLFW.
+ */
 GLHandler::~GLHandler() {
     if (!initialized) return;
 
@@ -29,6 +36,9 @@ GLHandler::~GLHandler() {
     initialized = false;
 }
 
+/**
+ * OpenGL callback for errors for example during shader compilation.
+ */
 void GLAPIENTRY MessageCallback( GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
     // must conform to GL specified template
     (void) source; (void) type; (void) id; (void) severity; (void) length; (void) userParam;
@@ -38,7 +48,18 @@ void GLAPIENTRY MessageCallback( GLenum source, GLenum type, GLuint id, GLenum s
              (unsigned int) type, (unsigned int) severity, message );
 }
 
-GLFWwindow * GLHandler::initializeGL(bool debug) {
+/**
+ * Initializes the GLHandler by creating a GLFW OpenGL context as well as a glbinding context. This will also generate
+ * all buffers contained in GLHandler::bufferIndices and set up buffer management. The program may exit with EXIT_OPENGL_ERROR
+ * for any of these reasons:
+ * <ul>
+ *  <li> GLFW could not initialize
+ *  <li> GLFW could not create a window with the specified parameters
+ * </ul>
+ * @param debug Whether or not to create a debug OpenGL context. Usually you want this to be false.
+ * @return A pointer to the created GLFWwindow (i.e., the OpenGL context)
+ */
+GLFWwindow * GLHandler::initializeGL(bool debug = false) {
     if (isInitialized(debug)) return context;
 
     if (!magic_enum::is_magic_enum_supported) {
@@ -83,6 +104,15 @@ GLFWwindow * GLHandler::initializeGL(bool debug) {
     return context;
 }
 
+/**
+ * Get the shader program compiled from the GLSL file pointed to by shaderFile. If useStandardDirectory is true,
+ * GLHandler::shaderDirectory is prepended on shaderFile. The program may exit if the requested shaderFile could not
+ * be opened.
+ * @param shaderFile The path to the requested GLSL file
+ * @param useStandardDirectory Whether or not to prepend GLHandler::shaderDirectory on shaderFile
+ * @throws std::exception If there was an error compiling or linking the requested shader
+ * @return The OpenGL object number of the compiled shader
+ */
 gl::GLuint GLHandler::getShaderProgram(const std::string& shaderFile, bool useStandardDirectory){
     std::ifstream shaderFileStream;
     std::stringstream shaderStream;
@@ -91,7 +121,8 @@ gl::GLuint GLHandler::getShaderProgram(const std::string& shaderFile, bool useSt
     else shaderFileStream.open(shaderFile);
 
     if (!shaderFileStream.is_open()) {
-        std::cout << "Specified shader could not be opened: " << shaderFile << std::endl;
+        if (useStandardDirectory) std::cout << "Specified shader could not be opened: " << shaderDirectory << "/" << shaderFile << std::endl;
+        else std::cout << "Specified shader could not be opened: " << shaderFile << std::endl;
         exit(Pipeline::EXIT_IO_ERROR);
     }
     shaderStream << shaderFileStream.rdbuf();
@@ -108,7 +139,7 @@ gl::GLuint GLHandler::getShaderProgram(const std::string& shaderFile, bool useSt
     if (!success) {
         glGetShaderInfoLog(shaderNumber, 512, nullptr, infoLog);
         std::cout << infoLog << std::endl;
-        exit(Pipeline::EXIT_OPENGL_ERROR);
+        throw std::exception();
     }
 
     auto program = glCreateProgram();
@@ -120,13 +151,23 @@ gl::GLuint GLHandler::getShaderProgram(const std::string& shaderFile, bool useSt
     if (!success) {
         glGetProgramInfoLog(program, 512, nullptr, infoLog);
         std::cout << infoLog << std::endl;
-        exit(Pipeline::EXIT_OPENGL_ERROR);
+        throw std::exception();
     }
 
     glDeleteShader(shaderNumber);
 
     return program;
 }
+
+/**
+ * Get the shader programs compiled from the GLSL files pointed to by shaderFiles. If useStandardDirectory is true,
+ * GLHandler::shaderDirectory is prepended on every string in shaderFiles. The program may exit if any of the requested shaderFiles could
+ * not be opened.
+ * @param shaderFiles A vector of paths to the requested GLSL files
+ * @param useStandardDirectory Whether or not to prepend GLHandler::shaderDirectory on every string in shaderFiles
+ * @throws std::exception If there was an error compiling or linking any of the requested shaders
+ * @return A vector of OpenGL object numbers of the compiled shaders
+ */
 std::vector<GLuint> GLHandler::getShaderPrograms(const std::vector<std::string>& shaderFiles, bool useStandardDirectory) {
     std::vector<GLuint> programs;
 
@@ -138,22 +179,31 @@ std::vector<GLuint> GLHandler::getShaderPrograms(const std::vector<std::string>&
     return programs;
 }
 
+/**
+ * Binds the specified buffer to its specific binding point or unbinds the buffer target if buffer is 0.
+ * @param buffer The buffer to be bound
+ * @throws std::exception If the requested buffer was previously deleted
+ */
 void GLHandler::bindBuffer(GLHandler::bufferIndices buffer) {
     if (deletedBufferMask.at(buffer)) {
         std::cout << magic_enum::enum_name(buffer) << " was previously deleted." << std::endl;
-        exit(Pipeline::EXIT_OPENGL_ERROR);
+        throw std::exception();
     }
     if (buffer == EFTDEM_UNBIND) glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
     else glBindBufferBase(GL_SHADER_STORAGE_BUFFER, buffer, ssbos.at(buffer - 1)); //no buffer needed for EFTDEM_UNBIND
 }
 
+/**
+ * Generates the specified buffer.
+ * @param buffer
+ */
 void GLHandler::generateBuffer(GLHandler::bufferIndices buffer) {
     generateBuffer((int) buffer);
 }
 
 void GLHandler::generateBuffer(int buffer) {
     if (!deletedBufferMask.at(buffer)) return;
-    if (buffer == EFTDEM_UNBIND) exit(Pipeline::EXIT_INVALID_FUNCTION_PARAMETERS);
+    if (buffer == EFTDEM_UNBIND) throw std::exception();
     glGenBuffers(1, &ssbos.at(buffer - 1));
     glFlush();
     deletedBufferMask.at(buffer) = false;

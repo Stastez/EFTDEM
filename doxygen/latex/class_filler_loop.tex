@@ -48,9 +48,14 @@ Definition at line 7 of file Filler\+Loop.\+h.
 \doxysubsubsection{\texorpdfstring{FillerLoop()}{FillerLoop()}}
 {\footnotesize\ttfamily Filler\+Loop\+::\+Filler\+Loop (\begin{DoxyParamCaption}\item[{std\+::vector$<$ \mbox{\hyperlink{class_i_height_map_filler}{IHeight\+Map\+Filler}} $\ast$ $>$}]{distinct\+Fillers }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
 
+Constructs a \mbox{\hyperlink{class_filler_loop}{Filler\+Loop}} that will apply all IHeight\+Map\+Fillers given by distinct\+Fillers sequentially. If any filler does not use Open\+GL, the \mbox{\hyperlink{class_filler_loop}{Filler\+Loop}} copies this behaviour outwardly. 
+\begin{DoxyParams}{Parameters}
+{\em distinct\+Fillers} & A vector containing IHeight\+Map\+Fillers in the order they are supposed to be applied in \\
+\hline
+\end{DoxyParams}
 
 
-Definition at line 7 of file Filler\+Loop.\+cpp.
+Definition at line 12 of file Filler\+Loop.\+cpp.
 
 \mbox{\Hypertarget{class_filler_loop_a23794676831c8698f9424be3d596ecbe}\label{class_filler_loop_a23794676831c8698f9424be3d596ecbe}} 
 \index{FillerLoop@{FillerLoop}!````~FillerLoop@{$\sim$FillerLoop}}
@@ -67,9 +72,11 @@ Definition at line 7 of file Filler\+Loop.\+cpp.
 \doxysubsubsection{\texorpdfstring{apply()}{apply()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$ Filler\+Loop\+::apply (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$}]{map,  }\item[{bool}]{generate\+Output }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
 
-Use the currently attached \mbox{\hyperlink{class_i_height_map_filler}{IHeight\+Map\+Filler}} to fill holes in the \mbox{\hyperlink{structheight_map}{height\+Map}} given by map. 
+Fill the given \mbox{\hyperlink{structheight_map}{height\+Map}} using the previously provided IHeight\+Map\+Fillers sequentially. 
 \begin{DoxyParams}{Parameters}
-{\em generate\+Output} & Whether to return a fully formed \mbox{\hyperlink{structheight_map}{height\+Map}} (including the actual height\+Data for each pixel). This may be set to false if the following stage uses Open\+GL and can employ the already set buffers on the GPU \\
+{\em map} & The \mbox{\hyperlink{structheight_map}{height\+Map}} to be filled \\
+\hline
+{\em generate\+Output} & Whether or not to return a fully formed \mbox{\hyperlink{structheight_map}{height\+Map}} (including the actual height\+Data for each pixel). This may be set to false if the following stage uses Open\+GL and can employ the already set buffers on the GPU \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
@@ -81,7 +88,7 @@ Implements \mbox{\hyperlink{class_i_height_map_filler_a39f19174dfe585c744d045349
 
 
 
-Definition at line 15 of file Filler\+Loop.\+cpp.
+Definition at line 27 of file Filler\+Loop.\+cpp.
 
 
 

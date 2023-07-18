@@ -39,11 +39,11 @@ enum \mbox{\hyperlink{class_pipeline_a173f4ddf14504cf1c964844661bde812}{exit\+Co
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\hyperlink{class_pipeline_a1703d47d00dbde0ba0b2654f6e610e74}{$\sim$\+Pipeline}} () override
-\item 
 \mbox{\hyperlink{class_pipeline_a23035678e2cae73a5af2a31666e025e1}{Pipeline}} (\mbox{\hyperlink{class_g_l_handler}{GLHandler}} $\ast$gl\+Handler)
 \item 
 \mbox{\hyperlink{class_pipeline_a58fce701b564e92dc4640549c1b1dacc}{Pipeline}} (const std\+::string \&shader\+Directory)
+\item 
+\mbox{\hyperlink{class_pipeline_a1703d47d00dbde0ba0b2654f6e610e74}{$\sim$\+Pipeline}} () override
 \item 
 bool \mbox{\hyperlink{class_pipeline_aefe3caf518bd64164959ac3aa4af0ad8}{is\+Operable}} ()
 \item 
@@ -56,6 +56,8 @@ void \mbox{\hyperlink{class_pipeline_a700719e2c84930d4d80064b7086da1ae}{attach\+
 \mbox{\hyperlink{class_g_l_handler}{GLHandler}} $\ast$ \mbox{\hyperlink{class_pipeline_acba31f087183732bcf6df9130bd8376f}{get\+GLHandler}} () override
 \item 
 \mbox{\hyperlink{class_i_cloud_reader}{ICloud\+Reader}} $\ast$ \mbox{\hyperlink{class_pipeline_acfe2b7059f84d716d46e9f76c71cb00a}{get\+Cloud\+Reader}} () override
+\item 
+\mbox{\hyperlink{class_i_cloud_sorter}{ICloud\+Sorter}} $\ast$ \mbox{\hyperlink{class_pipeline_a93bf4b2ed8d2dcc4d11f19668d7824a4}{get\+Cloud\+Sorter}} () override
 \item 
 \mbox{\hyperlink{class_i_height_map_writer}{IHeight\+Map\+Writer}} $\ast$ \mbox{\hyperlink{class_pipeline_a09b8e11faffa8894def7abb23558ad08}{get\+Height\+Map\+Writer}} () override
 \end{DoxyCompactItemize}
@@ -113,21 +115,11 @@ EXIT\+\_\+\+NOT\+\_\+\+YET\+\_\+\+IMPLEMENTED&\\
 \end{DoxyEnumFields}
 
 
-Definition at line 40 of file Pipeline.\+h.
+Definition at line 43 of file Pipeline.\+h.
 
 
 
 \doxysubsection{Constructor \& Destructor Documentation}
-\mbox{\Hypertarget{class_pipeline_a1703d47d00dbde0ba0b2654f6e610e74}\label{class_pipeline_a1703d47d00dbde0ba0b2654f6e610e74}} 
-\index{Pipeline@{Pipeline}!````~Pipeline@{$\sim$Pipeline}}
-\index{````~Pipeline@{$\sim$Pipeline}!Pipeline@{Pipeline}}
-\doxysubsubsection{\texorpdfstring{$\sim$Pipeline()}{~Pipeline()}}
-{\footnotesize\ttfamily Pipeline\+::$\sim$\+Pipeline (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}}
-
-
-
-Definition at line 3 of file Pipeline.\+cpp.
-
 \mbox{\Hypertarget{class_pipeline_a23035678e2cae73a5af2a31666e025e1}\label{class_pipeline_a23035678e2cae73a5af2a31666e025e1}} 
 \index{Pipeline@{Pipeline}!Pipeline@{Pipeline}}
 \index{Pipeline@{Pipeline}!Pipeline@{Pipeline}}
@@ -136,7 +128,7 @@ Definition at line 3 of file Pipeline.\+cpp.
 
 
 
-Definition at line 14 of file Pipeline.\+cpp.
+Definition at line 5 of file Pipeline.\+cpp.
 
 \mbox{\Hypertarget{class_pipeline_a58fce701b564e92dc4640549c1b1dacc}\label{class_pipeline_a58fce701b564e92dc4640549c1b1dacc}} 
 \index{Pipeline@{Pipeline}!Pipeline@{Pipeline}}
@@ -146,7 +138,17 @@ Definition at line 14 of file Pipeline.\+cpp.
 
 
 
-Definition at line 12 of file Pipeline.\+cpp.
+Definition at line 3 of file Pipeline.\+cpp.
+
+\mbox{\Hypertarget{class_pipeline_a1703d47d00dbde0ba0b2654f6e610e74}\label{class_pipeline_a1703d47d00dbde0ba0b2654f6e610e74}} 
+\index{Pipeline@{Pipeline}!````~Pipeline@{$\sim$Pipeline}}
+\index{````~Pipeline@{$\sim$Pipeline}!Pipeline@{Pipeline}}
+\doxysubsubsection{\texorpdfstring{$\sim$Pipeline()}{~Pipeline()}}
+{\footnotesize\ttfamily Pipeline\+::$\sim$\+Pipeline (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}}
+
+
+
+Definition at line 9 of file Pipeline.\+cpp.
 
 
 
@@ -224,6 +226,20 @@ Implements \mbox{\hyperlink{class_i_pipeline_a4ef82b40c8b2097c72cee16b5a119744}{
 
 Definition at line 80 of file Pipeline.\+cpp.
 
+\mbox{\Hypertarget{class_pipeline_a93bf4b2ed8d2dcc4d11f19668d7824a4}\label{class_pipeline_a93bf4b2ed8d2dcc4d11f19668d7824a4}} 
+\index{Pipeline@{Pipeline}!getCloudSorter@{getCloudSorter}}
+\index{getCloudSorter@{getCloudSorter}!Pipeline@{Pipeline}}
+\doxysubsubsection{\texorpdfstring{getCloudSorter()}{getCloudSorter()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_i_cloud_sorter}{ICloud\+Sorter}} $\ast$ Pipeline\+::get\+Cloud\+Sorter (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_i_pipeline_a7f5df6c47bb9dfd9f772547f3fa584fc}{IPipeline}}.
+
+
+
+Definition at line 81 of file Pipeline.\+cpp.
+
 \mbox{\Hypertarget{class_pipeline_acba31f087183732bcf6df9130bd8376f}\label{class_pipeline_acba31f087183732bcf6df9130bd8376f}} 
 \index{Pipeline@{Pipeline}!getGLHandler@{getGLHandler}}
 \index{getGLHandler@{getGLHandler}!Pipeline@{Pipeline}}
@@ -250,7 +266,7 @@ Implements \mbox{\hyperlink{class_i_pipeline_ab2659f6fdac349e952b5316c734b3e92}{
 
 
 
-Definition at line 81 of file Pipeline.\+cpp.
+Definition at line 82 of file Pipeline.\+cpp.
 
 \mbox{\Hypertarget{class_pipeline_aefe3caf518bd64164959ac3aa4af0ad8}\label{class_pipeline_aefe3caf518bd64164959ac3aa4af0ad8}} 
 \index{Pipeline@{Pipeline}!isOperable@{isOperable}}

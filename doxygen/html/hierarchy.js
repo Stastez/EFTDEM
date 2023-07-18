@@ -2,6 +2,7 @@ var hierarchy =
 [
     [ "bufferSpecifications", "structbuffer_specifications.html", null ],
     [ "ConfigProvider", "class_config_provider.html", null ],
+    [ "denormalizedHeightMap", "structdenormalized_height_map.html", null ],
     [ "doublePoint", "structdouble_point.html", null ],
     [ "floatPoint", "structfloat_point.html", null ],
     [ "GLHandler", "class_g_l_handler.html", null ],

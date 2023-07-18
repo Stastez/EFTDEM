@@ -29,7 +29,7 @@ Collaboration diagram for GTiff\+Reader\+:\nopagebreak
 \item 
 \mbox{\hyperlink{class_g_tiff_reader_a3441ca9a62b038a909db47b4ee783e9e}{$\sim$\+GTiff\+Reader}} () noexcept override
 \item 
-\mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$ \mbox{\hyperlink{class_g_tiff_reader_a493008bb067fe8767f815273ad88d76e}{apply}} (bool generate\+Output) override
+\mbox{\hyperlink{structdenormalized_height_map}{denormalized\+Height\+Map}} $\ast$ \mbox{\hyperlink{class_g_tiff_reader_afb2d4226bd5a6ebc69bf36d877af4894}{apply}} (bool generate\+Output) override
 \item 
 void \mbox{\hyperlink{class_g_tiff_reader_a62195f578879217b30dfa9b5567e1be2}{set\+Source\+DEM}} (const std\+::string \&\mbox{\hyperlink{class_i_height_map_reader_aab4d80d5b289cdd45d4cff991fa9804e}{source\+DEM}})
 \end{DoxyCompactItemize}
@@ -52,7 +52,7 @@ Definition at line 8 of file GTiff\+Reader.\+h.
 
 
 
-Definition at line 6 of file GTiff\+Reader.\+cpp.
+Definition at line 8 of file GTiff\+Reader.\+cpp.
 
 \mbox{\Hypertarget{class_g_tiff_reader_a3441ca9a62b038a909db47b4ee783e9e}\label{class_g_tiff_reader_a3441ca9a62b038a909db47b4ee783e9e}} 
 \index{GTiffReader@{GTiffReader}!````~GTiffReader@{$\sim$GTiffReader}}
@@ -63,11 +63,11 @@ Definition at line 6 of file GTiff\+Reader.\+cpp.
 
 
 \doxysubsection{Member Function Documentation}
-\mbox{\Hypertarget{class_g_tiff_reader_a493008bb067fe8767f815273ad88d76e}\label{class_g_tiff_reader_a493008bb067fe8767f815273ad88d76e}} 
+\mbox{\Hypertarget{class_g_tiff_reader_afb2d4226bd5a6ebc69bf36d877af4894}\label{class_g_tiff_reader_afb2d4226bd5a6ebc69bf36d877af4894}} 
 \index{GTiffReader@{GTiffReader}!apply@{apply}}
 \index{apply@{apply}!GTiffReader@{GTiffReader}}
 \doxysubsubsection{\texorpdfstring{apply()}{apply()}}
-{\footnotesize\ttfamily \mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$ GTiff\+Reader\+::apply (\begin{DoxyParamCaption}\item[{bool}]{generate\+Output }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdenormalized_height_map}{denormalized\+Height\+Map}} $\ast$ GTiff\+Reader\+::apply (\begin{DoxyParamCaption}\item[{bool}]{generate\+Output }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
 
 Exports the provided height map into Geo\+Tiff format. The resolution of the height map must be within int limits.
 
@@ -82,17 +82,18 @@ Exports the provided height map into Geo\+Tiff format. The resolution of the hei
 \end{DoxyParams}
 !!!!!!!!! GDALRegister\+\_\+\+GTiff();
 
-Implements \mbox{\hyperlink{class_i_height_map_reader_a94bd266f19bfe3d08072309853e027a4}{IHeight\+Map\+Reader}}.
+Implements \mbox{\hyperlink{class_i_height_map_reader_a9e71a8145a546b370530ef1fd754d18d}{IHeight\+Map\+Reader}}.
 
 
 
-Definition at line 24 of file GTiff\+Reader.\+cpp.
+Definition at line 26 of file GTiff\+Reader.\+cpp.
 
-Here is the caller graph for this function\+:\nopagebreak
+Here is the caller graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=319pt]{class_g_tiff_reader_a493008bb067fe8767f815273ad88d76e_icgraph}
+\includegraphics[width=319pt]{class_g_tiff_reader_afb2d4226bd5a6ebc69bf36d877af4894_icgraph}
 \end{center}
 \end{figure}
 \mbox{\Hypertarget{class_g_tiff_reader_a62195f578879217b30dfa9b5567e1be2}\label{class_g_tiff_reader_a62195f578879217b30dfa9b5567e1be2}} 
@@ -103,7 +104,7 @@ Here is the caller graph for this function\+:\nopagebreak
 
 
 
-Definition at line 13 of file GTiff\+Reader.\+cpp.
+Definition at line 15 of file GTiff\+Reader.\+cpp.
 
 
 

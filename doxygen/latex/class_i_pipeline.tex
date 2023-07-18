@@ -33,6 +33,8 @@ virtual \mbox{\hyperlink{class_g_l_handler}{GLHandler}} $\ast$ \mbox{\hyperlink{
 \item 
 virtual \mbox{\hyperlink{class_i_cloud_reader}{ICloud\+Reader}} $\ast$ \mbox{\hyperlink{class_i_pipeline_a4ef82b40c8b2097c72cee16b5a119744}{get\+Cloud\+Reader}} ()=0
 \item 
+virtual \mbox{\hyperlink{class_i_cloud_sorter}{ICloud\+Sorter}} $\ast$ \mbox{\hyperlink{class_i_pipeline_a7f5df6c47bb9dfd9f772547f3fa584fc}{get\+Cloud\+Sorter}} ()=0
+\item 
 virtual \mbox{\hyperlink{class_i_height_map_writer}{IHeight\+Map\+Writer}} $\ast$ \mbox{\hyperlink{class_i_pipeline_ab2659f6fdac349e952b5316c734b3e92}{get\+Height\+Map\+Writer}} ()=0
 \item 
 virtual \mbox{\hyperlink{class_i_pipeline_a13164260f479c250b5fea5b0585fd04d}{$\sim$\+IPipeline}} ()=default
@@ -47,7 +49,7 @@ virtual \mbox{\hyperlink{class_i_pipeline_a13164260f479c250b5fea5b0585fd04d}{$\s
 \doxysubsection{Detailed Description}
 
 
-Definition at line 9 of file IPipeline.\+h.
+Definition at line 10 of file IPipeline.\+h.
 
 
 
@@ -91,6 +93,16 @@ Implemented in \mbox{\hyperlink{class_tiff_pipeline_a737defaa488d58dde75e80ebec1
 
 Implemented in \mbox{\hyperlink{class_tiff_pipeline_ae9cf359036da761b2653b029392116ba}{Tiff\+Pipeline}}, and \mbox{\hyperlink{class_pipeline_acfe2b7059f84d716d46e9f76c71cb00a}{Pipeline}}.
 
+\mbox{\Hypertarget{class_i_pipeline_a7f5df6c47bb9dfd9f772547f3fa584fc}\label{class_i_pipeline_a7f5df6c47bb9dfd9f772547f3fa584fc}} 
+\index{IPipeline@{IPipeline}!getCloudSorter@{getCloudSorter}}
+\index{getCloudSorter@{getCloudSorter}!IPipeline@{IPipeline}}
+\doxysubsubsection{\texorpdfstring{getCloudSorter()}{getCloudSorter()}}
+{\footnotesize\ttfamily virtual \mbox{\hyperlink{class_i_cloud_sorter}{ICloud\+Sorter}}$\ast$ IPipeline\+::get\+Cloud\+Sorter (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [pure virtual]}}
+
+
+
+Implemented in \mbox{\hyperlink{class_tiff_pipeline_a18964c5c7f4589918f7e6fb840fd2717}{Tiff\+Pipeline}}, and \mbox{\hyperlink{class_pipeline_a93bf4b2ed8d2dcc4d11f19668d7824a4}{Pipeline}}.
+
 \mbox{\Hypertarget{class_i_pipeline_aca65bf845ba547ee335ca769523b43f6}\label{class_i_pipeline_aca65bf845ba547ee335ca769523b43f6}} 
 \index{IPipeline@{IPipeline}!getGLHandler@{getGLHandler}}
 \index{getGLHandler@{getGLHandler}!IPipeline@{IPipeline}}
@@ -122,7 +134,7 @@ Implemented in \mbox{\hyperlink{class_tiff_pipeline_a4c6b25fa2e85582bed26146650d
 
 
 
-Definition at line 11 of file IPipeline.\+h.
+Definition at line 12 of file IPipeline.\+h.
 
 
 

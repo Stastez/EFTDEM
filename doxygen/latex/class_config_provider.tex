@@ -47,9 +47,14 @@ Definition at line 7 of file Config\+Provider.\+h.
 \doxysubsubsection{\texorpdfstring{ConfigProvider()}{ConfigProvider()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
 {\footnotesize\ttfamily Config\+Provider\+::\+Config\+Provider (\begin{DoxyParamCaption}\item[{std\+::string}]{config\+Path }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
 
+Constructs a new Config\+Reader while setting the path of the .yaml to read from later. 
+\begin{DoxyParams}{Parameters}
+{\em config\+Path} & The path to the .yaml to be read \\
+\hline
+\end{DoxyParams}
 
 
-Definition at line 20 of file Config\+Provider.\+cpp.
+Definition at line 24 of file Config\+Provider.\+cpp.
 
 \mbox{\Hypertarget{class_config_provider_a02b410b6d24310c1a8b76f8e628acaa1}\label{class_config_provider_a02b410b6d24310c1a8b76f8e628acaa1}} 
 \index{ConfigProvider@{ConfigProvider}!````~ConfigProvider@{$\sim$ConfigProvider}}
@@ -68,9 +73,10 @@ Definition at line 20 of file Config\+Provider.\+cpp.
 
 
 
-Definition at line 176 of file Config\+Provider.\+cpp.
+Definition at line 208 of file Config\+Provider.\+cpp.
 
-Here is the caller graph for this function\+:\nopagebreak
+Here is the caller graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -85,7 +91,7 @@ Here is the caller graph for this function\+:\nopagebreak
 
 
 
-Definition at line 168 of file Config\+Provider.\+cpp.
+Definition at line 200 of file Config\+Provider.\+cpp.
 
 Here is the caller graph for this function\+:\nopagebreak
 \begin{figure}[H]
@@ -102,7 +108,7 @@ Here is the caller graph for this function\+:\nopagebreak
 
 
 
-Definition at line 164 of file Config\+Provider.\+cpp.
+Definition at line 196 of file Config\+Provider.\+cpp.
 
 \mbox{\Hypertarget{class_config_provider_a67cee24b36e7244af0299bb17810c94c}\label{class_config_provider_a67cee24b36e7244af0299bb17810c94c}} 
 \index{ConfigProvider@{ConfigProvider}!getThreshold@{getThreshold}}
@@ -112,7 +118,7 @@ Definition at line 164 of file Config\+Provider.\+cpp.
 
 
 
-Definition at line 172 of file Config\+Provider.\+cpp.
+Definition at line 204 of file Config\+Provider.\+cpp.
 
 Here is the caller graph for this function\+:\nopagebreak
 \begin{figure}[H]
@@ -127,9 +133,12 @@ Here is the caller graph for this function\+:\nopagebreak
 \doxysubsubsection{\texorpdfstring{providePipeline()}{providePipeline()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
 {\footnotesize\ttfamily \mbox{\hyperlink{class_pipeline}{Pipeline}} $\ast$ Config\+Provider\+::provide\+Pipeline (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
 
+Builds a \mbox{\hyperlink{class_pipeline}{Pipeline}} configured in the way specified by the .yaml pointed to by Config\+Provider\+::config\+Path. If the given .yaml contains parameter values that are inconsistent or incorrect, the program may (should) exit with EXIT\+\_\+\+INVALID\+\_\+\+CONFIGURATION. \begin{DoxyReturn}{Returns}
+A pointer to a \mbox{\hyperlink{class_pipeline}{Pipeline}} configured in the way specified by the .yaml at Config\+Provider\+::config\+Path 
+\end{DoxyReturn}
 
 
-Definition at line 73 of file Config\+Provider.\+cpp.
+Definition at line 105 of file Config\+Provider.\+cpp.
 
 Here is the caller graph for this function\+:\nopagebreak
 \begin{figure}[H]
@@ -142,11 +151,19 @@ Here is the caller graph for this function\+:\nopagebreak
 \index{ConfigProvider@{ConfigProvider}!providePipeline@{providePipeline}}
 \index{providePipeline@{providePipeline}!ConfigProvider@{ConfigProvider}}
 \doxysubsubsection{\texorpdfstring{providePipeline()}{providePipeline()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
-{\footnotesize\ttfamily \mbox{\hyperlink{class_pipeline}{Pipeline}} $\ast$ Config\+Provider\+::provide\+Pipeline (\begin{DoxyParamCaption}\item[{std\+::string}]{config\+Path }\end{DoxyParamCaption})}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_pipeline}{Pipeline}} $\ast$ Config\+Provider\+::provide\+Pipeline (\begin{DoxyParamCaption}\item[{std\+::string}]{cfg\+Path }\end{DoxyParamCaption})}
+
+Sets Config\+Provider\+::config\+Path to cfg\+Path and calls \mbox{\hyperlink{class_config_provider_ad826aeb085785b4986542edf9d21d3a5}{provide\+Pipeline()}} 
+\begin{DoxyParams}{Parameters}
+{\em cfg\+Path} & The path to the .yaml containing the requested configurations \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A pointer to a \mbox{\hyperlink{class_pipeline}{Pipeline}} configured in the way specified by the .yaml at cfg\+Path 
+\end{DoxyReturn}
 
 
-
-Definition at line 68 of file Config\+Provider.\+cpp.
+Definition at line 94 of file Config\+Provider.\+cpp.
 
 Here is the call graph for this function\+:\nopagebreak
 \begin{figure}[H]

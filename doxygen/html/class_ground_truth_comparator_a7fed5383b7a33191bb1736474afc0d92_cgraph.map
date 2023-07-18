@@ -1,5 +1,6 @@
 <map id="GroundTruthComparator::GroundTruthComparator" name="GroundTruthComparator::GroundTruthComparator">
-<area shape="rect" id="node1" title=" " alt="" coords="5,23,176,65"/>
-<area shape="rect" id="node2" href="$class_config_provider.html#a48304af9567b7b5bedc210c6c70af5a5" title=" " alt="" coords="224,5,455,32"/>
-<area shape="rect" id="node3" href="$class_config_provider.html#ad826aeb085785b4986542edf9d21d3a5" title=" " alt="" coords="237,56,441,83"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,64,176,105"/>
+<area shape="rect" id="node2" href="$class_config_provider.html#a8c45b595e160bbd9c045a9658cf24ef1" title=" " alt="" coords="255,5,424,47"/>
+<area shape="rect" id="node3" href="$class_config_provider.html#a48304af9567b7b5bedc210c6c70af5a5" title=" " alt="" coords="224,71,455,98"/>
+<area shape="rect" id="node4" href="$class_config_provider.html#ad826aeb085785b4986542edf9d21d3a5" title=" " alt="" coords="237,122,441,149"/>
 </map>

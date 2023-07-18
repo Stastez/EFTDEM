@@ -117,6 +117,8 @@ Collaboration diagram for ICloudSorter:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:aeaea1647d687855868ea77544c852b1d"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="structpoint_grid.html">pointGrid</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_cloud_sorter.html#aeaea1647d687855868ea77544c852b1d">apply</a> (<a class="el" href="structraw_point_cloud.html">rawPointCloud</a> *pointCloud, bool generateOutput)=0</td></tr>
 <tr class="separator:aeaea1647d687855868ea77544c852b1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac31f210c3a56481f8359bd38e53bfaf6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_cloud_sorter.html#ac31f210c3a56481f8359bd38e53bfaf6">setResolution</a> (unsigned long x, unsigned long y)</td></tr>
+<tr class="separator:ac31f210c3a56481f8359bd38e53bfaf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_class_i_pipeline_component"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_class_i_pipeline_component')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="class_i_pipeline_component.html">IPipelineComponent</a></td></tr>
 <tr class="memitem:ace875d6166e77f28243371c17f1a449e inherit pub_methods_class_i_pipeline_component"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_pipeline_component.html#ace875d6166e77f28243371c17f1a449e">~IPipelineComponent</a> ()=default</td></tr>
 <tr class="separator:ace875d6166e77f28243371c17f1a449e inherit pub_methods_class_i_pipeline_component"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -125,6 +127,10 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
+<tr class="memitem:aa6b9d1d5c893fb59ed05e945363e0b96"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_cloud_sorter.html#aa6b9d1d5c893fb59ed05e945363e0b96">resolutionX</a></td></tr>
+<tr class="separator:aa6b9d1d5c893fb59ed05e945363e0b96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8d59a04475978b2d6d8594e04b4bc65"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_cloud_sorter.html#ad8d59a04475978b2d6d8594e04b4bc65">resolutionY</a></td></tr>
+<tr class="separator:ad8d59a04475978b2d6d8594e04b4bc65"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a278f28b697cc16659a5490699950a394"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_cloud_sorter.html#a278f28b697cc16659a5490699950a394">pixelPerUnitX</a> {}</td></tr>
 <tr class="separator:a278f28b697cc16659a5490699950a394"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3fdd946bb6d4d14e2fe26ee6707cd237"><td class="memItemLeft" align="right" valign="top">unsigned long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_i_cloud_sorter.html#a3fdd946bb6d4d14e2fe26ee6707cd237">pixelPerUnitY</a> {}</td></tr>
@@ -193,6 +199,44 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
+<a id="ac31f210c3a56481f8359bd38e53bfaf6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac31f210c3a56481f8359bd38e53bfaf6">&#9670;&nbsp;</a></span>setResolution()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ICloudSorter::setResolution </td>
+          <td>(</td>
+          <td class="paramtype">unsigned long&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned long&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_i_cloud_sorter_8h_source.html#l00025">25</a> of file <a class="el" href="_i_cloud_sorter_8h_source.html">ICloudSorter.h</a>.</p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="a278f28b697cc16659a5490699950a394"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a278f28b697cc16659a5490699950a394">&#9670;&nbsp;</a></span>pixelPerUnitX</h2>
@@ -213,9 +257,8 @@ Here is the caller graph for this function:</div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Specifies the resolution of the resulting <a class="el" href="structpoint_grid.html">pointGrid</a> by defining how many grid cells shall be allocated for each unit of distance on the xy-plane. </p>
 
-<p class="definition">Definition at line <a class="el" href="_i_cloud_sorter_8h_source.html#l00012">12</a> of file <a class="el" href="_i_cloud_sorter_8h_source.html">ICloudSorter.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_i_cloud_sorter_8h_source.html#l00014">14</a> of file <a class="el" href="_i_cloud_sorter_8h_source.html">ICloudSorter.h</a>.</p>
 
 </div>
 </div>
@@ -230,6 +273,55 @@ Here is the caller graph for this function:</div>
       <table class="memname">
         <tr>
           <td class="memname">unsigned long ICloudSorter::pixelPerUnitY {}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="_i_cloud_sorter_8h_source.html#l00015">15</a> of file <a class="el" href="_i_cloud_sorter_8h_source.html">ICloudSorter.h</a>.</p>
+
+</div>
+</div>
+<a id="aa6b9d1d5c893fb59ed05e945363e0b96"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa6b9d1d5c893fb59ed05e945363e0b96">&#9670;&nbsp;</a></span>resolutionX</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned long ICloudSorter::resolutionX</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Specifies the resolution of the resulting <a class="el" href="structpoint_grid.html">pointGrid</a> by defining how many grid cells shall be allocated for each unit of distance on the xy-plane. </p>
+
+<p class="definition">Definition at line <a class="el" href="_i_cloud_sorter_8h_source.html#l00012">12</a> of file <a class="el" href="_i_cloud_sorter_8h_source.html">ICloudSorter.h</a>.</p>
+
+</div>
+</div>
+<a id="ad8d59a04475978b2d6d8594e04b4bc65"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8d59a04475978b2d6d8594e04b4bc65">&#9670;&nbsp;</a></span>resolutionY</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">unsigned long ICloudSorter::resolutionY</td>
         </tr>
       </table>
   </td>

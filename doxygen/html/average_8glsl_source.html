@@ -95,8 +95,8 @@ $(document).ready(function(){initNavTree('average_8glsl_source.html',''); initRe
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;layout (binding = EFTDEM_SUM_BUFFER) restrict buffer sumsBuffer{</div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;    float sums[];</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;};</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;layout (binding = EFTDEM_AMOUNT_BUFFER) restrict buffer amountsBuffer{</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    uint amounts[];</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;layout (binding = EFTDEM_TOTAL_WEIGHT_BUFFER) restrict buffer amountsBuffer{</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    float amounts[];</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;};</div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;layout (binding = EFTDEM_AVERAGE_BUFFER) restrict buffer averagesBuffer{</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    float average[];</div>
@@ -118,7 +118,7 @@ $(document).ready(function(){initNavTree('average_8glsl_source.html',''); initRe
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    coord1D = calculate1DCoordinate(correctedGlobalInvocation);</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    average[coord1D] = (heights[coord1D] &gt; 0.)</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        ? heights[coord1D]</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        : ((amounts[coord1D] == 0)</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        : ((amounts[coord1D] == 0.0)</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;            ? 0.0</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;            : sums[coord1D] / amounts[coord1D]);</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;}</div>

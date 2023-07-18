@@ -1,4 +1,9 @@
 <map id="TiffPipeline::execute" name="TiffPipeline::execute">
-<area shape="rect" id="node1" title=" " alt="" coords="5,5,145,32"/>
-<area shape="rect" id="node2" href="$class_g_tiff_reader.html#a493008bb067fe8767f815273ad88d76e" title=" " alt="" coords="193,5,324,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,35,145,61"/>
+<area shape="rect" id="node2" href="$class_g_tiff_reader.html#afb2d4226bd5a6ebc69bf36d877af4894" title=" " alt="" coords="212,5,343,32"/>
+<area shape="rect" id="node3" href="$class_tiff_pipeline.html#a737defaa488d58dde75e80ebec1e0436" title=" " alt="" coords="193,57,361,98"/>
+<area shape="rect" id="node4" href="$class_g_l_handler.html#a83527acf2d2cefec1518c457909eba37" title=" " alt="" coords="410,13,566,40"/>
+<area shape="rect" id="node6" href="$class_g_l_handler.html#a2449a095077f7ecf32ea7ed01f8d5b16" title=" " alt="" coords="409,64,567,91"/>
+<area shape="rect" id="node7" href="$_data_structures_8cpp.html#a0d2213a585f822b79ed952a3982faf60" title=" " alt="" coords="433,115,543,141"/>
+<area shape="rect" id="node5" href="$_g_l_handler_8cpp.html#a76259e93488aa188c59d8b8a80517f74" title=" " alt="" coords="615,13,741,40"/>
 </map>

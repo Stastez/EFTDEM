@@ -159,8 +159,14 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Constructs a <a class="el" href="class_filler_loop.html">FillerLoop</a> that will apply all IHeightMapFillers given by distinctFillers sequentially. If any filler does not use OpenGL, the <a class="el" href="class_filler_loop.html">FillerLoop</a> copies this behaviour outwardly. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">distinctFillers</td><td>A vector containing IHeightMapFillers in the order they are supposed to be applied in </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p class="definition">Definition at line <a class="el" href="_filler_loop_8cpp_source.html#l00007">7</a> of file <a class="el" href="_filler_loop_8cpp_source.html">FillerLoop.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_filler_loop_8cpp_source.html#l00012">12</a> of file <a class="el" href="_filler_loop_8cpp_source.html">FillerLoop.cpp</a>.</p>
 
 </div>
 </div>
@@ -223,9 +229,10 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Use the currently attached <a class="el" href="class_i_height_map_filler.html">IHeightMapFiller</a> to fill holes in the <a class="el" href="structheight_map.html">heightMap</a> given by map. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Fill the given <a class="el" href="structheight_map.html">heightMap</a> using the previously provided IHeightMapFillers sequentially. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">generateOutput</td><td>Whether to return a fully formed <a class="el" href="structheight_map.html">heightMap</a> (including the actual heightData for each pixel). This may be set to false if the following stage uses OpenGL and can employ the already set buffers on the GPU </td></tr>
+    <tr><td class="paramname">map</td><td>The <a class="el" href="structheight_map.html">heightMap</a> to be filled </td></tr>
+    <tr><td class="paramname">generateOutput</td><td>Whether or not to return a fully formed <a class="el" href="structheight_map.html">heightMap</a> (including the actual heightData for each pixel). This may be set to false if the following stage uses OpenGL and can employ the already set buffers on the GPU </td></tr>
   </table>
   </dd>
 </dl>
@@ -233,7 +240,7 @@ Additional Inherited Members</h2></td></tr>
 
 <p>Implements <a class="el" href="class_i_height_map_filler.html#a39f19174dfe585c744d045349914489c">IHeightMapFiller</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="_filler_loop_8cpp_source.html#l00015">15</a> of file <a class="el" href="_filler_loop_8cpp_source.html">FillerLoop.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_filler_loop_8cpp_source.html#l00027">27</a> of file <a class="el" href="_filler_loop_8cpp_source.html">FillerLoop.cpp</a>.</p>
 
 </div>
 </div>

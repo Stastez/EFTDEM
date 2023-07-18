@@ -1,5 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_i_pipeline.html" title=" " alt="" coords="5,31,77,57"/>
-<area shape="rect" id="node2" href="$class_pipeline.html" title=" " alt="" coords="135,5,203,32"/>
-<area shape="rect" id="node3" href="$class_tiff_pipeline.html" title=" " alt="" coords="125,56,212,83"/>
+<area shape="rect" id="node1" href="$class_i_comparator.html" title=" " alt="" coords="5,31,100,57"/>
+<area shape="rect" id="node2" href="$class_ground_truth_comparator.html" title=" " alt="" coords="148,5,311,32"/>
+<area shape="rect" id="node3" href="$class_radar_comparator.html" title=" " alt="" coords="167,56,292,83"/>
 </map>

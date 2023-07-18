@@ -5,6 +5,7 @@ var _data_structures_8h =
     [ "rawPointCloud", "structraw_point_cloud.html", "structraw_point_cloud" ],
     [ "pointGrid", "structpoint_grid.html", "structpoint_grid" ],
     [ "heightMap", "structheight_map.html", "structheight_map" ],
+    [ "denormalizedHeightMap", "structdenormalized_height_map.html", "structdenormalized_height_map" ],
     [ "add", "_data_structures_8h.html#aa89211e5d7aa177059e8e4160a8023a4", null ],
     [ "calculate1DCoordinate", "_data_structures_8h.html#a91ca5ac9d86d74806c0253288d006b9b", null ],
     [ "calculate1DCoordinate", "_data_structures_8h.html#acd2bfce29acf1b1411a9a4ff97ad6839", null ],

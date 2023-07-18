@@ -1,5 +1,7 @@
 <map id="GLHandler::initializeGL" name="GLHandler::initializeGL">
-<area shape="rect" id="node1" title=" " alt="" coords="416,5,572,32"/>
-<area shape="rect" id="node2" href="$class_pipeline.html#a667c1dc404c27551d94d6600c2a56e50" title=" " alt="" coords="5,5,128,32"/>
-<area shape="rect" id="node3" href="$class_pipeline.html#a87e22508386dec68911fa9ea445bcaf5" title=" " alt="" coords="176,31,368,57"/>
+<area shape="rect" id="node1" title=" " alt="" coords="433,31,589,57"/>
+<area shape="rect" id="node2" href="$class_pipeline.html#a667c1dc404c27551d94d6600c2a56e50" title=" " alt="" coords="14,5,137,32"/>
+<area shape="rect" id="node3" href="$class_pipeline.html#a87e22508386dec68911fa9ea445bcaf5" title=" " alt="" coords="193,31,385,57"/>
+<area shape="rect" id="node4" href="$class_tiff_pipeline.html#a737defaa488d58dde75e80ebec1e0436" title=" " alt="" coords="205,82,373,123"/>
+<area shape="rect" id="node5" href="$class_tiff_pipeline.html#a252a281e9e4f11b159a5c635fc51ce48" title=" " alt="" coords="5,89,145,116"/>
 </map>

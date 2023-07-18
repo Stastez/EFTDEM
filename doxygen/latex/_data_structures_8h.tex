@@ -8,7 +8,8 @@ Include dependency graph for Data\+Structures.\+h\+:\nopagebreak
 \includegraphics[width=244pt]{_data_structures_8h__incl}
 \end{center}
 \end{figure}
-This graph shows which files directly or indirectly include this file\+:\nopagebreak
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -27,6 +28,8 @@ struct \mbox{\hyperlink{structraw_point_cloud}{raw\+Point\+Cloud}}
 struct \mbox{\hyperlink{structpoint_grid}{point\+Grid}}
 \item 
 struct \mbox{\hyperlink{structheight_map}{height\+Map}}
+\item 
+struct \mbox{\hyperlink{structdenormalized_height_map}{denormalized\+Height\+Map}}
 \end{DoxyCompactItemize}
 \doxysubsection*{Functions}
 \begin{DoxyCompactItemize}
@@ -84,8 +87,13 @@ Appends the given point to the vector situated at position (x,y) of grid g
 \hline
 \end{DoxyParams}
 
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::exception} & If the given (x,y) are out of bounds for g \\
+\hline
+\end{DoxyExceptions}
 
-Definition at line 65 of file Data\+Structures.\+cpp.
+
+Definition at line 77 of file Data\+Structures.\+cpp.
 
 Here is the call graph for this function\+:\nopagebreak
 \begin{figure}[H]
@@ -107,9 +115,21 @@ Here is the caller graph for this function\+:\nopagebreak
 \doxysubsubsection{\texorpdfstring{calculate1DCoordinate()}{calculate1DCoordinate()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
 {\footnotesize\ttfamily unsigned long long calculate1\+DCoordinate (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$}]{h,  }\item[{unsigned long}]{x,  }\item[{unsigned long}]{y }\end{DoxyParamCaption})}
 
+Calculate the 1D array coordinate associated with (x,y) in \mbox{\hyperlink{structheight_map}{height\+Map}} h 
+\begin{DoxyParams}{Parameters}
+{\em h} & The reference \mbox{\hyperlink{structheight_map}{height\+Map}} \\
+\hline
+{\em x} & \\
+\hline
+{\em y} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The 1D representation of (x,y) in h 
+\end{DoxyReturn}
 
 
-Definition at line 17 of file Data\+Structures.\+cpp.
+Definition at line 24 of file Data\+Structures.\+cpp.
 
 \mbox{\Hypertarget{_data_structures_8h_acd2bfce29acf1b1411a9a4ff97ad6839}\label{_data_structures_8h_acd2bfce29acf1b1411a9a4ff97ad6839}} 
 \index{DataStructures.h@{DataStructures.h}!calculate1DCoordinate@{calculate1DCoordinate}}
@@ -127,7 +147,7 @@ Calculate the 1D array coordinate associated with (x,y) in grid g
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-
+The 1D representation of (x,y) in g 
 \end{DoxyReturn}
 
 
@@ -160,7 +180,7 @@ The denormalized value
 \end{DoxyReturn}
 
 
-Definition at line 89 of file Data\+Structures.\+cpp.
+Definition at line 101 of file Data\+Structures.\+cpp.
 
 Here is the caller graph for this function\+:\nopagebreak
 \begin{figure}[H]
@@ -175,9 +195,21 @@ Here is the caller graph for this function\+:\nopagebreak
 \doxysubsubsection{\texorpdfstring{denormalizeValue()}{denormalizeValue()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
 {\footnotesize\ttfamily \mbox{\hyperlink{structdouble_point}{double\+Point}} denormalize\+Value (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structfloat_point}{float\+Point}}}]{value,  }\item[{\mbox{\hyperlink{structdouble_point}{double\+Point}}}]{min,  }\item[{\mbox{\hyperlink{structdouble_point}{double\+Point}}}]{max }\end{DoxyParamCaption})}
 
+Denormalizes the given \mbox{\hyperlink{structfloat_point}{float\+Point}} component-\/wise from the range of \mbox{[}0,1\mbox{]} to \mbox{[}min,max\mbox{]}. 
+\begin{DoxyParams}{Parameters}
+{\em value} & The \mbox{\hyperlink{structfloat_point}{float\+Point}} to be denormalized \\
+\hline
+{\em min} & The \mbox{\hyperlink{structdouble_point}{double\+Point}} containing the minimum values for x,y,z \\
+\hline
+{\em max} & The \mbox{\hyperlink{structdouble_point}{double\+Point}} containing the maximum values for x,y,z \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A \mbox{\hyperlink{structdouble_point}{double\+Point}} with x,y,z in \mbox{[}min,max\mbox{]} 
+\end{DoxyReturn}
 
 
-Definition at line 100 of file Data\+Structures.\+cpp.
+Definition at line 126 of file Data\+Structures.\+cpp.
 
 Here is the call graph for this function\+:\nopagebreak
 \begin{figure}[H]
@@ -192,9 +224,17 @@ Here is the call graph for this function\+:\nopagebreak
 \doxysubsubsection{\texorpdfstring{emptyHeightMapFromHeightMap()}{emptyHeightMapFromHeightMap()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{structheight_map}{height\+Map}}$\ast$ empty\+Height\+Map\+From\+Height\+Map (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$}]{map }\end{DoxyParamCaption})}
 
+Allocates a new, empty \mbox{\hyperlink{structheight_map}{height\+Map}} with the same metadata (e.\+g., resolution) as the given map. 
+\begin{DoxyParams}{Parameters}
+{\em map} & The \mbox{\hyperlink{structheight_map}{height\+Map}} of which to copy the metadata \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A pointer to an empty \mbox{\hyperlink{structheight_map}{height\+Map}} 
+\end{DoxyReturn}
 
 
-Definition at line 116 of file Data\+Structures.\+cpp.
+Definition at line 152 of file Data\+Structures.\+cpp.
 
 Here is the caller graph for this function\+:\nopagebreak
 \begin{figure}[H]
@@ -209,9 +249,17 @@ Here is the caller graph for this function\+:\nopagebreak
 \doxysubsubsection{\texorpdfstring{emptyHeightMapFromPointGrid()}{emptyHeightMapFromPointGrid()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{structheight_map}{height\+Map}}$\ast$ empty\+Height\+Map\+From\+Point\+Grid (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structpoint_grid}{point\+Grid}} $\ast$}]{grid }\end{DoxyParamCaption})}
 
+Allocates a new, empty \mbox{\hyperlink{structheight_map}{height\+Map}} with the same metadata (e.\+g., resolution) as the given grid. 
+\begin{DoxyParams}{Parameters}
+{\em grid} & The \mbox{\hyperlink{structpoint_grid}{point\+Grid}} of which to copy the metadata \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A pointer to an empty \mbox{\hyperlink{structheight_map}{height\+Map}} 
+\end{DoxyReturn}
 
 
-Definition at line 107 of file Data\+Structures.\+cpp.
+Definition at line 138 of file Data\+Structures.\+cpp.
 
 Here is the caller graph for this function\+:\nopagebreak
 \begin{figure}[H]
@@ -226,9 +274,17 @@ Here is the caller graph for this function\+:\nopagebreak
 \doxysubsubsection{\texorpdfstring{emptyPointCloudFromHeightMap()}{emptyPointCloudFromHeightMap()}}
 {\footnotesize\ttfamily \mbox{\hyperlink{structraw_point_cloud}{raw\+Point\+Cloud}}$\ast$ empty\+Point\+Cloud\+From\+Height\+Map (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structheight_map}{height\+Map}} $\ast$}]{map }\end{DoxyParamCaption})}
 
+Allocates a new, empty \mbox{\hyperlink{structraw_point_cloud}{raw\+Point\+Cloud}} with the same metadata (i.\+e., min and max) as the given map. 
+\begin{DoxyParams}{Parameters}
+{\em map} & The \mbox{\hyperlink{structheight_map}{height\+Map}} of which to copy the metadata \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A pointer to an empty \mbox{\hyperlink{structraw_point_cloud}{raw\+Point\+Cloud}} 
+\end{DoxyReturn}
 
 
-Definition at line 125 of file Data\+Structures.\+cpp.
+Definition at line 166 of file Data\+Structures.\+cpp.
 
 Here is the caller graph for this function\+:\nopagebreak
 \begin{figure}[H]
@@ -243,7 +299,7 @@ Here is the caller graph for this function\+:\nopagebreak
 \doxysubsubsection{\texorpdfstring{get()}{get()}}
 {\footnotesize\ttfamily std\+::vector$<$\mbox{\hyperlink{structfloat_point}{float\+Point}}$>$ get (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structpoint_grid}{point\+Grid}} $\ast$}]{g,  }\item[{unsigned long}]{x,  }\item[{unsigned long}]{y }\end{DoxyParamCaption})}
 
-Returns the vector situated at posiiton (x,y) of grid g 
+Returns the vector situated at position (x,y) of grid g 
 \begin{DoxyParams}{Parameters}
 {\em g} & The \mbox{\hyperlink{structpoint_grid}{point\+Grid}} to be accessed \\
 \hline
@@ -252,12 +308,17 @@ Returns the vector situated at posiiton (x,y) of grid g
 {\em y} & The y coordinate of the requested position (y in \mbox{[}0, g-\/$>$resolutionY -\/ 1\mbox{]}) \\
 \hline
 \end{DoxyParams}
-\begin{DoxyReturn}{Returns}
 
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::exception} & If the given (x,y) are out of bounds for g \\
+\hline
+\end{DoxyExceptions}
+\begin{DoxyReturn}{Returns}
+The \mbox{\hyperlink{structfloat_point}{float\+Point}} vector situated at (x,y) in g 
 \end{DoxyReturn}
 
 
-Definition at line 41 of file Data\+Structures.\+cpp.
+Definition at line 51 of file Data\+Structures.\+cpp.
 
 Here is the call graph for this function\+:\nopagebreak
 \begin{figure}[H]
@@ -272,9 +333,17 @@ Here is the call graph for this function\+:\nopagebreak
 \doxysubsubsection{\texorpdfstring{mergeDoublePoints()}{mergeDoublePoints()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
 {\footnotesize\ttfamily std\+::pair$<$\mbox{\hyperlink{structdouble_point}{double\+Point}}, \mbox{\hyperlink{structdouble_point}{double\+Point}}$>$ merge\+Double\+Points (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ \mbox{\hyperlink{structdouble_point}{double\+Point}} $>$ \&}]{points }\end{DoxyParamCaption})}
 
+Calculates the absolute component-\/wise minimum point of all points in points, as well as the absolute component-\/wise maximum point. 
+\begin{DoxyParams}{Parameters}
+{\em points} & A vector of double\+Points \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A pair containing 1) the absolute minimum point and 2) the absolute maximum point 
+\end{DoxyReturn}
 
 
-Definition at line 150 of file Data\+Structures.\+cpp.
+Definition at line 203 of file Data\+Structures.\+cpp.
 
 Here is the call graph for this function\+:\nopagebreak
 \begin{figure}[H]
@@ -289,11 +358,22 @@ Here is the call graph for this function\+:\nopagebreak
 \doxysubsubsection{\texorpdfstring{mergeDoublePoints()}{mergeDoublePoints()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
 {\footnotesize\ttfamily std\+::pair$<$\mbox{\hyperlink{structdouble_point}{double\+Point}}, \mbox{\hyperlink{structdouble_point}{double\+Point}}$>$ merge\+Double\+Points (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdouble_point}{double\+Point}}}]{p1,  }\item[{\mbox{\hyperlink{structdouble_point}{double\+Point}}}]{p2 }\end{DoxyParamCaption})}
 
+Calculates the absolute component-\/wise minimum point of p1 and p2 as well as the absolute component-\/wise maximum point. 
+\begin{DoxyParams}{Parameters}
+{\em p1} & One \mbox{\hyperlink{structdouble_point}{double\+Point}} \\
+\hline
+{\em p2} & Another \mbox{\hyperlink{structdouble_point}{double\+Point}} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A pair containing 1) the absolute minimum point and 2) the absolute maximum point 
+\end{DoxyReturn}
 
 
-Definition at line 133 of file Data\+Structures.\+cpp.
+Definition at line 180 of file Data\+Structures.\+cpp.
 
-Here is the caller graph for this function\+:\nopagebreak
+Here is the caller graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -306,9 +386,17 @@ Here is the caller graph for this function\+:\nopagebreak
 \doxysubsubsection{\texorpdfstring{mergeFloatPoints()}{mergeFloatPoints()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
 {\footnotesize\ttfamily std\+::pair$<$\mbox{\hyperlink{structfloat_point}{float\+Point}}, \mbox{\hyperlink{structfloat_point}{float\+Point}}$>$ merge\+Float\+Points (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ \mbox{\hyperlink{structfloat_point}{float\+Point}} $>$ \&}]{points }\end{DoxyParamCaption})}
 
+Calculates the absolute component-\/wise minimum point of all points in points, as well as the absolute component-\/wise maximum point. 
+\begin{DoxyParams}{Parameters}
+{\em points} & A vector of float\+Points \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A pair containing 1) the absolute minimum point and 2) the absolute maximum point 
+\end{DoxyReturn}
 
 
-Definition at line 179 of file Data\+Structures.\+cpp.
+Definition at line 244 of file Data\+Structures.\+cpp.
 
 Here is the call graph for this function\+:\nopagebreak
 \begin{figure}[H]
@@ -323,9 +411,19 @@ Here is the call graph for this function\+:\nopagebreak
 \doxysubsubsection{\texorpdfstring{mergeFloatPoints()}{mergeFloatPoints()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
 {\footnotesize\ttfamily std\+::pair$<$\mbox{\hyperlink{structfloat_point}{float\+Point}}, \mbox{\hyperlink{structfloat_point}{float\+Point}}$>$ merge\+Float\+Points (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structfloat_point}{float\+Point}}}]{p1,  }\item[{\mbox{\hyperlink{structfloat_point}{float\+Point}}}]{p2 }\end{DoxyParamCaption})}
 
+Calculates the absolute component-\/wise minimum point of p1 and p2 as well as the absolute component-\/wise maximum point. 
+\begin{DoxyParams}{Parameters}
+{\em p1} & One \mbox{\hyperlink{structfloat_point}{float\+Point}} \\
+\hline
+{\em p2} & Another \mbox{\hyperlink{structfloat_point}{float\+Point}} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A pair containing 1) the absolute minimum point and 2) the absolute maximum point 
+\end{DoxyReturn}
 
 
-Definition at line 162 of file Data\+Structures.\+cpp.
+Definition at line 221 of file Data\+Structures.\+cpp.
 
 Here is the caller graph for this function\+:\nopagebreak
 \begin{figure}[H]
@@ -354,13 +452,14 @@ The normalized value
 \end{DoxyReturn}
 
 
-Definition at line 77 of file Data\+Structures.\+cpp.
+Definition at line 89 of file Data\+Structures.\+cpp.
 
-Here is the caller graph for this function\+:\nopagebreak
+Here is the caller graph for this function\+:
+\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
-\includegraphics[width=293pt]{_data_structures_8h_a0d2213a585f822b79ed952a3982faf60_icgraph}
+\includegraphics[width=350pt]{_data_structures_8h_a0d2213a585f822b79ed952a3982faf60_icgraph}
 \end{center}
 \end{figure}
 \mbox{\Hypertarget{_data_structures_8h_a03b900f8e95baae579a98a79d397b873}\label{_data_structures_8h_a03b900f8e95baae579a98a79d397b873}} 
@@ -369,9 +468,21 @@ Here is the caller graph for this function\+:\nopagebreak
 \doxysubsubsection{\texorpdfstring{normalizeValue()}{normalizeValue()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
 {\footnotesize\ttfamily \mbox{\hyperlink{structfloat_point}{float\+Point}} normalize\+Value (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structdouble_point}{double\+Point}}}]{value,  }\item[{\mbox{\hyperlink{structdouble_point}{double\+Point}}}]{min,  }\item[{\mbox{\hyperlink{structdouble_point}{double\+Point}}}]{max }\end{DoxyParamCaption})}
 
+Normalizes the given \mbox{\hyperlink{structdouble_point}{double\+Point}} component-\/wise from the range of \mbox{[}min,max\mbox{]} to \mbox{[}0,1\mbox{]} 
+\begin{DoxyParams}{Parameters}
+{\em value} & The \mbox{\hyperlink{structdouble_point}{double\+Point}} to be normalized \\
+\hline
+{\em min} & The \mbox{\hyperlink{structdouble_point}{double\+Point}} containing the minimum values for x,y,z \\
+\hline
+{\em max} & The \mbox{\hyperlink{structdouble_point}{double\+Point}} containing the maximum values for x,y,z \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A \mbox{\hyperlink{structfloat_point}{float\+Point}} with x,y,z in \mbox{[}0,1\mbox{]} 
+\end{DoxyReturn}
 
 
-Definition at line 93 of file Data\+Structures.\+cpp.
+Definition at line 112 of file Data\+Structures.\+cpp.
 
 Here is the call graph for this function\+:\nopagebreak
 \begin{figure}[H]
@@ -398,8 +509,13 @@ Replaces the vector situated at position (x,y) of grid g with value
 \hline
 \end{DoxyParams}
 
+\begin{DoxyExceptions}{Exceptions}
+{\em std\+::exception} & If the given (x,y) are out of bounds for g \\
+\hline
+\end{DoxyExceptions}
 
-Definition at line 53 of file Data\+Structures.\+cpp.
+
+Definition at line 64 of file Data\+Structures.\+cpp.
 
 Here is the call graph for this function\+:\nopagebreak
 \begin{figure}[H]

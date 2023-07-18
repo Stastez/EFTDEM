@@ -165,8 +165,14 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Constructs a new ConfigReader while setting the path of the .yaml to read from later. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">configPath</td><td>The path to the .yaml to be read </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p class="definition">Definition at line <a class="el" href="_config_provider_8cpp_source.html#l00020">20</a> of file <a class="el" href="_config_provider_8cpp_source.html">ConfigProvider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_config_provider_8cpp_source.html#l00024">24</a> of file <a class="el" href="_config_provider_8cpp_source.html">ConfigProvider.cpp</a>.</p>
 
 </div>
 </div>
@@ -211,14 +217,15 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_config_provider_8cpp_source.html#l00176">176</a> of file <a class="el" href="_config_provider_8cpp_source.html">ConfigProvider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_config_provider_8cpp_source.html#l00208">208</a> of file <a class="el" href="_config_provider_8cpp_source.html">ConfigProvider.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="class_config_provider_a8c45b595e160bbd9c045a9658cf24ef1_icgraph.png" border="0" usemap="#aclass_config_provider_a8c45b595e160bbd9c045a9658cf24ef1_icgraph" alt=""/></div>
 <map name="aclass_config_provider_a8c45b595e160bbd9c045a9658cf24ef1_icgraph" id="aclass_config_provider_a8c45b595e160bbd9c045a9658cf24ef1_icgraph">
-<area shape="rect" title=" " alt="" coords="289,5,459,47"/>
-<area shape="rect" href="class_radar_comparator.html#a6822357faf3bf9964e9d4fd0581616eb" title=" " alt="" coords="5,13,241,39"/>
+<area shape="rect" title=" " alt="" coords="289,35,459,76"/>
+<area shape="rect" href="class_ground_truth_comparator.html#a7fed5383b7a33191bb1736474afc0d92" title=" " alt="" coords="38,5,209,47"/>
+<area shape="rect" href="class_radar_comparator.html#a6822357faf3bf9964e9d4fd0581616eb" title=" " alt="" coords="5,71,241,98"/>
 </map>
 </div>
 
@@ -239,7 +246,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_config_provider_8cpp_source.html#l00168">168</a> of file <a class="el" href="_config_provider_8cpp_source.html">ConfigProvider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_config_provider_8cpp_source.html#l00200">200</a> of file <a class="el" href="_config_provider_8cpp_source.html">ConfigProvider.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -268,7 +275,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_config_provider_8cpp_source.html#l00164">164</a> of file <a class="el" href="_config_provider_8cpp_source.html">ConfigProvider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_config_provider_8cpp_source.html#l00196">196</a> of file <a class="el" href="_config_provider_8cpp_source.html">ConfigProvider.cpp</a>.</p>
 
 </div>
 </div>
@@ -287,7 +294,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="_config_provider_8cpp_source.html#l00172">172</a> of file <a class="el" href="_config_provider_8cpp_source.html">ConfigProvider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_config_provider_8cpp_source.html#l00204">204</a> of file <a class="el" href="_config_provider_8cpp_source.html">ConfigProvider.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -314,8 +321,9 @@ Here is the caller graph for this function:</div>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Builds a <a class="el" href="class_pipeline.html">Pipeline</a> configured in the way specified by the .yaml pointed to by ConfigProvider::configPath. If the given .yaml contains parameter values that are inconsistent or incorrect, the program may (should) exit with EXIT_INVALID_CONFIGURATION. </p><dl class="section return"><dt>Returns</dt><dd>A pointer to a <a class="el" href="class_pipeline.html">Pipeline</a> configured in the way specified by the .yaml at ConfigProvider::configPath </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_config_provider_8cpp_source.html#l00073">73</a> of file <a class="el" href="_config_provider_8cpp_source.html">ConfigProvider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_config_provider_8cpp_source.html#l00105">105</a> of file <a class="el" href="_config_provider_8cpp_source.html">ConfigProvider.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -340,13 +348,20 @@ Here is the caller graph for this function:</div>
           <td class="memname"><a class="el" href="class_pipeline.html">Pipeline</a> * ConfigProvider::providePipeline </td>
           <td>(</td>
           <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>configPath</em></td><td>)</td>
+          <td class="paramname"><em>cfgPath</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
+<p>Sets ConfigProvider::configPath to cfgPath and calls <a class="el" href="class_config_provider.html#ad826aeb085785b4986542edf9d21d3a5">providePipeline()</a> </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cfgPath</td><td>The path to the .yaml containing the requested configurations </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A pointer to a <a class="el" href="class_pipeline.html">Pipeline</a> configured in the way specified by the .yaml at cfgPath </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="_config_provider_8cpp_source.html#l00068">68</a> of file <a class="el" href="_config_provider_8cpp_source.html">ConfigProvider.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_config_provider_8cpp_source.html#l00094">94</a> of file <a class="el" href="_config_provider_8cpp_source.html">ConfigProvider.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">

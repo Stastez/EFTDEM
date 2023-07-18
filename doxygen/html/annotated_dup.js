@@ -3,6 +3,7 @@ var annotated_dup =
     [ "bufferSpecifications", "structbuffer_specifications.html", "structbuffer_specifications" ],
     [ "ClosingFilter", "class_closing_filter.html", "class_closing_filter" ],
     [ "ConfigProvider", "class_config_provider.html", "class_config_provider" ],
+    [ "denormalizedHeightMap", "structdenormalized_height_map.html", "structdenormalized_height_map" ],
     [ "doublePoint", "structdouble_point.html", "structdouble_point" ],
     [ "FillerLoop", "class_filler_loop.html", "class_filler_loop" ],
     [ "floatPoint", "structfloat_point.html", "structfloat_point" ],
