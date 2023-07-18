@@ -12,6 +12,7 @@ private:
 public:
     explicit GroundTruthComparator(std::vector<std::string> configPaths);
     std::vector<rawPointCloud *> setupPointClouds() override;
+    void writeComparisons(std::vector<heightMap *> comparisons) override;
 
     ~GroundTruthComparator() override;
 };

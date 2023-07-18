@@ -65,8 +65,6 @@ std::vector<heightMap *> IComparator::compareMaps() {
 }
 
 void IComparator::writeComparisons(std::vector<heightMap *> comparisons) {
-    writeThresholdMaps(comparisons, destinationPaths);
-
     for (auto i = 0ul; i < comparisons.size(); i++) {
         auto writer = new GTiffWriter(true, "", betterCompression.at(i));
 
