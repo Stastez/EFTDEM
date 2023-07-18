@@ -60,7 +60,7 @@ add_executable(EFTDEM
         RadialEroder.cpp
         RadialEroder.h
         RadialFiller.cpp
-        RadialFiller.h)
+        RadialFiller.h DummyFiller.cpp DummyFiller.h)
 
 if(MSVC)
     target_compile_options(EFTDEM PRIVATE /W4)

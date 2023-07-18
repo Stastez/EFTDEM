@@ -66,7 +66,7 @@ denormalizedHeightMap * GTiffReader::apply(bool generateOutput) {
             .resolutionX = resolutionX,
             .resolutionY = resolutionY,
             .dataSize = (long) (resolutionX * resolutionY * sizeof(float)),
-            .min = doublePoint{std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), minHeight},
-            .max = doublePoint{std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), maxHeight}
+            .min = doublePoint{std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), minHeight, -1},
+            .max = doublePoint{std::numeric_limits<double>::lowest(), std::numeric_limits<double>::lowest(), maxHeight, -1}
     };
 }

@@ -11,6 +11,7 @@
 #include "GroundRadarReader.h"
 #include "FillerLoop.h"
 #include "RadialFiller.h"
+#include "DummyFiller.h"
 
 #include <iostream>
 #include <utility>
@@ -171,11 +172,15 @@ Pipeline *ConfigProvider::providePipeline() {
         auto batchSizeTest = checkValidityAndReturn(
                 {"HeightMapFillerOptions", "radialFillerOptions", "batchSize"}, false);
         auto batchSize = (batchSizeTest.second) ? batchSizeTest.first.as<unsigned int>() : 0;
-        auto maxHoleRadius = checkValidityAndReturn({"HeightMapFillerOptions", "radialFillerOptions", "maxHoleRadius"}, true).first.as<unsigned int>();
-        auto useBatching = checkValidityAndReturn({"HeightMapFillerOptions", "radialFillerOptions", "useBatching"}, false);
+        auto maxHoleRadius = checkValidityAndReturn({"HeightMapFillerOptions", "radialFillerOptions", "maxHoleRadius"},
+                                                    true).first.as<unsigned int>();
+        auto useBatching = checkValidityAndReturn({"HeightMapFillerOptions", "radialFillerOptions", "useBatching"},
+                                                  false);
         auto batched = !(useBatching.second) || useBatching.first.as<bool>();
 
         filler = new RadialFiller(glHandler, maxHoleRadius, batched, batchSize);
+    } else if (fillingAlgorithm == "dummy") {
+        filler = new DummyFiller();
     } else {
         std::cout << fillingAlgorithm << " is either misspelled or not implemented." << std::endl;
         exit(Pipeline::EXIT_INVALID_CONFIGURATION);

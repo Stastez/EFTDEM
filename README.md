@@ -5,7 +5,7 @@
 Provide exactly one .yaml config of the type presented below as a command line argument.
 
 ### Comparison between our filling algorithms and a ground-truth DEM
-Provide exactly one .yaml config of the type presented below, as well as exactly one .tiff DEM as a command line argument.
+Provide exactly one .tiff (must be tiff, not tif) followed by exactly one .yaml config of the type presented below as a command line argument.
 
 ### Comparison between several layers of ground radar
 Provide at least two .yaml configs of the type presented below.
@@ -30,7 +30,7 @@ CloudRasterizerOptions:
 HeightMapFillerOptions:
   useGPU: true
 
-  # Currently implemented: closingFilter, inverseDistanceWeightedFilter, radialFiller
+  # Currently implemented: closingFilter, inverseDistanceWeightedFilter, radialFiller, dummy (use dummy to output the unfilled rasterized version)
   filler: inverseDistanceWeightedFilter
 
   # for closingFilter and inverseDistanceWeightedFilter
