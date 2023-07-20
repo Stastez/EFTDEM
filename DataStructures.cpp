@@ -4,6 +4,26 @@
 #include <iostream>
 
 /**
+ * Converts a doublePoint to a printable stream.
+ * @param os The stream to be printed on
+ * @param point The doublePoint to be printed
+ * @return A reference to the stream containing the original stream and the doublePoint
+ */
+std::ostream &operator<<(std::ostream &os, doublePoint const &point) {
+    return os << "doublePoint :: x: " << point.x << ", y: " << point.y << ", z: " << point.z;
+}
+
+/**
+ * Converts a floatPoint to a printable stream.
+ * @param os The stream to be printed on
+ * @param point The floatPoint to be printed
+ * @return A reference to the stream containing the original stream and the floatPoint
+ */
+std::ostream &operator<<(std::ostream &os, floatPoint const &point) {
+    return os << "floatPoint :: x: " << point.x << ", y: " << point.y << ", z: " << point.z;
+}
+
+/**
  * Calculate the 1D array coordinate associated with (x,y) in grid g
  * @param g The reference grid
  * @param x

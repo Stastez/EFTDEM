@@ -3,6 +3,7 @@
 #define EFTDEM_DATASTRUCTURES_H
 
 #include <vector>
+#include <ostream>
 
 struct doublePoint {
     double x, y, z;
@@ -13,6 +14,9 @@ struct floatPoint {
     float x, y, z;
     int intensity;
 };
+
+std::ostream &operator<<(std::ostream &os, doublePoint const &point);
+std::ostream &operator<<(std::ostream &os, floatPoint const &point);
 
 struct rawPointCloud {
     std::vector<doublePoint> groundPoints;
