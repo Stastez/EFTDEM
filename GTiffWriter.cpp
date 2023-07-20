@@ -63,7 +63,8 @@ void GTiffWriter::apply(const heightMap *map, bool generateOutput) {
         return;
     }
     auto rasterBand = dataset->GetRasterBand(1);
-    (void)! rasterBand->RasterIO(GF_Write, 0, 0, resolutionX, resolutionY, denormalizedHeights, resolutionX, resolutionY, GDT_Float64, 0, 0, nullptr);
+    auto error = rasterBand->RasterIO(GF_Write, 0, 0, resolutionX, resolutionY, denormalizedHeights, resolutionX, resolutionY, GDT_Float64, 0, 0, nullptr);
+    if (error == CE_Failure) std::cout << "Writing failed!" << std::endl;
     GDALClose(dataset);
 
     delete[] denormalizedHeights;
@@ -84,7 +85,8 @@ void GTiffWriter::apply(const heightMap *map, bool generateOutput) {
 
         dataset = driver->Create((destinationDEM + "_lowDepth.tiff").c_str(), resolutionX, resolutionY, 1, GDT_Byte, gdalDriverOptions);
         rasterBand = dataset->GetRasterBand(1);
-        (void)! rasterBand->RasterIO(GF_Write, 0, 0, resolutionX, resolutionY, heightsLowDepth, resolutionX, resolutionY, GDT_Byte, 4, 4 * resolutionX, nullptr);
+        error = rasterBand->RasterIO(GF_Write, 0, 0, resolutionX, resolutionY, heightsLowDepth, resolutionX, resolutionY, GDT_Byte, 4, 4 * resolutionX, nullptr);
+        if (error == CE_Failure) std::cout << "Writing failed!" << std::endl;
         GDALClose(dataset);
 
         delete[] heightsLowDepth;
@@ -124,8 +126,9 @@ GTiffWriter::writeRGB(std::vector<std::vector<int>> data, int resolutionX, int r
     GDALRasterBand * rasterBand;
     for (auto i = 1; i <= 3; i++) {
         rasterBand = dataset->GetRasterBand(i);
-        (void) !rasterBand->RasterIO(GF_Write, 0, 0, resolutionX, resolutionY, (void *) data.at(i - 1).data(), resolutionX,
+        auto error = rasterBand->RasterIO(GF_Write, 0, 0, resolutionX, resolutionY, (void *) data.at(i - 1).data(), resolutionX,
                                      resolutionY, GDT_Byte, sizeof(int), (long long) sizeof(int) * resolutionX, nullptr);
+        if (error == CE_Failure) std::cout << "Writing failed!" << std::endl;
     }
     GDALClose(dataset);
 }
