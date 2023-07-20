@@ -18,16 +18,13 @@ uint calculate1DCoordinate(uvec2 pos, uvec2 referenceResolution) {
     return pos.y * referenceResolution.x + pos.x;
 }
 
-uint calculatePointIndex(uvec2 pos) {
-    return calculate1DCoordinate(pos, uvec2(ceil(sqrt(double(numberOfPoints))))) * 3u;
-}
-
 void main() {
     if (gl_NumWorkGroups.x * 8 * gl_GlobalInvocationID.y + gl_GlobalInvocationID.x >= numberOfPoints) return;
 
-    uint pointIndex = calculatePointIndex(gl_GlobalInvocationID.xy);
+    uint pointIndexIndices = gl_NumWorkGroups.x * 8 * gl_GlobalInvocationID.y + gl_GlobalInvocationID.x;
+    uint pointIndexPoints = pointIndexIndices * 3u;
 
-    vec3 point = vec3(points[pointIndex], points[pointIndex + 1], points[pointIndex + 2]);
+    vec3 point = vec3(points[pointIndexPoints], points[pointIndexPoints + 1], points[pointIndexPoints + 2]);
 
     uvec2 returnXY = uvec2(floor(vec2(resolution) * point.xy));
     returnXY.x = clamp(returnXY.x, 0u, resolution.x - 1);
@@ -35,6 +32,6 @@ void main() {
 
     uint coordinate = calculate1DCoordinate(returnXY, resolution);
 
-    coordinates[calculate1DCoordinate(gl_GlobalInvocationID.xy, uvec2(ceil(sqrt(double(numberOfPoints)))))] = coordinate;
+    coordinates[pointIndexIndices] = coordinate;
     atomicAdd(counts[coordinate], 1u);
 }

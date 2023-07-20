@@ -10,18 +10,10 @@ layout (binding = EFTDEM_SORTED_POINT_COUNT_BUFFER) restrict buffer countBuffer{
 };
 uniform uint numberOfPoints;
 
-uint calculate1DCoordinate(uvec2 pos, uvec2 referenceResolution) {
-    return pos.y * referenceResolution.x + pos.x;
-}
-
-uint calculatePointIndex(uvec2 pos) {
-    return calculate1DCoordinate(pos, uvec2(ceil(sqrt(double(numberOfPoints))))); //* 3u;
-}
-
 void main() {
     if (gl_NumWorkGroups.x * 8 * gl_GlobalInvocationID.y + gl_GlobalInvocationID.x >= numberOfPoints) return;
 
-    uint pointIndex = calculatePointIndex(gl_GlobalInvocationID.xy);
+    uint pointIndex = gl_NumWorkGroups.x * 8 * gl_GlobalInvocationID.y + gl_GlobalInvocationID.x;
 
     atomicAdd(counts[indices[pointIndex]], 1u);
 }

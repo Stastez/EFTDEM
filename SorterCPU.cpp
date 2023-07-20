@@ -3,9 +3,8 @@
 #include <cmath>
 
 std::pair<unsigned long, unsigned long> SorterCPU::calculateGridCoordinates(pointGrid *grid, rawPointCloud *pointCloud, double xCoord, double yCoord){
-    unsigned long x, y;
-    x = std::min(grid->resolutionX - 1, (unsigned long) std::floor(normalizeValue(xCoord, pointCloud->min.x, pointCloud->max.x) * (double) grid->resolutionX));
-    y = std::min(grid->resolutionY - 1, (unsigned long) std::floor(normalizeValue(yCoord, pointCloud->min.y, pointCloud->max.y) * (double) grid->resolutionY));
+    unsigned long x = std::min(grid->resolutionX - 1, (unsigned long) std::floor(normalizeValue(xCoord, pointCloud->min.x, pointCloud->max.x) * (double) grid->resolutionX));
+    unsigned long y = std::min(grid->resolutionY - 1, (unsigned long) std::floor(normalizeValue(yCoord, pointCloud->min.y, pointCloud->max.y) * (double) grid->resolutionY));
     return {x, y};
 }
 

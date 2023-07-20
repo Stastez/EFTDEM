@@ -14,21 +14,12 @@ layout (binding = EFTDEM_SORTED_POINT_SUM_BUFFER) restrict buffer sumBuffer{
 layout (binding = EFTDEM_SORTED_POINT_COUNT_BUFFER) restrict buffer countBuffer{
     uint counts[];
 };
-uniform uvec2 resolution;
 uniform uint numberOfPoints;
-
-uint calculate1DCoordinate(uvec2 pos, uvec2 referenceResolution) {
-    return pos.y * referenceResolution.x + pos.x;
-}
-
-uint calculatePointIndex(uvec2 pos) {
-    return calculate1DCoordinate(pos, uvec2(ceil(sqrt(double(numberOfPoints)))));
-}
 
 void main() {
     if (gl_NumWorkGroups.x * 8 * gl_GlobalInvocationID.y + gl_GlobalInvocationID.x >= numberOfPoints) return;
 
-    uint pointIndexIndices = calculatePointIndex(gl_GlobalInvocationID.xy);
+    uint pointIndexIndices = gl_NumWorkGroups.x * 8 * gl_GlobalInvocationID.y + gl_GlobalInvocationID.x;
     uint pointIndexPoints = pointIndexIndices * 3u;
 
     float z = points[pointIndexPoints + 2];

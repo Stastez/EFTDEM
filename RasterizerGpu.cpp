@@ -98,7 +98,6 @@ heightMap * RasterizerGPU::apply(pointGrid *pointGrid, bool generateOutput) {
                             sums, GL_STATIC_DRAW);
     glHandler->bindBuffer(GLHandler::EFTDEM_UNBIND);
 
-    glUniform2ui(glGetUniformLocation(glHandler->getProgram(), "resolution"), pointGrid->resolutionX, pointGrid->resolutionY);
     glUniform1ui(glGetUniformLocation(glHandler->getProgram(), "numberOfPoints"), pointGrid->numberOfPoints);
 
     glDispatchCompute(workgroupSize, workgroupSize, 1);
