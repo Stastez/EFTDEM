@@ -24,4 +24,5 @@ void main() {
 
     // depth measured in positive amount of seconds taken by wave
     results[position] = clamp(bottom[position] - top[position], 0., 1.);
+    results[position] = 0.8;
 }

@@ -53,7 +53,7 @@ std::vector<heightMap *> IComparator::compareMaps() {
             pipelines.at(i) = nullptr;
             glHandler = pipelines.at(i + 1)->getGLHandler();
             bottomMap = pipelines.at(i + 1)->executeAfterReader(readerReturns.at(i + 1));
-            shaders = glHandler->getShaderPrograms({"compare.glsl"}, true);
+            shaders = glHandler->getShaderPrograms({compareShaderPath}, true);
             glHandler->setProgram(shaders.at(0));
             gl::glUniform2ui(gl::glGetUniformLocation(glHandler->getProgram(), "resolution"), bottomMap->resolutionX, bottomMap->resolutionY);
         }

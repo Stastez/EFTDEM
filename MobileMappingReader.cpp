@@ -105,6 +105,8 @@ rawPointCloud * MobileMappingReader::apply(bool generateOutput) {
     extremes.first = mergeDoublePoints(minVector).first;
     extremes.second = mergeDoublePoints(maxVector).second;
 
+    //std::cout << "min: " << extremes.first.z << " max: " << extremes.second.z << "\n";
+
     for (auto i = 0u; i < numThreads; i++) {
         groundPoints->insert(groundPoints->end(), groundPointsVector->at(i).begin(), groundPointsVector->at(i).end());
         environmentPoints->insert(environmentPoints->end(), environmentPointsVector->at(i).begin(), environmentPointsVector->at(i).end());

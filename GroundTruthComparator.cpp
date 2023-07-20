@@ -22,7 +22,7 @@ GroundTruthComparator::GroundTruthComparator(std::vector<std::string> configPath
     }
 
     GroundTruthComparator::glHandler = pipelines.at(0)->getGLHandler();
-    compareShaderPath = "compare.glsl";
+    compareShaderPath = "compareSquareError.glsl";
 }
 
 GroundTruthComparator::~GroundTruthComparator() {
@@ -67,7 +67,7 @@ void GroundTruthComparator::writeComparisons(std::vector<heightMap *> comparison
         double averageError = 0;
         auto amount = comparisons.at(i)->resolutionX * comparisons.at(i)->resolutionX;
         for (auto j = 0ul; j < amount; j++) {
-            averageError += pow(double(comparisons.at(i)->heights.at(j)), 2) / double(amount);
+            averageError += double(comparisons.at(i)->heights.at(j)) / double(amount);
         }
         meanSquareErrors.at(i) = sqrt(averageError);
     }
