@@ -9,8 +9,8 @@ protected:
      * Specifies the resolution of the resulting pointGrid by defining how many grid cells
      * shall be allocated for each unit of distance on the xy-plane.
      */
-    unsigned long resolutionX;
-    unsigned long resolutionY;
+    unsigned long resolutionX = 0;
+    unsigned long resolutionY = 0;
     unsigned long pixelPerUnitX{};
     unsigned long pixelPerUnitY{};
 public:
