@@ -2,8 +2,10 @@
 #include "RadarComparator.h"
 #include "GroundTruthComparator.h"
 #include <iostream>
+#include <chrono>
 
 int main(int argc, char** argv) {
+    auto start = std::chrono::high_resolution_clock::now();
 
     if (argc < 2) {
         std::cout << "Usage: EFTDEM <path to config yaml> or EFTDEM <path to first layer from top config yaml> <path to second layer from top config yaml> ..." << std::endl;
@@ -33,6 +35,8 @@ int main(int argc, char** argv) {
 
         delete comparator;
     }
+
+    std::cout << "Elapsed time for program: " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start).count() << " ms" << std::endl;
 
     return 0;
 }
