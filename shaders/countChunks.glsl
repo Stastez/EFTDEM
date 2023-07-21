@@ -1,7 +1,9 @@
 #version 430 core
 precision highp int;
 
-layout (local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
+#define LOCAL_SIZE 8
+
+layout (local_size_x = LOCAL_SIZE, local_size_y = LOCAL_SIZE, local_size_z = 1) in;
 layout (binding = EFTDEM_RAW_POINT_INDEX_BUFFER) restrict buffer indexBuffer{
     uint indices[];
 };

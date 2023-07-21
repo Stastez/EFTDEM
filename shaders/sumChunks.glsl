@@ -1,7 +1,9 @@
 #version 430 core
 precision highp int;
 
-layout (local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
+#define LOCAL_SIZE 8
+
+layout (local_size_x = LOCAL_SIZE, local_size_y = LOCAL_SIZE, local_size_z = 1) in;
 layout (binding = EFTDEM_RAW_POINT_BUFFER) restrict buffer pointBuffer{
     float points[];
 };
@@ -16,10 +18,13 @@ layout (binding = EFTDEM_SORTED_POINT_COUNT_BUFFER) restrict buffer countBuffer{
 };
 uniform uint numberOfPoints;
 
-void main() {
-    if (gl_NumWorkGroups.x * 8 * gl_GlobalInvocationID.y + gl_GlobalInvocationID.x >= numberOfPoints) return;
+uint calculatePointIdentifier() {
+    return gl_NumWorkGroups.x * LOCAL_SIZE * gl_GlobalInvocationID.y + gl_GlobalInvocationID.x;
+}
 
-    uint pointIndexIndices = gl_NumWorkGroups.x * 8 * gl_GlobalInvocationID.y + gl_GlobalInvocationID.x;
+void main() {
+    uint pointIndexIndices = calculatePointIdentifier();
+    if (pointIndexIndices >= numberOfPoints) return;
     uint pointIndexPoints = pointIndexIndices * 3u;
 
     float z = points[pointIndexPoints + 2];
