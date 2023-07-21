@@ -1,6 +1,8 @@
 #version 430 core
 
-layout (local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
+#define LOCAL_SIZE 8
+
+layout (local_size_x = LOCAL_SIZE, local_size_y = LOCAL_SIZE, local_size_z = 1) in;
 layout (binding = EFTDEM_HEIGHTMAP_BUFFER) restrict buffer bottomBuffer{
     float bottom[];
 };
@@ -24,5 +26,4 @@ void main() {
 
     // depth measured in positive amount of seconds taken by wave
     results[position] = clamp(bottom[position] - top[position], 0., 1.);
-    results[position] = 0.8;
 }
