@@ -52,15 +52,10 @@ add_executable(EFTDEM
         IPipeline.cpp
         IPipeline.h
         GTiffReader.cpp
-        RadialDilator.cpp
-        RadialDilator.h
-        IRadialFillerComponent.h
-        RadialBufferSwapper.cpp
-        RadialBufferSwapper.h
-        RadialEroder.cpp
-        RadialEroder.h
         RadialFiller.cpp
-        RadialFiller.h DummyFiller.cpp DummyFiller.h)
+        RadialFiller.h
+        DummyFiller.cpp
+        DummyFiller.h)
 
 if(MSVC)
     target_compile_options(EFTDEM PRIVATE /W4)

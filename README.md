@@ -44,8 +44,6 @@ HeightMapFillerOptions:
   # for radialFiller
   radialFillerOptions:
     maxHoleRadius: 50
-    batchSize: 8192 # optional, if not set will default to 0 (automatically trying to find possible batch size)
-    useBatching: false # optional, will default to "true". If "false", this will disable batching and make "batchSize" obsolete
 
 HeightMapWriterOptions:
   destinationPath: "../resources/map"

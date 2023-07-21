@@ -9,23 +9,21 @@ layout (binding = EFTDEM_SECOND_HEIGHTMAP_BUFFER) restrict buffer heightMapBuffe
 };
 uniform uvec2 resolution;
 uniform bool flipped;
-uniform uvec2 currentInvocation;
 
 uint calculate1DCoordinate(uvec2 pos, uvec2 referenceResolution) {
     return pos.y * referenceResolution.x + pos.x;
 }
 
 void main() {
-    uvec2 correctedGlobalInvocation = gl_GlobalInvocationID.xy + currentInvocation;
-    if (any(greaterThanEqual(correctedGlobalInvocation, resolution))) return;
+    if (any(greaterThanEqual(gl_GlobalInvocationID.xy, resolution))) return;
 
-    uint ownCoordinate = calculate1DCoordinate(correctedGlobalInvocation, resolution);
+    uint ownCoordinate = calculate1DCoordinate(gl_GlobalInvocationID.xy, resolution);
 
     float minValue = 1.;
 
     for (int xOffset = -1; xOffset <= 1; ++xOffset) {
         for (int yOffset = -1; yOffset <= 1; ++yOffset) {
-            uvec2 actualPosition = correctedGlobalInvocation + uvec2(xOffset, yOffset);
+            uvec2 actualPosition = gl_GlobalInvocationID.xy + uvec2(xOffset, yOffset);
             bool isOnCanvas = all(greaterThanEqual(actualPosition, uvec2(0, 0))) && all(lessThan(actualPosition, resolution));
 
             uint actual1DCoordinate = calculate1DCoordinate(actualPosition, resolution);

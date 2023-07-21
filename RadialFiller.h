@@ -7,11 +7,10 @@
 class RadialFiller : public IHeightMapFiller {
 private:
     GLHandler * glHandler;
-    bool batched;
-    unsigned int batchSize, maxHoleRadius;
+    unsigned int maxHoleRadius;
 
 public:
-    RadialFiller(GLHandler * glHandler, unsigned int maxHoleRadius, bool batched, unsigned int batchSize);
+    RadialFiller(GLHandler * glHandler, unsigned int maxHoleRadius);
     heightMap * apply(heightMap *map, bool generateOutput) override;
 };
 

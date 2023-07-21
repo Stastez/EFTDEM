@@ -171,14 +171,9 @@ Pipeline *ConfigProvider::providePipeline() {
     } else if (fillingAlgorithm == "radialFiller") {
         auto batchSizeTest = checkValidityAndReturn(
                 {"HeightMapFillerOptions", "radialFillerOptions", "batchSize"}, false);
-        auto batchSize = (batchSizeTest.second) ? batchSizeTest.first.as<unsigned int>() : 0;
         auto maxHoleRadius = checkValidityAndReturn({"HeightMapFillerOptions", "radialFillerOptions", "maxHoleRadius"},
                                                     true).first.as<unsigned int>();
-        auto useBatching = checkValidityAndReturn({"HeightMapFillerOptions", "radialFillerOptions", "useBatching"},
-                                                  false);
-        auto batched = !(useBatching.second) || useBatching.first.as<bool>();
-
-        filler = new RadialFiller(glHandler, maxHoleRadius, batched, batchSize);
+        filler = new RadialFiller(glHandler, maxHoleRadius);
     } else if (fillingAlgorithm == "dummy") {
         filler = new DummyFiller();
     } else {
