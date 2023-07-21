@@ -1,6 +1,8 @@
 #version 430 core
 
-layout (local_size_x = 8, local_size_y = 8, local_size_z = 1) in;
+#define LOCAL_SIZE 8
+
+layout (local_size_x = LOCAL_SIZE, local_size_y = LOCAL_SIZE, local_size_z = 1) in;
 layout (binding = EFTDEM_RAW_POINT_BUFFER) restrict buffer pointBuffer{
     float points[];
 };
@@ -18,19 +20,20 @@ uint calculate1DCoordinate(uvec2 pos, uvec2 referenceResolution) {
     return pos.y * referenceResolution.x + pos.x;
 }
 
+uint calculatePointIdentifier() {
+    return gl_NumWorkGroups.x * LOCAL_SIZE * gl_GlobalInvocationID.y + gl_GlobalInvocationID.x;
+}
+
 void main() {
-    if (gl_NumWorkGroups.x * 8 * gl_GlobalInvocationID.y + gl_GlobalInvocationID.x >= numberOfPoints) return;
-
-    uint pointIndexIndices = gl_NumWorkGroups.x * 8 * gl_GlobalInvocationID.y + gl_GlobalInvocationID.x;
+    uint pointIndexIndices = calculatePointIdentifier();
+    if (pointIndexIndices >= numberOfPoints) return;
     uint pointIndexPoints = pointIndexIndices * 3u;
-
     vec3 point = vec3(points[pointIndexPoints], points[pointIndexPoints + 1], points[pointIndexPoints + 2]);
 
-    uvec2 returnXY = uvec2(floor(vec2(resolution) * point.xy));
-    returnXY.x = clamp(returnXY.x, 0u, resolution.x - 1);
-    returnXY.y = clamp(returnXY.y, 0u, resolution.y - 1);
+    uvec2 gridPosition = uvec2(floor(vec2(resolution) * point.xy));
+    gridPosition = clamp(gridPosition, uvec2(0u), resolution);
 
-    uint coordinate = calculate1DCoordinate(returnXY, resolution);
+    uint coordinate = calculate1DCoordinate(gridPosition, resolution);
 
     coordinates[pointIndexIndices] = coordinate;
     atomicAdd(counts[coordinate], 1u);

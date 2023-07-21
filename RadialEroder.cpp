@@ -1,6 +1,5 @@
 #include "RadialEroder.h"
 
-#include <iostream>
 #include <cmath>
 
 RadialEroder::RadialEroder(GLHandler *glHandler, bool flipped, unsigned int batchSize, bool batched,
@@ -21,10 +20,6 @@ RadialEroder::RadialEroder(GLHandler *glHandler, bool flipped, unsigned int batc
 
 heightMap *RadialEroder::apply(heightMap *map, bool generateOutput) {
     using namespace gl;
-
-    /*auto shaderPaths = new std::vector<std::string>{"radialErosion.glsl"};
-
-    auto shaders = glHandler->getShaderPrograms(*shaderPaths, true);*/
 
     glHandler->setProgram(shaderProgram);
     if (!glHandler->getCoherentBufferMask().at(GLHandler::EFTDEM_HEIGHTMAP_BUFFER)){

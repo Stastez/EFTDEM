@@ -22,10 +22,6 @@ RadialDilator::RadialDilator(GLHandler *glHandler, bool flipped, unsigned int ba
 heightMap *RadialDilator::apply(heightMap *map, bool generateOutput) {
     using namespace gl;
 
-    /*auto shaderPaths = new std::vector<std::string>{"radialDilation.glsl"};
-
-    auto shaders = glHandler->getShaderPrograms(*shaderPaths, true);*/
-
     glHandler->setProgram(shaderProgram);
 
     if (!glHandler->getCoherentBufferMask().at(GLHandler::EFTDEM_HEIGHTMAP_BUFFER)){
