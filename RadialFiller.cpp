@@ -10,6 +10,33 @@ RadialFiller::RadialFiller(GLHandler * glHandler, unsigned int maxHoleRadius) {
     RadialFiller::stageUsesGPU = true;
 }
 
+RadialFiller::~RadialFiller() {
+    glHandler->deleteBuffer(GLHandler::EFTDEM_SECOND_HEIGHTMAP_BUFFER);
+}
+
+void dispatchCompute(gl::GLint flippedLocation, bool isDilation, unsigned int maxHoleRadius, heightMap * map) {
+    using namespace gl;
+
+    GLsync previousSync = nullptr;
+    for (auto i = 0u; i < maxHoleRadius; i++) {
+        auto flipped = (bool) (isDilation ? (i % 2u) : (maxHoleRadius + i) % 2u);
+        glUniform1i(flippedLocation, flipped);
+        glDispatchCompute((GLuint) std::ceil((double) map->resolutionX / 8.), (GLuint) std::ceil((double) map->resolutionY / 4.), 1);
+
+        if (previousSync != nullptr) {
+            glClientWaitSync(previousSync, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED);
+            glDeleteSync(previousSync);
+        }
+
+        auto currentSync = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+        std::swap(previousSync, currentSync);
+    }
+    if (previousSync != nullptr) {
+        glClientWaitSync(previousSync, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED);
+        glDeleteSync(previousSync);
+    }
+}
+
 heightMap *RadialFiller::apply(heightMap *map, bool generateOutput) {
     using namespace gl;
 
@@ -18,11 +45,11 @@ heightMap *RadialFiller::apply(heightMap *map, bool generateOutput) {
     auto begin = std::chrono::high_resolution_clock::now();
 
     // dilation
-    auto dilationProgram = glHandler->getShaderPrograms({"radialDilation.glsl"}, true).at(0);
-    auto dilationResolutionLocation = gl::glGetUniformLocation(dilationProgram, "resolution");
-    auto dilationFlippedLocation = gl::glGetUniformLocation(dilationProgram, "flipped");
+    auto program = glHandler->getShaderPrograms({"radialDilation.glsl"}, true).at(0);
+    auto resolutionLocation = gl::glGetUniformLocation(program, "resolution");
+    auto flippedLocation = gl::glGetUniformLocation(program, "flipped");
 
-    glHandler->setProgram(dilationProgram);
+    glHandler->setProgram(program);
 
     if (!glHandler->getCoherentBufferMask().at(GLHandler::EFTDEM_HEIGHTMAP_BUFFER)){
         glHandler->dataToBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,
@@ -37,52 +64,20 @@ heightMap *RadialFiller::apply(heightMap *map, bool generateOutput) {
                                 initialState->data(), GL_STATIC_DRAW);
     }
 
-    glUniform2ui(dilationResolutionLocation, map->resolutionX, map->resolutionY);
+    glUniform2ui(resolutionLocation, map->resolutionX, map->resolutionY);
 
-    GLsync previousSync = nullptr;
-    for (auto i = 0u; i < maxHoleRadius; i++) {
-        glUniform1i(dilationFlippedLocation, (bool) (i % 2u));
-        glDispatchCompute((GLuint) std::ceil((double) map->resolutionX / 8.), (GLuint) std::ceil((double) map->resolutionY / 4.), 1);
-
-        if (previousSync != nullptr) {
-            glClientWaitSync(previousSync, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED);
-            glDeleteSync(previousSync);
-        }
-
-        auto currentSync = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
-        std::swap(previousSync, currentSync);
-    }
-    if (previousSync != nullptr) {
-        glClientWaitSync(previousSync, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED);
-        glDeleteSync(previousSync);
-    }
+    dispatchCompute(flippedLocation, true, maxHoleRadius, map);
 
     // erosion
-    auto erosionProgram = glHandler->getShaderPrograms({"radialErosion.glsl"}, true).at(0);
-    auto erosionResolutionLocation = gl::glGetUniformLocation(erosionProgram, "resolution");
-    auto erosionFlippedLocation = gl::glGetUniformLocation(erosionProgram, "flipped");
+    program = glHandler->getShaderPrograms({"radialErosion.glsl"}, true).at(0);
+    resolutionLocation = gl::glGetUniformLocation(program, "resolution");
+    flippedLocation = gl::glGetUniformLocation(program, "flipped");
 
-    glHandler->setProgram(erosionProgram);
+    glHandler->setProgram(program);
 
-    glUniform2ui(erosionResolutionLocation, map->resolutionX, map->resolutionY);
+    glUniform2ui(resolutionLocation, map->resolutionX, map->resolutionY);
 
-    previousSync = nullptr;
-    for (auto i = 0u; i < maxHoleRadius; i++) {
-        glUniform1i(erosionFlippedLocation, (bool) ((maxHoleRadius + i) % 2u));
-        glDispatchCompute((GLuint) std::ceil((double) map->resolutionX / 8.), (GLuint) std::ceil((double) map->resolutionY / 4.), 1);
-
-        if (previousSync != nullptr) {
-            glClientWaitSync(previousSync, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED);
-            glDeleteSync(previousSync);
-        }
-
-        auto currentSync = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
-        std::swap(previousSync, currentSync);
-    }
-    if (previousSync != nullptr) {
-        glClientWaitSync(previousSync, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED);
-        glDeleteSync(previousSync);
-    }
+    dispatchCompute(flippedLocation, false, maxHoleRadius, map);
 
     auto filledMap = emptyHeightMapFromHeightMap(map);
 

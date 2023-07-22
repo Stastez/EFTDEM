@@ -11,6 +11,7 @@ private:
 
 public:
     RadialFiller(GLHandler * glHandler, unsigned int maxHoleRadius);
+    ~RadialFiller() override;
     heightMap * apply(heightMap *map, bool generateOutput) override;
 };
 
