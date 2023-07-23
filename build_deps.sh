@@ -4,11 +4,10 @@ numThreads="${nproc}"
 
 mkdir "$depFolder"
 
-#get glfw, glbinding, glm, magic_enum, yaml-cpp
+#get glfw, glbinding, magic_enum, yaml-cpp
 cd "$depFolder"
 git clone https://github.com/glfw/glfw.git
 git clone https://github.com/cginternals/glbinding.git
-git clone https://github.com/g-truc/glm.git
 git clone https://github.com/Neargye/magic_enum.git
 git clone https://github.com/jbeder/yaml-cpp.git
 
@@ -51,38 +50,6 @@ cmake   -B "glfw/build-release" \
 
 cmake --build "glfw/build-release" -j $numThreads --target all
 cmake --build "glfw/build-release" -j $numThreads --target install
-
-#build glm
-if [ -d "glm/build-debug" ] && $removeOld; then
-    rm -rf "glm/build-debug"
-fi
-if [ -d "glm/build-release" ] && $removeOld; then
-    rm -rf "glm/build-release"
-fi
-
-cmake   -B "glm/build-debug" \
-        -S "glm" \
-        -D CMAKE_BUILD_TYPE="Debug" \
-        -D CMAKE_INSTALL_PREFIX="glm" \
-        -D BUILD_SHARED_LIBS=ON \
-        -D BUILD_STATIC_LIBS=OFF \
-        -D BUILD_TESTING=OFF \
-        -G "Unix Makefiles"
-
-cmake --build "glm/build-debug" -j $numThreads --target all
-cmake --build "glm/build-debug" -j $numThreads --target install
-
-cmake   -B "glm/build-release" \
-        -S "glm" \
-        -D CMAKE_BUILD_TYPE="Release" \
-        -D CMAKE_INSTALL_PREFIX="glm" \
-        -D BUILD_SHARED_LIBS=ON \
-        -D BUILD_STATIC_LIBS=OFF \
-        -D BUILD_TESTING=OFF \
-        -G "Unix Makefiles"
-
-cmake --build "glm/build-release" -j $numThreads --target all
-cmake --build "glm/build-release" -j $numThreads --target install
 
 #build glbinding
 if [ -d "glbinding/build-debug" ] && $removeOld; then

@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <thread>
+#include <cmath>
 
 RadialFiller::RadialFiller(GLHandler * glHandler, unsigned int maxHoleRadius) {
     RadialFiller::glHandler = glHandler;

@@ -5,11 +5,10 @@ if (-Not (Test-Path ".deps")){
     New-Item -Path ".deps" -ItemType Directory
 }
 
-#get glfw, glbinding, glm, magic_enum, yaml-cpp
+#get glfw, glbinding, magic_enum, yaml-cpp
 Set-Location "${depFolder}"
 git clone https://github.com/glfw/glfw.git
 git clone https://github.com/cginternals/glbinding.git
-git clone https://github.com/g-truc/glm.git
 git clone https://github.com/Neargye/magic_enum.git
 git clone https://github.com/jbeder/yaml-cpp.git
 
@@ -22,16 +21,6 @@ cmake --build "glfw\build" --target ALL_BUILD --config Debug
 cmake --build "glfw\build" --target ALL_BUILD --config Release
 cmake --build "glfw\build" --target INSTALL --config Debug
 cmake --build "glfw\build" --target INSTALL --config Release
-
-#build glm
-if ((Test-Path "glm\build") -and $removeOld){
-    Remove-Item "glm\build" -Recurse
-}
-cmake -B "glm\build" -S "glm" -D CMAKE_CONFIGURATION_TYPES="Debug;Release" -D CMAKE_INSTALL_PREFIX="glm" -D BUILD_SHARED_LIBS:BOOL=ON -D BUILD_STATIC_LIBS:BOOL=ON -D BUILD_TESTING:BOOL=OFF -G "Visual Studio 17 2022" -A x64
-cmake --build "glm\build" --target ALL_BUILD --config Debug
-cmake --build "glm\build" --target ALL_BUILD --config Release
-cmake --build "glm\build" --target INSTALL --config Debug
-cmake --build "glm\build" --target INSTALL --config Release
 
 #build glbinding
 if ((Test-Path "glbinding\build") -and $removeOld){
