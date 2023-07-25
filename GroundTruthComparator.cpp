@@ -65,7 +65,7 @@ void GroundTruthComparator::writeComparisons(std::vector<heightMap *> comparison
 
     for (auto i = 0ul; i < comparisons.size(); i++) {
         double averageError = 0;
-        auto amount = comparisons.at(i)->resolutionX * comparisons.at(i)->resolutionX;
+        auto amount = comparisons.at(i)->resolutionX * comparisons.at(i)->resolutionY;
         for (auto j = 0ul; j < amount; j++) {
             averageError += double(comparisons.at(i)->heights.at(j)) / double(amount);
         }
