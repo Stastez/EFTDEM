@@ -34,7 +34,7 @@ denormalizedHeightMap * GTiffReader::apply(bool generateOutput) {
     GDALRegister_GTiff();
 
     //GDALAllRegister();//!!!!!!!!!! GDALRegister_GTiff();
-    GDALDataset * dataset = (GDALDataset *) GDALOpen(sourceDEM.c_str(), GA_ReadOnly);
+    auto dataset = (GDALDataset *) GDALOpen(sourceDEM.c_str(), GA_ReadOnly);
 
     unsigned long resolutionX = dataset->GetRasterXSize(),
         resolutionY = dataset->GetRasterYSize();

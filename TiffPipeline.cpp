@@ -13,7 +13,7 @@ TiffPipeline::TiffPipeline(const std::string& tiffPath, GLHandler *glHandler){
 }
 
 heightMap * TiffPipeline::execute() {
-    GTiffReader * reader = new GTiffReader(path);
+    auto reader = new GTiffReader(path);
 
     map = reader->apply(true);
     delete reader;

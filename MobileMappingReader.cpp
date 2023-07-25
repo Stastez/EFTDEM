@@ -64,8 +64,6 @@ std::pair<doublePoint, doublePoint> MobileMappingReader::parseFileContents(std::
 
             groundPoints->emplace_back(p);
         } else environmentPoints->emplace_back(p);
-
-        //std::cout << "Point: " << p.x << ", " << p.y << ", " << p.z << " Min: " << min.x << ", " << min.y << ", " << min.z << " Max: " << max.x << ", " << max.y << ", " << max.z << std::endl;
     }
 
     return {min, max};
@@ -104,8 +102,6 @@ rawPointCloud * MobileMappingReader::apply(bool generateOutput) {
     std::pair<doublePoint,doublePoint> extremes;
     extremes.first = mergeDoublePoints(minVector).first;
     extremes.second = mergeDoublePoints(maxVector).second;
-
-    //std::cout << "min: " << extremes.first.z << " max: " << extremes.second.z << "\n";
 
     for (auto i = 0u; i < numThreads; i++) {
         groundPoints->insert(groundPoints->end(), groundPointsVector->at(i).begin(), groundPointsVector->at(i).end());

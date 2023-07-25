@@ -1,15 +1,16 @@
 import sys
 import math
 
-if (len(sys.argv) < 6):
-    print("Usage: [program] inPath outPath centerX centerY threshold")
+if (len(sys.argv) < 7):
+    print("Usage: [program] inPath outPath minX maxX minY maxY")
     exit()
 
 inPath = sys.argv[1]
 outPath = sys.argv[2]
-centerX = float(sys.argv[3])
-centerY = float(sys.argv[4])
-threshold = float(sys.argv[5])
+minX = float(sys.argv[3])
+maxX = float(sys.argv[4])
+minY = float(sys.argv[5])
+maxY = float(sys.argv[6])
 
 inputFile = open(inPath, 'r')
 outputFile = open(outPath, 'w')
@@ -23,7 +24,7 @@ while (line != ""):
     x = float(splits[0])
     y = float(splits[1])
 
-    if (math.sqrt(math.pow(x - centerX, 2) + math.pow(y - centerY, 2)) > threshold):
+    if (x >= minX and x <= maxX and y >= minY and y <= maxY):
         outputFile.write(line)
 
     line = inputFile.readline()
