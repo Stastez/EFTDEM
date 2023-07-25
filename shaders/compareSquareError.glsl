@@ -18,7 +18,7 @@ uint calculate1DCoordinate(uvec2 pos, uvec2 referenceResolution) {
 }
 
 float errorMetric(float deviation){
-    return deviation * deviation;
+    return pow(deviation, 2.);
 }
 
 void main() {
@@ -27,6 +27,8 @@ void main() {
     uint position = calculate1DCoordinate(gl_GlobalInvocationID.xy, resolution);
 
     // depth measured in positive amount of seconds taken by wave
-    results[position] = clamp(errorMetric(bottom[position] - top[position]), 0., 1.);
+    results[position] = errorMetric(bottom[position] - top[position]);
+    if (isnan(results[position])) results[position] = 1000000.;
+    //results[position] = clamp(errorMetric(bottom[position] - top[position]), 0., 1.);
     //results[position] = top[position];
 }

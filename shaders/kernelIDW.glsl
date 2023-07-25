@@ -12,7 +12,9 @@ uniform uvec2 currentInvocation;
 float scattering = 1.0; // the bigger this Value, the heigher the impact of values that are further away from the pixel
 
 float weightingFunction(float x) {
-    return exp(float(-abs(x/scattering)));
+    //return exp(float(-abs(x/scattering)));
+    //return exp(-abs(x / (scattering * float(kernelRadius) * 2.)));
+    return (x == 0.) ? 1. : pow(x, -2.);
 }
 
 void main() {
@@ -20,5 +22,5 @@ void main() {
     if (any(greaterThanEqual(correctedGlobalInvocation, resolution))) return;
     uint coord1D = correctedGlobalInvocation.x;
 
-    kernel[coord1D] = weightingFunction(coord1D);
+    kernel[coord1D] = weightingFunction(float(coord1D));
 }
