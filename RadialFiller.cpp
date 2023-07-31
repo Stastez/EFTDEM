@@ -63,6 +63,7 @@ heightMap *RadialFiller::apply(heightMap *map, bool generateOutput) {
         glHandler->dataToBuffer(GLHandler::EFTDEM_SECOND_HEIGHTMAP_BUFFER,
                                 map->dataSize,
                                 initialState->data(), GL_STATIC_DRAW);
+        delete initialState;
     }
 
     glUniform2ui(resolutionLocation, map->resolutionX, map->resolutionY);

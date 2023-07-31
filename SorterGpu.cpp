@@ -61,6 +61,7 @@ pointGrid * SorterGPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
 
     if (!generateOutput) {
         GLHandler::waitForShaderStorageIntegrity();
+        delete gridIndices;
         return new pointGrid{.points = {},
                 .resolutionX = resolutionX,
                 .resolutionY = resolutionY,
