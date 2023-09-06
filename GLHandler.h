@@ -8,6 +8,9 @@
 #include <string>
 #include <magic_enum.hpp>
 
+/**
+ * The class that handles all interfacing with OpenGL.
+ */
 class GLHandler {
 public:
     enum bufferIndices {

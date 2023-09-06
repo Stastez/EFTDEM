@@ -14,9 +14,9 @@ GroundTruthComparator::GroundTruthComparator(std::vector<std::string> configPath
 
     auto pipeline = configProvider->providePipeline(GroundTruthComparator::configPaths.at(1));
     pipelines.emplace_back(new TiffPipeline(GroundTruthComparator::configPaths.at(0), pipeline->getGLHandler()->getShaderDir()));
-    destinationPaths.emplace_back(configProvider->getComparisonPath());
+    destinationPaths.emplace_back(configProvider->getDestinationPath());
     pipelines.emplace_back(pipeline);
-    destinationPaths.emplace_back(configProvider->getComparisonPath());
+    destinationPaths.emplace_back(configProvider->getDestinationPath());
     for (auto i = 0ul; i < pipelines.size(); i++){
         betterCompression.emplace_back(configProvider->getBetterCompression());
     }

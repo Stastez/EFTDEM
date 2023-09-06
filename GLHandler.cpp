@@ -194,13 +194,18 @@ void GLHandler::bindBuffer(GLHandler::bufferIndices buffer) {
 }
 
 /**
- * Generates the specified buffer.
- * @param buffer
+ * Generates the specified buffer. Also see generateBuffer(int).
+ * @param buffer The bufferIndices member to generate
  */
 void GLHandler::generateBuffer(GLHandler::bufferIndices buffer) {
     generateBuffer((int) buffer);
 }
 
+/**
+ * Generates the specified buffer. Does nothing if the buffer already exists.
+ * @throws std::exception When the provided buffer index is equal to 0
+ * @param buffer The number of the buffer to generate. Equates to a bufferIndices member
+ */
 void GLHandler::generateBuffer(int buffer) {
     if (!deletedBufferMask.at(buffer)) return;
     if (buffer == EFTDEM_UNBIND) throw std::exception();
@@ -210,10 +215,19 @@ void GLHandler::generateBuffer(int buffer) {
     coherentBufferMask.at(buffer) = false;
 }
 
+/**
+ * Deletes the specified buffer. Also see deleteBuffer(int).
+ * @param buffer The bufferIndices member to delete
+ */
 void GLHandler::deleteBuffer(GLHandler::bufferIndices buffer) {
     deleteBuffer((int) buffer);
 }
 
+/**
+ * Deletes the specified buffer. Does nothing if the buffer was deleted previously.
+ * @throws std::exception When the provided buffer index is equal to 0
+ * @param buffer The number of the buffer to delete. Equates to a bufferIndices member
+ */
 void GLHandler::deleteBuffer(int buffer) {
     if (deletedBufferMask.at(buffer)) return;
     if (buffer == EFTDEM_UNBIND) exit(Pipeline::EXIT_INVALID_FUNCTION_PARAMETERS);
@@ -223,6 +237,15 @@ void GLHandler::deleteBuffer(int buffer) {
     coherentBufferMask.at(buffer) = false;
 }
 
+/**
+ * Copies <b>size</b> bytes of <b>data</b> to the buffer specified by <b>buffer</b>. The buffer will be created if it
+ * did not exist previously of if it had already been deleted. <b>usage</b> will be passed to OpenGL, some GPU drivers
+ * may behave differently according to this parameter.
+ * @param buffer The buffer
+ * @param size How many bytes to copy
+ * @param data A pointer to the data to copy from
+ * @param usage See https://registry.khronos.org/OpenGL-Refpages/gl4/html/glBufferData.xhtml for reference
+ */
 void GLHandler::dataToBuffer(GLHandler::bufferIndices buffer, gl::GLsizeiptr size, const void *data, gl::GLenum usage) {
     if (deletedBufferMask.at(buffer)) generateBuffer(buffer);
     if (buffer == EFTDEM_UNBIND) exit(Pipeline::EXIT_INVALID_FUNCTION_PARAMETERS);
@@ -231,10 +254,19 @@ void GLHandler::dataToBuffer(GLHandler::bufferIndices buffer, gl::GLsizeiptr siz
     coherentBufferMask.at(buffer) = true;
 }
 
+/**
+ * Copies the <b>size</b> bytes immediately after the first <b>offset</b> bytes from the buffer specified by <b>buffer</b>.
+ * Calls waitForShaderStorageIntegrity to ensure the validity of the data.
+ * @throws std::exception If the specified buffer was previously deleted
+ * @param buffer The buffer
+ * @param offset How many prefix bytes to ignore
+ * @param size How many bytes to copy
+ * @param data Where to copy the data from the buffer
+ */
 void GLHandler::dataFromBuffer(GLHandler::bufferIndices buffer, gl::GLsizeiptr offset, gl::GLsizeiptr size, void *data) {
     if (deletedBufferMask.at(buffer)) {
         std::cout << magic_enum::enum_name(buffer) << " was previously deleted." << std::endl;
-        generateBuffer(buffer);
+        exit(Pipeline::EXIT_OPENGL_ERROR);
     }
     if (buffer == EFTDEM_UNBIND) exit(Pipeline::EXIT_INVALID_FUNCTION_PARAMETERS);
     bindBuffer(buffer);
@@ -251,6 +283,9 @@ gl::GLuint GLHandler::getProgram() const {
     return currentProgram;
 }
 
+/**
+ * Ensures that all compute shader invocations have finished writing data.
+ */
 void GLHandler::waitForShaderStorageIntegrity() {
     glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
 }
@@ -261,6 +296,14 @@ std::vector<bool> GLHandler::getCoherentBufferMask() {
 
 bool GLHandler::isInitialized(bool debug) const {return initialized && (this->isDebug == debug);}
 
+/**
+ * Executes the currently active compute shader program resolutionX * resolutionY times in batches of size localBatchSize.
+ * If localBatchSize is 0, it will attempt to find a viable batch size automatically. This function is useful for time-intensive
+ * calculations to prevent stalling the OpenGL command queue.
+ * @param localBatchSize The batch size to use. 0 if automatic discovery is wished
+ * @param resolutionX The amount of pixels to process in x-direction
+ * @param resolutionY The amount of pixels to process in y-direction
+ */
 void GLHandler::dispatchShader(unsigned int localBatchSize, unsigned long resolutionX, unsigned long resolutionY) const {
     const auto currentInvocationLocation = glGetUniformLocation(getProgram(), "currentInvocation");
 

@@ -11,7 +11,7 @@ RadarComparator::RadarComparator(std::vector<std::string> configPaths) {
     pipelines.reserve(RadarComparator::configPaths.size());
     for (const auto & configPath : RadarComparator::configPaths) {
         pipelines.emplace_back(configProvider->providePipeline(configPath));
-        destinationPaths.emplace_back(configProvider->getComparisonPath());
+        destinationPaths.emplace_back(configProvider->getDestinationPath());
         thresholds.emplace_back(configProvider->getThreshold());
         betterCompression.emplace_back(configProvider->getBetterCompression());
     }

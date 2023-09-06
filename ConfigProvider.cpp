@@ -19,7 +19,7 @@
 ConfigProvider::ConfigProvider() = default;
 
 /**
- * Constructs a new ConfigReader while setting the path of the .yaml to read from later.
+ * Constructs a new ConfigReader while setting the path of the .yaml to read from.
  * @param configPath The path to the .yaml to be read
  */
 ConfigProvider::ConfigProvider(std::string configPath) {
@@ -30,7 +30,7 @@ ConfigProvider::~ConfigProvider() = default;
 
 /**
  * Tries to read the .yaml pointed to by configPath.
- * @throws std::exception When the given path is not valid, or there was an error reading the config.
+ * @throws std::exception When the given path is not valid, or when there was an error reading the config
  * @return The YAML::Node containing all data found in the given .yaml
  */
 YAML::Node ConfigProvider::readConfig() {
@@ -40,7 +40,6 @@ YAML::Node ConfigProvider::readConfig() {
         localConfig = YAML::LoadFile(configPath);
     } catch (const std::exception& e) {
         std::cout << e.what() << std::endl;
-        //exit(Pipeline::EXIT_INVALID_COMMAND_LINE_ARGUMENTS);
         throw std::exception();
     }
 
@@ -193,18 +192,26 @@ Pipeline *ConfigProvider::providePipeline() {
     return pipeline;
 }
 
-GLHandler *ConfigProvider::getGLHandler() {
-    return glHandler;
-}
-
-std::string ConfigProvider::getComparisonPath() {
+/**
+ * Returns the destinationPath specified in the most recently processed YAML, if it exists.
+ * @return The specified destinationPath
+ */
+std::string ConfigProvider::getDestinationPath() {
     return checkValidityAndReturn({"ComparisonOptions", "destinationPath"}, true).first.as<std::string>();
 }
 
+/**
+ * Returns the threshold specified in the most recently processed YAML, if it exists.
+ * @return The specified threshold
+ */
 double ConfigProvider::getThreshold() {
     return checkValidityAndReturn({"ComparisonOptions", "threshold"}, true).first.as<double>();
 }
 
+/**
+ * Returns whether betterCompression is specified and true in the most recently processed YAML. This defaults to false if it is not specified.
+ * @return Whether to use better compression
+ */
 bool ConfigProvider::getBetterCompression() {
     auto betterCompression = checkValidityAndReturn({"HeightMapWriterOptions", "betterCompression"}, false);
     return betterCompression.second && betterCompression.first.as<bool>();
