@@ -3,6 +3,10 @@
 #include "GTiffWriter.h"
 #include "DataStructures.h"
 
+//only for Debug
+#include <fstream>
+#include <iostream>
+
 #include <utility>
 
 

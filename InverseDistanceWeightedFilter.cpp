@@ -11,19 +11,12 @@ InverseDistanceWeightedFilter::InverseDistanceWeightedFilter(GLHandler *glHandle
 }
 
 InverseDistanceWeightedFilter::~InverseDistanceWeightedFilter() {
-    auto bufferMask = glHandler->getCoherentBufferMask();
-
     glHandler->deleteBuffer(GLHandler::EFTDEM_CLOSING_MASK_BUFFER);
     glHandler->deleteBuffer(GLHandler::EFTDEM_HORIZONTAL_BUFFER);
     glHandler->deleteBuffer(GLHandler::EFTDEM_TOTAL_WEIGHT_BUFFER);
     glHandler->deleteBuffer(GLHandler::EFTDEM_SUM_BUFFER);
     glHandler->deleteBuffer(GLHandler::EFTDEM_AVERAGE_BUFFER);
 };
-
-void InverseDistanceWeightedFilter::allocBuffer(GLHandler::bufferIndices buffer, long size) {
-    glHandler->dataToBuffer(buffer, size, nullptr, gl::GL_STATIC_DRAW);
-}
-
 
 heightMap * InverseDistanceWeightedFilter::apply(heightMap *map, bool generateOutput) {
     using namespace gl;

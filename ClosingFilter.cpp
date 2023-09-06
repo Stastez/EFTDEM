@@ -14,8 +14,6 @@ ClosingFilter::ClosingFilter(GLHandler *glHandler, unsigned int kernelRadius, un
  * Deletes all buffers used for closing, except for the result buffer.
  */
 ClosingFilter::~ClosingFilter() {
-    auto bufferMask = glHandler->getCoherentBufferMask();
-
     glHandler->deleteBuffer(GLHandler::EFTDEM_CLOSING_MASK_BUFFER);
     glHandler->deleteBuffer(GLHandler::EFTDEM_HORIZONTAL_BUFFER);
     glHandler->deleteBuffer(GLHandler::EFTDEM_TOTAL_WEIGHT_BUFFER);
@@ -23,15 +21,8 @@ ClosingFilter::~ClosingFilter() {
     glHandler->deleteBuffer(GLHandler::EFTDEM_AVERAGE_BUFFER);
 }
 
-/**
- * Allocates the specified buffer for singleDataSize * dataCount bytes WITHOUT initializing the memory.
- * @param buffer The GLHandler bufferIndices member to be allocated
- * @param singleDataSize The size of a single value in bytes (e.g. sizeof(float))
- * @param dataCount The number of cells of singleDataSize to allocate
- */
-void ClosingFilter::allocBuffer(GLHandler::bufferIndices buffer, long singleDataSize, long dataCount) {
-    glHandler->dataToBuffer(buffer, singleDataSize * dataCount, nullptr, gl::GL_STATIC_DRAW);
-}
+
+
 
 heightMap * ClosingFilter::apply(heightMap *map, bool generateOutput) {
     using namespace gl;
@@ -93,7 +84,7 @@ heightMap * ClosingFilter::apply(heightMap *map, bool generateOutput) {
     bufferSpecs.emplace_back();
 
     for (auto i = 0ul; i < bufferSpecs.size(); i++) {
-        for (auto spec : bufferSpecs.at(i)) allocBuffer(spec.buffer, long(spec.size), pixelCount);
+        for (auto spec : bufferSpecs.at(i)) allocBuffer(spec.buffer, long(spec.size) * pixelCount);
 
         glHandler->setProgram(shader.at(i));
         glUniform2ui(glGetUniformLocation(glHandler->getProgram(), "resolution"), map->resolutionX, map->resolutionY);

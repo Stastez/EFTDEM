@@ -12,9 +12,10 @@ struct bufferSpecifications {
 class IKernelBasedFilter : public IHeightMapFiller {
 protected:
     GLHandler *glHandler;
-    unsigned int batchSize;
+    unsigned int kernelRadius, batchSize;
     std::vector<std::string> shaderPaths;
     std::vector<bufferSpecifications> interimBufferSpecifications;
+    void allocBuffer(GLHandler::bufferIndices buffer, long size);
 
 public:
     ~IKernelBasedFilter() noexcept override;

@@ -8,9 +8,6 @@
 
 class InverseDistanceWeightedFilter : public IKernelBasedFilter {
 private:
-    GLHandler *glHandler;
-    unsigned int kernelRadius;
-    void allocBuffer(GLHandler::bufferIndices buffer, long size);
 public:
     InverseDistanceWeightedFilter(GLHandler *glHandler, unsigned int kernelRadius, unsigned int batchSize);
     ~InverseDistanceWeightedFilter() override;

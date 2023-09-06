@@ -55,7 +55,7 @@ add_executable(EFTDEM
         RadialFiller.cpp
         RadialFiller.h
         DummyFiller.cpp
-        DummyFiller.h)
+        DummyFiller.h GradientBasedFiller.cpp GradientBasedFiller.h)
 
 if(MSVC)
     target_compile_options(EFTDEM PRIVATE /W4)
