@@ -362,6 +362,11 @@ void GLHandler::dispatchShader(unsigned int localBatchSize, unsigned long resolu
     }
 }
 
+/**
+ * Convenience function that takes a string and replaces all bufferIndices member names with their corresponding index
+ * (e.g. "layout (binding = EFTDEM_HEIGHTMAP_BUFFER) ..." -> "layout (binding = 5) ...")
+ * @param shaderSource The string in which to replace names
+ */
 void GLHandler::replaceBufferPlaceholders(std::string &shaderSource) {
     for (unsigned long i = 1; i < magic_enum::enum_count<bufferIndices>(); i++) {
         size_t index = 0;
