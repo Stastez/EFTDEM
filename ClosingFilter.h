@@ -10,7 +10,6 @@
  * An IHeightMapFiller that closes voids via simple interpolation of the neighbourhood pixels.
  */
 class ClosingFilter : public IKernelBasedFilter {
-private:
 public:
     ClosingFilter(GLHandler *glHandler, unsigned int kernelRadius, unsigned int batchSize);
     ~ClosingFilter() override;

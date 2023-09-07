@@ -21,9 +21,6 @@ ClosingFilter::~ClosingFilter() {
     glHandler->deleteBuffer(GLHandler::EFTDEM_AVERAGE_BUFFER);
 }
 
-
-
-
 heightMap * ClosingFilter::apply(heightMap *map, bool generateOutput) {
     using namespace gl;
 

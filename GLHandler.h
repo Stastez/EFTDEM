@@ -28,6 +28,7 @@ public:
         EFTDEM_TOTAL_WEIGHT_BUFFER, // float for each grid cell
         EFTDEM_KERNEL_BUFFER, // float for as manny fields as Kernel Radius
         EFTDEM_SECOND_HEIGHTMAP_BUFFER, // float for each grid cell
+        EFTDEM_GRADIENT_BUFFER, // float for each grid cell
     };
 
     GLHandler();

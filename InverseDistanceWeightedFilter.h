@@ -7,7 +7,6 @@
 #include "IKernelBasedFilter.h"
 
 class InverseDistanceWeightedFilter : public IKernelBasedFilter {
-private:
 public:
     InverseDistanceWeightedFilter(GLHandler *glHandler, unsigned int kernelRadius, unsigned int batchSize);
     ~InverseDistanceWeightedFilter() override;
