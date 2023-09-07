@@ -1,7 +1,8 @@
-import sys
-import math
+# This script enables the user to cut off the edges of the specified point cloud up to the specified thresholds.
 
-if (len(sys.argv) < 7):
+import sys
+
+if len(sys.argv) < 7:
     print("Usage: [program] inPath outPath minX maxX minY maxY")
     exit()
 
@@ -18,13 +19,13 @@ outputFile = open(outPath, 'w')
 line = inputFile.readline()
 outputFile.write(line)
 line = inputFile.readline()
-while (line != ""):
+while line != "":
     splits = line.split(',')
 
     x = float(splits[0])
     y = float(splits[1])
 
-    if (x >= minX and x <= maxX and y >= minY and y <= maxY):
+    if minX <= x <= maxX and minY <= y <= maxY:
         outputFile.write(line)
 
     line = inputFile.readline()

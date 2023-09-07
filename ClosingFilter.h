@@ -6,6 +6,9 @@
 #include "GLHandler.h"
 #include "IKernelBasedFilter.h"
 
+/**
+ * An IHeightMapFiller that closes voids via simple interpolation of the neighbourhood pixels.
+ */
 class ClosingFilter : public IKernelBasedFilter {
 private:
 public:

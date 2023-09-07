@@ -4,6 +4,9 @@
 #include "Pipeline.h"
 #include <yaml-cpp/yaml.h>
 
+/**
+ * This class can read YAML files and provide Pipeline objects that are configured in the specified way.
+ */
 class ConfigProvider {
 private:
     YAML::Node config;
@@ -18,8 +21,8 @@ public:
     ~ConfigProvider();
     Pipeline *providePipeline();
     Pipeline *providePipeline(std::string configPath);
-    GLHandler *getGLHandler();
-    std::string getComparisonPath();
+
+    std::string getDestinationPath();
     double getThreshold();
     bool getBetterCompression();
 };
