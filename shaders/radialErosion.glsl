@@ -23,16 +23,17 @@ void main() {
 
     for (int xOffset = -1; xOffset <= 1; ++xOffset) {
         for (int yOffset = -1; yOffset <= 1; ++yOffset) {
-            uvec2 actualPosition = gl_GlobalInvocationID.xy + uvec2(xOffset, yOffset);
-            bool isOnCanvas = all(greaterThanEqual(actualPosition, uvec2(0, 0))) && all(lessThan(actualPosition, resolution));
+            ivec2 newPosition = ivec2(gl_GlobalInvocationID.xy) + ivec2(xOffset, yOffset);
+            uvec2 clampedNewPosition = uvec2(clamp(newPosition, uvec2(0u), resolution - 1u));
+            bool isOnCanvas = all(greaterThanEqual(clampedNewPosition, uvec2(0, 0))) && all(lessThan(clampedNewPosition, resolution));
 
-            uint actual1DCoordinate = calculate1DCoordinate(actualPosition, resolution);
+            uint actual1DCoordinate = calculate1DCoordinate(clampedNewPosition, resolution);
             float height = (!flipped) ? firstHeightMap[actual1DCoordinate] : secondHeightMap[actual1DCoordinate];
             height = mix(1., height, float(isOnCanvas));
             minValue = min(minValue, height);
         }
     }
 
-    if (!flipped) secondHeightMap[ownCoordinate] = mix(0., secondHeightMap[ownCoordinate], step(0.0000001, minValue));
-    else firstHeightMap[ownCoordinate] = mix(0., secondHeightMap[ownCoordinate], step(0.0000001, minValue));
+    if (!flipped) secondHeightMap[ownCoordinate] = mix(0., secondHeightMap[ownCoordinate], float(minValue > 0.));
+    else firstHeightMap[ownCoordinate] = mix(0., secondHeightMap[ownCoordinate], float(minValue > 0.));
 }

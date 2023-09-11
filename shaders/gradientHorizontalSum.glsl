@@ -8,8 +8,8 @@ layout (binding = EFTDEM_GRADIENT_BUFFER) restrict buffer mapBuffer{
 layout (binding = EFTDEM_KERNEL_BUFFER) restrict buffer kernelBuffer{
     float kernel[];
 };
-layout (binding = EFTDEM_HORIZONTAL_BUFFER) restrict buffer horizontalTotalWeightsBuffer{
-    vec2 horizontalTotalWeights[];
+layout (binding = EFTDEM_HORIZONTAL_BUFFER) restrict buffer horizontalSumBuffer{
+    vec2 horizontalSums[];
 };
 
 uniform uvec2 resolution;
@@ -18,6 +18,12 @@ uniform uvec2 currentInvocation;
 
 uint calculate1DCoordinate(uvec2 pos) {
     return pos.y * resolution.x + pos.x;
+}
+
+bvec2 isVoidPixel(uvec2 pos) {
+    return bvec2(
+    values[calculate1DCoordinate(pos)].x <= -2,
+    values[calculate1DCoordinate(pos)].y <= -2);
 }
 
 void main() {
@@ -32,8 +38,8 @@ void main() {
         uint y = correctedGlobalInvocation.y;
 
         uint kernelIndex = abs(kx);
-        totalWeight += kernel[kernelIndex] * values[calculate1DCoordinate(uvec2(x,y))];
+        totalWeight += kernel[kernelIndex] * values[calculate1DCoordinate(uvec2(x,y))] * vec2(not(isVoidPixel(uvec2(x,y))));
     }
 
-    horizontalTotalWeights[coord1D] = totalWeight;
+    horizontalSums[coord1D] = totalWeight;
 }

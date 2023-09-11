@@ -20,6 +20,12 @@ uint calculate1DCoordinate(uvec2 pos) {
     return pos.y * resolution.x + pos.x;
 }
 
+bvec2 isVoidPixel(uvec2 pos) {
+    return bvec2(
+        values[calculate1DCoordinate(pos)].x <= -2,
+        values[calculate1DCoordinate(pos)].y <= -2);
+}
+
 void main() {
     uvec2 correctedGlobalInvocation = gl_GlobalInvocationID.xy + currentInvocation;
     if (any(greaterThanEqual(correctedGlobalInvocation, resolution))) return;
@@ -32,8 +38,7 @@ void main() {
         uint y = correctedGlobalInvocation.y;
 
         uint kernelIndex = abs(kx);
-        vec2 discrete = ceil(abs(values[calculate1DCoordinate(uvec2(x,y))]));
-        totalWeight += kernel[kernelIndex] * discrete;
+        totalWeight += kernel[kernelIndex] * vec2(not(isVoidPixel(uvec2(x,y))));
     }
 
     horizontalTotalWeights[coord1D] = totalWeight;

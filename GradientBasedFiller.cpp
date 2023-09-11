@@ -16,7 +16,7 @@ GradientBasedFiller::~GradientBasedFiller() {
     glHandler->deleteBuffer(GLHandler::EFTDEM_TOTAL_WEIGHT_BUFFER);
     glHandler->deleteBuffer(GLHandler::EFTDEM_SUM_BUFFER);
     glHandler->deleteBuffer(GLHandler::EFTDEM_AVERAGE_BUFFER);*/
-};
+}
 
 void GradientBasedFiller::dispatchCompute(gl::GLint flippedLocation, bool isDilation, heightMap * map) const {
     using namespace gl;
@@ -57,6 +57,12 @@ heightMap * GradientBasedFiller::apply(heightMap *map, bool generateOutput) {
     shaderPaths.emplace_back("gradientSum.glsl");
     shaderPaths.emplace_back("gradientFiller.glsl");
 
+    shaderPaths.emplace_back("discretization.glsl");
+    shaderPaths.emplace_back("horizontalSumIDW.glsl");
+    shaderPaths.emplace_back("sumIDW.glsl");
+    shaderPaths.emplace_back("horizontalTotalWeights.glsl");
+    shaderPaths.emplace_back("totalWeights.glsl");
+
     auto shader = glHandler->getShaderPrograms(shaderPaths, true);
 
     auto pixelCount = (long) (map->resolutionX * map->resolutionY);
@@ -83,13 +89,18 @@ heightMap * GradientBasedFiller::apply(heightMap *map, bool generateOutput) {
     bufferSpecs.emplace_back();
     // sum
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_SUM_BUFFER, long(sizeof(GLfloat) * pixelCount * 2)}});
-    // averageIDW
-    //bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_AVERAGE_BUFFER, long(sizeof(GLfloat) * pixelCount)}});
     // gradientFiller
+    bufferSpecs.emplace_back();
+    // discretisation
+    bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_CLOSING_MASK_BUFFER, long(sizeof(GLfloat) * pixelCount)}});
+    // IDW on heights, buffers already exist
+    bufferSpecs.emplace_back();
+    bufferSpecs.emplace_back();
+    bufferSpecs.emplace_back();
     bufferSpecs.emplace_back();
 
     for (auto i = 0ul; i < shader.size(); i++) {
-        for (auto spec : bufferSpecs.at(i)) allocBuffer(spec.buffer, long(spec.size));
+        for (auto spec: bufferSpecs.at(i)) allocBuffer(spec.buffer, long(spec.size));
 
         glHandler->setProgram(shader.at(i));
         glUniform2ui(glGetUniformLocation(shader.at(i), "resolution"), map->resolutionX, map->resolutionY);
@@ -98,18 +109,20 @@ heightMap * GradientBasedFiller::apply(heightMap *map, bool generateOutput) {
         GLHandler::waitForShaderStorageIntegrity();
     }
 
+    /*auto tmp = new float[pixelCount];
+    glHandler->dataFromBuffer(GLHandler::EFTDEM_HORIZONTAL_BUFFER, 0, pixelCount * sizeof(GLfloat ), tmp);
+    for (auto i = 0; i < pixelCount; i++) {
+        if (tmp[i] != 0) {
+            std::cout << i << ": " << tmp[i] << std::endl;
+        }
+    }*/
+
     // dilation
     auto program = glHandler->getShaderPrograms({"gradientRadialDilation.glsl"}, true).at(0);
     auto resolutionLocation = gl::glGetUniformLocation(program, "resolution");
     auto flippedLocation = gl::glGetUniformLocation(program, "flipped");
 
     glHandler->setProgram(program);
-
-    if (!glHandler->getCoherentBufferMask().at(GLHandler::EFTDEM_HEIGHTMAP_BUFFER)){
-        glHandler->dataToBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,
-                                map->dataSize,
-                                map->heights.data(), GL_STATIC_DRAW);
-    }
 
     if (!glHandler->getCoherentBufferMask().at(GLHandler::EFTDEM_SECOND_HEIGHTMAP_BUFFER)) {
         auto initialState = new std::vector<GLfloat>(map->resolutionX * map->resolutionY, 0);
@@ -124,7 +137,7 @@ heightMap * GradientBasedFiller::apply(heightMap *map, bool generateOutput) {
     dispatchCompute(flippedLocation, true, map);
 
     // erosion
-    /*program = glHandler->getShaderPrograms({"radialErosion.glsl"}, true).at(0);
+    program = glHandler->getShaderPrograms({"radialErosion.glsl"}, true).at(0);
     resolutionLocation = gl::glGetUniformLocation(program, "resolution");
     flippedLocation = gl::glGetUniformLocation(program, "flipped");
 
@@ -132,21 +145,21 @@ heightMap * GradientBasedFiller::apply(heightMap *map, bool generateOutput) {
 
     glUniform2ui(resolutionLocation, map->resolutionX, map->resolutionY);
 
-    dispatchCompute(flippedLocation, false, map);*/
+    dispatchCompute(flippedLocation, false, map);
 
     // Actual radial filler output
     auto filledMap = emptyHeightMapFromHeightMap(map);
 
-    if (kernelRadius % 2u == 1) {
+    /*if (kernelRadius % 2u == 1) {
         glHandler->dataFromBuffer(GLHandler::EFTDEM_SECOND_HEIGHTMAP_BUFFER,
                                   0, map->dataSize, filledMap->heights.data());
         glHandler->dataToBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,
                                 map->dataSize,
                                 filledMap->heights.data(), GL_STATIC_DRAW);
-    } else {
+    } else {*/
         glHandler->dataFromBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,
                                   0, map->dataSize, filledMap->heights.data());
-    }
+    //}
 
     auto end = std::chrono::high_resolution_clock::now();
     std::cout << "Elapsed time for closing: " << duration_cast<std::chrono::milliseconds>(end - start).count() << "ms" << std::endl;

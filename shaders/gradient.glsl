@@ -25,12 +25,12 @@ void main() {
 
     gradients[coord1D].x =
         (heights[coord1D] <= 0.0 || heights[coord1DRight] <= 0.0) ?
-            0.0 :
+            -2.0 :
             heights[coord1DRight] - heights[coord1D];
 
     gradients[coord1D].y =
         (heights[coord1D] <= 0.0 || heights[coord1DTop] <= 0.0) ?
-            0.0 :
+            -2.0 :
             heights[coord1DTop] - heights[coord1D];
 }
 

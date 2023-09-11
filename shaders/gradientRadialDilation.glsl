@@ -10,16 +10,18 @@ layout (binding = EFTDEM_HEIGHTMAP_BUFFER) restrict buffer heightMapBuffer1 {
 layout (binding = EFTDEM_SECOND_HEIGHTMAP_BUFFER) restrict buffer heightMapBuffer2 {
     float secondHeightMap[];
 };
+layout (binding = EFTDEM_TOTAL_WEIGHT_BUFFER) restrict buffer totalWeightBuffer{
+    float totalWeights[];
+};
+layout (binding = EFTDEM_SUM_BUFFER) restrict buffer sumBuffer{
+    float sums[];
+};
 uniform uvec2 resolution;
 uniform bool flipped;
 
 uint calculate1DCoordinate(uvec2 pos, uvec2 referenceResolution) {
     return pos.y * referenceResolution.x + pos.x;
 }
-
-/*uint calculate1DCoordinateGradientBuffer(uvec2 pos, uvec2 referenceResolution) {
-    return (pos.y * referenceResolution.x + pos.x) * 2u;
-}*/
 
 void main() {
     if (any(greaterThanEqual(gl_GlobalInvocationID.xy, resolution))) return;
@@ -31,21 +33,21 @@ void main() {
 
     for (int xOffset = -1; xOffset <= 1; ++xOffset) {
         for (int yOffset = -1; yOffset <= 1; ++yOffset) {
-            uvec2 actualPosition = gl_GlobalInvocationID.xy + uvec2(xOffset, yOffset);
-            bool isOnCanvas = all(greaterThanEqual(actualPosition, uvec2(0, 0))) && all(lessThan(actualPosition, resolution));
+            ivec2 newPosition = ivec2(gl_GlobalInvocationID.xy) + ivec2(xOffset, yOffset);
+            uvec2 clampedNewPosition = uvec2(clamp(newPosition, uvec2(0u), resolution - 1u));
+            bool isOnCanvas = all(greaterThanEqual(clampedNewPosition, uvec2(0, 0))) && all(lessThan(clampedNewPosition, resolution));
 
-            uint actual1DCoordinate = calculate1DCoordinate(actualPosition, resolution);
-            //uint actual1DCoordinateGradient = calculate1DCoordinateGradientBuffer(actualPosition, resolution);
+            uint actual1DCoordinate = calculate1DCoordinate(clampedNewPosition, resolution);
             float originalHeight = (!flipped) ? firstHeightMap[actual1DCoordinate] : secondHeightMap[actual1DCoordinate];
             vec2 gradient = gradients[actual1DCoordinate];
 
-            float distanceFromKernelOrigin = length(vec2(xOffset, yOffset));
             sum += float(isOnCanvas) * float(originalHeight > 0.)
-                * ((float(xOffset < 0) * (originalHeight + gradient.x)))
-                /*+ float(xOffset > 0) * (originalHeight - gradient.x)
-                + float(yOffset < 0) * (originalHeight + gradient.y)
-                + float(yOffset > 0) * (originalHeight - gradient.y))
-                / distanceFromKernelOrigin)*/;
+            * ((float(xOffset < 0) * gradient.x
+            + float(xOffset > 0) * -gradient.x
+            + float(yOffset < 0) * gradient.y
+            + float(yOffset > 0) * -gradient.y)
+            + originalHeight);
+
             count += float(isOnCanvas) * float(originalHeight > 0.);
         }
     }
@@ -53,10 +55,12 @@ void main() {
     float previousValue = (!flipped) ? firstHeightMap[ownCoordinate] : secondHeightMap[ownCoordinate];
 
     bool isVoidPixel = (previousValue <= 0.);
-    count = max(count, 1.);
+    count = mix(1., count, float(count > 0.));
     float average = mix(previousValue, sum / count, float(isVoidPixel));
 
-    average = sum;
+    // mix with IDW result
+    float idwHeight = sums[ownCoordinate] / (totalWeights[ownCoordinate] + float(totalWeights[ownCoordinate] == 0.));
+    //average = mix(idwHeight, average, 0.5);
 
     if (!flipped) secondHeightMap[ownCoordinate] = average;
     else firstHeightMap[ownCoordinate] = average;

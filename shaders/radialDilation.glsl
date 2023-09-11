@@ -30,10 +30,11 @@ void main() {
 
     for (int xOffset = -1; xOffset <= 1; ++xOffset) {
         for (int yOffset = -1; yOffset <= 1; ++yOffset) {
-            uvec2 actualPosition = gl_GlobalInvocationID.xy + uvec2(xOffset, yOffset);
-            bool isOnCanvas = all(greaterThanEqual(actualPosition, uvec2(0, 0))) && all(lessThan(actualPosition, resolution));
+            ivec2 newPosition = ivec2(gl_GlobalInvocationID.xy) + ivec2(xOffset, yOffset);
+            uvec2 clampedNewPosition = uvec2(clamp(newPosition, uvec2(0u), resolution - 1u));
+            bool isOnCanvas = all(greaterThanEqual(clampedNewPosition, uvec2(0, 0))) && all(lessThan(clampedNewPosition, resolution));
 
-            uint actual1DCoordinate = calculate1DCoordinate(actualPosition, resolution);
+            uint actual1DCoordinate = calculate1DCoordinate(clampedNewPosition, resolution);
             float height = (!flipped) ? firstHeightMap[actual1DCoordinate] : secondHeightMap[actual1DCoordinate];
 
             float distanceFromKernelOrigin = length(vec2(xOffset, yOffset));
@@ -45,7 +46,7 @@ void main() {
     float previousValue = (!flipped) ? firstHeightMap[ownCoordinate] : secondHeightMap[ownCoordinate];
 
     bool isVoidPixel = (previousValue == 0.);
-    count = max(count, 1.);
+    count = mix(1., count, float(count > 0.));
     float average = mix(previousValue, sum / count, float(isVoidPixel));
 
     if (!flipped) secondHeightMap[ownCoordinate] = average;

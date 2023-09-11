@@ -26,9 +26,7 @@ uint calculate1DCoordinate(uvec2 pos) {
 void main() {
     uvec2 correctedGlobalInvocation = gl_GlobalInvocationID.xy + currentInvocation;
     if (any(greaterThanEqual(correctedGlobalInvocation, resolution))) return;
-    uint coord1D;
 
-    coord1D = calculate1DCoordinate(correctedGlobalInvocation);
-    //gradient[coord1D] = abs(sums[coord1D] / totalWeights[coord1D]);
-    gradient[coord1D] = vec2(0.2);
+    uint coord1D = calculate1DCoordinate(correctedGlobalInvocation);
+    gradient[coord1D] = sums[coord1D] / totalWeights[coord1D];
 }
