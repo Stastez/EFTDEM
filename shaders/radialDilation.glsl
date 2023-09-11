@@ -45,7 +45,7 @@ void main() {
     float previousValue = (!flipped) ? firstHeightMap[ownCoordinate] : secondHeightMap[ownCoordinate];
 
     bool isVoidPixel = (previousValue == 0.);
-    count = mix(1., count, step(0.0000001, count));
+    count = max(count, 1.);
     float average = mix(previousValue, sum / count, float(isVoidPixel));
 
     if (!flipped) secondHeightMap[ownCoordinate] = average;

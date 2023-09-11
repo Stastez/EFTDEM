@@ -29,6 +29,6 @@ void main() {
     uint coord1D;
 
     coord1D = calculate1DCoordinate(correctedGlobalInvocation);
-    //heights[coord1D] = sums[coord1D].x / totalWeights[coord1D].x;
-    heights[coord1D] = gradient[coord1D].x;
+    //gradient[coord1D] = abs(sums[coord1D] / totalWeights[coord1D]);
+    gradient[coord1D] = vec2(0.2);
 }

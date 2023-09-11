@@ -1,5 +1,6 @@
 #include "GradientBasedFiller.h"
 #include <iostream>
+#include <cmath>
 
 GradientBasedFiller::GradientBasedFiller(GLHandler *glHandler, unsigned int kernelRadius, unsigned int batchSize = 0) {
     GradientBasedFiller::glHandler = glHandler;
@@ -98,7 +99,7 @@ heightMap * GradientBasedFiller::apply(heightMap *map, bool generateOutput) {
     }
 
     // dilation
-    /*auto program = glHandler->getShaderPrograms({"radialDilation.glsl"}, true).at(0);
+    auto program = glHandler->getShaderPrograms({"gradientRadialDilation.glsl"}, true).at(0);
     auto resolutionLocation = gl::glGetUniformLocation(program, "resolution");
     auto flippedLocation = gl::glGetUniformLocation(program, "flipped");
 
@@ -123,7 +124,7 @@ heightMap * GradientBasedFiller::apply(heightMap *map, bool generateOutput) {
     dispatchCompute(flippedLocation, true, map);
 
     // erosion
-    program = glHandler->getShaderPrograms({"radialErosion.glsl"}, true).at(0);
+    /*program = glHandler->getShaderPrograms({"radialErosion.glsl"}, true).at(0);
     resolutionLocation = gl::glGetUniformLocation(program, "resolution");
     flippedLocation = gl::glGetUniformLocation(program, "flipped");
 
@@ -131,7 +132,7 @@ heightMap * GradientBasedFiller::apply(heightMap *map, bool generateOutput) {
 
     glUniform2ui(resolutionLocation, map->resolutionX, map->resolutionY);
 
-    dispatchCompute(flippedLocation, false, map);
+    dispatchCompute(flippedLocation, false, map);*/
 
     // Actual radial filler output
     auto filledMap = emptyHeightMapFromHeightMap(map);
@@ -145,18 +146,18 @@ heightMap * GradientBasedFiller::apply(heightMap *map, bool generateOutput) {
     } else {
         glHandler->dataFromBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,
                                   0, map->dataSize, filledMap->heights.data());
-    }*/
+    }
 
     auto end = std::chrono::high_resolution_clock::now();
     std::cout << "Elapsed time for closing: " << duration_cast<std::chrono::milliseconds>(end - start).count() << "ms" << std::endl;
 
     if (!generateOutput) return emptyHeightMapFromHeightMap(map);
 
-    auto filledMap = emptyHeightMapFromHeightMap(map);
+    /*auto filledMap = emptyHeightMapFromHeightMap(map);
     glHandler->dataFromBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,
                               0,
                               (long) (sizeof(GLfloat) * filledMap->resolutionX * filledMap->resolutionY),
-                              filledMap->heights.data());
+                              filledMap->heights.data());*/
 
     return filledMap;
 }

@@ -40,21 +40,23 @@ void main() {
             vec2 gradient = gradients[actual1DCoordinate];
 
             float distanceFromKernelOrigin = length(vec2(xOffset, yOffset));
-            sum += float(isOnCanvas) * float(originalHeight != 0.)
-                * ((float(xOffset < 0) * (originalHeight + gradient.x)
-                + float(xOffset > 0) * (originalHeight - gradient.x)
+            sum += float(isOnCanvas) * float(originalHeight > 0.)
+                * ((float(xOffset < 0) * (originalHeight + gradient.x)))
+                /*+ float(xOffset > 0) * (originalHeight - gradient.x)
                 + float(yOffset < 0) * (originalHeight + gradient.y)
                 + float(yOffset > 0) * (originalHeight - gradient.y))
-                / distanceFromKernelOrigin);
-            count += float(isOnCanvas) * float(originalHeight != 0.);
+                / distanceFromKernelOrigin)*/;
+            count += float(isOnCanvas) * float(originalHeight > 0.);
         }
     }
 
     float previousValue = (!flipped) ? firstHeightMap[ownCoordinate] : secondHeightMap[ownCoordinate];
 
-    bool isVoidPixel = (previousValue == 0.);
-    count = mix(1., count, step(0.0000001, count));
+    bool isVoidPixel = (previousValue <= 0.);
+    count = max(count, 1.);
     float average = mix(previousValue, sum / count, float(isVoidPixel));
+
+    average = sum;
 
     if (!flipped) secondHeightMap[ownCoordinate] = average;
     else firstHeightMap[ownCoordinate] = average;

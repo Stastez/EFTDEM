@@ -82,17 +82,8 @@ heightMap *RadialFiller::apply(heightMap *map, bool generateOutput) {
     dispatchCompute(flippedLocation, false, map);
 
     auto filledMap = emptyHeightMapFromHeightMap(map);
-
-    if (maxHoleRadius % 2u == 1) {
-        glHandler->dataFromBuffer(GLHandler::EFTDEM_SECOND_HEIGHTMAP_BUFFER,
-                                  0, map->dataSize, filledMap->heights.data());
-        glHandler->dataToBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,
-                                map->dataSize,
-                                filledMap->heights.data(), GL_STATIC_DRAW);
-    } else {
-        glHandler->dataFromBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,
-                                  0, map->dataSize, filledMap->heights.data());
-    }
+    glHandler->dataFromBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,
+                              0, map->dataSize, filledMap->heights.data());
 
     std::cout << "Elapsed time for radial filler: " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - begin).count() << " ms" << std::endl;
 
