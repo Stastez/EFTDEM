@@ -8,6 +8,7 @@ class RadialFiller : public IHeightMapFiller {
 private:
     GLHandler * glHandler;
     unsigned int maxHoleRadius;
+    void dispatchCompute(gl::GLint, bool, heightMap *) const;
 
 public:
     RadialFiller(GLHandler * glHandler, unsigned int maxHoleRadius);

@@ -137,6 +137,7 @@ gl::GLuint GLHandler::getShaderProgram(const std::string& shaderFile, bool useSt
     glCompileShader(shaderNumber);
     glGetShaderiv(shaderNumber, GL_COMPILE_STATUS, &success);
     if (!success) {
+        std::cout << "ERROR -- " << shaderFile << " -- ERROR" << std::endl;
         glGetShaderInfoLog(shaderNumber, 512, nullptr, infoLog);
         std::cout << infoLog << std::endl;
         throw std::exception();
@@ -149,6 +150,7 @@ gl::GLuint GLHandler::getShaderProgram(const std::string& shaderFile, bool useSt
 
     glGetProgramiv(program, GL_LINK_STATUS, &success);
     if (!success) {
+        std::cout << "ERROR -- " << shaderFile << " -- ERROR" << std::endl;
         glGetProgramInfoLog(program, 512, nullptr, infoLog);
         std::cout << infoLog << std::endl;
         throw std::exception();

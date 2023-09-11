@@ -17,6 +17,29 @@ GradientBasedFiller::~GradientBasedFiller() {
     glHandler->deleteBuffer(GLHandler::EFTDEM_AVERAGE_BUFFER);*/
 };
 
+void GradientBasedFiller::dispatchCompute(gl::GLint flippedLocation, bool isDilation, heightMap * map) const {
+    using namespace gl;
+
+    GLsync previousSync = nullptr;
+    for (auto i = 0u; i < kernelRadius; i++) {
+        auto flipped = (bool) (isDilation ? (i % 2u) : (kernelRadius + i) % 2u);
+        glUniform1i(flippedLocation, flipped);
+        glDispatchCompute((GLuint) std::ceil((double) map->resolutionX / 8.), (GLuint) std::ceil((double) map->resolutionY / 4.), 1);
+
+        if (previousSync != nullptr) {
+            glClientWaitSync(previousSync, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED);
+            glDeleteSync(previousSync);
+        }
+
+        auto currentSync = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+        std::swap(previousSync, currentSync);
+    }
+    if (previousSync != nullptr) {
+        glClientWaitSync(previousSync, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED);
+        glDeleteSync(previousSync);
+    }
+}
+
 heightMap * GradientBasedFiller::apply(heightMap *map, bool generateOutput) {
     using namespace gl;
 

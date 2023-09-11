@@ -5,6 +5,8 @@
 
 class GradientBasedFiller : public IKernelBasedFilter {
 private:
+    void dispatchCompute(gl::GLint, bool, heightMap *) const;
+
 public:
     GradientBasedFiller(GLHandler *glHandler, unsigned int kernelRadius, unsigned int batchSize);
     ~GradientBasedFiller() override;

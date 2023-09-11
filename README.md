@@ -30,11 +30,12 @@ CloudRasterizerOptions:
 HeightMapFillerOptions:
   useGPU: true
 
-  # Currently implemented: closingFilter, inverseDistanceWeightedFilter, radialFiller, dummy (use dummy to output the unfilled rasterized version)
+  # Currently implemented: closingFilter, inverseDistanceWeightedFilter, radialFiller, gradientFiller, dummy (use dummy to output the unfilled rasterized version)
   filler: inverseDistanceWeightedFilter
 
-  # for closingFilter and inverseDistanceWeightedFilter
+  # for closingFilter, inverseDistanceWeightedFilter and gradientFiller
   kernelBasedFilterOptions:
+    # gradientFiller will only use the first kernelSize
     kernelSizes:
       - 5
       - 25
@@ -86,7 +87,7 @@ EFTDEM with the build-directory specified as `build`.
 
 ### Linux (X11)
 
-You may run [build_deps.sh](./build_deps.sh). The installation script requires CMake and git to be to be installed in the system PATH,
+You may run [build_deps.sh](./build_deps.sh). The installation script requires CMake and git to be installed in the system PATH,
 as well as a working C++ compiler.
 The script will clone all necessary dependencies from GitHub and compile them into a directory called "deps". GDAL will be installed via vcpkg.
 Lastly, the script will execute [build_config.sh](./build_config.sh) which will set up a valid CMake project for

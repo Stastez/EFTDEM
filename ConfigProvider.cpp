@@ -12,6 +12,7 @@
 #include "FillerLoop.h"
 #include "RadialFiller.h"
 #include "DummyFiller.h"
+#include "GradientBasedFiller.h"
 
 #include <iostream>
 #include <utility>
@@ -173,6 +174,13 @@ Pipeline *ConfigProvider::providePipeline() {
         auto maxHoleRadius = checkValidityAndReturn({"HeightMapFillerOptions", "radialFillerOptions", "maxHoleRadius"},
                                                     true).first.as<unsigned int>();
         filler = new RadialFiller(glHandler, maxHoleRadius);
+    } else if (fillingAlgorithm == "gradientFiller") {
+        auto kernelRadius = checkValidityAndReturn({"HeightMapFillerOptions", "kernelBasedFilterOptions", "kernelSizes"}, true).first.as<std::vector<unsigned int>>().front();
+        auto batchSizeTest = checkValidityAndReturn(
+                {"HeightMapFillerOptions", "kernelBasedFilterOptions", "batchSize"}, false);
+        auto batchSize = (batchSizeTest.second) ? batchSizeTest.first.as<unsigned int>() : 0;
+
+        filler = new GradientBasedFiller(glHandler, kernelRadius, batchSize);
     } else if (fillingAlgorithm == "dummy") {
         filler = new DummyFiller();
     } else {

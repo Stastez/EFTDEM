@@ -15,7 +15,7 @@ RadialFiller::~RadialFiller() {
     glHandler->deleteBuffer(GLHandler::EFTDEM_SECOND_HEIGHTMAP_BUFFER);
 }
 
-void dispatchCompute(gl::GLint flippedLocation, bool isDilation, unsigned int maxHoleRadius, heightMap * map) {
+void RadialFiller::dispatchCompute(gl::GLint flippedLocation, bool isDilation, heightMap * map) const {
     using namespace gl;
 
     GLsync previousSync = nullptr;
@@ -68,7 +68,7 @@ heightMap *RadialFiller::apply(heightMap *map, bool generateOutput) {
 
     glUniform2ui(resolutionLocation, map->resolutionX, map->resolutionY);
 
-    dispatchCompute(flippedLocation, true, maxHoleRadius, map);
+    dispatchCompute(flippedLocation, true, map);
 
     // erosion
     program = glHandler->getShaderPrograms({"radialErosion.glsl"}, true).at(0);
@@ -79,7 +79,7 @@ heightMap *RadialFiller::apply(heightMap *map, bool generateOutput) {
 
     glUniform2ui(resolutionLocation, map->resolutionX, map->resolutionY);
 
-    dispatchCompute(flippedLocation, false, maxHoleRadius, map);
+    dispatchCompute(flippedLocation, false, map);
 
     auto filledMap = emptyHeightMapFromHeightMap(map);
 
