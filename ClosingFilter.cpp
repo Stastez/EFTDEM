@@ -21,6 +21,12 @@ ClosingFilter::~ClosingFilter() {
     glHandler->deleteBuffer(GLHandler::EFTDEM_AVERAGE_BUFFER);
 }
 
+/**
+ * Applies the ClosingFilter
+ * @param map the Heightmap that should be closed (if the Heightmap is already in the EFTDEM_HEIGHTMAP_BUFFER, the given map won't be used and may be an empty heightMap)
+ * @param generateOutput specifies whether to return a heightMap Object with the filled map or just an empty heightMap. This improves efficiency, by only moving Data from and to graphics memory when necessary.
+ * @return a heightMap with the filled height-data, or an empty map.
+ */
 heightMap * ClosingFilter::apply(heightMap *map, bool generateOutput) {
     using namespace gl;
 
@@ -28,6 +34,7 @@ heightMap * ClosingFilter::apply(heightMap *map, bool generateOutput) {
 
     auto start = std::chrono::high_resolution_clock::now();
 
+    //TODO extract into constant Variable
     shaderPaths = std::vector<std::string>();
     shaderPaths.emplace_back("discretization.glsl");
     shaderPaths.emplace_back("horizontalAmount.glsl");

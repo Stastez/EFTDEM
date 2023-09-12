@@ -12,6 +12,10 @@ GroundRadarReader::GroundRadarReader(const std::string& fileName) {
 
 GroundRadarReader::~GroundRadarReader() noexcept = default;
 
+/**
+ * Reads the file at the position in variable fileName (if there is one)
+ * @return a Vector containing the Lines of the File as Strings
+ */
 std::vector<std::string> GroundRadarReader::readFile() {
     std::fstream pointFile (fileName, std::ios::in);
     if (!pointFile.is_open()) {
@@ -49,6 +53,7 @@ std::pair<doublePoint, doublePoint> GroundRadarReader::parseFileContents(std::ve
 
         doublePoint p = {.x=stod(words[0]), .y=stod(words[1]), .z=stod(words[2]), .intensity=-1};
 
+        //TODO compact into one Point
         min.x = std::min(min.x, p.x);
         min.y = std::min(min.y, p.y);
         min.z = std::min(min.z, p.z);
