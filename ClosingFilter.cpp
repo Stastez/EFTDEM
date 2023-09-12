@@ -34,57 +34,52 @@ heightMap * ClosingFilter::apply(heightMap *map, bool generateOutput) {
 
     auto start = std::chrono::high_resolution_clock::now();
 
+    //The shaders in this vector will be executed
     shaderPaths = std::vector<std::string>();
-    shaderPaths.emplace_back("discretization.glsl");
-    shaderPaths.emplace_back("horizontalAmount.glsl");
-    shaderPaths.emplace_back("amount.glsl");
-    shaderPaths.emplace_back("horizontalSum.glsl");
-    shaderPaths.emplace_back("sum.glsl");
-    shaderPaths.emplace_back("average.glsl");
-
-    shaderPaths.emplace_back("dilation.glsl");
-    shaderPaths.emplace_back("horizontalAmount.glsl");
-    shaderPaths.emplace_back("amount.glsl");
-    shaderPaths.emplace_back("erosion.glsl");
-
-    shaderPaths.emplace_back("closing.glsl");
 
     auto pixelCount = (long) (map->resolutionX * map->resolutionY);
 
+    /*This vector should contain a vector of bufferSpecifications for every Shader specified in shaderPaths,
+     * containing the Specifications for all Buffers that need to be initialized before the respective shader is executed.*/
     auto bufferSpecs = std::vector<std::vector<bufferSpecifications>>();
-    bufferSpecs.reserve(shaderPaths.size());
-    // discretization
+
+    shaderPaths.emplace_back("discretization.glsl");
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_CLOSING_MASK_BUFFER, sizeof(GLfloat)}});
-    // horizontalAmount
+    shaderPaths.emplace_back("horizontalAmount.glsl");
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_HORIZONTAL_BUFFER, sizeof(GLfloat)}});
-    // amount
+    shaderPaths.emplace_back("amount.glsl");
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_TOTAL_WEIGHT_BUFFER, long(sizeof(unsigned int) * pixelCount)}});
-    // horizontalSum
+    shaderPaths.emplace_back("horizontalSum.glsl");
     bufferSpecs.emplace_back();
-    // sum
+    shaderPaths.emplace_back("sum.glsl");
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_SUM_BUFFER, sizeof(GLfloat)}});
-    // average
+    shaderPaths.emplace_back("average.glsl");
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_AVERAGE_BUFFER, sizeof(GLfloat)}});
-    // dilation
+
+    shaderPaths.emplace_back("dilation.glsl");
     bufferSpecs.emplace_back();
-    // horizontalAmount again
+    shaderPaths.emplace_back("horizontalAmount.glsl");
     bufferSpecs.emplace_back();
-    // amount again
+    shaderPaths.emplace_back("amount.glsl");
     bufferSpecs.emplace_back();
-    // erosion
+    shaderPaths.emplace_back("erosion.glsl");
     bufferSpecs.emplace_back();
-    // closing
+
+    shaderPaths.emplace_back("closing.glsl");
     bufferSpecs.emplace_back();
+
 
     auto shader = glHandler->getShaderPrograms(shaderPaths, true);
 
-    glHandler->setProgram(shader.at(0));
-
+    //if the height-data is already in the EFTDEM_HEIGHTMAP_BUFFER the coherent-buffer-mask will indicate that and the data does not need to be put on the Buffer
     if (!glHandler->getCoherentBufferMask().at(GLHandler::EFTDEM_HEIGHTMAP_BUFFER)){
         glHandler->dataToBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,
                                 (long) (sizeof(GLfloat) * pixelCount),
                                 map->heights.data(), GL_STATIC_DRAW);
     }
+
+    //TODO remove?
+    glHandler->setProgram(shader.at(0));
 
     for (auto i = 0ul; i < bufferSpecs.size(); i++) {
         for (auto spec : bufferSpecs.at(i)) allocBuffer(spec.buffer, long(spec.size) * pixelCount);
