@@ -37,9 +37,6 @@ std::vector<std::string> MobileMappingReader::readFile() {
 }
 
 std::pair<doublePoint, doublePoint> MobileMappingReader::parseFileContents(std::vector<std::string> *lines, std::vector<doublePoint> *groundPoints, std::vector<doublePoint> *environmentPoints, unsigned long begin = 0, unsigned long end = -1) {
-    doublePoint min = {std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<int>::max()};
-    doublePoint max = {-std::numeric_limits<double>::max(), -std::numeric_limits<double>::max(), -std::numeric_limits<double>::max(), std::numeric_limits<int>::min()};
-
     for (auto i = begin; i < end; i++) {
         std::string words[5];
         auto lastPosition = (unsigned long long) -1;
@@ -52,21 +49,13 @@ std::pair<doublePoint, doublePoint> MobileMappingReader::parseFileContents(std::
 
         doublePoint p = {.x=stod(words[0]), .y=stod(words[1]), .z=stod(words[2]), .intensity=stoi(words[4])};
 
-        if (words[3] == "1") {
-            min.x = std::min(min.x, p.x);
-            min.y = std::min(min.y, p.y);
-            min.z = std::min(min.z, p.z);
-            min.intensity = std::min(min.intensity, p.intensity);
-            max.x = std::max(max.x, p.x);
-            max.y = std::max(max.y, p.y);
-            max.z = std::max(max.z, p.z);
-            max.intensity = std::max(max.intensity, p.intensity);
-
+        if (words[3] == "1")
             groundPoints->emplace_back(p);
-        } else environmentPoints->emplace_back(p);
+        else
+            environmentPoints->emplace_back(p);
     }
 
-    return {min, max};
+    return mergeDoublePoints(*groundPoints);
 }
 
 rawPointCloud * MobileMappingReader::apply(bool generateOutput) {
@@ -102,9 +91,6 @@ rawPointCloud * MobileMappingReader::apply(bool generateOutput) {
     std::pair<doublePoint,doublePoint> extremes;
     extremes.first = mergeDoublePoints(minVector).first;
     extremes.second = mergeDoublePoints(maxVector).second;
-
-    //std::cout << "min: " << extremes.first.x << " max: " << extremes.second.x << "\n";
-    //std::cout << "min: " << extremes.first.y << " max: " << extremes.second.y << "\n";
 
     for (auto i = 0u; i < numThreads; i++) {
         groundPoints->insert(groundPoints->end(), groundPointsVector->at(i).begin(), groundPointsVector->at(i).end());

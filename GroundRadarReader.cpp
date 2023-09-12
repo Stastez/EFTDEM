@@ -38,9 +38,6 @@ std::vector<std::string> GroundRadarReader::readFile() {
 }
 
 std::pair<doublePoint, doublePoint> GroundRadarReader::parseFileContents(std::vector<std::string> *lines, std::vector<doublePoint> *groundPoints, unsigned long begin = 0, unsigned long end = -1) {
-    doublePoint min = {std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), std::numeric_limits<double>::max(), -1};
-    doublePoint max = {-std::numeric_limits<double>::max(), -std::numeric_limits<double>::max(), -std::numeric_limits<double>::max(), -1};
-
     for (auto i = begin; i < end; i++) {
         std::string words[3];
         auto lastPosition = (unsigned long long) -1;
@@ -53,20 +50,10 @@ std::pair<doublePoint, doublePoint> GroundRadarReader::parseFileContents(std::ve
 
         doublePoint p = {.x=stod(words[0]), .y=stod(words[1]), .z=stod(words[2]), .intensity=-1};
 
-        //TODO compact into one Point
-        min.x = std::min(min.x, p.x);
-        min.y = std::min(min.y, p.y);
-        min.z = std::min(min.z, p.z);
-        max.x = std::max(max.x, p.x);
-        max.y = std::max(max.y, p.y);
-        max.z = std::max(max.z, p.z);
-
         groundPoints->emplace_back(p);
-
-        //std::cout << "Point: " << p.x << ", " << p.y << ", " << p.z << " Min: " << min.x << ", " << min.y << ", " << min.z << " Max: " << max.x << ", " << max.y << ", " << max.z << std::endl;
     }
 
-    return {min, max};
+    return mergeDoublePoints(*groundPoints);
 }
 
 rawPointCloud * GroundRadarReader::apply(bool generateOutput) {

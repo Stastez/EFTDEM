@@ -34,7 +34,6 @@ heightMap * ClosingFilter::apply(heightMap *map, bool generateOutput) {
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    //TODO extract into constant Variable
     shaderPaths = std::vector<std::string>();
     shaderPaths.emplace_back("discretization.glsl");
     shaderPaths.emplace_back("horizontalAmount.glsl");
@@ -50,17 +49,7 @@ heightMap * ClosingFilter::apply(heightMap *map, bool generateOutput) {
 
     shaderPaths.emplace_back("closing.glsl");
 
-    auto shader = glHandler->getShaderPrograms(shaderPaths, true);
-
     auto pixelCount = (long) (map->resolutionX * map->resolutionY);
-
-    glHandler->setProgram(shader.at(0));
-
-    if (!glHandler->getCoherentBufferMask().at(GLHandler::EFTDEM_HEIGHTMAP_BUFFER)){
-        glHandler->dataToBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,
-                                (long) (sizeof(GLfloat) * pixelCount),
-                                map->heights.data(), GL_STATIC_DRAW);
-    }
 
     auto bufferSpecs = std::vector<std::vector<bufferSpecifications>>();
     bufferSpecs.reserve(shaderPaths.size());
@@ -86,6 +75,16 @@ heightMap * ClosingFilter::apply(heightMap *map, bool generateOutput) {
     bufferSpecs.emplace_back();
     // closing
     bufferSpecs.emplace_back();
+
+    auto shader = glHandler->getShaderPrograms(shaderPaths, true);
+
+    glHandler->setProgram(shader.at(0));
+
+    if (!glHandler->getCoherentBufferMask().at(GLHandler::EFTDEM_HEIGHTMAP_BUFFER)){
+        glHandler->dataToBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,
+                                (long) (sizeof(GLfloat) * pixelCount),
+                                map->heights.data(), GL_STATIC_DRAW);
+    }
 
     for (auto i = 0ul; i < bufferSpecs.size(); i++) {
         for (auto spec : bufferSpecs.at(i)) allocBuffer(spec.buffer, long(spec.size) * pixelCount);

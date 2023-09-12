@@ -147,19 +147,10 @@ heightMap * GradientBasedFiller::apply(heightMap *map, bool generateOutput) {
 
     dispatchCompute(flippedLocation, false, map);
 
-    // Actual radial filler output
     auto filledMap = emptyHeightMapFromHeightMap(map);
 
-    /*if (kernelRadius % 2u == 1) {
-        glHandler->dataFromBuffer(GLHandler::EFTDEM_SECOND_HEIGHTMAP_BUFFER,
-                                  0, map->dataSize, filledMap->heights.data());
-        glHandler->dataToBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,
-                                map->dataSize,
-                                filledMap->heights.data(), GL_STATIC_DRAW);
-    } else {*/
-        glHandler->dataFromBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,
-                                  0, map->dataSize, filledMap->heights.data());
-    //}
+    glHandler->dataFromBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,
+                              0, map->dataSize, filledMap->heights.data());
 
     auto end = std::chrono::high_resolution_clock::now();
     std::cout << "Elapsed time for closing: " << duration_cast<std::chrono::milliseconds>(end - start).count() << "ms" << std::endl;

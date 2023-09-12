@@ -11,13 +11,14 @@ int main(int argc, char** argv) {
         std::cout << "Usage: EFTDEM <path to config yaml> or EFTDEM <path to first layer from top config yaml> <path to second layer from top config yaml> ..." << std::endl;
         exit(Pipeline::EXIT_INVALID_COMMAND_LINE_ARGUMENTS);
     } else if (argc == 2) {
-        // normal
+        // executes filling according to the specifications of the yaml given in the single Argument
         auto configProvider = new ConfigProvider(argv[1]);
         auto pipeline = configProvider->providePipeline();
         delete pipeline->execute();
         delete pipeline;
         delete configProvider;
     } else {
+        // executes filling according to the specifications of the yaml(s) given and compares them either to each other or to the given tiff-File
         bool groundTruthCompare = false;
         for (int i = 1; i < argc; i++){
             std::string s = argv[i];

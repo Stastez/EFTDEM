@@ -9,13 +9,13 @@ add_executable(EFTDEM
         GLHandler.h
         ClosingFilter.cpp
         ClosingFilter.h
+        Pipeline.cpp
         Pipeline.h
         ICloudSorter.h
         ICloudReader.h
         ICloudRasterizer.h
         IHeightMapFiller.h
         IHeightMapWriter.h
-        Pipeline.cpp
         IPipelineComponent.h
         MobileMappingReader.cpp
         MobileMappingReader.h
@@ -49,13 +49,14 @@ add_executable(EFTDEM
         GroundTruthComparator.h
         IComparator.cpp
         IComparator.h
-        IPipeline.cpp
         IPipeline.h
         GTiffReader.cpp
         RadialFiller.cpp
         RadialFiller.h
         DummyFiller.cpp
-        DummyFiller.h GradientBasedFiller.cpp GradientBasedFiller.h)
+        DummyFiller.h
+        GradientBasedFiller.cpp
+        GradientBasedFiller.h)
 
 if(MSVC)
     target_compile_options(EFTDEM PRIVATE /W4)

@@ -63,7 +63,7 @@ void GTiffWriter::apply(const heightMap *map, bool generateOutput) {
         return;
     }
     auto rasterBand = dataset->GetRasterBand(1);
-    auto error = rasterBand->RasterIO(GF_Write, 0, 0, resolutionX, resolutionY, denormalizedHeights, resolutionX, resolutionY, GDT_Float64, 0, 0, nullptr);
+    CPLErr error = rasterBand->RasterIO(GF_Write, 0, 0, resolutionX, resolutionY, denormalizedHeights, resolutionX, resolutionY, GDT_Float64, 0, 0, nullptr);
     if (error == CE_Failure) std::cout << "Writing failed!" << std::endl;
     GDALClose(dataset);
 
