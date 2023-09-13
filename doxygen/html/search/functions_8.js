@@ -1,8 +1,0 @@
-var searchData=
-[
-  ['main_419',['main',['../main_8cpp.html#a3c04138a5bfe5d72780bb7e82a18e627',1,'main.cpp']]],
-  ['mergedoublepoints_420',['mergeDoublePoints',['../_data_structures_8cpp.html#aa62e8703f0bfc42a2ea7f882a55b5d0f',1,'mergeDoublePoints(doublePoint p1, doublePoint p2):&#160;DataStructures.cpp'],['../_data_structures_8cpp.html#a325b8f9abaa48b18de6b81828803813f',1,'mergeDoublePoints(const std::vector&lt; doublePoint &gt; &amp;points):&#160;DataStructures.cpp'],['../_data_structures_8h.html#aa62e8703f0bfc42a2ea7f882a55b5d0f',1,'mergeDoublePoints(doublePoint p1, doublePoint p2):&#160;DataStructures.cpp'],['../_data_structures_8h.html#a325b8f9abaa48b18de6b81828803813f',1,'mergeDoublePoints(const std::vector&lt; doublePoint &gt; &amp;points):&#160;DataStructures.cpp']]],
-  ['mergefloatpoints_421',['mergeFloatPoints',['../_data_structures_8cpp.html#a88de7536ac455ec5f2091ab47b046c8c',1,'mergeFloatPoints(floatPoint p1, floatPoint p2):&#160;DataStructures.cpp'],['../_data_structures_8cpp.html#acac6bb3d94206c7373b43429cc2df724',1,'mergeFloatPoints(const std::vector&lt; floatPoint &gt; &amp;points):&#160;DataStructures.cpp'],['../_data_structures_8h.html#a88de7536ac455ec5f2091ab47b046c8c',1,'mergeFloatPoints(floatPoint p1, floatPoint p2):&#160;DataStructures.cpp'],['../_data_structures_8h.html#acac6bb3d94206c7373b43429cc2df724',1,'mergeFloatPoints(const std::vector&lt; floatPoint &gt; &amp;points):&#160;DataStructures.cpp']]],
-  ['messagecallback_422',['MessageCallback',['../_g_l_handler_8cpp.html#a76259e93488aa188c59d8b8a80517f74',1,'GLHandler.cpp']]],
-  ['mobilemappingreader_423',['MobileMappingReader',['../class_mobile_mapping_reader.html#a68243c12b6045ef9785c4aa9bfc9b88b',1,'MobileMappingReader']]]
-];

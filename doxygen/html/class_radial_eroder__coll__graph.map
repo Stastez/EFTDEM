@@ -1,6 +1,0 @@
-<map id="RadialEroder" name="RadialEroder">
-<area shape="rect" id="node1" title=" " alt="" coords="36,229,133,256"/>
-<area shape="rect" id="node2" href="$class_i_radial_filler_component.html" title=" " alt="" coords="5,155,164,181"/>
-<area shape="rect" id="node3" href="$class_i_height_map_filler.html" title=" " alt="" coords="26,80,143,107"/>
-<area shape="rect" id="node4" href="$class_i_pipeline_component.html" title=" " alt="" coords="15,5,154,32"/>
-</map>
