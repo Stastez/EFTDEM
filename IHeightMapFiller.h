@@ -3,6 +3,10 @@
 
 #include "IPipelineComponent.h"
 
+/**
+ * The pipeline component immediately succeeding an ICloudRasterizer. This takes a heightMap and fills the voids
+ * within to provide another, filled heightMap.
+ */
 class IHeightMapFiller : public IPipelineComponent {
 public:
     /**

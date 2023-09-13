@@ -7,6 +7,9 @@
 #include "ICloudSorter.h"
 #include "IHeightMapWriter.h"
 
+/**
+ * A wrapper around pipelines to enable usage of different pipeline types in comparisons.
+ */
 class IPipeline {
 protected:
     GLHandler *glHandler{};

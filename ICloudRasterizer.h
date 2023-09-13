@@ -3,6 +3,9 @@
 
 #include "IPipelineComponent.h"
 
+/**
+ * The pipeline stage immediately following ICloudSorter. This takes a pointGrid and extracts a heightMap from it.
+ */
 class ICloudRasterizer : public IPipelineComponent {
 public:
     /**

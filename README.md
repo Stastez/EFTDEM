@@ -66,7 +66,7 @@ ComparisonOptions:
 ## Hardware Requirements
 - An OpenGL 4.3 or greater capable combination of GPU and graphics driver
 - Lots of RAM
-  - EFTDEM uses 64 bit doubles for the values of points and height data
+  - EFTDEM uses 64 bit doubles and 32 bit floats for the values of points and height data
   - Optimization of computation time requires lots of (shared) GPU memory
 
 ## Installation
@@ -97,7 +97,6 @@ EFTDEM with the build-directories specified as `build-debug`, `build-debug-cover
 
 [GDAL](https://gdal.org/)  
 [glfw](https://www.glfw.org/)  
-[glm](https://github.com/g-truc/glm)  
 [glbinding](https://github.com/cginternals/glbinding)  
 [magic_enum](https://github.com/Neargye/magic_enum)  
 [yaml-cpp](https://github.com/jbeder/yaml-cpp)  

@@ -4,6 +4,9 @@
 #include "IPipelineComponent.h"
 #include <string>
 
+/**
+ * The last pipeline component, immediately succeeding an IHeightMapFiller. This takes a heightMap and exports it to disk.
+ */
 class IHeightMapWriter : public IPipelineComponent {
 protected:
     /**
@@ -17,7 +20,7 @@ public:
      */
     virtual void apply(const heightMap *map, bool generateOutput) = 0;
     virtual void setDestinationDEM(const std::string& newDestinationDEM) = 0;
-    virtual void writeRGB(const std::vector<std::vector<int>> data, int resolutionX, int resolutionY) = 0;
+    virtual void writeRGB(std::vector<std::vector<int>> data, int resolutionX, int resolutionY) = 0;
 };
 
 

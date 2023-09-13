@@ -16,6 +16,12 @@ RasterizerGPU::~RasterizerGPU() {
     glHandler->deleteBuffer(GLHandler::EFTDEM_SORTED_POINT_COUNT_BUFFER);
 }
 
+/**
+ * Creates a heightmap from the given point grid by averaging the points of every grid cell.
+ * @param pointGrid The point grid containing the point data, sorted into a grid
+ * @param generateOutput Whether or not to create output. May be false if the next stage uses the same GPU buffer
+ * @return A new heightMap struct
+ */
 heightMap * RasterizerGPU::apply(pointGrid *pointGrid, bool generateOutput) {
     using namespace gl;
 

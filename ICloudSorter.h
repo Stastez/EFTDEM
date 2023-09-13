@@ -3,12 +3,12 @@
 
 #include "IPipelineComponent.h"
 
+/**
+ * The pipeline stage immediately succeeding ICloudReader. This creates a grid and sorts all points into it using their
+ * x,y-coordinates.
+ */
 class ICloudSorter : public IPipelineComponent {
 protected:
-    /**
-     * Specifies the resolution of the resulting pointGrid by defining how many grid cells
-     * shall be allocated for each unit of distance on the xy-plane.
-     */
     unsigned long resolutionX = 0;
     unsigned long resolutionY = 0;
     unsigned long pixelPerUnitX{};

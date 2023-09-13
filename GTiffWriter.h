@@ -4,6 +4,9 @@
 #include "IHeightMapWriter.h"
 #include <string>
 
+/**
+ * An IHeightMapWriter that exports the given heights or RGB data as GeoTIFFs.
+ */
 class GTiffWriter : public IHeightMapWriter {
 private:
     bool writeLowDepth;

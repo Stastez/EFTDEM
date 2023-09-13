@@ -6,6 +6,9 @@
 #include "IHeightMapWriter.h"
 #include "ICloudReader.h"
 
+/**
+ * A pipeline that reads a tiff from disk and provides it as a heightMap.
+ */
 class TiffPipeline : public IPipeline{
 private:
     denormalizedHeightMap * map;

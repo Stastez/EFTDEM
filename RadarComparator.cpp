@@ -26,7 +26,7 @@ RadarComparator::~RadarComparator() {
 }
 
 /**
- * Reads all the point-clouds in the pipelines in pipelines and adds a shared min and max value, so the point-clouds will be scaled and rasterized koherently.
+ * Reads all the point-clouds in the pipelines in pipelines and adds a shared min and max value, so the point-clouds will be scaled and rasterized coherently.
  * @return a Vector containing all the read point-clouds
  */
 std::vector<rawPointCloud *> RadarComparator::setupPointClouds() {
@@ -58,8 +58,8 @@ void addColor(std::vector<std::vector<int>>& colors, std::vector<int> color) {
 }
 
 /**
- * Writes the pixelwise comparisons to a Geotiff-File, with Values falling below a threshold marked in red.
- * @param comparisons a vector of pixelwise comparisons to be writen as Geotiff-Files
+ * Writes the pixel-wise comparisons to a Geotiff-File, with Values falling below a threshold marked in red.
+ * @param comparisons a vector of pixel-wise comparisons to be written as Geotiff-Files
  */
 void RadarComparator::writeThresholdMaps(const std::vector<heightMap *> &comparisons) {
     std::vector<std::vector<int>> colors(3);
@@ -84,9 +84,9 @@ void RadarComparator::writeThresholdMaps(const std::vector<heightMap *> &compari
 }
 
 /**
- * Writes the pixelwise comparisons to a Geotiff-File,
+ * Writes the pixel-wise comparisons to a Geotiff-File,
  * as a regular Geotiff-File and an additional Geotiff, with Values falling below a threshold marked in red.
- * @param comparisons a vector of pixelwise comparisons to be writen as Geotiff-Files
+ * @param comparisons a vector of pixel-wise comparisons to be writen as Geotiff-Files
  */
 void RadarComparator::writeComparisons(std::vector<heightMap *> comparisons){
     writeThresholdMaps(comparisons);

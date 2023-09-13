@@ -104,6 +104,7 @@ rawPointCloud * ICloudReader::apply(bool generateOutput) {
         extremesVector.at(i) = futuresVector.at(i).get();
     }
 
+    // Merge all found minima and maxima to find the absolute component-wise minimum and maximum
     std::vector<doublePoint> minVector, maxVector;
     for (auto extremes : extremesVector) {
         minVector.emplace_back(extremes.first);

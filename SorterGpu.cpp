@@ -13,6 +13,13 @@ SorterGPU::SorterGPU(GLHandler *glHandler, unsigned long pixelPerUnitX, unsigned
 
 SorterGPU::~SorterGPU() = default;
 
+/**
+ * Creates a sorted grid of points from the points contained in the given rawPointCloud. The grid resolution is calculated
+ * using the previously set pixelPerUnit{x,y}.
+ * @param pointCloud The rawPointCloud to sort
+ * @param generateOutput Whether to create a pointGrid. May be false if the next stage uses the same buffers
+ * @return A fully formed pointGrid if generateOutput is true, a pointGrid only containing all necessary metadata otherwise
+ */
 pointGrid * SorterGPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
     using namespace gl;
 

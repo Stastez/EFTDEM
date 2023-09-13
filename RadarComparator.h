@@ -8,6 +8,10 @@
 #include <vector>
 #include <string>
 
+/**
+ * An IComparator that executes two or more pipelines and exports the difference between adjacent layers as GeoTIFFs.
+ * Also writes GeoTIFFs that are colored red wherever the difference
+ */
 class RadarComparator : public IComparator {
 private:
     std::vector<double> thresholds;

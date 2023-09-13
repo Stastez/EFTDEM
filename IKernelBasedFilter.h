@@ -9,6 +9,9 @@ struct bufferSpecifications {
     gl::GLsizeiptr size;
 };
 
+/**
+ * An IHeightMapFiller that uses variably sized kernels to provide filling of heightMaps.
+ */
 class IKernelBasedFilter : public IHeightMapFiller {
 protected:
     GLHandler *glHandler;

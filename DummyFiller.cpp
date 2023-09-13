@@ -5,6 +5,7 @@ DummyFiller::DummyFiller() {
 }
 
 heightMap *DummyFiller::apply(heightMap *map, bool generateOutput) {
+    // must create new map because pipeline will delete passed map
     auto newMap = emptyHeightMapFromHeightMap(map);
     if (generateOutput) {
         newMap->heights.clear();

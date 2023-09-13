@@ -4,6 +4,9 @@
 #include "IPipelineComponent.h"
 #include <string>
 
+/**
+ * This may be used in a TiffPipeline and reads a GeoTiff from disk into a heightMap.
+ */
 class IHeightMapReader : public IPipelineComponent {
 protected:
     /**

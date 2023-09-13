@@ -3,18 +3,17 @@
 #include "DataStructures.h"
 #include "IHeightMapWriter.h"
 
-#include <utility>
-
 TiffPipeline::TiffPipeline(const std::string& tiffPath, const std::string& shaderDirectory) : TiffPipeline(tiffPath, new GLHandler(shaderDirectory)){}
 
 TiffPipeline::TiffPipeline(const std::string& tiffPath, GLHandler *glHandler){
-    TiffPipeline::path = std::move(tiffPath);
+    TiffPipeline::map = nullptr;
+    TiffPipeline::path = tiffPath;
     TiffPipeline::glHandler = glHandler;
 }
 
 /**
- * Executes all attached IPipelineComponents sequentially and deletes interim results.
- * @return The filled heightMap
+ * Reads the GeoTIFF at path and provides it as a heightMap.
+ * @return The extracted heightMap
  */
 heightMap * TiffPipeline::execute() {
     auto reader = new GTiffReader(path);
@@ -32,7 +31,7 @@ heightMap * TiffPipeline::execute() {
 }
 
 /**
- * normalizes the heightmap in map, according to the data in pointCloud, to get a heightMap coherent with the ones produced by the Pipeline-Class
+ * Normalizes the heightmap in map, according to the data in pointCloud, to get a heightMap coherent with the ones produced by the Pipeline-Class
  * @param pointCloud containing metadata (the actual points in this Object won't be used)
  * @return The normalized heightMap
  */

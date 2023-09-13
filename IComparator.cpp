@@ -2,16 +2,11 @@
 #include "ConfigProvider.h"
 #include "GTiffWriter.h"
 #include "DataStructures.h"
-
-//only for Debug
-#include <fstream>
 #include <iostream>
-
-#include <utility>
 
 /**
  * Executes the pipelines in pipelines one by one and comparing the results after each executed pipeline to the one before it.
- * @return The pixelwise comparison of each pair of results from consecutive pipelines in pipelines
+ * @return The pixel-wise comparison of each pair of results from consecutive pipelines in pipelines
  */
 std::vector<heightMap *> IComparator::compareMaps() {
     std::vector<heightMap *> comparisons;
@@ -72,8 +67,8 @@ std::vector<heightMap *> IComparator::compareMaps() {
 }
 
 /**
- * Writes the pixelwise comparisons to a Geotiff-File.
- * @param comparisons a vector of pixelwise comparisons to be writen as Geotiff-Files.
+ * Writes the pixel-wise comparisons to a Geotiff-File.
+ * @param comparisons a vector of pixel-wise comparisons to be writen as Geotiff-Files.
  */
 void IComparator::writeComparisons(std::vector<heightMap *> comparisons) {
     for (auto i = 0ul; i < comparisons.size(); i++) {

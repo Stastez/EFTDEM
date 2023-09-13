@@ -70,7 +70,7 @@ heightMap *Pipeline::executeAfterReader(rawPointCloud *pointCloud) {
 }
 
 /**
- * Attach the given IPipelineComponents to the pipeline. The execution order is equal to the order of the parameters of this function.
+ * Attaches the given IPipelineComponents to the pipeline. The execution order is equal to the order of the parameters of this function.
  */
 void Pipeline::attachElements(ICloudReader *readerParameter, ICloudSorter *sorterParameter, ICloudRasterizer *rasterizerParameter, IHeightMapFiller *fillerParameter, IHeightMapWriter *writerParameter) {
     this->reader = readerParameter;
@@ -81,7 +81,7 @@ void Pipeline::attachElements(ICloudReader *readerParameter, ICloudSorter *sorte
 }
 
 /**
- * Get whether all IPipelineComponent slots have an actual object attached.
+ * Gets whether all IPipelineComponent slots have an actual object attached.
  * @return Whether all IPipelineComponent slots have an actual object attached.
  */
 bool Pipeline::isOperable() {

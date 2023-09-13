@@ -19,9 +19,7 @@ void GTiffWriter::setDestinationDEM(const std::string &newDestinationDEM) {
 /**
  * Exports the provided height map into GeoTiff format. The resolution of the height map must be within int limits.
  *
- * @param map
- * @param resolutionX
- * @param resolutionY
+ * @param map The heightMap to export
  */
 void GTiffWriter::apply(const heightMap *map, bool generateOutput) {
     std::cout << "Writing GeoTIFF..." << std::endl;

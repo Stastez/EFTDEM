@@ -2,9 +2,9 @@
 #include <iostream>
 #include <cmath>
 
-std::pair<unsigned long, unsigned long> SorterCPU::calculateGridCoordinates(pointGrid *grid, rawPointCloud *pointCloud, double xCoord, double yCoord){
-    unsigned long x = std::min(grid->resolutionX - 1, (unsigned long) std::floor(normalizeValue(xCoord, pointCloud->min.x, pointCloud->max.x) * (double) grid->resolutionX));
-    unsigned long y = std::min(grid->resolutionY - 1, (unsigned long) std::floor(normalizeValue(yCoord, pointCloud->min.y, pointCloud->max.y) * (double) grid->resolutionY));
+std::pair<unsigned long, unsigned long> SorterCPU::calculateGridCoordinates(pointGrid *grid, double xCoord, double yCoord){
+    unsigned long x = std::min(grid->resolutionX - 1, (unsigned long) std::floor(normalizeValue(xCoord, grid->min.x, grid->max.x) * (double) grid->resolutionX));
+    unsigned long y = std::min(grid->resolutionY - 1, (unsigned long) std::floor(normalizeValue(yCoord, grid->min.y, grid->max.y) * (double) grid->resolutionY));
     return {x, y};
 }
 
@@ -16,6 +16,13 @@ SorterCPU::SorterCPU(unsigned long pixelPerUnitX, unsigned long pixelPerUnitY) {
 
 SorterCPU::~SorterCPU() noexcept = default;
 
+/**
+ * Creates a sorted grid of points from the points contained in the given rawPointCloud. The grid resolution is calculated
+ * using the previously set pixelPerUnit{x,y}.
+ * @param pointCloud The rawPointCloud to sort
+ * @param generateOutput Whether to create a pointGrid. Should be true
+ * @return A pointGrid if generateOutput is true
+ */
 pointGrid * SorterCPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
     std::cout << "Sorting points into grid using CPU..." << std::endl;
 
@@ -34,7 +41,7 @@ pointGrid * SorterCPU::apply(rawPointCloud *pointCloud, bool generateOutput) {
                       .numberOfPoints = pointCloud->numberOfPoints};
 
     for (auto it = pointCloud->groundPoints.begin(); it != pointCloud->groundPoints.end(); it++){
-        std::pair<unsigned long, unsigned long> coords = calculateGridCoordinates(grid, pointCloud, it->x, it->y);
+        std::pair<unsigned long, unsigned long> coords = calculateGridCoordinates(grid, it->x, it->y);
         add(grid, coords.first, coords.second, normalizeValue(*it, pointCloud->min, pointCloud->max));
     }
 

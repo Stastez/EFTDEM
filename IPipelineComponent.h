@@ -3,6 +3,9 @@
 
 #include "DataStructures.h"
 
+/**
+ * The interface all pipeline components (e.g. IHeightMapFillers, ICloudReaders) must implement.
+ */
 class IPipelineComponent {
 protected:
     /**

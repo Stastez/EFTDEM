@@ -7,6 +7,9 @@
 #include <vector>
 #include <string>
 
+/**
+ * A wrapper around multiple pipelines allowing for comparisons between their results.
+ */
 class IComparator {
 protected:
     std::vector<std::string> configPaths;

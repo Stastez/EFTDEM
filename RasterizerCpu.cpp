@@ -10,8 +10,7 @@ RasterizerCPU::~RasterizerCPU() noexcept = default;
 /**
  * Creates a heightmap from the given point grid by averaging the points of every grid cell.
  * @param pointGrid The point grid containing the point data, sorted into a grid
- * @param useGPU Whether to use OpenGL GPU-acceleration
- * @param glHandler If GPU-acceleration is used, the GLHandler for creating contexts and reading shaders
+ * @param generateOutput Whether or not to create output. Should be true
  * @return A new heightMap struct
  */
 heightMap * RasterizerCPU::apply(pointGrid *pointGrid, bool generateOutput) {
