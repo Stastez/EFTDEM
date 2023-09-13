@@ -13,7 +13,7 @@ layout (binding = EFTDEM_SORTED_POINT_COUNT_BUFFER) restrict buffer countBuffer{
 uniform uint numberOfPoints;
 
 /**
- * Counts how many points are were sorted into each grid cell.
+ * Counts how many points were sorted into each grid cell.
  */
 void main() {
     if (gl_NumWorkGroups.x * LOCAL_SIZE * gl_GlobalInvocationID.y + gl_GlobalInvocationID.x >= numberOfPoints) return;

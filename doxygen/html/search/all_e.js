@@ -18,5 +18,5 @@ var searchData=
   ['stageusesgpu_214',['stageUsesGPU',['../class_i_pipeline_component.html#a048c521b3ec7ec490624980a49de6efc',1,'IPipelineComponent']]],
   ['sum_2eglsl_215',['sum.glsl',['../sum_8glsl.html',1,'']]],
   ['sumchunks_2eglsl_216',['sumChunks.glsl',['../sum_chunks_8glsl.html',1,'']]],
-  ['sumidw_2eglsl_217',['sumIDW.glsl',['../sum_i_d_w_8glsl.html',1,'']]]
+  ['sumidw_2eglsl_217',['IDWsum.glsl',['../sum_i_d_w_8glsl.html',1,'']]]
 ];

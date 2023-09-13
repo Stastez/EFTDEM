@@ -56,11 +56,11 @@ heightMap * ClosingFilter::apply(heightMap *map, bool generateOutput) {
     // average
     shaderPaths.emplace_back("discretization.glsl");
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_CLOSING_MASK_BUFFER, sizeof(GLfloat)}});
-    shaderPaths.emplace_back("horizontalAmount.glsl");
+    shaderPaths.emplace_back("amountHorizontal.glsl");
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_HORIZONTAL_BUFFER, sizeof(GLfloat)}});
     shaderPaths.emplace_back("amount.glsl");
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_TOTAL_WEIGHT_BUFFER, long(sizeof(unsigned int) * pixelCount)}});
-    shaderPaths.emplace_back("horizontalSum.glsl");
+    shaderPaths.emplace_back("sumHorizontal.glsl");
     bufferSpecs.emplace_back();
     shaderPaths.emplace_back("sum.glsl");
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_SUM_BUFFER, sizeof(GLfloat)}});
@@ -69,7 +69,7 @@ heightMap * ClosingFilter::apply(heightMap *map, bool generateOutput) {
     // closing
     shaderPaths.emplace_back("dilation.glsl");
     bufferSpecs.emplace_back();
-    shaderPaths.emplace_back("horizontalAmount.glsl");
+    shaderPaths.emplace_back("amountHorizontal.glsl");
     bufferSpecs.emplace_back();
     shaderPaths.emplace_back("amount.glsl");
     bufferSpecs.emplace_back();

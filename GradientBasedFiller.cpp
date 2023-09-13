@@ -44,11 +44,11 @@ heightMap * GradientBasedFiller::apply(heightMap *map, bool generateOutput) {
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_GRADIENT_BUFFER, long(sizeof(GLfloat) * pixelCount * 2)}});
     shaderPaths.emplace_back("kernelIDW.glsl");
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_KERNEL_BUFFER, long(sizeof(GLfloat) * kernelRadius)}});
-    shaderPaths.emplace_back("gradientHorizontalTotalWeight.glsl");
+    shaderPaths.emplace_back("gradientTotalWeightHorizontal.glsl");
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_HORIZONTAL_BUFFER, long(sizeof(GLfloat) * pixelCount * 2)}});
     shaderPaths.emplace_back("gradientTotalWeights.glsl");
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_TOTAL_WEIGHT_BUFFER, long(sizeof(GLfloat) * pixelCount * 2)}});
-    shaderPaths.emplace_back("gradientHorizontalSum.glsl");
+    shaderPaths.emplace_back("gradientSumHorizontal.glsl");
     bufferSpecs.emplace_back();
     shaderPaths.emplace_back("gradientSum.glsl");
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_SUM_BUFFER, long(sizeof(GLfloat) * pixelCount * 2)}});
@@ -57,11 +57,11 @@ heightMap * GradientBasedFiller::apply(heightMap *map, bool generateOutput) {
 
     shaderPaths.emplace_back("discretization.glsl");
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_CLOSING_MASK_BUFFER, long(sizeof(GLfloat) * pixelCount)}});
-    shaderPaths.emplace_back("horizontalSumIDW.glsl");
+    shaderPaths.emplace_back("IDWsumHorizontal.glsl");
     bufferSpecs.emplace_back();
-    shaderPaths.emplace_back("sumIDW.glsl");
+    shaderPaths.emplace_back("IDWsum.glsl");
     bufferSpecs.emplace_back();
-    shaderPaths.emplace_back("horizontalTotalWeights.glsl");
+    shaderPaths.emplace_back("totalWeightsHorizontal.glsl");
     bufferSpecs.emplace_back();
     shaderPaths.emplace_back("totalWeights.glsl");
     bufferSpecs.emplace_back();

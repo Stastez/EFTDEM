@@ -17,7 +17,7 @@ uint calculate1DCoordinate(uvec2 pos) {
 }
 
 /**
- * Calculates the discrete Values of the heights.
+ * Calculates the mask of non-void pixels
  */
 void main() {
     uvec2 correctedGlobalInvocation = gl_GlobalInvocationID.xy + currentInvocation;

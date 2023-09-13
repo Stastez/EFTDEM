@@ -21,7 +21,7 @@ uint calculate1DCoordinate(uvec2 pos) {
 
 /**
  * Calculates the sum of all gradientvalues in an area of size kernelSize in every direction around the the pixel,
- * by adding together the interrim results in horizontalSums, wich where calculated by the shader gradientHorizontalSum.
+ * by adding together the interrim results in horizontalSums, wich where calculated by the shader gradientSumHorizontal.
  */
 void main() {
     uvec2 correctedGlobalInvocation = gl_GlobalInvocationID.xy + currentInvocation;
