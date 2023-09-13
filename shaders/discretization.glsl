@@ -16,10 +16,13 @@ uint calculate1DCoordinate(uvec2 pos) {
     return pos.y * resolution.x + pos.x;
 }
 
+/**
+ * Calculates the discrete Values of the heights.
+ */
 void main() {
     uvec2 correctedGlobalInvocation = gl_GlobalInvocationID.xy + currentInvocation;
     if (any(greaterThanEqual(correctedGlobalInvocation, resolution))) return;
-    uint coord1D = calculate1DCoordinate(correctedGlobalInvocation);
 
+    uint coord1D = calculate1DCoordinate(correctedGlobalInvocation);
     discreteValues[coord1D] = (heights[coord1D] <= 0.0) ? 0.0 : 1.0;
 }

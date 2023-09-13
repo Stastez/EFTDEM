@@ -15,29 +15,14 @@ RadialFiller::~RadialFiller() {
     glHandler->deleteBuffer(GLHandler::EFTDEM_SECOND_HEIGHTMAP_BUFFER);
 }
 
-void RadialFiller::dispatchCompute(gl::GLint flippedLocation, bool isDilation, heightMap * map) const {
-    using namespace gl;
-
-    GLsync previousSync = nullptr;
-    for (auto i = 0u; i < maxHoleRadius; i++) {
-        auto flipped = (bool) (isDilation ? (i % 2u) : (maxHoleRadius + i) % 2u);
-        glUniform1i(flippedLocation, flipped);
-        glDispatchCompute((GLuint) std::ceil((double) map->resolutionX / 8.), (GLuint) std::ceil((double) map->resolutionY / 4.), 1);
-
-        if (previousSync != nullptr) {
-            glClientWaitSync(previousSync, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED);
-            glDeleteSync(previousSync);
-        }
-
-        auto currentSync = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
-        std::swap(previousSync, currentSync);
-    }
-    if (previousSync != nullptr) {
-        glClientWaitSync(previousSync, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED);
-        glDeleteSync(previousSync);
-    }
-}
-
+/**
+ * Applies radial filling to the heightMap passed in map. map may be empty if a previous pipeline stage has already
+ * written the height map to EFTDEM_HEIGHTMAP_BUFFER.
+ * @param map The heightMap to fill or an empty heightMap
+ * @param generateOutput Whether or not to return a fully formed heightMap. This may be set false if the stage immediately
+ *                      after uses GPU buffers
+ * @return A filled heightMap if generateOutput is true, a heightMap only containing all necessary metadata otherwise
+ */
 heightMap *RadialFiller::apply(heightMap *map, bool generateOutput) {
     using namespace gl;
 
@@ -68,7 +53,7 @@ heightMap *RadialFiller::apply(heightMap *map, bool generateOutput) {
 
     glUniform2ui(resolutionLocation, map->resolutionX, map->resolutionY);
 
-    dispatchCompute(flippedLocation, true, map);
+    glHandler->dispatchShader(flippedLocation, true, map->resolutionX, map->resolutionY, maxHoleRadius);
 
     // erosion
     program = glHandler->getShaderPrograms({"radialErosion.glsl"}, true).at(0);
@@ -79,7 +64,7 @@ heightMap *RadialFiller::apply(heightMap *map, bool generateOutput) {
 
     glUniform2ui(resolutionLocation, map->resolutionX, map->resolutionY);
 
-    dispatchCompute(flippedLocation, false, map);
+    glHandler->dispatchShader(flippedLocation, false, map->resolutionX, map->resolutionY, maxHoleRadius);
 
     auto filledMap = emptyHeightMapFromHeightMap(map);
     glHandler->dataFromBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,

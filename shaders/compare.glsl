@@ -19,6 +19,9 @@ uint calculate1DCoordinate(uvec2 pos, uvec2 referenceResolution) {
     return pos.y * referenceResolution.x + pos.x;
 }
 
+/**
+ * Calculates the difference between the heights of top and bottom as bottom - top.
+ */
 void main() {
     if (any(greaterThan(gl_GlobalInvocationID.xy, resolution))) return;
 

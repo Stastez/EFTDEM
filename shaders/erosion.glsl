@@ -16,10 +16,14 @@ uint calculate1DCoordinate(uvec2 pos) {
     return pos.y * resolution.x + pos.x;
 }
 
+/**
+ * Makes the pixel void if any pixels in the area of the kernel around the pixel are void.
+ */
 void main() {
     uvec2 correctedGlobalInvocation = gl_GlobalInvocationID.xy + currentInvocation;
     if (any(greaterThanEqual(correctedGlobalInvocation, resolution))) return;
 
+    // calculate the amount of pixels in the area of the kernel around the pixel, that are in the range of the map.
     uint x = correctedGlobalInvocation.x;
     uint y = correctedGlobalInvocation.y;
     uint xx = min(kernelRadius,x) + min(kernelRadius, resolution.x-x-1) + 1;

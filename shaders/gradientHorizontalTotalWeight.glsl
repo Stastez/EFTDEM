@@ -26,6 +26,9 @@ bvec2 isVoidPixel(uvec2 pos) {
         values[calculate1DCoordinate(pos)].y <= -2);
 }
 
+/**
+ * Calculates the sum of weights on non-void pixels in an area of kernelSize pixels right and left of the pixel.
+ */
 void main() {
     uvec2 correctedGlobalInvocation = gl_GlobalInvocationID.xy + currentInvocation;
     if (any(greaterThanEqual(correctedGlobalInvocation, resolution))) return;

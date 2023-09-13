@@ -22,12 +22,20 @@ uint calculatePointIdentifier() {
     return gl_NumWorkGroups.x * LOCAL_SIZE * gl_GlobalInvocationID.y + gl_GlobalInvocationID.x;
 }
 
+/**
+ * Calculates the sum of the heights of all points per grid cell as a uint. This is a workaround for not having
+ * EXT_SHADER_ATOMIC_FLOAT or equivalent extensions available on our hardware.
+ */
 void main() {
     uint pointIndexIndices = calculatePointIdentifier();
     if (pointIndexIndices >= numberOfPoints) return;
     uint pointIndexPoints = pointIndexIndices * 3u;
 
     float z = points[pointIndexPoints + 2];
+    /*
+    * This approximates a summation of doubles using uints. Note: the accuracy of this approximation will diminish
+    * with an increasing amount of points per grid cell.
+    */
     uint zRepresentation = uint(double(z) * (double(~0u) / double(counts[indices[pointIndexIndices]])));
 
     atomicAdd(heights[indices[pointIndexIndices]], zRepresentation);

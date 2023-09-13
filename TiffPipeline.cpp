@@ -12,6 +12,10 @@ TiffPipeline::TiffPipeline(const std::string& tiffPath, GLHandler *glHandler){
     TiffPipeline::glHandler = glHandler;
 }
 
+/**
+ * Executes all attached IPipelineComponents sequentially and deletes interim results.
+ * @return The filled heightMap
+ */
 heightMap * TiffPipeline::execute() {
     auto reader = new GTiffReader(path);
 
@@ -27,6 +31,11 @@ heightMap * TiffPipeline::execute() {
     return executeAfterReader(pointCloud);
 }
 
+/**
+ * normalizes the heightmap in map, according to the data in pointCloud, to get a heightMap coherent with the ones produced by the Pipeline-Class
+ * @param pointCloud containing metadata (the actual points in this Object won't be used)
+ * @return The normalized heightMap
+ */
 heightMap * TiffPipeline::executeAfterReader(rawPointCloud *pointCloud) {
 
     if (!glHandler->isInitialized(false)) glHandler->initializeGL(false);

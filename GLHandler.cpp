@@ -365,9 +365,43 @@ void GLHandler::dispatchShader(unsigned int localBatchSize, unsigned long resolu
 }
 
 /**
+ * Executes the currently active shader program for a resolution of resolutionX x resolutionY numIterations many times.
+ * This is designed for use with the RadialFiller and the radial filling portion of GradientBasedFiller, for each iteration
+ * the uniform at flippedLocation is flipped: the first invocation uses <uniform> = true, the second uses <uniform> = false, ...
+ * If isDilation is true, this progression is flipped if numIterations is uneven and <uniform> starts out false.
+ * Use this if your shader conforms to these conditions and has a constant and adequately short runtime.
+ * @param flippedLocation The OpenGL location of the uniform to be flipped each invocation
+ * @param isDilation Whether a previous shader has been executed numIterations times and has to be taken into account to
+ *                  decide whether the uniform at flippedLocation should be true
+ * @param resolutionX The resolution of the data in x-direction
+ * @param resolutionY The resolution of the data in y-direction
+ * @param numIterations The amount of times to invoke the shader
+ */
+void GLHandler::dispatchShader(gl::GLint flippedLocation, bool isDilation, unsigned long resolutionX, unsigned long resolutionY, unsigned int numIterations) const {
+    GLsync previousSync = nullptr;
+    for (auto i = 0u; i < numIterations; i++) {
+        auto flipped = (bool) (isDilation ? (i % 2u) : (numIterations + i) % 2u);
+        glUniform1i(flippedLocation, flipped);
+        glDispatchCompute((GLuint) std::ceil((double) resolutionX / 8.), (GLuint) std::ceil((double) resolutionY / 4.), 1);
+
+        if (previousSync != nullptr) {
+            glClientWaitSync(previousSync, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED);
+            glDeleteSync(previousSync);
+        }
+
+        auto currentSync = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+        std::swap(previousSync, currentSync);
+    }
+    if (previousSync != nullptr) {
+        glClientWaitSync(previousSync, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED);
+        glDeleteSync(previousSync);
+    }
+}
+
+/**
  * Convenience function that takes a string and replaces all bufferIndices member names with their corresponding index
  * (e.g. "layout (binding = EFTDEM_HEIGHTMAP_BUFFER) ..." -> "layout (binding = 5) ...")
- * @param shaderSource The string in which to replace names
+ * @param shaderSource The string in which to replace buffer names
  */
 void GLHandler::replaceBufferPlaceholders(std::string &shaderSource) {
     for (unsigned long i = 1; i < magic_enum::enum_count<bufferIndices>(); i++) {
@@ -391,6 +425,9 @@ void GLHandler::replaceBufferPlaceholders(std::string &shaderSource) {
 
 std::string GLHandler::getShaderDir() { return shaderDirectory; }
 
+/**
+ * Resets all buffers to their original state, i.e. deletes all buffers and generates them anew.
+ */
 void GLHandler::resetBuffers() {
     glDeleteBuffers((int) numBuffers, ssbos.data());
     glGenBuffers((int) numBuffers, ssbos.data());

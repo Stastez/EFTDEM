@@ -1,6 +1,5 @@
 #include "GroundTruthComparator.h"
 #include "ConfigProvider.h"
-#include "GTiffWriter.h"
 #include "TiffPipeline.h"
 #include "DataStructures.h"
 
@@ -31,6 +30,10 @@ GroundTruthComparator::~GroundTruthComparator() {
     configProvider = nullptr;
 }
 
+/**
+ * Reads all the point-clouds in the pipelines in pipelines and adds a shared min and max value, so the point-clouds will be scaled and rasterized koherently.
+ * @return a Vector containing all the read point-clouds
+ */
 std::vector<rawPointCloud *> GroundTruthComparator::setupPointClouds() {
     std::vector<rawPointCloud *> readerReturns(pipelines.size());
 
@@ -60,6 +63,10 @@ std::vector<rawPointCloud *> GroundTruthComparator::setupPointClouds() {
     return readerReturns;
 }
 
+/**
+ * Writes the pixelwise comparisons to a Geotiff-File. And the Mean-Squre-Error to the console.
+ * @param comparisons a vector of pixelwise comparisons to be writen as Geotiff-Files.
+ */
 void GroundTruthComparator::writeComparisons(std::vector<heightMap *> comparisons) {
     std::vector<double> meanSquareErrors(comparisons.size());
 
@@ -72,9 +79,9 @@ void GroundTruthComparator::writeComparisons(std::vector<heightMap *> comparison
         meanSquareErrors.at(i) = sqrt(averageError);
     }
 
-    IComparator::writeComparisons(comparisons);
-
     for (auto i = 0ul; i < comparisons.size(); i++) {
         std::cout << "Mean-Square-Error: " << meanSquareErrors.at(i) << "\n";
     }
+
+    IComparator::writeComparisons(comparisons);
 }

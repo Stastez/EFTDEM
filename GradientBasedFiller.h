@@ -3,10 +3,11 @@
 
 #include "IKernelBasedFilter.h"
 
+/**
+ * An IHeightMapFiller that fills voids by interpolating between gradients on the original height map and using them to
+ * fill height data.
+ */
 class GradientBasedFiller : public IKernelBasedFilter {
-private:
-    void dispatchCompute(gl::GLint, bool, heightMap *) const;
-
 public:
     GradientBasedFiller(GLHandler *glHandler, unsigned int kernelRadius, unsigned int batchSize);
     ~GradientBasedFiller() override;

@@ -1,7 +1,6 @@
 #ifndef EFTDEM_SORTERCPU_H
 #define EFTDEM_SORTERCPU_H
 
-
 #include "DataStructures.h"
 #include "ICloudSorter.h"
 

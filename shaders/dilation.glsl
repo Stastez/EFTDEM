@@ -16,11 +16,14 @@ uint calculate1DCoordinate(uvec2 pos) {
     return pos.y * resolution.x + pos.x;
 }
 
+/**
+ * Makes the pixel non-void if any pixels in the area of the kernel around the pixel are non-void.
+ */
 void main() {
     uvec2 correctedGlobalInvocation = gl_GlobalInvocationID.xy + currentInvocation;
     if (any(greaterThanEqual(correctedGlobalInvocation, resolution))) return;
     uint coord1D;
 
     coord1D = calculate1DCoordinate(correctedGlobalInvocation);
-    dilationMask[coord1D] = (amounts[coord1D] <= 0) ? 0.0 : 1.0; //double(amounts[coord1D]) / double(kernelRadius*2*kernelRadius*2);  // (amounts[coord1D] <= 0) * 1.0
+    dilationMask[coord1D] = (amounts[coord1D] <= 0) ? 0.0 : 1.0;
 }

@@ -1,104 +1,11 @@
 #include "GroundRadarReader.h"
 #include "Pipeline.h"
 #include <fstream>
-#include <iostream>
-#include <thread>
-#include <future>
 
-GroundRadarReader::GroundRadarReader(const std::string& fileName) {
-    stageUsesGPU = false;
-    GroundRadarReader::fileName = fileName;
-}
+void GroundRadarReader::parseLineVector(std::vector<std::string> words, std::vector<doublePoint> *groundPoints, std::vector<doublePoint> *environmentPoints) {
+    (void) environmentPoints;
 
-GroundRadarReader::~GroundRadarReader() noexcept = default;
+    doublePoint p = {.x=stod(words[0]), .y=stod(words[1]), .z=stod(words[2]), .intensity=-1};
 
-/**
- * Reads the file at the position in variable fileName (if there is one)
- * @return a Vector containing the Lines of the File as Strings
- */
-std::vector<std::string> GroundRadarReader::readFile() {
-    std::fstream pointFile (fileName, std::ios::in);
-    if (!pointFile.is_open()) {
-        std::cout << "Specified file could not be opened." << std::endl;
-        exit(Pipeline::EXIT_IO_ERROR);
-    }
-
-    std::vector<std::string> lines;
-    std::string currentLine;
-    for (int i = 0; i < 9; i++) {
-        getline(pointFile, currentLine);
-    }
-    while (getline(pointFile, currentLine)) {
-        lines.emplace_back(currentLine);
-    }
-
-    pointFile.close();
-
-    return lines;
-}
-
-std::pair<doublePoint, doublePoint> GroundRadarReader::parseFileContents(std::vector<std::string> *lines, std::vector<doublePoint> *groundPoints, unsigned long begin = 0, unsigned long end = -1) {
-    for (auto i = begin; i < end; i++) {
-        std::string words[3];
-        auto lastPosition = (unsigned long long) -1;
-        for (auto & word : words) {
-            ++lastPosition;
-            auto delimiterPosition = lines->at(i).find(',', lastPosition);
-            word = lines->at(i).substr(lastPosition, std::min(delimiterPosition - lastPosition, lines->at(i).size() - lastPosition));
-            lastPosition = delimiterPosition;
-        }
-
-        doublePoint p = {.x=stod(words[0]), .y=stod(words[1]), .z=stod(words[2]), .intensity=-1};
-
-        groundPoints->emplace_back(p);
-    }
-
-    return mergeDoublePoints(*groundPoints);
-}
-
-rawPointCloud * GroundRadarReader::apply(bool generateOutput) {
-    if (!generateOutput) return {};
-
-    auto groundPoints = new std::vector<doublePoint>();
-    std::cout << "Reading point cloud..." << std::endl;
-
-    auto numThreads = 16u;
-    auto lines = readFile();
-    auto batchSize = (unsigned long) (lines.size() / numThreads);
-    auto extremesVector = std::vector<std::pair<doublePoint, doublePoint>>(numThreads);
-    auto futuresVector = std::vector<std::future<std::pair<doublePoint, doublePoint>>>(numThreads);
-
-    auto groundPointsVector = new std::vector<std::vector<doublePoint>>(numThreads);
-
-    for (auto i = 0u; i < numThreads - 1u; i++) {
-        futuresVector.at(i) = std::async(&parseFileContents, &lines, &(groundPointsVector->at(i)), batchSize * i, batchSize * (i+1));
-    }
-    futuresVector.at(numThreads - 1) = std::async(&parseFileContents, &lines, &(groundPointsVector->at(numThreads - 1)), batchSize * (numThreads - 1), (unsigned long) lines.size());
-
-    for (auto i = 0u; i < numThreads; i++) {
-        extremesVector.at(i) = futuresVector.at(i).get();
-    }
-
-    std::vector<doublePoint> minVector, maxVector;
-    for (auto extremes : extremesVector) {
-        minVector.emplace_back(extremes.first);
-        maxVector.emplace_back(extremes.second);
-    }
-    std::pair<doublePoint,doublePoint> extremes;
-    extremes.first = mergeDoublePoints(minVector).first;
-    extremes.second = mergeDoublePoints(maxVector).second;
-
-    for (auto i = 0u; i < numThreads; i++) {
-        groundPoints->insert(groundPoints->end(), groundPointsVector->at(i).begin(), groundPointsVector->at(i).end());
-    }
-
-    delete groundPointsVector;
-
-    if (groundPoints->empty()) {
-        extremes.first = {0,0,0, 0}; extremes.second = {0,0,0, 0};
-    }
-
-    auto readerReturn = new rawPointCloud{.groundPoints = *groundPoints, .environmentPoints = std::vector<doublePoint>(0), .min = extremes.first, .max = extremes.second, .numberOfPoints = static_cast<unsigned int>(groundPoints->size())};
-    delete groundPoints;
-    return readerReturn;
+    groundPoints->emplace_back(p);
 }

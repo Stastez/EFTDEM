@@ -25,6 +25,10 @@ RadarComparator::~RadarComparator() {
     configProvider = nullptr;
 }
 
+/**
+ * Reads all the point-clouds in the pipelines in pipelines and adds a shared min and max value, so the point-clouds will be scaled and rasterized koherently.
+ * @return a Vector containing all the read point-clouds
+ */
 std::vector<rawPointCloud *> RadarComparator::setupPointClouds() {
     std::vector<rawPointCloud *> readerReturns(pipelines.size());
     for (auto i = 0ul; i < pipelines.size(); i++) {
@@ -53,7 +57,11 @@ void addColor(std::vector<std::vector<int>>& colors, std::vector<int> color) {
     colors.at(2).emplace_back(color.at(2));
 }
 
-void RadarComparator::writeThresholdMaps(const std::vector<heightMap *> &comparisons, const std::vector<std::string> &destinationDEM) {
+/**
+ * Writes the pixelwise comparisons to a Geotiff-File, with Values falling below a threshold marked in red.
+ * @param comparisons a vector of pixelwise comparisons to be writen as Geotiff-Files
+ */
+void RadarComparator::writeThresholdMaps(const std::vector<heightMap *> &comparisons) {
     std::vector<std::vector<int>> colors(3);
 
     for (auto i = 0ul; i < comparisons.size(); i++) {
@@ -67,7 +75,7 @@ void RadarComparator::writeThresholdMaps(const std::vector<heightMap *> &compari
             else addColor(colors, {integerHeight, integerHeight, integerHeight});
         }
 
-        writer->setDestinationDEM(destinationDEM.at(i) + "_color_" + std::to_string(i));
+        writer->setDestinationDEM(destinationPaths.at(i) + "_color_" + std::to_string(i));
         writer->writeRGB(colors, (int) comparisons.at(i)->resolutionX, (int) comparisons.at(i)->resolutionY);
         colors = std::vector<std::vector<int>>(3);
 
@@ -75,7 +83,12 @@ void RadarComparator::writeThresholdMaps(const std::vector<heightMap *> &compari
     }
 }
 
+/**
+ * Writes the pixelwise comparisons to a Geotiff-File,
+ * as a regular Geotiff-File and an additional Geotiff, with Values falling below a threshold marked in red.
+ * @param comparisons a vector of pixelwise comparisons to be writen as Geotiff-Files
+ */
 void RadarComparator::writeComparisons(std::vector<heightMap *> comparisons){
-    writeThresholdMaps(comparisons, destinationPaths);
+    writeThresholdMaps(comparisons);
     IComparator::writeComparisons(comparisons);
 }

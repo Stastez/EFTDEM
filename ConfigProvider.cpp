@@ -2,7 +2,7 @@
 #include "Pipeline.h"
 #include "MobileMappingReader.h"
 #include "SorterGpu.h"
-#include "SorterCPU.h"
+#include "SorterCpu.h"
 #include "RasterizerGpu.h"
 #include "RasterizerCpu.h"
 #include "ClosingFilter.h"

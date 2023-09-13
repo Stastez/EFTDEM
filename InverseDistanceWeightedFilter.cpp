@@ -31,58 +31,54 @@ heightMap * InverseDistanceWeightedFilter::apply(heightMap *map, bool generateOu
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    //The shaders in this vector will be executed
+    /*
+     * The shaders in this vector will be executed
+     */
     shaderPaths = std::vector<std::string>();
-    shaderPaths.emplace_back("kernelIDW.glsl");
-    shaderPaths.emplace_back("discretization.glsl");
-    shaderPaths.emplace_back("horizontalTotalWeights.glsl");
-    shaderPaths.emplace_back("totalWeights.glsl");
-    shaderPaths.emplace_back("horizontalSumIDW.glsl");
-    shaderPaths.emplace_back("sumIDW.glsl");
-    shaderPaths.emplace_back("averageIDW.glsl");
-
-    shaderPaths.emplace_back("horizontalAmount.glsl");
-    shaderPaths.emplace_back("amount.glsl");
-    shaderPaths.emplace_back("dilation.glsl");
-    shaderPaths.emplace_back("horizontalAmount.glsl");
-    shaderPaths.emplace_back("amount.glsl");
-    shaderPaths.emplace_back("erosion.glsl");
-
-    shaderPaths.emplace_back("closing.glsl");
 
     auto pixelCount = (long) (map->resolutionX * map->resolutionY);
 
     /*This vector should contain a vector of bufferSpecifications for every Shader specified in shaderPaths,
      * containing the Specifications for all Buffers that need to be initialized before the respective shader is executed.*/
     auto bufferSpecs = std::vector<std::vector<bufferSpecifications>>();
-    bufferSpecs.reserve(shaderPaths.size());
-    // kernel
+
+    /*
+     * For every Pixel wie add the all Values in a kernelRadius-sized surrounding together and count the amount of Pixels in this area,
+     * that have a non-void value (for witch we have data) (both weighted by an inverse distance weighted kernel).
+     * From these we calculate an average to predict the values for witch we don't have anny data.
+     * To decide witch pixels to fill we apply the concept of closing.
+     * For all these calculations we use the concept of separable filters.
+     */
+    // average
+    shaderPaths.emplace_back("kernelIDW.glsl");
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_KERNEL_BUFFER, long(sizeof(GLfloat) * kernelRadius)}});
-    // discretization
+    shaderPaths.emplace_back("discretization.glsl");
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_CLOSING_MASK_BUFFER, long(sizeof(GLfloat) * pixelCount)}});
-    // horizontalTotalWeights
+    shaderPaths.emplace_back("horizontalTotalWeights.glsl");
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_HORIZONTAL_BUFFER, long(sizeof(GLfloat) * pixelCount)}});
-    // totalWeights
+    shaderPaths.emplace_back("totalWeights.glsl");
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_TOTAL_WEIGHT_BUFFER, long(sizeof(GLfloat) * pixelCount)}});
-    // horizontalSumIDW
+    shaderPaths.emplace_back("horizontalSumIDW.glsl");
     bufferSpecs.emplace_back();
-    // sumIDW
+    shaderPaths.emplace_back("sumIDW.glsl");
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_SUM_BUFFER, long(sizeof(GLfloat) * pixelCount)}});
-    // averageIDW
+    shaderPaths.emplace_back("averageIDW.glsl");
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_AVERAGE_BUFFER, long(sizeof(GLfloat) * pixelCount)}});
-    // horizontalAmount
-    bufferSpecs.emplace_back();
-    // amount
-    bufferSpecs.emplace_back();
-    // dilation
-    bufferSpecs.emplace_back();
-    // horizontalAmount again
-    bufferSpecs.emplace_back();
-    // amount again
-    bufferSpecs.emplace_back();
-    // erosion
-    bufferSpecs.emplace_back();
     // closing
+    shaderPaths.emplace_back("horizontalAmount.glsl");
+    bufferSpecs.emplace_back();
+    shaderPaths.emplace_back("amount.glsl");
+    bufferSpecs.emplace_back();
+    shaderPaths.emplace_back("dilation.glsl");
+    bufferSpecs.emplace_back();
+    shaderPaths.emplace_back("horizontalAmount.glsl");
+    bufferSpecs.emplace_back();
+    shaderPaths.emplace_back("amount.glsl");
+    bufferSpecs.emplace_back();
+    shaderPaths.emplace_back("erosion.glsl");
+    bufferSpecs.emplace_back();
+    // combining
+    shaderPaths.emplace_back("closing.glsl");
     bufferSpecs.emplace_back();
 
     auto shader = glHandler->getShaderPrograms(shaderPaths, true);

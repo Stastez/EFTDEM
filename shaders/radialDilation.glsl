@@ -9,10 +9,8 @@ layout (binding = EFTDEM_SECOND_HEIGHTMAP_BUFFER) restrict buffer heightMapBuffe
 };
 uniform uvec2 resolution;
 uniform bool flipped;
-float scattering = 1.;
 
 float weightingFunction(float x) {
-    //return exp(float(-abs(x/scattering)));
     return (x == 0) ? 1. : pow(x, -2.);
 }
 
@@ -20,6 +18,9 @@ uint calculate1DCoordinate(uvec2 pos, uvec2 referenceResolution) {
     return pos.y * referenceResolution.x + pos.x;
 }
 
+/**
+ *
+ */
 void main() {
     if (any(greaterThanEqual(gl_GlobalInvocationID.xy, resolution))) return;
 

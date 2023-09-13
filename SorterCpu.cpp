@@ -1,4 +1,4 @@
-#include "SorterCPU.h"
+#include "SorterCpu.h"
 #include <iostream>
 #include <cmath>
 

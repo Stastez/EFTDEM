@@ -10,6 +10,14 @@
 #include "IHeightMapWriter.h"
 #include "GLHandler.h"
 
+/**
+ * Supports one of each type of IPipelineComponent which will be executed sequentially as:
+ * 1) ICloudReader
+ * 2) ICloudSorter
+ * 3) ICloudRasterizer
+ * 4) IHeightMapFiller
+ * 5) IHeightMapWriter
+ */
 class Pipeline : public IPipeline {
 friend class ConfigProvider;
 

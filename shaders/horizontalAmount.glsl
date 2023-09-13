@@ -17,6 +17,9 @@ uint calculate1DCoordinate(uvec2 pos) {
     return pos.y * resolution.x + pos.x;
 }
 
+/**
+ * Calculates the amount of non-void pixels in an area of kernelSize pixels right and left of the pixel.
+ */
 void main() {
     uvec2 correctedGlobalInvocation = gl_GlobalInvocationID.xy + currentInvocation;
     if (any(greaterThanEqual(correctedGlobalInvocation, resolution))) return;

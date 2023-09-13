@@ -26,9 +26,9 @@ public:
         EFTDEM_AVERAGE_BUFFER, // float for each grid cell
         EFTDEM_CLOSING_MASK_BUFFER, // float for each grid cell
         EFTDEM_TOTAL_WEIGHT_BUFFER, // float for each grid cell
-        EFTDEM_KERNEL_BUFFER, // float for as manny fields as Kernel Radius
+        EFTDEM_KERNEL_BUFFER, // float for as many fields as kernelRadius
         EFTDEM_SECOND_HEIGHTMAP_BUFFER, // float for each grid cell
-        EFTDEM_GRADIENT_BUFFER, // float for each grid cell
+        EFTDEM_GRADIENT_BUFFER, // vec2 for each grid cell
     };
 
     GLHandler();
@@ -49,6 +49,7 @@ public:
     void dataToBuffer(bufferIndices buffer, gl::GLsizeiptr size, const void *data, gl::GLenum usage);
     void dataFromBuffer(bufferIndices buffer, gl::GLsizeiptr offset, gl::GLsizeiptr size, void *data);
     void dispatchShader(unsigned int localBatchSize, unsigned long resolutionX, unsigned long resolutionY) const;
+    void dispatchShader(gl::GLint flippedLocation, bool isDilation, unsigned long resolutionX, unsigned long resolutionY, unsigned int numIterations) const;
     static void waitForShaderStorageIntegrity();
 
     void setProgram(gl::GLuint program);

@@ -4,11 +4,13 @@
 #include "IHeightMapFiller.h"
 #include "GLHandler.h"
 
+/**
+ * An IHeightMapFiller that successively fills voids one ring of pixels at a time from the outer bounds of the void.
+ */
 class RadialFiller : public IHeightMapFiller {
 private:
     GLHandler * glHandler;
     unsigned int maxHoleRadius;
-    void dispatchCompute(gl::GLint, bool, heightMap *) const;
 
 public:
     RadialFiller(GLHandler * glHandler, unsigned int maxHoleRadius);

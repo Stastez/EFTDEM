@@ -23,7 +23,6 @@ public:
     virtual void writeComparisons(std::vector<heightMap *> comparisons);
 
     virtual std::vector<rawPointCloud *> setupPointClouds() = 0;
-    virtual void writeThresholdMaps(const std::vector<heightMap *> &comparisons, const std::vector<std::string> &destinationDEM);
 };
 
 #endif //EFTDEM_ICOMPERATOR_H

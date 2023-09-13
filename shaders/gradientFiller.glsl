@@ -23,6 +23,10 @@ uint calculate1DCoordinate(uvec2 pos) {
     return pos.y * resolution.x + pos.x;
 }
 
+/**
+ * Calculates the weighted average of all gradients in an area of size kernelSize in every direction around the the pixel,
+ * using the precalculated sum of and total weight on all non-void pixels in this area.
+ */
 void main() {
     uvec2 correctedGlobalInvocation = gl_GlobalInvocationID.xy + currentInvocation;
     if (any(greaterThanEqual(correctedGlobalInvocation, resolution))) return;

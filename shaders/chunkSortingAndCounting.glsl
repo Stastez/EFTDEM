@@ -24,6 +24,9 @@ uint calculatePointIdentifier() {
     return gl_NumWorkGroups.x * LOCAL_SIZE * gl_GlobalInvocationID.y + gl_GlobalInvocationID.x;
 }
 
+/**
+ * Calculates the grid position for each point and counts how many points are sorted into each grid cell.
+ */
 void main() {
     uint pointIndexIndices = calculatePointIdentifier();
     if (pointIndexIndices >= numberOfPoints) return;

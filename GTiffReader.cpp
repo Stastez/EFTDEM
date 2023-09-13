@@ -17,11 +17,8 @@ void GTiffReader::setSourceDEM(const std::string &soureDEM) {
 }
 
 /**
- * Exports the provided height map into GeoTiff format. The resolution of the height map must be within int limits.
- *
- * @param map
- * @param resolutionX
- * @param resolutionY
+ * Reads the GeoTIFF provided by sourceDEM into a denormalizedHeightMap.
+ * @param generateOutput Whether or not to create an output. Should be true
  */
 denormalizedHeightMap * GTiffReader::apply(bool generateOutput) {
 
@@ -58,9 +55,7 @@ denormalizedHeightMap * GTiffReader::apply(bool generateOutput) {
             maxHeight = std::max(maxHeight, heights.at(i));
     }
 
-    //std::cout << "min: " << minHeight << " max: " << maxHeight << "\n";
-
-    //Flips map along the x-Accesses
+    //Flips map along the x-axis
     for (auto y = 0ul; y < (resolutionY / 2); y++){
         for (auto x = 0ul; x < resolutionX; x++) {
             auto coord1D = resolutionX * y + x;

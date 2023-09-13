@@ -33,7 +33,7 @@ heightMap * FillerLoop::apply(heightMap *map, bool generateOutput) {
         std::cout << "Current filler number: " << i << std::endl;
         result = fillers.at(i)->apply(oldResult, generateOutput);
 
-        // Pipeline deletes rasterizerReturn which points to the same data as map
+        // Pipeline deletes rasterizerReturn which points to the same data as map, thus map may not be deleted here
         if (i >= 1) delete oldResult;
         delete fillers.at(i);
     }

@@ -9,7 +9,10 @@
 
 #include <utility>
 
-
+/**
+ * Executes the pipelines in pipelines one by one and comparing the results after each executed pipeline to the one before it.
+ * @return The pixelwise comparison of each pair of results from consecutive pipelines in pipelines
+ */
 std::vector<heightMap *> IComparator::compareMaps() {
     std::vector<heightMap *> comparisons;
     comparisons.reserve(pipelines.size());
@@ -68,6 +71,10 @@ std::vector<heightMap *> IComparator::compareMaps() {
     return comparisons;
 }
 
+/**
+ * Writes the pixelwise comparisons to a Geotiff-File.
+ * @param comparisons a vector of pixelwise comparisons to be writen as Geotiff-Files.
+ */
 void IComparator::writeComparisons(std::vector<heightMap *> comparisons) {
     for (auto i = 0ul; i < comparisons.size(); i++) {
         auto writer = new GTiffWriter(true, "", betterCompression.at(i));
@@ -78,8 +85,4 @@ void IComparator::writeComparisons(std::vector<heightMap *> comparisons) {
 
         delete writer;
     }
-}
-
-void IComparator::writeThresholdMaps(const std::vector<heightMap *> &comparisons, const std::vector<std::string> &destinationDEM) {
-    (void) comparisons; (void) destinationDEM;
 }

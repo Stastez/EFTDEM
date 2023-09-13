@@ -12,10 +12,13 @@ layout (binding = EFTDEM_SORTED_POINT_COUNT_BUFFER) restrict buffer countBuffer{
 };
 uniform uint numberOfPoints;
 
+/**
+ * Counts how many points are were sorted into each grid cell.
+ */
 void main() {
-    if (gl_NumWorkGroups.x * 8 * gl_GlobalInvocationID.y + gl_GlobalInvocationID.x >= numberOfPoints) return;
+    if (gl_NumWorkGroups.x * LOCAL_SIZE * gl_GlobalInvocationID.y + gl_GlobalInvocationID.x >= numberOfPoints) return;
 
-    uint pointIndex = gl_NumWorkGroups.x * 8 * gl_GlobalInvocationID.y + gl_GlobalInvocationID.x;
+    uint pointIndex = gl_NumWorkGroups.x * LOCAL_SIZE * gl_GlobalInvocationID.y + gl_GlobalInvocationID.x;
 
     atomicAdd(counts[indices[pointIndex]], 1u);
 }

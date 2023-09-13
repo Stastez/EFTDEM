@@ -18,7 +18,7 @@ int main(int argc, char** argv) {
         delete pipeline;
         delete configProvider;
     } else {
-        // executes filling according to the specifications of the yaml(s) given and compares them either to each other or to the given tiff-File
+        //executes filling according to the specifications of the yaml(s) given and compares them either to each other or to the given tiff-File
         bool groundTruthCompare = false;
         for (int i = 1; i < argc; i++){
             std::string s = argv[i];

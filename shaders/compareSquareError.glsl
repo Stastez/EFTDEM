@@ -21,6 +21,9 @@ float errorMetric(float deviation){
     return pow(deviation, 2.);
 }
 
+/**
+ * Calculates the squared difference between top and bottom as (bottom - top)^2.
+ */
 void main() {
     if (any(greaterThan(gl_GlobalInvocationID.xy, resolution))) return;
 
@@ -29,6 +32,4 @@ void main() {
     // depth measured in positive amount of seconds taken by wave
     results[position] = errorMetric(bottom[position] - top[position]);
     if (isnan(results[position])) results[position] = 1000000.;
-    //results[position] = clamp(errorMetric(bottom[position] - top[position]), 0., 1.);
-    //results[position] = top[position];
 }

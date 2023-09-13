@@ -21,8 +21,8 @@ add_executable(EFTDEM
         MobileMappingReader.h
         GTiffWriter.cpp
         GTiffWriter.h
-        SorterCPU.cpp
-        SorterCPU.h
+        SorterCpu.cpp
+        SorterCpu.h
         RasterizerCpu.cpp
         RasterizerCpu.h
         RasterizerGpu.cpp
@@ -56,7 +56,8 @@ add_executable(EFTDEM
         DummyFiller.cpp
         DummyFiller.h
         GradientBasedFiller.cpp
-        GradientBasedFiller.h)
+        GradientBasedFiller.h
+        ICloudReader.cpp)
 
 if(MSVC)
     target_compile_options(EFTDEM PRIVATE /W4)

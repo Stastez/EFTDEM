@@ -60,7 +60,7 @@ void main() {
 
     // mix with IDW result
     float idwHeight = sums[ownCoordinate] / (totalWeights[ownCoordinate] + float(totalWeights[ownCoordinate] == 0.));
-    //average = mix(idwHeight, average, 0.5);
+    average = mix(idwHeight, average, 0.85);
 
     if (!flipped) secondHeightMap[ownCoordinate] = average;
     else firstHeightMap[ownCoordinate] = average;

@@ -19,6 +19,10 @@ uint calculate1DCoordinate(uvec2 pos) {
     return pos.y * resolution.x + pos.x;
 }
 
+/**
+ * Combines the (weighted) average of heights with the closing mask, wich specifies wich pixels should be filled,
+ * to produce the finished filled heightMap.
+ */
 void main() {
     uvec2 correctedGlobalInvocation = gl_GlobalInvocationID.xy + currentInvocation;
     if (any(greaterThanEqual(correctedGlobalInvocation, resolution))) return;

@@ -18,31 +18,8 @@ GradientBasedFiller::~GradientBasedFiller() {
     glHandler->deleteBuffer(GLHandler::EFTDEM_AVERAGE_BUFFER);*/
 }
 
-void GradientBasedFiller::dispatchCompute(gl::GLint flippedLocation, bool isDilation, heightMap * map) const {
-    using namespace gl;
-
-    GLsync previousSync = nullptr;
-    for (auto i = 0u; i < kernelRadius; i++) {
-        auto flipped = (bool) (isDilation ? (i % 2u) : (kernelRadius + i) % 2u);
-        glUniform1i(flippedLocation, flipped);
-        glDispatchCompute((GLuint) std::ceil((double) map->resolutionX / 8.), (GLuint) std::ceil((double) map->resolutionY / 4.), 1);
-
-        if (previousSync != nullptr) {
-            glClientWaitSync(previousSync, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED);
-            glDeleteSync(previousSync);
-        }
-
-        auto currentSync = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
-        std::swap(previousSync, currentSync);
-    }
-    if (previousSync != nullptr) {
-        glClientWaitSync(previousSync, GL_SYNC_FLUSH_COMMANDS_BIT, GL_TIMEOUT_IGNORED);
-        glDeleteSync(previousSync);
-    }
-}
-
 /**
- * Applies the InverseDistanceWeightedFilter
+ * Applies gradient-based filling on the provided heightMap.
  * @param map the Heightmap that should be closed (if the Heightmap is already in the EFTDEM_HEIGHTMAP_BUFFER, the given map won't be used and may be an empty heightMap)
  * @param generateOutput specifies whether to return a heightMap Object with the filled map or just an empty heightMap. This improves efficiency, by only moving Data from and to graphics memory when necessary.
  * @return a heightMap with the filled height-data, or an empty map.
@@ -56,47 +33,39 @@ heightMap * GradientBasedFiller::apply(heightMap *map, bool generateOutput) {
 
     //The shaders in this vector will be executed
     shaderPaths = std::vector<std::string>();
-    shaderPaths.emplace_back("gradient.glsl");
-    shaderPaths.emplace_back("kernelIDW.glsl");
-    shaderPaths.emplace_back("gradientHorizontalTotalWeight.glsl");
-    shaderPaths.emplace_back("gradientTotalWeights.glsl");
-    shaderPaths.emplace_back("gradientHorizontalSum.glsl");
-    shaderPaths.emplace_back("gradientSum.glsl");
-    shaderPaths.emplace_back("gradientFiller.glsl");
-
-    shaderPaths.emplace_back("discretization.glsl");
-    shaderPaths.emplace_back("horizontalSumIDW.glsl");
-    shaderPaths.emplace_back("sumIDW.glsl");
-    shaderPaths.emplace_back("horizontalTotalWeights.glsl");
-    shaderPaths.emplace_back("totalWeights.glsl");
 
     auto pixelCount = (long) (map->resolutionX * map->resolutionY);
 
     /*This vector should contain a vector of bufferSpecifications for every Shader specified in shaderPaths,
      * containing the Specifications for all Buffers that need to be initialized before the respective shader is executed.*/
     auto bufferSpecs = std::vector<std::vector<bufferSpecifications>>();
-    bufferSpecs.reserve(shaderPaths.size());
-    // gradient
+
+    shaderPaths.emplace_back("gradient.glsl");
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_GRADIENT_BUFFER, long(sizeof(GLfloat) * pixelCount * 2)}});
-    // kernel
+    shaderPaths.emplace_back("kernelIDW.glsl");
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_KERNEL_BUFFER, long(sizeof(GLfloat) * kernelRadius)}});
-    // gradientHorizontalTotalWeights
+    shaderPaths.emplace_back("gradientHorizontalTotalWeight.glsl");
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_HORIZONTAL_BUFFER, long(sizeof(GLfloat) * pixelCount * 2)}});
-    // totalWeights
+    shaderPaths.emplace_back("gradientTotalWeights.glsl");
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_TOTAL_WEIGHT_BUFFER, long(sizeof(GLfloat) * pixelCount * 2)}});
-    // horizontalSum
+    shaderPaths.emplace_back("gradientHorizontalSum.glsl");
     bufferSpecs.emplace_back();
-    // sum
+    shaderPaths.emplace_back("gradientSum.glsl");
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_SUM_BUFFER, long(sizeof(GLfloat) * pixelCount * 2)}});
-    // gradientFiller
+    shaderPaths.emplace_back("gradientFiller.glsl");
     bufferSpecs.emplace_back();
-    // discretisation
+
+    shaderPaths.emplace_back("discretization.glsl");
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_CLOSING_MASK_BUFFER, long(sizeof(GLfloat) * pixelCount)}});
-    // IDW on heights, buffers already exist
+    shaderPaths.emplace_back("horizontalSumIDW.glsl");
     bufferSpecs.emplace_back();
+    shaderPaths.emplace_back("sumIDW.glsl");
     bufferSpecs.emplace_back();
+    shaderPaths.emplace_back("horizontalTotalWeights.glsl");
     bufferSpecs.emplace_back();
+    shaderPaths.emplace_back("totalWeights.glsl");
     bufferSpecs.emplace_back();
+
 
     auto shader = glHandler->getShaderPrograms(shaderPaths, true);
 
@@ -119,14 +88,6 @@ heightMap * GradientBasedFiller::apply(heightMap *map, bool generateOutput) {
         GLHandler::waitForShaderStorageIntegrity();
     }
 
-    /*auto tmp = new float[pixelCount];
-    glHandler->dataFromBuffer(GLHandler::EFTDEM_HORIZONTAL_BUFFER, 0, pixelCount * sizeof(GLfloat ), tmp);
-    for (auto i = 0; i < pixelCount; i++) {
-        if (tmp[i] != 0) {
-            std::cout << i << ": " << tmp[i] << std::endl;
-        }
-    }*/
-
     // dilation
     auto program = glHandler->getShaderPrograms({"gradientRadialDilation.glsl"}, true).at(0);
     auto resolutionLocation = gl::glGetUniformLocation(program, "resolution");
@@ -144,7 +105,7 @@ heightMap * GradientBasedFiller::apply(heightMap *map, bool generateOutput) {
 
     glUniform2ui(resolutionLocation, map->resolutionX, map->resolutionY);
 
-    dispatchCompute(flippedLocation, true, map);
+    glHandler->dispatchShader(flippedLocation, true, map->resolutionX, map->resolutionY, kernelRadius);
 
     // erosion
     program = glHandler->getShaderPrograms({"radialErosion.glsl"}, true).at(0);
@@ -155,24 +116,16 @@ heightMap * GradientBasedFiller::apply(heightMap *map, bool generateOutput) {
 
     glUniform2ui(resolutionLocation, map->resolutionX, map->resolutionY);
 
-    dispatchCompute(flippedLocation, false, map);
-
-    auto filledMap = emptyHeightMapFromHeightMap(map);
-
-    glHandler->dataFromBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,
-                              0, map->dataSize, filledMap->heights.data());
+    glHandler->dispatchShader(flippedLocation, false, map->resolutionX, map->resolutionY, kernelRadius);
 
     auto end = std::chrono::high_resolution_clock::now();
     std::cout << "Elapsed time for closing: " << duration_cast<std::chrono::milliseconds>(end - start).count() << "ms" << std::endl;
 
     if (!generateOutput) return emptyHeightMapFromHeightMap(map);
+    auto filledMap = emptyHeightMapFromHeightMap(map);
 
-    //TODO warum auskommenriert
-    /*auto filledMap = emptyHeightMapFromHeightMap(map);
     glHandler->dataFromBuffer(GLHandler::EFTDEM_HEIGHTMAP_BUFFER,
-                              0,
-                              (long) (sizeof(GLfloat) * filledMap->resolutionX * filledMap->resolutionY),
-                              filledMap->heights.data());*/
+                              0, map->dataSize, filledMap->heights.data());
 
     return filledMap;
 }

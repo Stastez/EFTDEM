@@ -23,8 +23,8 @@ ClosingFilter::~ClosingFilter() {
 
 /**
  * Applies the ClosingFilter
- * @param map the Heightmap that should be closed (if the Heightmap is already in the EFTDEM_HEIGHTMAP_BUFFER, the given map won't be used and may be an empty heightMap)
- * @param generateOutput specifies whether to return a heightMap Object with the filled map or just an empty heightMap. This improves efficiency, by only moving Data from and to graphics memory when necessary.
+ * @param map the height map that should be closed (if the height map is already in the EFTDEM_HEIGHTMAP_BUFFER, the given map won't be used and may be an empty heightMap)
+ * @param generateOutput specifies whether to return a heightMap object with the filled map or just an empty heightMap. This improves efficiency, by only moving Data from and to graphics memory when necessary.
  * @return a heightMap with the filled height-data, or an empty map.
  */
 heightMap * ClosingFilter::apply(heightMap *map, bool generateOutput) {
@@ -34,15 +34,26 @@ heightMap * ClosingFilter::apply(heightMap *map, bool generateOutput) {
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    //The shaders in this vector will be executed
+    /*
+     * The shaders in this vector will be executed
+     */
     shaderPaths = std::vector<std::string>();
 
     auto pixelCount = (long) (map->resolutionX * map->resolutionY);
 
-    /*This vector should contain a vector of bufferSpecifications for every Shader specified in shaderPaths,
-     * containing the Specifications for all Buffers that need to be initialized before the respective shader is executed.*/
+    /*
+     * This vector should contain a vector of bufferSpecifications for every Shader specified in shaderPaths,
+     * containing the Specifications for all Buffers that need to be initialized before the respective shader is executed.
+     */
     auto bufferSpecs = std::vector<std::vector<bufferSpecifications>>();
 
+    /*
+     * For every Pixel wie add the all Values in a kernelRadius-sized surrounding together and count the amount of Pixels in this area,
+     * that have a non-void value (for witch we have data). From these we calculate an average to predict the values for witch we don't have anny data.
+     * To decide witch pixels to fill we apply the concept of closing.
+     * For all these calculations we use the concept of separable filters.
+     */
+    // average
     shaderPaths.emplace_back("discretization.glsl");
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_CLOSING_MASK_BUFFER, sizeof(GLfloat)}});
     shaderPaths.emplace_back("horizontalAmount.glsl");
@@ -55,7 +66,7 @@ heightMap * ClosingFilter::apply(heightMap *map, bool generateOutput) {
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_SUM_BUFFER, sizeof(GLfloat)}});
     shaderPaths.emplace_back("average.glsl");
     bufferSpecs.emplace_back(std::vector<bufferSpecifications>{bufferSpecifications{GLHandler::EFTDEM_AVERAGE_BUFFER, sizeof(GLfloat)}});
-
+    // closing
     shaderPaths.emplace_back("dilation.glsl");
     bufferSpecs.emplace_back();
     shaderPaths.emplace_back("horizontalAmount.glsl");
@@ -64,7 +75,7 @@ heightMap * ClosingFilter::apply(heightMap *map, bool generateOutput) {
     bufferSpecs.emplace_back();
     shaderPaths.emplace_back("erosion.glsl");
     bufferSpecs.emplace_back();
-
+    // combining
     shaderPaths.emplace_back("closing.glsl");
     bufferSpecs.emplace_back();
 

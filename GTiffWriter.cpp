@@ -93,10 +93,16 @@ void GTiffWriter::apply(const heightMap *map, bool generateOutput) {
     }
 }
 
-void
-GTiffWriter::writeRGB(std::vector<std::vector<int>> data, int resolutionX, int resolutionY) {
+/**
+ * Exports the provided color data to "<destinationDEM>.tiff" with resolution resolutionX x resolutionY.
+ * @param data A 3-vector of ints in [0, 255]. data[0] is the red channel, data[1] is green and data[2] is blue
+ * @param resolutionX The x-resolution of the data and resulting image
+ * @param resolutionY The y-resolution of the data and resulting image
+ */
+void GTiffWriter::writeRGB(std::vector<std::vector<int>> data, int resolutionX, int resolutionY) {
     std::cout << "Writing RGB tiff..." << std::endl;
 
+    // This flips the image vertically. See explanation above.
     int temp;
     for (auto y = 0; y < resolutionY / 2; y++) {
         for (auto x = 0; x < resolutionX; x++) {

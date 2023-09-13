@@ -19,6 +19,9 @@ uint calculate1DCoordinate(uvec2 pos, uvec2 referenceResolution) {
     return pos.y * referenceResolution.x + pos.x;
 }
 
+/**
+ * This calculates the average height per grid cell. See sumChunks.glsl for an explanation of the uint usage.
+ */
 void main() {
     if (any(greaterThanEqual(gl_GlobalInvocationID.xy, resolution))) return;
 

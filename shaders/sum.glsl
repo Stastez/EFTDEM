@@ -16,6 +16,10 @@ uint calculate1DCoordinate(uvec2 pos) {
     return pos.y * resolution.x + pos.x;
 }
 
+/**
+ * Calculates the sum of all heights in an area of size kernelSize in every direction around the the pixel,
+ * by adding together the interrim results in horizontalSums, wich where calculated by the shader gradientHorizontalSum.
+ */
 void main() {
     uvec2 correctedGlobalInvocation = gl_GlobalInvocationID.xy + currentInvocation;
     if (any(greaterThanEqual(correctedGlobalInvocation, resolution))) return;

@@ -8,13 +8,10 @@
 
 class MobileMappingReader : public ICloudReader {
 private:
-    std::vector<std::string> readFile();
-    static std::pair<doublePoint, doublePoint> parseFileContents(std::vector<std::string> *lines, std::vector<doublePoint> *groundPoints, std::vector<doublePoint> *environmentPoints, unsigned long begin, unsigned long end);
+    void parseLineVector(std::vector<std::string> words, std::vector<doublePoint> *groundPoints, std::vector<doublePoint> *environmentPoints) override;
 
 public:
-    explicit MobileMappingReader(const std::string& fileName);
-    ~MobileMappingReader() noexcept override;
-    rawPointCloud * apply(bool generateOutput) override;
+    explicit MobileMappingReader(const std::string& fileName) : ICloudReader(fileName, 1) {};
 };
 
 

@@ -16,6 +16,10 @@ uint calculate1DCoordinate(uvec2 pos) {
     return pos.y * resolution.x + pos.x;
 }
 
+/**
+ * Calculates the totoal number of non-void pixels in an area of size kernelSize in every direction around the the pixel,
+ * by adding together the interrim results in horizontalAmounts, wich where calculated by the shader horizontalAmount.
+ */
 void main() {
     uvec2 correctedGlobalInvocation = gl_GlobalInvocationID.xy + currentInvocation;
     if (any(greaterThanEqual(correctedGlobalInvocation, resolution))) return;
