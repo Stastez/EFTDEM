@@ -23,6 +23,10 @@ uint calculate1DCoordinate(uvec2 pos, uvec2 referenceResolution) {
     return pos.y * referenceResolution.x + pos.x;
 }
 
+/**
+ * Calculates an extrapolated height value using the gradients in a 3x3 neighbourhood and mixes it with the basic IDW result.
+ * Only writes a value if the pixel did not have one before.
+ */
 void main() {
     if (any(greaterThanEqual(gl_GlobalInvocationID.xy, resolution))) return;
 

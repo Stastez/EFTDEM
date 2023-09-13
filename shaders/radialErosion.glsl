@@ -14,6 +14,9 @@ uint calculate1DCoordinate(uvec2 pos, uvec2 referenceResolution) {
     return pos.y * referenceResolution.x + pos.x;
 }
 
+/**
+ * Removes pixels that are adjacent to a void pixel after filling.
+ */
 void main() {
     if (any(greaterThanEqual(gl_GlobalInvocationID.xy, resolution))) return;
 

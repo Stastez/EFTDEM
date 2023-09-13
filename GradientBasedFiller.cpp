@@ -10,12 +10,12 @@ GradientBasedFiller::GradientBasedFiller(GLHandler *glHandler, unsigned int kern
 }
 
 GradientBasedFiller::~GradientBasedFiller() {
-    //TODO: delete used buffers
-    /*glHandler->deleteBuffer(GLHandler::EFTDEM_CLOSING_MASK_BUFFER);
+    glHandler->deleteBuffer(GLHandler::EFTDEM_GRADIENT_BUFFER);
+    glHandler->deleteBuffer(GLHandler::EFTDEM_KERNEL_BUFFER);
     glHandler->deleteBuffer(GLHandler::EFTDEM_HORIZONTAL_BUFFER);
     glHandler->deleteBuffer(GLHandler::EFTDEM_TOTAL_WEIGHT_BUFFER);
     glHandler->deleteBuffer(GLHandler::EFTDEM_SUM_BUFFER);
-    glHandler->deleteBuffer(GLHandler::EFTDEM_AVERAGE_BUFFER);*/
+    glHandler->deleteBuffer(GLHandler::EFTDEM_CLOSING_MASK_BUFFER);
 }
 
 /**

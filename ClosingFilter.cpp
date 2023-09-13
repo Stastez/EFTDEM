@@ -89,13 +89,10 @@ heightMap * ClosingFilter::apply(heightMap *map, bool generateOutput) {
                                 map->heights.data(), GL_STATIC_DRAW);
     }
 
-    //TODO remove?
-    glHandler->setProgram(shader.at(0));
-
     for (auto i = 0ul; i < bufferSpecs.size(); i++) {
+        glHandler->setProgram(shader.at(i));
         for (auto spec : bufferSpecs.at(i)) allocBuffer(spec.buffer, long(spec.size) * pixelCount);
 
-        glHandler->setProgram(shader.at(i));
         glUniform2ui(glGetUniformLocation(glHandler->getProgram(), "resolution"), map->resolutionX, map->resolutionY);
         glUniform1ui(glGetUniformLocation(glHandler->getProgram(), "kernelRadius"), kernelRadius);
         glHandler->dispatchShader(batchSize, map->resolutionX, map->resolutionY);

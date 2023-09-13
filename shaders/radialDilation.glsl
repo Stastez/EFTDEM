@@ -19,7 +19,8 @@ uint calculate1DCoordinate(uvec2 pos, uvec2 referenceResolution) {
 }
 
 /**
- *
+ * Calculates an interpolated height value using the heights of its 3x3 neighbourhood.
+ * Only writes a value if the pixel did not have one before.
  */
 void main() {
     if (any(greaterThanEqual(gl_GlobalInvocationID.xy, resolution))) return;
