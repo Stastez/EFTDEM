@@ -1,4 +1,8 @@
-# Tabp Efficient Filling Techniques
+# TABP Efficient Filling Techniques Seminar @ HPI
+
+## What is this?
+EFTDEM is a project done as part of the above mentioned seminar in the summer term of 2023. Its goal was to enable efficient filling of voids in point cloud data of digital elevation models using OpenGL and different filling algorithms.
+Data ingest is tightly coupled to the point cloud format used during this seminar.
 
 ## Usage
 ### Simple filling
